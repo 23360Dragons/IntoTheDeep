@@ -4,9 +4,6 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class DragonsDriver extends OpMode{
@@ -21,21 +18,26 @@ public class DragonsDriver extends OpMode{
     @Override
     public void init() {
 
-        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftFront = new DriveMotor(hardwareMap, "leftFront").dcMotor;
+        rightFront = new DriveMotor(hardwareMap, "rightFront").dcMotor;
+        leftBack = new DriveMotor(hardwareMap, "leftBack").dcMotor;
+        rightBack = new DriveMotor(hardwareMap, "rightBack").dcMotor;
 
-        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        leftBack = hardwareMap.get(DcMotor.class,"leftBack");
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
-        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+//        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+//        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        leftBack = hardwareMap.get(DcMotor.class,"leftBack");
+//        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+//        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
