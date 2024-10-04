@@ -44,18 +44,27 @@ public class DragonsDriver extends OpMode{
     @Override
     public void loop() {
 
-        double y, x, rightX, speed;
+        double y, x, rightX;
         y = -gamepad1.left_stick_y;
         x = gamepad1.left_stick_x;
         rightX = gamepad1.right_stick_x;
+
+        moveRobot(x,y, rightX);
+
+
+
+
+    }
+
+    private void moveRobot(double x, double y, double rightX)
+    {
         //we have to initialize the variable to control speed percentage
-        speed = -0.5;
+        //because y on the stick is negative, speed must be negative
+        double speed = -0.5;
 
         leftFront.setPower(((y + x) + rightX)*speed);
         leftBack.setPower(((y - x) + rightX)*speed);
         rightFront.setPower(((y - x) - rightX)*speed);
         rightBack.setPower(((y + x) - rightX)*speed);
-
-
     }
 }
