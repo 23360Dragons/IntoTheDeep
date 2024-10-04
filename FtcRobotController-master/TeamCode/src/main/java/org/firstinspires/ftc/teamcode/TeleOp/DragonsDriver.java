@@ -23,22 +23,6 @@ public class DragonsDriver extends OpMode{
         leftBack = new DriveMotor(hardwareMap, "leftBack").dcMotor;
         rightBack = new DriveMotor(hardwareMap, "rightBack").dcMotor;
 
-//        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-//        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//
-//        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-//        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//
-//        leftBack = hardwareMap.get(DcMotor.class,"leftBack");
-//        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//
-//        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
-//        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
     }
