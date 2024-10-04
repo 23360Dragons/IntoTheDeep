@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,28 +16,40 @@ public class DragonsDriver extends OpMode{
     DcMotor leftBack;
     DcMotor rightBack;
 
+    private Limelight3A limelight;
+
     @Override
     public void init() {
 
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-        leftBack = hardwareMap.get(DcMotor.class,"leftBack");
-        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        leftBack = hardwareMap.get(DcMotor.class,"leftBack");
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
     }
 
     @Override
     public void loop() {
-        
-        double y;
-        double x;
-        double rightX;
+
+        double y, x, rightX, speed;
         y = -gamepad1.left_stick_y;
         x = gamepad1.left_stick_x;
         rightX = gamepad1.right_stick_x;
         //we have to initialize the variable to control speed percentage
-        double speed = -0.5;
+        speed = -0.5;
 
         leftFront.setPower(((y + x) + rightX)*speed);
         leftBack.setPower(((y - x) + rightX)*speed);
