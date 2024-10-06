@@ -18,8 +18,8 @@ public class DragonsDriver extends OpMode{
     @Override
     public void init() {
 
-        leftFront = new DriveMotor(hardwareMap, "leftFront").dcMotor;
-        rightFront = new DriveMotor(hardwareMap, "rightFront").dcMotor;
+        leftFront = new DriveMotor(hardwareMap, "leftFront").dcMotor; //returns DcMotorEx
+        rightFront = new DriveMotor(hardwareMap, "rightFront").dcMotor; //(editable in DriveMotor.java)
         leftBack = new DriveMotor(hardwareMap, "leftBack").dcMotor;
         rightBack = new DriveMotor(hardwareMap, "rightBack").dcMotor;
 
