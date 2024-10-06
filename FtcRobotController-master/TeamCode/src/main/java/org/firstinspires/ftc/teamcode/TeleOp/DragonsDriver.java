@@ -23,22 +23,6 @@ public class DragonsDriver extends OpMode{
         leftBack = new DriveMotor(hardwareMap, "leftBack").dcMotor;
         rightBack = new DriveMotor(hardwareMap, "rightBack").dcMotor;
 
-//        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-//        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//
-//        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-//        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//
-//        leftBack = hardwareMap.get(DcMotor.class,"leftBack");
-//        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//
-//        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
-//        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
     }
@@ -46,18 +30,27 @@ public class DragonsDriver extends OpMode{
     @Override
     public void loop() {
 
-        double y, x, rightX, speed;
+        double y, x, rightX;
         y = -gamepad1.left_stick_y;
         x = gamepad1.left_stick_x;
         rightX = gamepad1.right_stick_x;
+
+        moveRobot(x,y, rightX);
+
+
+
+
+    }
+
+    private void moveRobot(double x, double y, double rightX)
+    {
         //we have to initialize the variable to control speed percentage
-        speed = -0.5;
+        //because y on the stick is negative, speed must be negative
+        double speed = -0.5;
 
         leftFront.setPower(((y + x) + rightX)*speed);
         leftBack.setPower(((y - x) + rightX)*speed);
         rightFront.setPower(((y - x) - rightX)*speed);
         rightBack.setPower(((y + x) - rightX)*speed);
-
-
     }
 }
