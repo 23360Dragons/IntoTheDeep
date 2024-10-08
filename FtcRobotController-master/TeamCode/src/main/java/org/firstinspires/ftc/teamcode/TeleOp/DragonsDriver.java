@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.hardware.limelightvision.LLFieldMap;
+import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+
 @TeleOp
-public class DragonsDriver extends OpMode{
+public class DragonsDriver extends OpMode {
 
     DcMotor leftFront;
     DcMotor rightFront;
@@ -18,12 +22,14 @@ public class DragonsDriver extends OpMode{
     @Override
     public void init() {
 
-        leftFront = new DriveMotor(hardwareMap, "leftFront").dcMotor;
-        rightFront = new DriveMotor(hardwareMap, "rightFront").dcMotor;
+        leftFront = new DriveMotor(hardwareMap, "leftFront").dcMotor; //returns DcMotorEx
+        rightFront = new DriveMotor(hardwareMap, "rightFront").dcMotor; //(editable in DriveMotor.java)
         leftBack = new DriveMotor(hardwareMap, "leftBack").dcMotor;
         rightBack = new DriveMotor(hardwareMap, "rightBack").dcMotor;
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.pipelineSwitch(0);
+        limelight.start();
 
     }
 
@@ -37,8 +43,18 @@ public class DragonsDriver extends OpMode{
 
         moveRobot(x,y, rightX);
 
+        LLResult result = limelight.getLatestResult();
+        if (result != null) {
 
+            if (result.isValid()) {
 
+                Pose3D botpose = result.getBotpose();
+                telemetry.addData("tx", result.getTx());
+                telemetry.addData("ty", result.getTy());
+                telemetry.addData("Botpose", botpose.toString());
+            }
+            
+        }
 
     }
 
