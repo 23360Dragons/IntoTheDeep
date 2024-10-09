@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
 public class DriveMotor {
-    public static DcMotorEx createNewMotor (HardwareMap hardwareMap, String name) {
+    public static DcMotorEx newMotor(HardwareMap hardwareMap, String name) {
         DcMotorEx dcMotor;
 
         dcMotor = hardwareMap.get(DcMotorEx.class, name); // gets a dcMotorEx object of the name "name"
