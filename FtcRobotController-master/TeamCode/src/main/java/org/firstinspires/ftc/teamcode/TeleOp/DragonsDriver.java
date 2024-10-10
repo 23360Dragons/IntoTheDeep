@@ -67,19 +67,30 @@ public class DragonsDriver extends OpMode {
     private void moveRobot(double botHeading, double x, double y, double rightX)
     {
 
-        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
+        double rotX = (x * Math.cos(-botHeading) - y * Math.sin(-botHeading)) * 1.1; // Counteract imperfect strafing
         double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
-        rotX *= 1.1; // Counteract imperfect strafing
+        /*
+        these are the rotated x and y (i.e. the vector relative to the field rather than to the robot)
+
+        x * Math.cos and Math.sin are using trigonometry to find the values of the distances between
+        the robot-centric vector and the field-centric vector (the target vector). rotY does the same
+
+        in essence, x and y are the values of the initial vector, and rotX and rotY are the values
+        of the field-centric vector (the vector after it has been transformed by the botHeading)
+
+        see the Mecanum Drive Tutorial on gm0.org for more info
+         */
 
         //we have to initialize the variable to control speed percentage
         //because y on the stick is negative, speed must be negative
         double speed = -0.5;
 
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rightX), 1);
-        leftFront.setPower (((rotY + rotX + rightX) / denominator) * speed);
-        leftBack.setPower  (((rotY - rotX + rightX) / denominator) * speed);
-        rightFront.setPower(((rotY - rotX - rightX) / denominator) * speed);
-        rightBack.setPower (((rotY + rotX - rightX) / denominator) * speed);
+        //takes the sum of all inputs so the total motor power is within the range -1 to 1
+        leftFront.setPower (((rotY + rotX + rightX) * speed) / denominator); //possibly swap speed and denominator - test
+        leftBack.setPower  (((rotY - rotX + rightX) * speed) / denominator);
+        rightFront.setPower(((rotY - rotX - rightX) * speed) / denominator);
+        rightBack.setPower (((rotY + rotX - rightX) * speed) / denominator);
 
     }
 }
