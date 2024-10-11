@@ -9,10 +9,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 public class DragonsLimelight
 {
-    public static Limelight3A initialize (Limelight3A limelight, HardwareMap hardwareMap)
+    public static Limelight3A initialize (HardwareMap hardwareMap, int pipeline)
     {
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        limelight.pipelineSwitch(0);
+        Limelight3A limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.pipelineSwitch(pipeline);
         limelight.start();
         return limelight;
     }

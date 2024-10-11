@@ -5,6 +5,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -31,10 +32,14 @@ public class DragonsDriver extends OpMode {
     @Override
     public void init() {
 
-        leftFront  = DriveMotor.newMotor(hardwareMap, "leftFront");  // returns DcMotorEx - editable in utils\DriveMotor.java
+        leftFront  = DriveMotor.newMotor(hardwareMap, "leftFront");  // returns DcMotor - editable in utils\DriveMotor.java
         rightFront = DriveMotor.newMotor(hardwareMap, "rightFront");
         leftBack   = DriveMotor.newMotor(hardwareMap, "leftBack");
         rightBack  = DriveMotor.newMotor(hardwareMap, "rightBack");
+
+        //reverse the right motors due to the direction they rotate being flipped on the right side
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         imu = hardwareMap.get(IMU.class, "imu");
 
@@ -44,7 +49,7 @@ public class DragonsDriver extends OpMode {
 
         imu.initialize(parameters);
 
-        limelight = DragonsLimelight.initialize(limelight, hardwareMap);
+//        limelight = DragonsLimelight.initialize(hardwareMap, 0);
 
     }
 
@@ -62,15 +67,15 @@ public class DragonsDriver extends OpMode {
         x = gamepad1.left_stick_x;
         rightX = gamepad1.right_stick_x;
 
-        moveRobot(botHeading, x, y, rightX); // x, y, and rightX are the gamepad inputs
+        moveRobotFC(botHeading, x, y, rightX, -0.5); // x, y, and rightX are the gamepad inputs
 
-        DragonsLimelight.update(limelight, telemetry);
+//        DragonsLimelight.update(limelight, telemetry);
 
-        telemetry.update();
+//        telemetry.update();
 
     }
 
-    private void moveRobot(double botHeading, double x, double y, double rightX)
+    private void moveRobotFC(double botHeading, double x, double y, double rightX, double speed)
     {
 
         double rotX = (x * Math.cos(-botHeading) - y * Math.sin(-botHeading)) * 1.1; // Counteract imperfect strafing
@@ -89,7 +94,8 @@ public class DragonsDriver extends OpMode {
 
         //we have to initialize the variable to control speed percentage
         //because y on the stick is negative, speed must be negative
-        double speed = -0.5;
+
+        //speed == -0.5
 
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rightX), 1); //makes sure values don't get scaled up by dividing by a decimal
         //takes the sum of all inputs so the total motor power is within the range -1 to 1
@@ -106,11 +112,23 @@ public class DragonsDriver extends OpMode {
 
         int i = 0;
         for (DcMotor motor : driveMotors) {
-            telemetry.addData(driveMotorNames[i] + " power", motor.getPower());
             telemetry.addLine();
+            telemetry.addData(driveMotorNames[i] + " power", motor.getPower());
             i++;
         }
+        telemetry.addLine();
         telemetry.addData("botHeading", botHeading);
 
+    }
+    private void moveRobotRC (double x, double y, double rightX, double speed)
+    {
+        // speed == -0.5
+
+        double denominator = Math.max(Math.abs(x) + Math.abs(y) + Math.abs(rightX), 1);
+
+        leftFront.setPower (((y + x + rightX) * speed) / denominator);
+        leftBack.setPower  (((y - x + rightX) * speed) / denominator);
+        rightFront.setPower(((y - x - rightX) * speed) / denominator);
+        rightBack.setPower (((y + x - rightX) * speed) / denominator);
     }
 }
