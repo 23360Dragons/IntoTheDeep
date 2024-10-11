@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.TeleOp.utils.DragonsLimelight;
 import org.firstinspires.ftc.teamcode.TeleOp.utils.DriveMotor;
 
-@TeleOp
+@TeleOp(name = "Dragons Driver", group = "TeleOp")
 public class DragonsDriver extends OpMode {
 
     DcMotor leftFront;
