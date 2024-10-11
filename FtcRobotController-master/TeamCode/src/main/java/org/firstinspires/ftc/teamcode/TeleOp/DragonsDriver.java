@@ -20,21 +20,27 @@ public class DragonsDriver extends OpMode {
     DcMotor rightBack;
     IMU imu;
 
+    // TODO: change these values based on robot construction
+    RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
+            RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
+    RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
+            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+
     private Limelight3A limelight;
 
     @Override
     public void init() {
 
-        leftFront  = DriveMotor.newMotor(hardwareMap, "leftFront");  // returns DcMotorEx
-        rightFront = DriveMotor.newMotor(hardwareMap, "rightFront"); // editable in
-        leftBack   = DriveMotor.newMotor(hardwareMap, "leftBack");   // utils\DriveMotor.java
+        leftFront  = DriveMotor.newMotor(hardwareMap, "leftFront");  // returns DcMotorEx - editable in utils\DriveMotor.java
+        rightFront = DriveMotor.newMotor(hardwareMap, "rightFront");
+        leftBack   = DriveMotor.newMotor(hardwareMap, "leftBack");
         rightBack  = DriveMotor.newMotor(hardwareMap, "rightBack");
 
         imu = hardwareMap.get(IMU.class, "imu");
 
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
+                logoFacingDirection,
+                usbFacingDirection));
 
         imu.initialize(parameters);
 
@@ -85,12 +91,26 @@ public class DragonsDriver extends OpMode {
         //because y on the stick is negative, speed must be negative
         double speed = -0.5;
 
-        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rightX), 1);
+        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rightX), 1); //makes sure values don't get scaled up by dividing by a decimal
         //takes the sum of all inputs so the total motor power is within the range -1 to 1
-        leftFront.setPower (((rotY + rotX + rightX) * speed) / denominator); //possibly swap speed and denominator - test
+        // TODO: possibly swap speed and denominator - test
+        leftFront.setPower (((rotY + rotX + rightX) * speed) / denominator);
         leftBack.setPower  (((rotY - rotX + rightX) * speed) / denominator);
         rightFront.setPower(((rotY - rotX - rightX) * speed) / denominator);
         rightBack.setPower (((rotY + rotX - rightX) * speed) / denominator);
+
+
+        //telemetry placeholder code
+        DcMotor[] driveMotors = {leftFront, leftBack, rightFront, rightBack};
+        String[] driveMotorNames = {"leftFront", "leftBack", "rightFront", "rightBack"};
+
+        int i = 0;
+        for (DcMotor motor : driveMotors) {
+            telemetry.addData(driveMotorNames[i] + " power", motor.getPower());
+            telemetry.addLine();
+            i++;
+        }
+        telemetry.addData("botHeading", botHeading);
 
     }
 }
