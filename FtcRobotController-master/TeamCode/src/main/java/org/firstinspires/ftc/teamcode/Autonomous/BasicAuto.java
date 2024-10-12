@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
+import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
-import org.firstinspires.ftc.teamcode.TeleOp.utils.DriveMotor;
+import org.firstinspires.ftc.teamcode.utils.ConfigurationException;
+import org.firstinspires.ftc.teamcode.utils.DragonsLimelight;
+import org.firstinspires.ftc.teamcode.utils.DriveMotor;
 
 @Autonomous
 public class BasicAuto extends LinearOpMode {
@@ -15,49 +19,103 @@ public class BasicAuto extends LinearOpMode {
     DcMotor leftBack;
     DcMotor rightBack;
     IMU imu;
+    Limelight3A limelight;
+
+    // TODO: change these values based on robot construction
+    RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
+            RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
+    RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
+            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        StringBuilder exceptions = new StringBuilder("The following exceptions occurred: \n");
+        boolean exceptionOccured = false;
+
+        DcMotor[] driveMotors = {leftFront, leftBack, rightFront, rightBack};
+        String[] driveMotorNames = {"leftFront", "leftBack", "rightFront", "rightBack"};
+
         try
         {
-            leftFront  = DriveMotor.newMotor(hardwareMap, "leftFront");  // returns DcMotor - editable in utils\DriveMotor.java
-            rightFront = DriveMotor.newMotor(hardwareMap, "rightFront");
-            leftBack   = DriveMotor.newMotor(hardwareMap, "leftBack");
-            rightBack  = DriveMotor.newMotor(hardwareMap, "rightBack");
+            for (int i = 0; i < driveMotors.length - 1; i++)
+            {
+                try
+                {
+                    driveMotors[i] = DriveMotor.newMotor(hardwareMap, driveMotorNames[i]);  // returns DcMotor - editable in utils\DriveMotor.java
+                } catch (ConfigurationException ex)
+                {
+                    exceptions.append(ex.getMessage()).append("\n");
+                    exceptionOccured = true;
+                }
+            }
+
+            leftFront = driveMotors[0];
+            rightFront = driveMotors[1];
+            leftBack = driveMotors[2];
+            rightBack = driveMotors[3];
+
+            // reverse the right motors due to the direction they rotate being flipped on the right side
+            rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+            rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
+            try
+            {
+                imu = hardwareMap.get(IMU.class, "imu");
+
+                IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                        logoFacingDirection,
+                        usbFacingDirection));
+                imu.initialize(parameters);
+            } catch (IllegalArgumentException ex)
+            {
+                exceptions.append(ex.getMessage()).append("\n");
+                exceptionOccured = true;
+            }
+
+            try
+            {
+                limelight = DragonsLimelight.initialize(hardwareMap, 0);
+            } catch (IllegalArgumentException ex)
+            {
+                exceptions.append(ex.getMessage()).append("\n");
+                exceptionOccured = true;
+            }
+        } catch (Exception ex)
+        {
+            exceptions.append(ex.getMessage()).append("\n");
+            exceptionOccured = true;
         }
-        catch(IllegalArgumentException ex) {
-            telemetry.addData("Configuration issue", "One or more motors not available");
-            telemetry.update();
+
+        if (exceptionOccured)
+        {
+            telemetry.addLine(exceptions.toString());
 
             Thread.sleep(5000);
 
-            terminateOpModeNow();
+            requestOpModeStop();
             return;
         }
 
-
-        //reverse the right motors due to the direction they rotate being flipped on the right side
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        imu = hardwareMap.get(IMU.class, "imu");
-
         waitForStart();
 
+        if(isStopRequested()) return;
+
         moveRobot(-1, 0, 0, 1,1);
+        //why not this?
+        //moveRobotRC(0, 1, 0, 0.5, leftFront, leftBack, rightFront, rightBack);
 
     }
 
-    public void moveRobot(double x, double y, double yaw, double straif, double straif1) {
+    public void moveRobot(double x, double y, double yaw, double strafe, double strafe1) {
         // Calculate wheel powers.
         //changed power calculations by adding *0.7 to run at 70% of what it ran at beforehand
-        double leftFrontPower    =  (x -y -yaw) *0.7*straif;
-        double rightFrontPower   =  (x +y +yaw) *0.7*straif1;
-        double leftBackPower     =  (x +y -yaw) *0.7*straif1;
-        double rightBackPower    =  (x -y +yaw) *0.7*straif;
+        double leftFrontPower  = (x - y - yaw) * 0.7 * strafe;
+        double rightFrontPower = (x + y + yaw) * 0.7 * strafe1;
+        double leftBackPower   = (x + y - yaw) * 0.7 * strafe1;
+        double rightBackPower  = (x - y + yaw) * 0.7 * strafe;
 
-        //straif makes robot go right straif1 makes robot go left
-        //always set straifing variables to 1, set one of them negitive to go left or right as instructed above
+        //strafe makes robot go right strafe1 makes robot go left
+        //always set strafing variables to 1, set one of them negative to go left or right as instructed above
 
         // Normalize wheel powers to be less than 1.0
         double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
@@ -65,10 +123,10 @@ public class BasicAuto extends LinearOpMode {
         max = Math.max(max, Math.abs(rightBackPower));
 
         if (max > 1.0) {
-            leftFrontPower /= max;
+            leftFrontPower  /= max;
             rightFrontPower /= max;
-            leftBackPower /= max;
-            rightBackPower /= max;
+            leftBackPower   /= max;
+            rightBackPower  /= max;
         }
 
         // Send powers to the wheels.

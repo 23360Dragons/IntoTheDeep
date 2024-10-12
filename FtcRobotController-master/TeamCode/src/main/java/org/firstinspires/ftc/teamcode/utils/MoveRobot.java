@@ -1,9 +1,10 @@
-package org.firstinspires.ftc.teamcode.TeleOp.utils;
+package org.firstinspires.ftc.teamcode.utils;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class MoveRobot
 {
+    //robot-centric move function
     public static void moveRobotRC (double x, double y, double rightX, double speed,
                                     DcMotor leftFront, DcMotor leftBack, DcMotor rightFront, DcMotor rightBack)
     {
@@ -15,6 +16,7 @@ public class MoveRobot
         rightBack.setPower (((y + x - rightX) * speed) / denominator);
     }
 
+    //field-centric move function
     public static void moveRobotFC(double botHeading, double x, double y, double rightX, double speed,
                                    DcMotor leftFront, DcMotor leftBack, DcMotor rightFront, DcMotor rightBack)
     {
