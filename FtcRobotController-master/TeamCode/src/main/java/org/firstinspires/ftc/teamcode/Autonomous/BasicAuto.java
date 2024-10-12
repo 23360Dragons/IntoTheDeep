@@ -1,11 +1,12 @@
-package org.firstinspires.ftc.teamcode.TeleOp.utils;
+package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+
+import org.firstinspires.ftc.teamcode.TeleOp.utils.DriveMotor;
 
 @Autonomous
 public class BasicAuto extends LinearOpMode {
@@ -26,7 +27,6 @@ public class BasicAuto extends LinearOpMode {
         }
         catch(IllegalArgumentException ex) {
             telemetry.addData("Configuration issue", "One or more motors not available");
-            telemetry.addLine();
             telemetry.update();
 
             Thread.sleep(5000);

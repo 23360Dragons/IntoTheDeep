@@ -11,9 +11,11 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.TeleOp.utils.DragonsLimelight;
 import org.firstinspires.ftc.teamcode.TeleOp.utils.DriveMotor;
+import org.firstinspires.ftc.teamcode.TeleOp.utils.MoveRobot;
 
 @TeleOp(name = "Dragons Driver", group = "TeleOp")
-public class DragonsDriver extends OpMode {
+public class DragonsDriver extends OpMode
+{
 
     DcMotor leftFront;
     DcMotor rightFront;
@@ -30,7 +32,8 @@ public class DragonsDriver extends OpMode {
     private Limelight3A limelight;
 
     @Override
-    public void init() {
+    public void init()
+    {
 
         leftFront  = DriveMotor.newMotor(hardwareMap, "leftFront");  // returns DcMotor - editable in utils\DriveMotor.java
         rightFront = DriveMotor.newMotor(hardwareMap, "rightFront");
@@ -54,7 +57,8 @@ public class DragonsDriver extends OpMode {
     }
 
     @Override
-    public void loop() {
+    public void loop()
+    {
 
         if(gamepad1.options) {
             imu.resetYaw();
@@ -67,68 +71,27 @@ public class DragonsDriver extends OpMode {
         x = gamepad1.left_stick_x;
         rightX = gamepad1.right_stick_x;
 
-        moveRobotFC(botHeading, x, y, rightX, -0.5); // x, y, and rightX are the gamepad inputs
+        MoveRobot.moveRobotFC(botHeading, x, y, rightX, -0.5, leftFront, leftBack, rightFront, rightBack); // x, y, and rightX are the gamepad inputs
+        //speed should be negative because gamepad y is negative
+
+        //telemetry placeholder code
+        {
+            DcMotor[] driveMotors = {leftFront, leftBack, rightFront, rightBack};
+            String[] driveMotorNames = {"leftFront", "leftBack", "rightFront", "rightBack"};
+
+            int i = 0;
+            for (DcMotor motor : driveMotors) {
+                telemetry.addLine();
+                telemetry.addData(driveMotorNames[i] + " power", motor.getPower());
+                i++;
+            }
+            telemetry.addLine();
+            telemetry.addData("botHeading", botHeading);
+        }
 
 //        DragonsLimelight.update(limelight, telemetry);
 
 //        telemetry.update();
 
-    }
-
-    private void moveRobotFC(double botHeading, double x, double y, double rightX, double speed)
-    {
-
-        double rotX = (x * Math.cos(-botHeading) - y * Math.sin(-botHeading)) * 1.1; // Counteract imperfect strafing
-        double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
-        /*
-        these are the rotated x and y (i.e. the vector relative to the field rather than to the robot)
-
-        x * Math.cos and Math.sin are using trigonometry to find the values of the distances between
-        the robot-centric vector and the field-centric vector (the target vector). rotY does the same
-
-        in essence, x and y are the values of the initial vector, and rotX and rotY are the values
-        of the field-centric vector (the vector after it has been transformed by the botHeading)
-
-        see the Mecanum Drive Tutorial on gm0.org for more info
-         */
-
-        //we have to initialize the variable to control speed percentage
-        //because y on the stick is negative, speed must be negative
-
-        //speed == -0.5
-
-        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rightX), 1); //makes sure values don't get scaled up by dividing by a decimal
-        //takes the sum of all inputs so the total motor power is within the range -1 to 1
-        // TODO: possibly swap speed and denominator - test
-        leftFront.setPower (((rotY + rotX + rightX) * speed) / denominator);
-        leftBack.setPower  (((rotY - rotX + rightX) * speed) / denominator);
-        rightFront.setPower(((rotY - rotX - rightX) * speed) / denominator);
-        rightBack.setPower (((rotY + rotX - rightX) * speed) / denominator);
-
-
-        //telemetry placeholder code
-        DcMotor[] driveMotors = {leftFront, leftBack, rightFront, rightBack};
-        String[] driveMotorNames = {"leftFront", "leftBack", "rightFront", "rightBack"};
-
-        int i = 0;
-        for (DcMotor motor : driveMotors) {
-            telemetry.addLine();
-            telemetry.addData(driveMotorNames[i] + " power", motor.getPower());
-            i++;
-        }
-        telemetry.addLine();
-        telemetry.addData("botHeading", botHeading);
-
-    }
-    private void moveRobotRC (double x, double y, double rightX, double speed)
-    {
-        // speed == -0.5
-
-        double denominator = Math.max(Math.abs(x) + Math.abs(y) + Math.abs(rightX), 1);
-
-        leftFront.setPower (((y + x + rightX) * speed) / denominator);
-        leftBack.setPower  (((y - x + rightX) * speed) / denominator);
-        rightFront.setPower(((y - x - rightX) * speed) / denominator);
-        rightBack.setPower (((y + x - rightX) * speed) / denominator);
     }
 }
