@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.utils.ConfigurationException;
+import org.firstinspires.ftc.teamcode.utils.DragonsIMU;
 import org.firstinspires.ftc.teamcode.utils.DragonsLimelight;
 import org.firstinspires.ftc.teamcode.utils.DriveMotor;
 
@@ -30,63 +31,55 @@ public class BasicAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         StringBuilder exceptions = new StringBuilder("The following exceptions occurred: \n");
-        boolean exceptionOccured = false;
+        boolean exceptionOccurred = false;
 
         DcMotor[] driveMotors = {leftFront, leftBack, rightFront, rightBack};
         String[] driveMotorNames = {"leftFront", "leftBack", "rightFront", "rightBack"};
 
-        try
+        //tests each motor
+        for (int i = 0; i < driveMotors.length - 1; i++)
         {
-            for (int i = 0; i < driveMotors.length - 1; i++)
-            {
-                try
-                {
-                    driveMotors[i] = DriveMotor.newMotor(hardwareMap, driveMotorNames[i]);  // returns DcMotor - editable in utils\DriveMotor.java
-                } catch (ConfigurationException ex)
-                {
-                    exceptions.append(ex.getMessage()).append("\n");
-                    exceptionOccured = true;
-                }
-            }
-
-            leftFront = driveMotors[0];
-            rightFront = driveMotors[1];
-            leftBack = driveMotors[2];
-            rightBack = driveMotors[3];
-
-            // reverse the right motors due to the direction they rotate being flipped on the right side
-            rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-            rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-
             try
             {
-                imu = hardwareMap.get(IMU.class, "imu");
-
-                IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                        logoFacingDirection,
-                        usbFacingDirection));
-                imu.initialize(parameters);
-            } catch (IllegalArgumentException ex)
+                driveMotors[i] = DriveMotor.newMotor(hardwareMap, driveMotorNames[i]);  // returns DcMotor - editable in utils\DriveMotor.java
+            } catch (ConfigurationException ex)
             {
                 exceptions.append(ex.getMessage()).append("\n");
-                exceptionOccured = true;
+                exceptionOccurred = true;
             }
-
-            try
-            {
-                limelight = DragonsLimelight.initialize(hardwareMap, 0);
-            } catch (IllegalArgumentException ex)
-            {
-                exceptions.append(ex.getMessage()).append("\n");
-                exceptionOccured = true;
-            }
-        } catch (Exception ex)
-        {
-            exceptions.append(ex.getMessage()).append("\n");
-            exceptionOccured = true;
         }
 
-        if (exceptionOccured)
+        //assigns the motors to the corresponding motor from the array
+        leftFront = driveMotors[0];
+        rightFront = driveMotors[1];
+        leftBack = driveMotors[2];
+        rightBack = driveMotors[3];
+
+        // reverse the right motors due to the direction they rotate being flipped on the right side
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        //initializes the imu
+        try
+        {
+            imu = DragonsIMU.initialize(hardwareMap, usbFacingDirection, logoFacingDirection);
+        } catch (ConfigurationException ex)
+        {
+            exceptions.append(ex.getMessage()).append("\n");
+            exceptionOccurred = true;
+        }
+
+        //initializes the limelight
+        try
+        {
+            limelight = DragonsLimelight.initialize(hardwareMap, 0);
+        } catch (ConfigurationException ex)
+        {
+            exceptions.append(ex.getMessage()).append("\n");
+            exceptionOccurred = true;
+        }
+
+        if (exceptionOccurred)
         {
             telemetry.addLine(exceptions.toString());
 
