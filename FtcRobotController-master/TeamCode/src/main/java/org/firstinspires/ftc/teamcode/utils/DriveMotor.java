@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-
 public class DriveMotor {
     public static DcMotor newMotor(HardwareMap hardwareMap, String name) throws ConfigurationException {
 
@@ -17,7 +16,6 @@ public class DriveMotor {
             dcMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             dcMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             return dcMotor; // returns a DcMotor object
-            //should this return be here or after the catch?
         } catch (IllegalArgumentException ex)
         {
             throw new ConfigurationException(name + " does not exist"); //"throws" said exception back to the script that called newMotor()
