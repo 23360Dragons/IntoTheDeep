@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.utils.ConfigurationException;
 import org.firstinspires.ftc.teamcode.utils.DragonsIMU;
 import org.firstinspires.ftc.teamcode.utils.DragonsLimelight;
 import org.firstinspires.ftc.teamcode.utils.DriveMotor;
+import org.firstinspires.ftc.teamcode.utils.InitInfo;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 
 @TeleOp(name = "Dragons Driver", group = "TeleOp")
@@ -29,18 +30,19 @@ public class DragonsDriver extends LinearOpMode
 
     //initialization parameters for the imu
     // TODO: change these values based on robot construction
-    RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
-            RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
-    RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+    RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection;
+    RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection;
 
     //limelight camera
     private Limelight3A limelight;
 
+
+    public StringBuilder exceptions;
+    public boolean exceptionOccurred;
     @Override
     public void runOpMode() throws InterruptedException {
-        StringBuilder exceptions = new StringBuilder("The following exceptions occurred: \n");
-        boolean exceptionOccurred = false;
+        exceptions = new StringBuilder("The following exceptions occurred: \n");
+        exceptionOccurred = false;
 
         DcMotor[] driveMotors = {leftFront, leftBack, rightFront, rightBack};
         String[] driveMotorNames = {"leftFront", "leftBack", "rightFront", "rightBack"};
@@ -67,6 +69,9 @@ public class DragonsDriver extends LinearOpMode
         // reverse the right motors due to the direction they rotate being flipped on the right side
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        logoFacingDirection = InitInfo.logoFacingDirection;
+        usbFacingDirection  = InitInfo.usbFacingDirection;
 
         //initializes the imu
         try

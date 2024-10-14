@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.utils.ConfigurationException;
 import org.firstinspires.ftc.teamcode.utils.DragonsIMU;
 import org.firstinspires.ftc.teamcode.utils.DragonsLimelight;
 import org.firstinspires.ftc.teamcode.utils.DriveMotor;
+import org.firstinspires.ftc.teamcode.utils.InitInfo;
 
 @Autonomous
 public class BasicAuto extends LinearOpMode {
@@ -23,10 +24,8 @@ public class BasicAuto extends LinearOpMode {
     Limelight3A limelight;
 
     // TODO: change these values based on robot construction
-    RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
-            RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
-    RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+    RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection;
+    RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -58,6 +57,9 @@ public class BasicAuto extends LinearOpMode {
         // reverse the right motors due to the direction they rotate being flipped on the right side
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        logoFacingDirection = InitInfo.logoFacingDirection;
+        usbFacingDirection = InitInfo.usbFacingDirection;
 
         //initializes the imu
         try
