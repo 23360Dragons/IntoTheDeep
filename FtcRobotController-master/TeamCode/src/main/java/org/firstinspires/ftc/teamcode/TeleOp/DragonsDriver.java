@@ -57,10 +57,10 @@ public class DragonsDriver extends LinearOpMode {
         if (InitInfo.exceptionOccurred) {
             telemetry.addLine(InitInfo.exceptions.toString());
 
+            Thread.sleep(5000);
             if (InitInfo.movementExceptionOccurred) {
                 requestOpModeStop();
             }
-            Thread.sleep(5000);
         }
 
         waitForStart();
