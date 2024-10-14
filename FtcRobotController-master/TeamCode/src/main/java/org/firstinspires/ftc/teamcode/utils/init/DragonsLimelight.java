@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.utils;
+package org.firstinspires.ftc.teamcode.utils.init;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -9,16 +9,19 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 public class DragonsLimelight
 {
-    public static Limelight3A initialize (HardwareMap hardwareMap, int pipeline) throws ConfigurationException {
+    public static Limelight3A limelight;
+    public static Limelight3A initialize (HardwareMap hardwareMap, int pipeline) {
         try
         {
-            Limelight3A limelight = hardwareMap.get(Limelight3A.class, "limelight");
+            limelight = hardwareMap.get(Limelight3A.class, "limelight");
             limelight.pipelineSwitch(pipeline);
             limelight.start();
             return limelight;
         } catch (IllegalArgumentException ex)
         {
-            throw new ConfigurationException("limelight does not exist");
+            InitInfo.exceptions.append("Configuration Error: ").append("limelight").append(" does not exist").append("\n");
+            InitInfo.exceptionOccurred = true;
+            return null;
         }
     }
 
@@ -35,7 +38,6 @@ public class DragonsLimelight
                 telemetry.addLine().addData("Botpose", botpose.toString());
 
             }
-
         }
     }
 }

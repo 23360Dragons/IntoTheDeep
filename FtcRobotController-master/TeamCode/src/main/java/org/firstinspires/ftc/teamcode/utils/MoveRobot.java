@@ -5,20 +5,20 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class MoveRobot
 {
     //robot-centric move function
-    public static void moveRobotRC (double x, double y, double rightX, double speed,
-                                    DcMotor leftFront, DcMotor leftBack, DcMotor rightFront, DcMotor rightBack)
+    public static double[] moveRobotRC (double x, double y, double rightX, double speed)
     {
         double denominator = Math.max(Math.abs(x) + Math.abs(y) + Math.abs(rightX), 1);
 
-        leftFront.setPower (((y + x + rightX) * speed) / denominator);
-        leftBack.setPower  (((y - x + rightX) * speed) / denominator);
-        rightFront.setPower(((y - x - rightX) * speed) / denominator);
-        rightBack.setPower (((y + x - rightX) * speed) / denominator);
+        double leftFrontPower  = (((y + x + rightX) * speed) / denominator);
+        double rightFrontPower = (((y - x - rightX) * speed) / denominator);
+        double leftBackPower   = (((y - x + rightX) * speed) / denominator);
+        double rightBackPower  = (((y + x - rightX) * speed) / denominator);
+
+        return new double[]{leftFrontPower, rightFrontPower, leftBackPower, rightBackPower};
     }
 
     //field-centric move function
-    public static void moveRobotFC(double botHeading, double x, double y, double rightX, double speed,
-                                   DcMotor leftFront, DcMotor leftBack, DcMotor rightFront, DcMotor rightBack)
+    public static double[] moveRobotFC(double botHeading, double x, double y, double rightX, double speed)
     {
 
         double rotX = (x * Math.cos(-botHeading) - y * Math.sin(-botHeading)) * 1.1; // Counteract imperfect strafing
@@ -38,9 +38,12 @@ public class MoveRobot
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rightX), 1); //makes sure values don't get scaled up by dividing by a decimal
         //takes the sum of all inputs so the total motor power is within the range -1 to 1
         //TODO: possibly swap speed and denominator - test
-        leftFront.setPower (((rotY + rotX + rightX) * speed) / denominator);
-        leftBack.setPower  (((rotY - rotX + rightX) * speed) / denominator);
-        rightFront.setPower(((rotY - rotX - rightX) * speed) / denominator);
-        rightBack.setPower (((rotY + rotX - rightX) * speed) / denominator);
+
+        double leftFrontPower  = (((rotY + rotX + rightX) * speed) / denominator);
+        double rightFrontPower = (((rotY - rotX - rightX) * speed) / denominator);
+        double leftBackPower   = (((rotY - rotX + rightX) * speed) / denominator);
+        double rightBackPower  = (((rotY + rotX - rightX) * speed) / denominator);
+
+        return new double[]{leftFrontPower, rightFrontPower, leftBackPower, rightBackPower};
     }
 }

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,105 +8,66 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.utils.ConfigurationException;
-import org.firstinspires.ftc.teamcode.utils.DragonsIMU;
-import org.firstinspires.ftc.teamcode.utils.DragonsLimelight;
-import org.firstinspires.ftc.teamcode.utils.DriveMotor;
-import org.firstinspires.ftc.teamcode.utils.InitInfo;
+import org.firstinspires.ftc.teamcode.utils.init.DragonsIMU;
+import org.firstinspires.ftc.teamcode.utils.init.DragonsLimelight;
+import org.firstinspires.ftc.teamcode.utils.init.DriveMotor;
+import org.firstinspires.ftc.teamcode.utils.init.InitInfo;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 
 @TeleOp(name = "Dragons Driver", group = "TeleOp")
-public class DragonsDriver extends LinearOpMode
-{
+public class DragonsDriver extends LinearOpMode {
     //drive motors
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
     DcMotor rightBack;
+    double[] drivePowers;
 
     //imu - for orientation
     IMU imu;
 
-    //initialization parameters for the imu
-    // TODO: change these values based on robot construction
-    RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection;
-    RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection;
-
     //limelight camera
-    private Limelight3A limelight;
+    Limelight3A limelight;
 
-
-    public StringBuilder exceptions;
-    public boolean exceptionOccurred;
     @Override
     public void runOpMode() throws InterruptedException {
-        exceptions = new StringBuilder("The following exceptions occurred: \n");
-        exceptionOccurred = false;
+        InitInfo.exceptions = new StringBuilder("The following exceptions occurred: \n");
+        InitInfo.exceptionOccurred = false;
+        InitInfo.movementExceptionOccurred = false;
 
-        DcMotor[] driveMotors = {leftFront, leftBack, rightFront, rightBack};
-        String[] driveMotorNames = {"leftFront", "leftBack", "rightFront", "rightBack"};
-
-        //tests each motor
-        for (int i = 0; i < driveMotors.length - 1; i++)
-        {
-            try
-            {
-                driveMotors[i] = DriveMotor.newMotor(hardwareMap, driveMotorNames[i]);  // returns DcMotor - editable in utils\DriveMotor.java
-            } catch (ConfigurationException ex)
-            {
-                exceptions.append(ex.getMessage()).append("\n");
-                exceptionOccurred = true;
-            }
-        }
+        DcMotor[] driveMotors = DriveMotor.initialize(hardwareMap);
 
         //assigns the motors to the corresponding motor from the array
-        leftFront = driveMotors[0];
-        rightFront = driveMotors[1];
-        leftBack = driveMotors[2];
-        rightBack = driveMotors[3];
+        if (driveMotors != null) {
+            leftFront = driveMotors[0];
+            rightFront = driveMotors[1];
+            leftBack = driveMotors[2];
+            rightBack = driveMotors[3];
+        }
 
         // reverse the right motors due to the direction they rotate being flipped on the right side
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        logoFacingDirection = InitInfo.logoFacingDirection;
-        usbFacingDirection  = InitInfo.usbFacingDirection;
+        imu = DragonsIMU.initialize(hardwareMap);
 
-        //initializes the imu
-        try
-        {
-            imu = DragonsIMU.initialize(hardwareMap, usbFacingDirection, logoFacingDirection);
-        } catch (ConfigurationException ex)
-        {
-            exceptions.append(ex.getMessage()).append("\n");
-            exceptionOccurred = true;
-        }
+        limelight = DragonsLimelight.initialize(hardwareMap, 0);
 
-        //initializes the limelight
-        try
-        {
-            limelight = DragonsLimelight.initialize(hardwareMap, 0);
-        } catch (ConfigurationException ex)
-        {
-            exceptions.append(ex.getMessage()).append("\n");
-            exceptionOccurred = true;
-        }
+        //check for configuration issues
+        if (InitInfo.exceptionOccurred) {
+            telemetry.addLine(InitInfo.exceptions.toString());
 
-        if (exceptionOccurred)
-        {
-            telemetry.addLine(exceptions.toString());
-
+            if (InitInfo.movementExceptionOccurred) {
+                requestOpModeStop();
+            }
             Thread.sleep(5000);
-
-            requestOpModeStop();
-            return;
         }
 
         waitForStart();
 
-        if(isStopRequested()) return;
+        if (isStopRequested()) return;
 
-        while(opModeIsActive()) {
+        while (opModeIsActive()) {
             if (gamepad1.options) {
                 imu.resetYaw();
             }
@@ -119,20 +79,27 @@ public class DragonsDriver extends LinearOpMode
             x = gamepad1.left_stick_x;
             rightX = gamepad1.right_stick_x;
 
-            MoveRobot.moveRobotFC(botHeading, x, y, rightX, 0.5, leftFront, leftBack, rightFront, rightBack); // x, y, and rightX are the gamepad inputs
-            //speed should be negative because gamepad y is negative
+            drivePowers = MoveRobot.moveRobotFC(botHeading, x, y, rightX, 0.5); // x, y, and rightX are the gamepad inputs
 
-            //telemetry placeholder code
-            {
-                int i = 0;
-                for (DcMotor motor : driveMotors) {
-                    telemetry.addLine().addData(driveMotorNames[i] + " power", motor.getPower());
-                    i++;
-                }
-                telemetry.addLine().addData("botHeading", botHeading);
+            leftFront.setPower(drivePowers[0]);
+            rightFront.setPower(drivePowers[1]);
+            leftBack.setPower(drivePowers[2]);
+            rightBack.setPower(drivePowers[3]);
+
+            if (!InitInfo.movementExceptionOccurred) {
+                DragonsLimelight.update(limelight, telemetry);
+
+                //put all non-movement code here
             }
 
-            DragonsLimelight.update(limelight, telemetry);
+            //telemetry placeholder code
+
+            int i = 0;
+            for (DcMotor motor : driveMotors) {
+                telemetry.addLine().addData(DriveMotor.getDriveMotorNames()[i] + " power", motor.getPower());
+                i++;
+            }
+            telemetry.addLine().addData("botHeading", botHeading);
 
             telemetry.update();
         }
