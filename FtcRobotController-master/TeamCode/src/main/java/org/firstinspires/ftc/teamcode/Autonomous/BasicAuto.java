@@ -29,6 +29,8 @@ public class BasicAuto extends LinearOpMode {
         InitInfo.exceptionOccurred = false;
         InitInfo.movementExceptionOccurred = false;
 
+
+
         DcMotor[] driveMotors = DriveMotor.initialize(hardwareMap);
 
         //assigns the motors to the corresponding motor from the array
@@ -39,13 +41,11 @@ public class BasicAuto extends LinearOpMode {
             rightBack = driveMotors[3];
         }
 
-        // reverse the right motors due to the direction they rotate being flipped on the right side
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-
         imu = DragonsIMU.initialize(hardwareMap);
 
         limelight = DragonsLimelight.initialize(hardwareMap, 0);
+
+
 
         //check for configuration issues
         if (InitInfo.exceptionOccurred) {

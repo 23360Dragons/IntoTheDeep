@@ -4,7 +4,6 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -35,6 +34,8 @@ public class DragonsDriver extends LinearOpMode {
         InitInfo.exceptionOccurred = false;
         InitInfo.movementExceptionOccurred = false;
 
+
+
         DcMotor[] driveMotors = DriveMotor.initialize(hardwareMap);
 
         //assigns the motors to the corresponding motor from the array
@@ -45,13 +46,11 @@ public class DragonsDriver extends LinearOpMode {
             rightBack = driveMotors[3];
         }
 
-        // reverse the right motors due to the direction they rotate being flipped on the right side
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-
         imu = DragonsIMU.initialize(hardwareMap);
 
         limelight = DragonsLimelight.initialize(hardwareMap, 0);
+
+
 
         //check for configuration issues
         if (InitInfo.exceptionOccurred) {
@@ -95,6 +94,7 @@ public class DragonsDriver extends LinearOpMode {
             //telemetry placeholder code
 
             int i = 0;
+            assert driveMotors != null;
             for (DcMotor motor : driveMotors) {
                 telemetry.addLine().addData(DriveMotor.getDriveMotorNames()[i] + " power", motor.getPower());
                 i++;

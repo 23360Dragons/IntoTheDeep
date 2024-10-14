@@ -7,26 +7,23 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
-public class DragonsLimelight
-{
+public class DragonsLimelight {
     public static Limelight3A limelight;
-    public static Limelight3A initialize (HardwareMap hardwareMap, int pipeline) {
-        try
-        {
+
+    public static Limelight3A initialize(HardwareMap hardwareMap, int pipeline) {
+        try {
             limelight = hardwareMap.get(Limelight3A.class, "limelight");
             limelight.pipelineSwitch(pipeline);
             limelight.start();
             return limelight;
-        } catch (IllegalArgumentException ex)
-        {
+        } catch (IllegalArgumentException ex) {
             InitInfo.exceptions.append("Configuration Error: ").append("limelight").append(" does not exist").append("\n");
             InitInfo.exceptionOccurred = true;
             return null;
         }
     }
 
-    public static void update (Limelight3A limelight, Telemetry telemetry)
-    {
+    public static void update(Limelight3A limelight, Telemetry telemetry) {
         LLResult result = limelight.getLatestResult();
         if (result != null) {
 

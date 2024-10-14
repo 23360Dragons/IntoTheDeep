@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.utils.init;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class DriveMotor {
@@ -17,6 +18,11 @@ public class DriveMotor {
                 driveMotors[i] = hardwareMap.get(DcMotor.class, driveMotorNames[i]); // gets a dcMotor object of the name "name"
                 driveMotors[i].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 driveMotors[i].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+                if (i % 2 != 0) { // if the index is odd (1 or 3), set direction to reverse. (this flips the right motors)
+                    driveMotors[i].setDirection(DcMotorSimple.Direction.REVERSE);
+                }
+
             } catch (IllegalArgumentException ex) {
                 InitInfo.exceptions.append("CRITICAL Configuration Error: ").append(driveMotorNames[i]).append(" does not exist").append("\n");
                 InitInfo.exceptionOccurred = true;
