@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-
 public class MoveRobot
 {
     //robot-centric move function
     public static double[] moveRobotRC (double x, double y, double rightX, double speed)
     {
-        double denominator = Math.max(Math.abs(x) + Math.abs(y) + Math.abs(rightX), 1);
+        x*=1.1; //counteract imperfect strafing
+        double denominator = Math.max(Math.abs(x) + Math.abs(y) + Math.abs(rightX), 1); //normalize the inputs
 
         double leftFrontPower  = (((y + x + rightX) * speed) / denominator);
         double rightFrontPower = (((y - x - rightX) * speed) / denominator);
