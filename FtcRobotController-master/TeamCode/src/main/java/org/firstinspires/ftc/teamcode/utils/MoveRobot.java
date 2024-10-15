@@ -8,10 +8,10 @@ public class MoveRobot
         x*=1.1; //counteract imperfect strafing
         double denominator = Math.max(Math.abs(x) + Math.abs(y) + Math.abs(rightX), 1); //normalize the inputs
 
-        double leftFrontPower  = (((y + x + rightX) * speed) / denominator);
-        double rightFrontPower = (((y - x - rightX) * speed) / denominator);
-        double leftBackPower   = (((y - x + rightX) * speed) / denominator);
-        double rightBackPower  = (((y + x - rightX) * speed) / denominator);
+        double leftFrontPower  = (((y + x + rightX) ) / denominator)* speed;
+        double rightFrontPower = (((y - x - rightX) ) / denominator)* speed;
+        double leftBackPower   = (((y - x + rightX) ) / denominator)* speed;
+        double rightBackPower  = (((y + x - rightX) ) / denominator)* speed;
 
         return new double[]{leftFrontPower, rightFrontPower, leftBackPower, rightBackPower};
     }
