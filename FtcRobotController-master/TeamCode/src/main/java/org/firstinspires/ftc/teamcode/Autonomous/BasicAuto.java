@@ -27,7 +27,6 @@ public class BasicAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         InitInfo.exceptions = new StringBuilder("The following exceptions occurred: \n");
         InitInfo.exceptionOccurred = false;
-        InitInfo.movementExceptionOccurred = false;
 
 
 
@@ -52,7 +51,7 @@ public class BasicAuto extends LinearOpMode {
             telemetry.addLine(InitInfo.exceptions.toString());
 
             Thread.sleep(5000);
-            if (InitInfo.movementExceptionOccurred) {
+            if (!DriveMotor.isValid) {
                 requestOpModeStop();
             }
         }

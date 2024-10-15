@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class DriveMotor {
     private static final DcMotor[] driveMotors = new DcMotor[4];
     private static final String[] driveMotorNames = {"leftFront", "leftBack", "rightFront", "rightBack"};
+    public static boolean isValid;
 
     public static String[] getDriveMotorNames () {
         return driveMotorNames;
@@ -23,10 +24,12 @@ public class DriveMotor {
                     driveMotors[i].setDirection(DcMotorSimple.Direction.REVERSE);
                 }
 
+                isValid = true;
+
             } catch (IllegalArgumentException ex) {
                 InitInfo.exceptions.append("CRITICAL Configuration Error: ").append(driveMotorNames[i]).append(" does not exist").append("\n");
                 InitInfo.exceptionOccurred = true;
-                InitInfo.movementExceptionOccurred = true;
+                isValid = false;
             }
         }
 

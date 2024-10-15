@@ -24,7 +24,6 @@ public class DragonsDriver extends LinearOpMode {
     DcMotor rightBack;
     double[] drivePowers;
 
-
     //imu - for orientation
     IMU imu;
 
@@ -35,7 +34,6 @@ public class DragonsDriver extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         InitInfo.exceptions = new StringBuilder("The following exceptions occurred: \n");
         InitInfo.exceptionOccurred = false;
-        InitInfo.movementExceptionOccurred = false;
 
 
 
@@ -60,7 +58,7 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.addLine(InitInfo.exceptions.toString());
 
             Thread.sleep(5000);
-            if (InitInfo.movementExceptionOccurred) {
+        if (!DragonsIMU.isValid && !DriveMotor.isValid) {
                 requestOpModeStop();
             }
         }

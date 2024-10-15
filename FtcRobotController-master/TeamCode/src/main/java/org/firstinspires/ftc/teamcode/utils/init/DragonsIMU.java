@@ -16,6 +16,8 @@ public class DragonsIMU {
         try {
             imu = hardwareMap.get(IMU.class, "imu");
 
+            isValid = true;
+
             IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                     logoFacingDirection,
                     usbFacingDirection));
@@ -24,7 +26,7 @@ public class DragonsIMU {
         } catch (IllegalArgumentException ex) {
             InitInfo.exceptions.append("CRITICAL Configuration Error: ").append("imu").append(" does not exist").append("\n");
             InitInfo.exceptionOccurred = true;
-            InitInfo.movementExceptionOccurred = true;
+            isValid = false;
             return null;
         }
     }
