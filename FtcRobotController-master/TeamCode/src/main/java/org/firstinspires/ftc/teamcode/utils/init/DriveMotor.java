@@ -4,39 +4,54 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftFront;
+import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.rightFront;
+import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftBack;
+import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.rightBack;
+
+
+
 public class DriveMotor {
-    private static final DcMotor[] driveMotors = new DcMotor[4];
-    private static final String[] driveMotorNames = {"leftFront", "leftBack", "rightFront", "rightBack"};
     public static boolean isValid;
 
-    public static String[] getDriveMotorNames () {
-        return driveMotorNames;
-    }
+    public static void initialize (HardwareMap hardwareMap) {
+        try {
+            leftFront = hardwareMap.get(DcMotor.class, "leftFront"); // gets a dcMotor object of the name "name"
+            leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            leftFront.setDirection(DcMotor.Direction.REVERSE); // fix faulty drive behavior 10/15
 
-    public static DcMotor[] initialize (HardwareMap hardwareMap) {
-        for (int i = 0; i < driveMotors.length - 1; i++) {
-            try {
-                driveMotors[i] = hardwareMap.get(DcMotor.class, driveMotorNames[i]); // gets a dcMotor object of the name "name"
-                driveMotors[i].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                driveMotors[i].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-                if (i % 2 != 0) { // if the index is odd (1 or 3), set direction to reverse. (this flips the right motors)
-                    driveMotors[i].setDirection(DcMotorSimple.Direction.REVERSE);
-                }
-
-                isValid = true;
-
-            } catch (IllegalArgumentException ex) {
-                InitInfo.exceptions.append("CRITICAL Configuration Error: ").append(driveMotorNames[i]).append(" does not exist").append("\n");
-                InitInfo.exceptionOccurred = true;
-                isValid = false;
-            }
+        } catch (IllegalArgumentException e) {
+            InitInfo.exceptions.append("Configuration Error: ").append("leftFront").append(" does not exist").append("\n");
+            InitInfo.exceptionOccurred = true;
         }
 
-        if (InitInfo.exceptionOccurred) {
-            return null;
-        } else {
-            return driveMotors;
+        try {
+            rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+            rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        } catch (IllegalArgumentException e) {
+            InitInfo.exceptions.append("Configuration Error: ").append("rightFront").append(" does not exist").append("\n");
+            InitInfo.exceptionOccurred = true;
+        }
+
+        try {
+            leftBack = hardwareMap.get(DcMotor.class, "leftBack");
+            leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        } catch (IllegalArgumentException e) {
+            InitInfo.exceptions.append("Configuration Error: ").append("leftBack").append(" does not exist").append("\n");
+            InitInfo.exceptionOccurred = true;
+        }
+
+        try {
+            rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+            rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        } catch (IllegalArgumentException e) {
+            InitInfo.exceptions.append("Configuration Error: ").append("rightBack").append(" does not exist").append("\n");
+            InitInfo.exceptionOccurred = true;
         }
     }
 }

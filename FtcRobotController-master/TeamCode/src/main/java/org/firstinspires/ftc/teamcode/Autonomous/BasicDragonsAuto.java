@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.utils.init.DragonsIMU;
@@ -11,13 +10,13 @@ import org.firstinspires.ftc.teamcode.utils.init.DragonsLimelight;
 import org.firstinspires.ftc.teamcode.utils.init.DriveMotor;
 import org.firstinspires.ftc.teamcode.utils.init.InitInfo;
 
+import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftFront;
+import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.rightFront;
+import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftBack;
+import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.rightBack;
+
 @Autonomous
 public class BasicDragonsAuto extends LinearOpMode {
-    DcMotor leftFront;
-    DcMotor rightFront;
-    DcMotor leftBack;
-    DcMotor rightBack;
-
     IMU imu;
 
     Limelight3A limelight;
@@ -29,15 +28,7 @@ public class BasicDragonsAuto extends LinearOpMode {
 
 
 
-        DcMotor[] driveMotors = DriveMotor.initialize(hardwareMap);
-
-        //assigns the motors to the corresponding motor from the array
-        if (driveMotors != null) {
-            leftFront = driveMotors[0];
-            rightFront = driveMotors[1];
-            leftBack = driveMotors[2];
-            rightBack = driveMotors[3];
-        }
+        DriveMotor.initialize(hardwareMap); //sets the drive motors in init info
 
         imu = DragonsIMU.initialize(hardwareMap);
 
