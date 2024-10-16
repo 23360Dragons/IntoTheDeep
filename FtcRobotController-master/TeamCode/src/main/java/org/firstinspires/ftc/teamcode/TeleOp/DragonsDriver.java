@@ -82,9 +82,10 @@ public class DragonsDriver extends LinearOpMode {
         //check for configuration issues
         if (InitInfo.exceptionOccurred) {
             telemetry.addLine(InitInfo.exceptions.toString());
+            telemetry.update();
 
             Thread.sleep(5000);
-        if (!DragonsIMU.isValid && !DriveMotor.isValid) {
+            if (!DragonsIMU.isValid && !DriveMotor.isValid) {
                 requestOpModeStop();
             }
         }
