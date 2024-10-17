@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.utils.init;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftFront;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.rightFront;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftBack;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.rightBack;
+import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.driveMotorNames;
+
 
 
 
@@ -15,7 +16,43 @@ public class DriveMotor {
     public static boolean isValid;
 
     public static void initialize (HardwareMap hardwareMap) {
-        try {
+        DcMotor[] motors = {leftFront, leftBack, rightFront, rightBack};
+
+        int i=0;
+        for (DcMotor m : motors) {
+            try {
+                m = hardwareMap.get(DcMotor.class, driveMotorNames[i]);
+                m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                m.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                if (i % 2 == 0)
+                    m.setDirection(DcMotor.Direction.REVERSE);
+
+                switch (i) {
+                    case 0: {
+                        leftFront = m;
+                    }
+                    case 1: {
+                        rightFront = m;
+                    }
+                    case 2: {
+                        leftBack = m;
+                    }
+                    case 3: {
+                        rightBack = m;
+                    }
+                }
+            } catch (IllegalArgumentException e) {
+                InitInfo.exceptions.append("Configuration Error: ").append(driveMotorNames[i]).append(" does not exist").append("\n");
+                InitInfo.exceptionOccurred = true;
+                isValid = false;
+            } finally {
+                i++;
+            }
+
+        }
+
+
+        /*try {
             leftFront = hardwareMap.get(DcMotor.class, "leftFront"); // gets a dcMotor object of the name "name"
             leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -52,7 +89,7 @@ public class DriveMotor {
         } catch (IllegalArgumentException e) {
             InitInfo.exceptions.append("Configuration Error: ").append("rightBack").append(" does not exist").append("\n");
             InitInfo.exceptionOccurred = true;
-        }
+        }*/
     }
 }
 

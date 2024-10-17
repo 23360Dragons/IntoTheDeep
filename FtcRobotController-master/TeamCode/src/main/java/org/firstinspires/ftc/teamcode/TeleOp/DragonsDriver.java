@@ -51,7 +51,7 @@ public class DragonsDriver extends LinearOpMode {
         }*/
 
         DriveMotor.initialize(hardwareMap);
-        driveMotors = new DcMotor[]{leftFront, leftBack, rightFront, rightBack};
+        driveMotors = new DcMotor[]{leftFront, leftBack, rightFront, rightBack}; // for telemetry, maybe other things too
 
         imu = DragonsIMU.initialize(hardwareMap);
 
