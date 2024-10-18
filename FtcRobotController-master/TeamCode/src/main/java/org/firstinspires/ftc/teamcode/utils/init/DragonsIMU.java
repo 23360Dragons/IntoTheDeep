@@ -8,7 +8,6 @@ public class DragonsIMU {
     public static IMU imu;
     public static boolean isValid = false;
 
-    // TODO: change these values based on robot construction
     public static RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
     public static RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
 
