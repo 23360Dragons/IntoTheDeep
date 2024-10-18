@@ -99,10 +99,10 @@ public class DragonsDriver extends LinearOpMode {
             //telemetry
 
             telemetry.addLine();
-            telemetry.addData("leftFront power",  String.valueOf((driveMotors[0])).substring(0, 5));
-            telemetry.addData("rightFront power", String.valueOf((driveMotors[1])).substring(0, 5));
-            telemetry.addData("leftBack power",   String.valueOf((driveMotors[2])).substring(0, 5));
-            telemetry.addData("rightBack power",  String.valueOf((driveMotors[3])).substring(0, 5));
+            telemetry.addData("leftFront power",  String.valueOf((driveMotors[0]).getPower()).substring(0, 5));
+            telemetry.addData("rightFront power", String.valueOf((driveMotors[1]).getPower()).substring(0, 5));
+            telemetry.addData("leftBack power",   String.valueOf((driveMotors[2]).getPower()).substring(0, 5));
+            telemetry.addData("rightBack power",  String.valueOf((driveMotors[3]).getPower()).substring(0, 5));
 
             telemetry.update();
         }
