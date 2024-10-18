@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.utils.init.DriveMotor;
 import org.firstinspires.ftc.teamcode.utils.init.InitInfo;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 
+import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.exceptions;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftFront;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.rightFront;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftBack;
@@ -61,8 +62,6 @@ public class DragonsDriver extends LinearOpMode {
 
         waitForStart();
 
-        if (isStopRequested()) return;
-
         while (opModeIsActive()) {
             if (DragonsLimelight.isValid) {
                 DragonsLimelight.update(limelight, telemetry);
@@ -99,10 +98,10 @@ public class DragonsDriver extends LinearOpMode {
             //telemetry
 
             telemetry.addLine();
-            telemetry.addData("leftFront power",  String.valueOf((driveMotors[0]).getPower()).substring(0, 5));
-            telemetry.addData("rightFront power", String.valueOf((driveMotors[1]).getPower()).substring(0, 5));
-            telemetry.addData("leftBack power",   String.valueOf((driveMotors[2]).getPower()).substring(0, 5));
-            telemetry.addData("rightBack power",  String.valueOf((driveMotors[3]).getPower()).substring(0, 5));
+            telemetry.addData("leftFront power",  String.valueOf(Math.round(leftFront.getPower() * 100)/100));
+            telemetry.addData("rightFront power", String.valueOf(Math.round(rightFront.getPower() * 100)/100));
+            telemetry.addData("leftBack power",   String.valueOf(Math.round(leftBack.getPower() * 100)/100));
+            telemetry.addData("rightBack power",  String.valueOf(Math.round(rightBack.getPower() * 100)/100));
 
             telemetry.update();
         }

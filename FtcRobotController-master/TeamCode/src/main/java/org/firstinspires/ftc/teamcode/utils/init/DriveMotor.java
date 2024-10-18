@@ -87,8 +87,6 @@ public class DriveMotor {
 
     public static void initialize2 (HardwareMap hardwareMap) {
         DcMotor[] motors = {leftFront, leftBack, rightFront, rightBack};
-
-        int i=0;
         try
         {
             for (DcMotor m : motors)
