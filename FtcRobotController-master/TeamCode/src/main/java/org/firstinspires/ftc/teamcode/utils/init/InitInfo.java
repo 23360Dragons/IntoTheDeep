@@ -16,7 +16,7 @@ public class InitInfo {
     public static DcMotor rightFront;
     public static DcMotor leftBack;
     public static DcMotor rightBack;
-    public static DcMotor[] driveMotors;
+    public static DcMotor[] driveMotors = {leftFront, rightFront, leftBack, rightBack};
     public static String[] driveMotorNames = {"leftFront", "rightFront", "leftBack", "rightBack"};
 
 

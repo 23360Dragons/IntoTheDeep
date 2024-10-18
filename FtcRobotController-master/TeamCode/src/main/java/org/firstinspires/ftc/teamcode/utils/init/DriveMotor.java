@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.utils.init;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.driveMotors;
+import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.driveMotors;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftFront;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.rightFront;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftBack;
@@ -16,10 +19,8 @@ public class DriveMotor {
     public static boolean isValid;
 
     public static void initialize (HardwareMap hardwareMap) {
-        DcMotor[] motors = {leftFront, leftBack, rightFront, rightBack};
-
         int i=0;
-        for (DcMotor m : motors) {
+        for (DcMotor m : driveMotors) {
             try {
                 m = hardwareMap.get(DcMotor.class, driveMotorNames[i]);
                 m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -30,15 +31,19 @@ public class DriveMotor {
                 switch (i) {
                     case 0: {
                         leftFront = m;
+                        driveMotors[0] = m;
                     }
                     case 1: {
                         rightFront = m;
+                        driveMotors[1] = m;
                     }
                     case 2: {
                         leftBack = m;
+                        driveMotors[2] = m;
                     }
                     case 3: {
                         rightBack = m;
+                        driveMotors[3] = m;
                     }
                 }
             } catch (IllegalArgumentException e) {
@@ -48,7 +53,6 @@ public class DriveMotor {
             } finally {
                 i++;
             }
-
         }
     }
 
