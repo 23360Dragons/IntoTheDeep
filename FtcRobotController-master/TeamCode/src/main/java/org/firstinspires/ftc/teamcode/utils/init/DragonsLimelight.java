@@ -26,9 +26,10 @@ public class DragonsLimelight {
         }
     }
 
-    public static void update(Limelight3A limelight, Telemetry telemetry) {
-        LLResult result = limelight.getLatestResult();
+    public static void update (Limelight3A limelight, Telemetry telemetry, int pipeline) {
+        limelight.pipelineSwitch(pipeline);
 
+        LLResult result = limelight.getLatestResult();
 
         if (result != null && result.isValid()) {
             Pose3D botpose = result.getBotpose();

@@ -8,5 +8,6 @@ public class DragonsOTOS {
     public static SensorSparkFunOTOS initialize (HardwareMap hardwareMap) {
         SensorSparkFunOTOS otos = hardwareMap.get(SensorSparkFunOTOS.class, "");
         return new SensorSparkFunOTOS();
+        //TODO: add more to this
     }
 }
