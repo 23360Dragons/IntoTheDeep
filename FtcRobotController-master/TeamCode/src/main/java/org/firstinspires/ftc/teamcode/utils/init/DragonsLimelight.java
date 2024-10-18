@@ -19,7 +19,6 @@ public class DragonsLimelight {
             limelight.start();
             return limelight;
         } catch (IllegalArgumentException ex) {
-
             InitInfo.exceptions.append("Configuration Error: ").append("limelight").append(" does not exist").append("\n");
             InitInfo.exceptionOccurred = true;
             isValid = false;
@@ -29,18 +28,15 @@ public class DragonsLimelight {
 
     public static void update(Limelight3A limelight, Telemetry telemetry) {
         LLResult result = limelight.getLatestResult();
-        if (result != null) {
 
-            if (result.isValid()) {
 
-                Pose3D botpose = result.getBotpose();
+        if (result != null && result.isValid()) {
+            Pose3D botpose = result.getBotpose();
 
-                telemetry.addLine("blue sample detected");
-                telemetry.addLine().addData("tx", result.getTx());
-                telemetry.addLine().addData("ty", result.getTy());
-                telemetry.addLine().addData("Botpose", botpose.toString());
-
-            }
+            telemetry.addLine("blue sample detected");
+            telemetry.addLine().addData("tx", result.getTx());
+            telemetry.addLine().addData("ty", result.getTy());
+            telemetry.addLine().addData("Botpose", botpose.toString());
         }
     }
 }
