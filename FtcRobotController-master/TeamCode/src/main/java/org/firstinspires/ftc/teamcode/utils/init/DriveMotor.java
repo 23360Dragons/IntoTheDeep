@@ -47,41 +47,6 @@ public class DriveMotor {
                 InitInfo.exceptionOccurred = true;
                 isValid = false;
             }
-        /*
-        int i=0;
-        for (DcMotor m : driveMotors) {
-            try {
-                m = hardwareMap.get(DcMotor.class, driveMotorNames[i]);
-                m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                m.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                if (i % 2 == 0)
-                    m.setDirection(DcMotor.Direction.REVERSE);
-
-                switch (i) {
-                    case 0: {
-                        leftFront = m;
-                        driveMotors[0] = m;
-                    }
-                    case 1: {
-                        rightFront = m;
-                        driveMotors[1] = m;
-                    }
-                    case 2: {
-                        leftBack = m;
-                        driveMotors[2] = m;
-                    }
-                    case 3: {
-                        rightBack = m;
-                        driveMotors[3] = m;
-                    }
-                }
-            } catch (IllegalArgumentException e) {
-                InitInfo.exceptions.append("Configuration Error: ").append(driveMotorNames[i]).append(" does not exist").append("\n");
-                InitInfo.exceptionOccurred = true;
-                isValid = false;
-            } finally {
-                i++;
-            }*/
         }
     }
 
@@ -89,6 +54,7 @@ public class DriveMotor {
         DcMotor[] motors = {leftFront, leftBack, rightFront, rightBack};
 
         int i=0;
+        isValid=true;
         try
         {
             for (DcMotor m : motors)
@@ -103,7 +69,9 @@ public class DriveMotor {
                 catch(IllegalArgumentException e)
                 {
                     InitInfo.exceptions.append("Configuration Error: ").append("leftFront").append(" does not exist").append("\n");
-                    InitInfo.exceptionOccurred = true;}
+                    InitInfo.exceptionOccurred = true;
+                    isValid = false;
+                }
                 //right front
                 try
                 {
@@ -115,6 +83,7 @@ public class DriveMotor {
                 {
                     InitInfo.exceptions.append("Configuration Error: ").append("rightFront").append(" does not exist").append("\n");
                     InitInfo.exceptionOccurred = true;
+                    isValid = false;
                 }
                 //left back
                 try
@@ -127,7 +96,8 @@ public class DriveMotor {
                 catch(IllegalArgumentException e)
                 {
                     InitInfo.exceptions.append("Configuration Error: ").append("leftBack").append(" does not exist").append("\n");
-                    InitInfo.exceptionOccurred = true;}
+                    InitInfo.exceptionOccurred = true;
+                    isValid = false;}
                 //right back
                 try
                 {
@@ -139,6 +109,7 @@ public class DriveMotor {
                 {
                     InitInfo.exceptions.append("Configuration Error: ").append("rightBack").append(" does not exist").append("\n");
                     InitInfo.exceptionOccurred = true;
+                    isValid = false;
                 }
             }
 
@@ -147,6 +118,7 @@ public class DriveMotor {
         {
             InitInfo.exceptions.append("Configuration Error: ").append("General Motor Config").append(ex.getMessage()).append("\n");
             InitInfo.exceptionOccurred = true;
+            isValid = false;
         }
     }
 }

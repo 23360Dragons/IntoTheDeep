@@ -38,7 +38,7 @@ public class DragonsDriver extends LinearOpMode {
         InitInfo.exceptions = new StringBuilder("The following exceptions occurred: \n");
         InitInfo.exceptionOccurred = false;
 
-        DriveMotor.initialize(hardwareMap);
+        DriveMotor.initialize2(hardwareMap);
         //driveMotors is an array of the motors for telemetry, maybe other things too
 
         imu = DragonsIMU.initialize(hardwareMap);
@@ -50,6 +50,9 @@ public class DragonsDriver extends LinearOpMode {
         if (InitInfo.exceptionOccurred) {
             telemetry.addLine(InitInfo.exceptions.toString());
             telemetry.update();
+
+            telemetry.addData("DragonIMU.IsValid", DragonsIMU.isValid);
+            telemetry.addData("DriveMotor.IsValid", DriveMotor.isValid);
 
             Thread.sleep(5000);
 
@@ -79,7 +82,7 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
-            telemetry.addData("IMU heading", botHeading);
+            telemetry.addData("IMU heading", Math.round(botHeading * 100) / 100);
 
             //gets input
             double y, x, rightX;
@@ -99,10 +102,10 @@ public class DragonsDriver extends LinearOpMode {
             //telemetry
 
             telemetry.addLine();
-            telemetry.addData("leftFront power",  String.valueOf((driveMotors[0])).substring(0, 5));
-            telemetry.addData("rightFront power", String.valueOf((driveMotors[1])).substring(0, 5));
-            telemetry.addData("leftBack power",   String.valueOf((driveMotors[2])).substring(0, 5));
-            telemetry.addData("rightBack power",  String.valueOf((driveMotors[3])).substring(0, 5));
+            telemetry.addData("leftFront power",  String.valueOf(Math.round(leftFront.getPower() * 100) / 100));
+            telemetry.addData("rightFront power", String.valueOf(Math.round(rightFront.getPower() * 100) / 100));
+            telemetry.addData("leftBack power",   String.valueOf(Math.round(leftBack.getPower() * 100) / 100));
+            telemetry.addData("rightBack power",  String.valueOf(Math.round(rightBack.getPower() * 100) / 100));
 
             telemetry.update();
         }
