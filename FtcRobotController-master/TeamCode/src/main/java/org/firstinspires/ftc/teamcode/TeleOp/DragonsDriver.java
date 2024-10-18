@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.utils.init.DriveMotor;
 import org.firstinspires.ftc.teamcode.utils.init.InitInfo;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 
+import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.exceptions;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftFront;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.rightFront;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftBack;
@@ -63,8 +64,6 @@ public class DragonsDriver extends LinearOpMode {
         }
 
         waitForStart();
-
-        if (isStopRequested()) return;
 
         while (opModeIsActive()) {
             if (DragonsLimelight.isValid) {
