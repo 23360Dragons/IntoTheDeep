@@ -21,22 +21,26 @@ import org.firstinspires.ftc.teamcode.utils.init.DriveMotor;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 
 public class DragonsDriver {
+    //imu - for orientation
+    IMU imu;
 
-    public static HardwareDevice[] init (HardwareMap hardwareMap, Telemetry telemetry, int pipeline) throws Exception {
-        //imu - for orientation
-        IMU imu;
-        //limelight camera
-        Limelight3A limelight;
+    //motors
+    DcMotor leftFront, rightFront, leftBack, rightBack;
+    DcMotor[] motors;
+
+    //limelight camera
+    Limelight3A limelight;
+
+    public void init (HardwareMap hardwareMap, Telemetry telemetry, int pipeline) throws Exception {
         exceptions = new StringBuilder("The following exceptions occurred: \n");
         exceptionOccurred = false;
 
-        DcMotor[] motors = DriveMotor.initialize(hardwareMap);
+        motors = DriveMotor.initialize(hardwareMap);
         //driveMotors is an array of the motors for telemetry, maybe other things too
 
         imu = DragonsIMU.initialize(hardwareMap);
 
         limelight = DragonsLimelight.initialize(hardwareMap, pipeline);
-
 
         //check for configuration issues
         if (exceptionOccurred) {
@@ -48,26 +52,10 @@ public class DragonsDriver {
             if (!DragonsIMU.isValid || !DriveMotor.isValid) {
                 throw new Exception();
             }
-
-            return new HardwareDevice[]{imu, motors[0], motors[1], motors[2], motors[3]}; // if no movement errors
         }
-
-        return new HardwareDevice[]{imu, motors[0], motors[1], motors[2], motors[3], limelight}; //if everything works
-
     }
 
-    public static void update (HardwareDevice[] devices, Telemetry telemetry) throws InterruptedException {
-        IMU imu = (IMU) devices[0];
-        DcMotor leftFront  = (DcMotor) devices[1];
-        DcMotor rightFront = (DcMotor) devices[2];
-        DcMotor leftBack   = (DcMotor) devices[3];
-        DcMotor rightBack  = (DcMotor) devices[4];
-        Limelight3A limelight = null;
-
-        if (!exceptionOccurred) {
-            // all non-movement devices go here
-            limelight = (Limelight3A) devices[5];
-        }
+    public void update (Telemetry telemetry) throws InterruptedException {
 
         if (DragonsLimelight.isValid) {
             DragonsLimelight.update(limelight, telemetry,0);

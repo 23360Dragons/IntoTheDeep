@@ -9,13 +9,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 
-@TeleOp(name = "TeleOpBlue", group = "TeleOp")
-public class TeleOpBlue extends LinearOpMode {
+@TeleOp(name = "TeleOpRed", group = "TeleOp")
+public class TeleOpRed extends LinearOpMode {
+    //needs to be linear, otherwise an exception would be thrown in loop due to the time it takes to call update()
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         DragonsDriver dragonsDriver = new DragonsDriver();
         try {
-            dragonsDriver.init(hardwareMap, telemetry, BluePipeline);
+            dragonsDriver.init(hardwareMap, telemetry, RedPipeline);
         } catch (Exception e) {
             requestOpModeStop();
         }
