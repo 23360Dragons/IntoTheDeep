@@ -3,33 +3,38 @@ package org.firstinspires.ftc.teamcode.utils.init;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.SerialNumber;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
-public class DragonsLimelight {
-    public static Limelight3A limelight;
-    public static boolean isValid = false;
+import java.net.InetAddress;
 
-    public static Limelight3A initialize(HardwareMap hardwareMap, int pipeline) {
+public class DragonsLimelight extends Limelight3A {
+    public Limelight3A limelight;
+    public boolean isValid = false;
+
+    public DragonsLimelight(SerialNumber serialNumber, String name, InetAddress ipAddress) {
+        super(serialNumber, name, ipAddress);
+    }
+
+    public void initialize(HardwareMap hardwareMap, int pipeline) {
         try {
-            limelight = hardwareMap.get(Limelight3A.class, "limelight");
-            isValid = true;
-            limelight.pipelineSwitch(pipeline);
-            limelight.start();
-            return limelight;
+            this.limelight = hardwareMap.get(Limelight3A.class, "limelight");
+            this.isValid   = true;
+            this.limelight.pipelineSwitch(pipeline);
+            this.limelight.start();
         } catch (IllegalArgumentException ex) {
             InitInfo.exceptions.append("Configuration Error: ").append("limelight").append(" does not exist").append("\n");
             InitInfo.exceptionOccurred = true;
-            isValid = false;
-            return null;
+            this.isValid = false;
         }
     }
 
-    public static void update (Limelight3A limelight, Telemetry telemetry, int pipeline) {
-        limelight.pipelineSwitch(pipeline);
+    public void update (Telemetry telemetry, int pipeline) {
+        this.limelight.pipelineSwitch(pipeline);
 
-        LLResult result = limelight.getLatestResult();
+        LLResult result = this.limelight.getLatestResult();
 
         if (result != null && result.isValid()) {
             Pose3D botpose = result.getBotpose();

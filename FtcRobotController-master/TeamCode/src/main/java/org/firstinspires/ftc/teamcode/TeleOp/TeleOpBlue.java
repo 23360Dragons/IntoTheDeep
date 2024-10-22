@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareDevice;
 @TeleOp(name = "TeleOpBlue", group = "TeleOp")
 public class TeleOpBlue extends LinearOpMode {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         DragonsDriver dragonsDriver = new DragonsDriver();
         try {
             dragonsDriver.init(hardwareMap, telemetry, BluePipeline);
@@ -28,7 +28,7 @@ public class TeleOpBlue extends LinearOpMode {
             try {
                 dragonsDriver.update(telemetry); // todo: finishing touches, maybe add extra params
             } catch (InterruptedException e) {
-                requestOpModeStop();
+                stop();
             }
         }
     }

@@ -20,6 +20,7 @@ public class DragonsIMU {
             IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                     logoFacingDirection,
                     usbFacingDirection));
+
             imu.initialize(parameters);
             return imu;
         } catch (IllegalArgumentException ex) {

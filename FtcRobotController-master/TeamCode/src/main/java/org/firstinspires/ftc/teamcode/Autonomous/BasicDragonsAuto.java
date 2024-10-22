@@ -19,7 +19,7 @@ import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.rightBack;
 public class BasicDragonsAuto extends LinearOpMode {
     IMU imu;
 
-    Limelight3A limelight;
+    DragonsLimelight limelight;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -32,7 +32,7 @@ public class BasicDragonsAuto extends LinearOpMode {
 
         imu = DragonsIMU.initialize(hardwareMap);
 
-        limelight = DragonsLimelight.initialize(hardwareMap, 0);
+        limelight.initialize(hardwareMap, 0);
 
 
 
