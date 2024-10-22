@@ -8,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.exceptionOccurr
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.exceptions;
 
 
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -31,10 +32,10 @@ public class DragonsDriver {
     DcMotor[] motors;
 
     //limelight camera
-    DragonsLimelight limelight;
+    Limelight3A limelight;
 
     //light strips
-    DragonsLights light;
+    RevBlinkinLedDriver light;
 
     public void init (HardwareMap hardwareMap, Telemetry telemetry, int pipeline) throws Exception {
         exceptions = new StringBuilder("The following exceptions occurred: \n");
@@ -45,9 +46,9 @@ public class DragonsDriver {
 
         imu = DragonsIMU.initialize(hardwareMap);
 
-        limelight.initialize(hardwareMap, pipeline);
+        limelight = DragonsLimelight.initialize(hardwareMap, pipeline);
 
-        light.initialize(hardwareMap);
+        light = DragonsLights.initialize(hardwareMap);
         light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
         //check for configuration issues
@@ -65,8 +66,8 @@ public class DragonsDriver {
 
     public void update (Telemetry telemetry) throws InterruptedException {
 
-        if (limelight.isValid && light.isValid) {
-            limelight.update(telemetry,0, light);
+        if (DragonsLimelight.isValid && DragonsLights.isValid) {
+            DragonsLimelight.update(telemetry,0, light);
         }
 
         while (gamepad1.b) {

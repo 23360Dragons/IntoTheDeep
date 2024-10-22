@@ -11,31 +11,29 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 import java.net.InetAddress;
 
-public class DragonsLimelight extends Limelight3A {
-    public Limelight3A limelight;
-    public boolean isValid = false;
+public class DragonsLimelight {
+    public static Limelight3A limelight;
+    public static boolean isValid = false;
 
-    public DragonsLimelight(SerialNumber serialNumber, String name, InetAddress ipAddress) {
-        super(serialNumber, name, ipAddress);
-    }
-
-    public void initialize(HardwareMap hardwareMap, int pipeline) {
+    public static Limelight3A initialize(HardwareMap hardwareMap, int pipeline) {
         try {
-            this.limelight = hardwareMap.get(Limelight3A.class, "limelight");
-            this.isValid   = true;
-            this.limelight.pipelineSwitch(pipeline);
-            this.limelight.start();
+            limelight = hardwareMap.get(Limelight3A.class, "limelight");
+            isValid   = true;
+            limelight.pipelineSwitch(pipeline);
+            limelight.start();
+            return limelight;
         } catch (IllegalArgumentException ex) {
             InitInfo.exceptions.append("Configuration Error: ").append("limelight").append(" does not exist").append("\n");
             InitInfo.exceptionOccurred = true;
-            this.isValid = false;
+            isValid = false;
+            return null;
         }
     }
 
-    public void update (Telemetry telemetry, int pipeline, DragonsLights light) {
-        this.limelight.pipelineSwitch(pipeline);
+    public static void update (Telemetry telemetry, int pipeline, RevBlinkinLedDriver light) {
+        limelight.pipelineSwitch(pipeline);
 
-        LLResult result = this.limelight.getLatestResult();
+        LLResult result = limelight.getLatestResult();
 
         if (result != null && result.isValid()) {
             Pose3D botpose = result.getBotpose();
