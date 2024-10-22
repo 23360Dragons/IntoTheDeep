@@ -26,7 +26,7 @@ public class TeleOpBlue extends LinearOpMode {
 
         while (opModeIsActive()) {
             try {
-                dragonsDriver.update(telemetry); // todo: finishing touches, maybe add extra params
+                dragonsDriver.update(telemetry, gamepad1, gamepad2); // todo: finishing touches, maybe add extra params
             } catch (InterruptedException e) {
                 stop();
             }

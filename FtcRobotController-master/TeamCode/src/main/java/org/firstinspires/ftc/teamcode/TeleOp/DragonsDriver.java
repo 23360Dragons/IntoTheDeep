@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
-
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.BluePipeline;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.exceptionOccurred;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.exceptions;
@@ -11,9 +8,9 @@ import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.exceptions;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.Light;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -64,7 +61,7 @@ public class DragonsDriver {
         }
     }
 
-    public void update (Telemetry telemetry) throws InterruptedException {
+    public void update (Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) throws InterruptedException {
 
         if (DragonsLimelight.isValid && DragonsLights.isValid) {
             DragonsLimelight.update(telemetry,0, light);
