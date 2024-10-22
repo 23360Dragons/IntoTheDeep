@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils.init;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class DriveMotor {

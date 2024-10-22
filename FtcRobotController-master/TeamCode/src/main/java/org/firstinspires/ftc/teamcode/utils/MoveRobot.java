@@ -46,7 +46,7 @@ public class MoveRobot
         return new double[]{leftFrontPower, rightFrontPower, leftBackPower, rightBackPower};
     }
 
-    public static double[] moveRobotAngle(double angle, double speed) {
+    public static double[] moveRobotAngle (double angle, double speed) {
         double x = Math.abs(-Math.abs(((double) 1 /90) * angle) + 2)-1;
         double y = Math.abs(-Math.abs(((double) 1 /90) * angle - 1) + 2)-1; // math works out.
 
