@@ -5,31 +5,27 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class DriveMotor {
     public static boolean isValid;
-
-    public static DcMotor[] initialize (HardwareMap hardwareMap) {
-        DcMotor leftFront = null, rightFront = null, leftBack = null, rightBack = null;
-        DcMotor[] motors = {leftFront, leftBack, rightFront, rightBack};
+    public static void initialize (HardwareMap hardwareMap) {
         try
         {
                 //left front
                 try{
-                    leftFront = hardwareMap.get(DcMotor.class, "leftFront"); // gets a dcMotor object of the name "name"
-                    leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    leftFront.setDirection(DcMotor.Direction.REVERSE); // fix faulty drive behavior 10/15
-                    motors[0] = leftFront;
+                    InitInfo.leftFront = hardwareMap.get(DcMotor.class, "leftFront"); // gets a dcMotor object of the name "name"
+                    InitInfo.leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    InitInfo.leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    InitInfo.leftFront.setDirection(DcMotor.Direction.REVERSE); // fix faulty drive behavior 10/15
                 }
                 catch(IllegalArgumentException e)
                 {
                     InitInfo.exceptions.append("Configuration Error: ").append("leftFront").append(" does not exist").append("\n");
-                    InitInfo.exceptionOccurred = true;}
+                    InitInfo.exceptionOccurred = true;
+                }
                 //right front
                 try
                 {
-                    rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-                    rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    motors[1] = rightFront;
+                    InitInfo.rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+                    InitInfo.rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    InitInfo.rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
                 }
                 catch(IllegalArgumentException e)
@@ -40,11 +36,10 @@ public class DriveMotor {
                 //left back
                 try
                 {
-                    leftBack = hardwareMap.get(DcMotor.class, "leftBack");
-                    leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    leftBack.setDirection(DcMotor.Direction.REVERSE);
-                    motors[2] = leftBack;
+                    InitInfo.leftBack = hardwareMap.get(DcMotor.class, "leftBack");
+                    InitInfo.leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    InitInfo.leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    InitInfo.leftBack.setDirection(DcMotor.Direction.REVERSE);
                 }
                 catch(IllegalArgumentException e)
                 {
@@ -53,10 +48,9 @@ public class DriveMotor {
                 //right back
                 try
                 {
-                    rightBack = hardwareMap.get(DcMotor.class, "rightBack");
-                    rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    motors[3] = rightBack;
+                    InitInfo.rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+                    InitInfo.rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    InitInfo.rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 }
                 catch(IllegalArgumentException e)
                 {
@@ -68,9 +62,7 @@ public class DriveMotor {
         {
             InitInfo.exceptions.append("Configuration Error: ").append("General Motor Config").append(ex.getMessage()).append("\n");
             InitInfo.exceptionOccurred = true;
-            return null;
         }
-        return motors;
     }
 }
 

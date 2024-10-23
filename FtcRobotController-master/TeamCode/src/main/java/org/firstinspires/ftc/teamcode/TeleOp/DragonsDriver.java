@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.BluePipeline;
-import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.RedPipeline;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.exceptionOccurred;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.exceptions;
 
@@ -24,7 +22,7 @@ public class DragonsDriver {
         exceptions = new StringBuilder("The following exceptions occurred: \n");
         exceptionOccurred = false;
 
-        InitInfo.motors = DriveMotor.initialize(hardwareMap);
+        DriveMotor.initialize(hardwareMap);
         //driveMotors is an array of the motors for telemetry, maybe other things too
 
         DragonsIMU.initialize(hardwareMap);

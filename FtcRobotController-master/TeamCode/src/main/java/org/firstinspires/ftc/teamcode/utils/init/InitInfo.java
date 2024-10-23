@@ -14,7 +14,6 @@ public class InitInfo {
     public static final int BluePipeline = 0;
     public static final int RedPipeline = 1;
     public static DcMotor leftFront, rightFront, leftBack, rightBack;
-    public static DcMotor[] motors;
     public static IMU imu;
     public static Limelight3A limelight;
     public static RevBlinkinLedDriver light;
