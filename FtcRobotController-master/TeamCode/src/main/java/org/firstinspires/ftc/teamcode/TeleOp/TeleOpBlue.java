@@ -13,9 +13,8 @@ import com.qualcomm.robotcore.hardware.HardwareDevice;
 public class TeleOpBlue extends LinearOpMode {
     @Override
     public void runOpMode() {
-        DragonsDriver dragonsDriver = new DragonsDriver();
         try {
-            dragonsDriver.init(hardwareMap, telemetry, BluePipeline);
+            DragonsDriver.init(hardwareMap, telemetry, BluePipeline);
         } catch (Exception e) {
             requestOpModeStop();
         }
@@ -26,7 +25,7 @@ public class TeleOpBlue extends LinearOpMode {
 
         while (opModeIsActive()) {
             try {
-                dragonsDriver.update(telemetry, gamepad1, gamepad2); // todo: finishing touches, maybe add extra params
+                DragonsDriver.update(telemetry, gamepad1, gamepad2); // todo: finishing touches, maybe add extra params
             } catch (InterruptedException e) {
                 stop();
             }

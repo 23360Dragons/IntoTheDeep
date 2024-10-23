@@ -12,21 +12,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import java.net.InetAddress;
 
 public class DragonsLimelight {
-    public static Limelight3A limelight;
     public static boolean isValid = false;
 
-    public static Limelight3A initialize(HardwareMap hardwareMap, int pipeline) {
+    public static void initialize(HardwareMap hardwareMap, int pipeline) {
         try {
-            limelight = hardwareMap.get(Limelight3A.class, "limelight");
+            InitInfo.limelight = hardwareMap.get(Limelight3A.class, "limelight");
             isValid   = true;
-            limelight.pipelineSwitch(pipeline);
-            limelight.start();
-            return limelight;
+            InitInfo.limelight.pipelineSwitch(pipeline);
+            InitInfo.limelight.start();
         } catch (IllegalArgumentException ex) {
             InitInfo.exceptions.append("Configuration Error: ").append("limelight").append(" does not exist").append("\n");
             InitInfo.exceptionOccurred = true;
             isValid = false;
-            return null;
         }
     }
 

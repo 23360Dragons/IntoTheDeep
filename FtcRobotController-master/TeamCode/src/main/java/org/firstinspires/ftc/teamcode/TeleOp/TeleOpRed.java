@@ -14,9 +14,8 @@ public class TeleOpRed extends LinearOpMode {
     //needs to be linear, otherwise an exception would be thrown in loop due to the time it takes to call update()
     @Override
     public void runOpMode() {
-        DragonsDriver dragonsDriver = new DragonsDriver();
         try {
-            dragonsDriver.init(hardwareMap, telemetry, RedPipeline);
+            DragonsDriver.init(hardwareMap, telemetry, RedPipeline);
         } catch (Exception e) {
             requestOpModeStop();
         }
@@ -27,7 +26,7 @@ public class TeleOpRed extends LinearOpMode {
 
         while (opModeIsActive()) {
             try {
-                dragonsDriver.update(telemetry); // todo: finishing touches, maybe add extra params
+                DragonsDriver.update(telemetry, gamepad1, gamepad2); // todo: finishing touches, maybe add extra params
             } catch (InterruptedException e) {
                 requestOpModeStop();
             }

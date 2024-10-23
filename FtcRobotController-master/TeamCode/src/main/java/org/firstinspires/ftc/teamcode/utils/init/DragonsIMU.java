@@ -5,15 +5,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 public class DragonsIMU {
-    public static IMU imu;
     public static boolean isValid = false;
 
     public static RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
     public static RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
 
-    public static IMU initialize(HardwareMap hardwareMap) {
+    public static void initialize(HardwareMap hardwareMap) {
         try {
-            imu = hardwareMap.get(IMU.class, "imu");
+            InitInfo.imu = hardwareMap.get(IMU.class, "imu");
 
             isValid = true;
 
@@ -21,13 +20,11 @@ public class DragonsIMU {
                     logoFacingDirection,
                     usbFacingDirection));
 
-            imu.initialize(parameters);
-            return imu;
+            InitInfo.imu.initialize(parameters);
         } catch (IllegalArgumentException ex) {
             InitInfo.exceptions.append("CRITICAL Configuration Error: ").append("imu").append(" does not exist").append("\n");
             InitInfo.exceptionOccurred = true;
             isValid = false;
-            return null;
         }
     }
 }

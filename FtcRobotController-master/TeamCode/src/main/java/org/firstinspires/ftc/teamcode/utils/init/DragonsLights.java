@@ -6,23 +6,20 @@ import com.qualcomm.robotcore.hardware.Light;
 import com.qualcomm.robotcore.hardware.ServoControllerEx;
 
 public class DragonsLights {
-    public static RevBlinkinLedDriver light;
     public static boolean isValid;
 
-    public static RevBlinkinLedDriver initialize (HardwareMap hardwareMap) {
+    public static void initialize (HardwareMap hardwareMap) {
         try {
-            light = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+            InitInfo.light = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
             isValid = true;
-            return light;
         } catch (IllegalArgumentException ex) {
             InitInfo.exceptions.append("Configuration Error: ").append("lights").append(" does not exist").append("\n");
             InitInfo.exceptionOccurred = true;
             isValid = false;
-            return null;
         }
     }
 
     public static void setPattern (RevBlinkinLedDriver.BlinkinPattern pattern) {
-        light.setPattern(pattern);
+        InitInfo.light.setPattern(pattern);
     }
 }
