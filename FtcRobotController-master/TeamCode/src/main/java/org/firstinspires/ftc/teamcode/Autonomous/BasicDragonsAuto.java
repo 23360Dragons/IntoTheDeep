@@ -1,3 +1,4 @@
+/*
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -14,12 +15,12 @@ import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftFront;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.rightFront;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftBack;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.rightBack;
-
+//TODO: FIX THIS AND UPDATE
 @Autonomous
 public class BasicDragonsAuto extends LinearOpMode {
     IMU imu;
 
-    Limelight3A limelight;
+    DragonsLimelight limelight;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -32,7 +33,7 @@ public class BasicDragonsAuto extends LinearOpMode {
 
         imu = DragonsIMU.initialize(hardwareMap);
 
-        limelight = DragonsLimelight.initialize(hardwareMap, 0);
+        limelight.initialize(hardwareMap, 0);
 
 
 
@@ -86,3 +87,4 @@ public class BasicDragonsAuto extends LinearOpMode {
         rightBack.setPower(rightBackPower);
     }
 }
+*/

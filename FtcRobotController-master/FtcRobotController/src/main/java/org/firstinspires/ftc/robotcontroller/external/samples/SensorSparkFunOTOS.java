@@ -81,10 +81,10 @@ public class SensorSparkFunOTOS extends LinearOpMode {
         // set, the default is inches and degrees. Note that this setting is not
         // persisted in the sensor, so you need to set at the start of all your
         // OpModes if using the non-default value.
-        // myOtos.setLinearUnit(DistanceUnit.METER);
-        myOtos.setLinearUnit(DistanceUnit.INCH);
-        // myOtos.setAngularUnit(AnguleUnit.RADIANS);
-        myOtos.setAngularUnit(AngleUnit.DEGREES);
+         myOtos.setLinearUnit(DistanceUnit.METER);
+//        myOtos.setLinearUnit(DistanceUnit.INCH);
+         myOtos.setAngularUnit(AngleUnit.RADIANS);
+//        myOtos.setAngularUnit(AngleUnit.DEGREES);
 
         // Assuming you've mounted your sensor to a robot and it's not centered,
         // you can specify the offset for the sensor relative to the center of the
