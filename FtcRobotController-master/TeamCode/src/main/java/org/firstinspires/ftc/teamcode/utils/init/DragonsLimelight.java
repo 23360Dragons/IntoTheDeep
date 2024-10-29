@@ -25,13 +25,13 @@ public class DragonsLimelight {
         }
     }
 
-    public static void update (Telemetry telemetry, Limelight3A limelight, int colorPipeline) {
+    public static void update (Telemetry telemetry, Limelight3A limelight) {
             LLResult result = limelight.getLatestResult();
 
             if (result != null && result.isValid()) {
                 Pose3D botpose = result.getBotpose();
 
-                switch (colorPipeline) {
+                switch (currentPipeline) {
                     case 0:
                         Consts.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
                         break;

@@ -89,7 +89,7 @@ public class DragonsDriver {
         telemetry.addData("heading",        Consts.sparkFunOTOS.getPosition().h);
 
 
-        /*if (gamepad1.a) { //provides a way to recalibrate the imu
+        /*if (currentGamepad1.y) { //provides a way to recalibrate the imu
             telemetry.addLine("reset imu yaw");
             Consts.imu.resetYaw();
         }*/
