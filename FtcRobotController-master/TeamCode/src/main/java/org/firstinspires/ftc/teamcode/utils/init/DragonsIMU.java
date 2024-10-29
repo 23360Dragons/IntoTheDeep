@@ -12,7 +12,7 @@ public class DragonsIMU {
 
     public static void initialize(HardwareMap hardwareMap) {
         try {
-            InitInfo.imu = hardwareMap.get(IMU.class, "imu");
+            Consts.imu = hardwareMap.get(IMU.class, "imu");
 
             isValid = true;
 
@@ -20,10 +20,10 @@ public class DragonsIMU {
                     logoFacingDirection,
                     usbFacingDirection));
 
-            InitInfo.imu.initialize(parameters);
+            Consts.imu.initialize(parameters);
         } catch (IllegalArgumentException ex) {
-            InitInfo.exceptions.append("CRITICAL Configuration Error: ").append("imu").append(" does not exist").append("\n");
-            InitInfo.exceptionOccurred = true;
+            Consts.exceptions.append("CRITICAL Configuration Error: ").append("imu").append(" does not exist").append("\n");
+            Consts.exceptionOccurred = true;
             isValid = false;
         }
     }

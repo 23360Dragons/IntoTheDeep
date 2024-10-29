@@ -8,16 +8,16 @@ public class DragonsLights {
 
     public static void initialize (HardwareMap hardwareMap) {
         try {
-            InitInfo.light = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+            Consts.light = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
             isValid = true;
         } catch (IllegalArgumentException ex) {
-            InitInfo.exceptions.append("Configuration Error: ").append("lights").append(" does not exist").append("\n");
-            InitInfo.exceptionOccurred = true;
+            Consts.exceptions.append("Configuration Error: ").append("lights").append(" does not exist").append("\n");
+            Consts.exceptionOccurred = true;
             isValid = false;
         }
     }
 
     public static void setPattern (RevBlinkinLedDriver.BlinkinPattern pattern) {
-        InitInfo.light.setPattern(pattern);
+        Consts.light.setPattern(pattern);
     }
 }

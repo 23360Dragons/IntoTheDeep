@@ -1,13 +1,9 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.BluePipeline;
-import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.RedPipeline;
-
-import android.util.Log;
+import static org.firstinspires.ftc.teamcode.utils.init.Consts.RedPipeline;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareDevice;
 
 @TeleOp(name = "TeleOpRed", group = "TeleOp")
 public class TeleOpRed extends LinearOpMode {

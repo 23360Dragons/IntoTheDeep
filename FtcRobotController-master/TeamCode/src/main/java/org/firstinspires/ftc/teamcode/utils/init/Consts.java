@@ -2,12 +2,11 @@ package org.firstinspires.ftc.teamcode.utils.init;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
-import java.util.HashMap;
-
-public class InitInfo {
+public class Consts {
     public static StringBuilder exceptions;
     public static boolean exceptionOccurred;
 
@@ -18,4 +17,5 @@ public class InitInfo {
     public static IMU imu;
     public static Limelight3A limelight;
     public static RevBlinkinLedDriver light;
+    public static SparkFunOTOS sparkFunOTOS;
 }
