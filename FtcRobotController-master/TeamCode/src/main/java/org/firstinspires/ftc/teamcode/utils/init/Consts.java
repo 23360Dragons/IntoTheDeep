@@ -12,7 +12,7 @@ public class Consts {
 
     public static final int BluePipeline = 0;
     public static final int RedPipeline = 1;
-    public static final int blueAndYellowPipeline = 3;
+    public static final int yellowPipeline = 2;
     public static DcMotor leftFront, rightFront, leftBack, rightBack;
     public static IMU imu;
     public static Limelight3A limelight;

@@ -19,6 +19,8 @@ public class TeleOpBlue extends LinearOpMode {
             requestOpModeStop();
         }
 
+        telemetry.update();
+
         waitForStart();
 
         if (isStopRequested()) return;

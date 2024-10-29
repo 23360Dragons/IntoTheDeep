@@ -22,8 +22,6 @@ public class DragonsDriver {
     static Gamepad previousGamepad1;
     static Gamepad previousGamepad2;
 
-    public final static int yellowPipeline = 2;
-
     public static void init (HardwareMap hardwareMap, Telemetry telemetry, int pipeline) throws Exception {
         Consts.exceptions = new StringBuilder("The following exceptions occurred: \n");
         Consts.exceptionOccurred = false;
@@ -34,10 +32,10 @@ public class DragonsDriver {
         previousGamepad1 = new Gamepad();
         previousGamepad2 = new Gamepad();
 
-        DriveMotor.initialize(hardwareMap);
+       /* DriveMotor.initialize(hardwareMap);
 
         DragonsIMU.initialize(hardwareMap);
-
+*/
         DragonsLimelight.initialize(hardwareMap);
         DragonsLimelight.setPipeline(pipeline);
 
@@ -56,8 +54,6 @@ public class DragonsDriver {
                 throw new Exception();
             }
         }
-
-        telemetry.update();
     }
 
     public static void update (Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2, int colorPipeline) throws InterruptedException {
@@ -74,29 +70,31 @@ public class DragonsDriver {
         currentGamepad1.copy(gamepad1);
         currentGamepad2.copy(gamepad2);
 
-
         if (DragonsLimelight.isValid && DragonsLights.isValid) {
             DragonsLimelight.update(telemetry, Consts.limelight, colorPipeline);
         }
 
         if (currentGamepad1.b && !previousGamepad1.b) { //rising edge
-            DragonsLimelight.setPipeline(yellowPipeline);
+            DragonsLimelight.setPipeline(Consts.yellowPipeline);
         } else if (!currentGamepad1.b && previousGamepad1.b) { //falling edge
             DragonsLimelight.setPipeline(colorPipeline);
         }
 
-        telemetry.addData("Sparkfun position", Consts.sparkFunOTOS.getPosition());
-        telemetry.addData("Sparkfun acceleration", Consts.sparkFunOTOS.getAcceleration());
-        telemetry.addData("Sparkfun velocity", Consts.sparkFunOTOS.getVelocity());
-        telemetry.addData("Sparkfun status", Consts.sparkFunOTOS.getStatus());
-        telemetry.addData("Sparkfun offset", Consts.sparkFunOTOS.getOffset());
+        telemetry.addData("Sparkfun angular scalar",      Consts.sparkFunOTOS.getAngularScalar());
+        telemetry.addData("Sparkfun acceleration",  Consts.sparkFunOTOS.getAcceleration());
+        telemetry.addData("Sparkfun velocity",      Consts.sparkFunOTOS.getVelocity());
+        telemetry.addLine();
+        telemetry.addData("x",        Consts.sparkFunOTOS.getPosition().x);
+        telemetry.addData("y",        Consts.sparkFunOTOS.getPosition().y);
+        telemetry.addData("heading",        Consts.sparkFunOTOS.getPosition().h);
 
-        if (gamepad1.a) { //provides a way to recalibrate the imu
+
+        /*if (gamepad1.a) { //provides a way to recalibrate the imu
             telemetry.addLine("reset imu yaw");
             Consts.imu.resetYaw();
-        }
+        }*/
 
-        double botHeading = Consts.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
+        /*double botHeading = Consts.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
         telemetry.addData("IMU heading", botHeading);
 
         //gets input
@@ -117,7 +115,7 @@ public class DragonsDriver {
         telemetry.addData("leftFront power",  String.valueOf(Math.round(Consts.leftFront.getPower()  * 10)/10));
         telemetry.addData("rightFront power", String.valueOf(Math.round(Consts.rightFront.getPower() * 10)/10));
         telemetry.addData("leftBack power",   String.valueOf(Math.round(Consts.leftBack.getPower()   * 10)/10));
-        telemetry.addData("rightBack power",  String.valueOf(Math.round(Consts.rightBack.getPower()  * 10)/10));
+        telemetry.addData("rightBack power",  String.valueOf(Math.round(Consts.rightBack.getPower()  * 10)/10));*/
         telemetry.update();
     }
 
