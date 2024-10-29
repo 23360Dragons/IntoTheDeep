@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.utils.init;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Light;
-import com.qualcomm.robotcore.hardware.ServoControllerEx;
 
 public class DragonsLights {
     public static boolean isValid;

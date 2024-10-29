@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.BluePipeline;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.exceptionOccurred;
 import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.exceptions;
 
@@ -18,24 +19,27 @@ import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.teamcode.utils.init.InitInfo;
 
 public class DragonsDriver {
-    public static void init (HardwareMap hardwareMap, Telemetry telemetry, int pipeline) throws Exception {
-        exceptions = new StringBuilder("The following exceptions occurred: \n");
-        exceptionOccurred = false;
 
-        DriveMotor.initialize(hardwareMap);
+    public final static int yellowPipeline = 2;
+
+    public static void init (HardwareMap hardwareMap, Telemetry telemetry, int pipeline) throws Exception {
+        InitInfo.exceptions = new StringBuilder("The following exceptions occurred: \n");
+        InitInfo.exceptionOccurred = false;
+
+//        DriveMotor.initialize(hardwareMap);
         //driveMotors is an array of the motors for telemetry, maybe other things too
 
-        DragonsIMU.initialize(hardwareMap);
+//        DragonsIMU.initialize(hardwareMap);
 
-        DragonsLimelight.initialize(hardwareMap, pipeline);
+        DragonsLimelight.initialize(hardwareMap);
+        DragonsLimelight.setPipeline(pipeline);
 
         DragonsLights.initialize(hardwareMap);
         InitInfo.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
         //check for configuration issues
-        if (exceptionOccurred) {
-            telemetry.addLine(exceptions.toString());
-            telemetry.update();
+        if (InitInfo.exceptionOccurred) {
+            telemetry.addLine(InitInfo.exceptions.toString());
 
             Thread.sleep(5000);
 
@@ -43,37 +47,44 @@ public class DragonsDriver {
                 throw new Exception();
             }
         }
+
+        telemetry.update();
     }
 
-    public static void update (Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) throws InterruptedException {
-
+    public static void update (Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2, int colorPipeline) throws InterruptedException {
         if (DragonsLimelight.isValid && DragonsLights.isValid) {
-            DragonsLimelight.update(telemetry,0, InitInfo.light);
+            DragonsLimelight.update(telemetry, InitInfo.limelight, colorPipeline);
         }
 
-        while (gamepad1.b) {
-            telemetry.addLine("B is pressed!");
-            sleep(50);
+        if (gamepad1.b) {
+            DragonsLimelight.setPipeline(yellowPipeline);
+        } else {
+            DragonsLimelight.setPipeline(colorPipeline);
         }
 
-        if (gamepad1.a) { //provides a way to recalibrate the imu
+//        while (gamepad1.b) {
+//            telemetry.addLine("B is pressed!");
+//            sleep(50);
+//        }
+
+        /*if (gamepad1.a) { //provides a way to recalibrate the imu
             telemetry.addLine("reset imu yaw");
             InitInfo.imu.resetYaw();
-        }
+        }*/
 
-        double botHeading = InitInfo.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
-        telemetry.addData("IMU heading", botHeading);
+        /*double botHeading = InitInfo.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
+        telemetry.addData("IMU heading", botHeading);*/
 
         //gets input
-        double y = -gamepad1.left_stick_y,
+       /* double y = -gamepad1.left_stick_y,
                 x = gamepad1.left_stick_x,
                 rightX = gamepad1.right_stick_x;
 
         // calls for movement
         double[] drivePowers = MoveRobot.moveRobotFC(botHeading, x, y, rightX, 1); // x, y, and rightX are the gamepad inputs
-
+*/
         //sets the motors to their corresponding power
-        InitInfo.leftFront.setPower(drivePowers[0]);
+        /*InitInfo.leftFront.setPower(drivePowers[0]);
         InitInfo.rightFront.setPower(drivePowers[1]);
         InitInfo.leftBack.setPower(drivePowers[2]);
         InitInfo.rightBack.setPower(drivePowers[3]);
@@ -83,7 +94,7 @@ public class DragonsDriver {
         telemetry.addData("leftFront power",  String.valueOf(Math.round(InitInfo.leftFront.getPower()  * 10)/10));
         telemetry.addData("rightFront power", String.valueOf(Math.round(InitInfo.rightFront.getPower() * 10)/10));
         telemetry.addData("leftBack power",   String.valueOf(Math.round(InitInfo.leftBack.getPower()   * 10)/10));
-        telemetry.addData("rightBack power",  String.valueOf(Math.round(InitInfo.rightBack.getPower()  * 10)/10));
+        telemetry.addData("rightBack power",  String.valueOf(Math.round(InitInfo.rightBack.getPower()  * 10)/10));*/
         telemetry.update();
     }
 
