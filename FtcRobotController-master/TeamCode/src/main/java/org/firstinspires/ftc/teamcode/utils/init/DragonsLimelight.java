@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
+import org.firstinspires.ftc.teamcode.utils.init.Consts;
+
 public class DragonsLimelight {
     public static boolean isValid = false;
     public static int currentPipeline;
@@ -25,8 +27,8 @@ public class DragonsLimelight {
         }
     }
 
-    public static void update (Telemetry telemetry, Limelight3A limelight) {
-            LLResult result = limelight.getLatestResult();
+    public static void update (Telemetry telemetry) {
+            LLResult result = Consts.limelight.getLatestResult();
 
             if (result != null && result.isValid()) {
                 Pose3D botpose = result.getBotpose();

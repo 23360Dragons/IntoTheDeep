@@ -71,7 +71,7 @@ public class DragonsDriver {
         currentGamepad2.copy(gamepad2);
 
         if (DragonsLimelight.isValid && DragonsLights.isValid) {
-            DragonsLimelight.update(telemetry, Consts.limelight, colorPipeline);
+            DragonsLimelight.update(telemetry);
         }
 
         if (currentGamepad1.b && !previousGamepad1.b) { //rising edge
