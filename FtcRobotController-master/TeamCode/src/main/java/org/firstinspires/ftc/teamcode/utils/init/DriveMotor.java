@@ -11,21 +11,20 @@ public class DriveMotor {
                 //left front
                 try{
                     Consts.leftFront = hardwareMap.get(DcMotor.class, "leftFront"); // gets a dcMotor object of the name "name"
-                    Consts.leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    Consts.leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                     Consts.leftFront.setDirection(DcMotor.Direction.REVERSE); // fix faulty drive behavior 10/15
+                    configure(Consts.leftFront);
                 }
                 catch(IllegalArgumentException e)
                 {
                     Consts.exceptions.append("Configuration Error: ").append("leftFront").append(" does not exist").append("\n");
                     Consts.exceptionOccurred = true;
                 }
+
                 //right front
                 try
                 {
                     Consts.rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-                    Consts.rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    Consts.rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    configure(Consts.rightFront);
 
                 }
                 catch(IllegalArgumentException e)
@@ -33,12 +32,12 @@ public class DriveMotor {
                     Consts.exceptions.append("Configuration Error: ").append("rightFront").append(" does not exist").append("\n");
                     Consts.exceptionOccurred = true;
                 }
+
                 //left back
                 try
                 {
                     Consts.leftBack = hardwareMap.get(DcMotor.class, "leftBack");
-                    Consts.leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    Consts.leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    configure(Consts.leftBack);
                     Consts.leftBack.setDirection(DcMotor.Direction.REVERSE);
                 }
                 catch(IllegalArgumentException e)
@@ -49,8 +48,7 @@ public class DriveMotor {
                 try
                 {
                     Consts.rightBack = hardwareMap.get(DcMotor.class, "rightBack");
-                    Consts.rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    Consts.rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    configure(Consts.rightBack);
                 }
                 catch(IllegalArgumentException e)
                 {
@@ -63,6 +61,12 @@ public class DriveMotor {
             Consts.exceptions.append("Configuration Error: ").append("General Motor Config").append(ex.getMessage()).append("\n");
             Consts.exceptionOccurred = true;
         }
+    }
+
+    private static void configure(DcMotor m) {
+        //java passes in the actual object rather than a reference, so this actually changes the passed in variable
+        m.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }
 
