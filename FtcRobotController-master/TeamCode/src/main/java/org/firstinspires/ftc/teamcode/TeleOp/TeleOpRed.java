@@ -25,7 +25,7 @@ public class TeleOpRed extends LinearOpMode {
 
         while (opModeIsActive()) {
             try {
-                DragonsDriver.update(telemetry, gamepad1, gamepad2, RedPipeline); // todo: finishing touches, maybe add extra params
+                DragonsDriver.update(telemetry, gamepad1, gamepad2); // todo: finishing touches, maybe add extra params
             } catch (InterruptedException e) {
                 stop();
             }

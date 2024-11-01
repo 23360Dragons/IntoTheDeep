@@ -13,7 +13,7 @@ public class MoveRobot
         double leftBackPower   = (((y - x + rightX) ) / denominator)* speed;
         double rightBackPower  = (((y + x - rightX) ) / denominator)* speed;
 
-        return new double[]{leftFrontPower, rightFrontPower, leftBackPower, rightBackPower};
+        return new double[] {leftFrontPower, rightFrontPower, leftBackPower, rightBackPower};
     }
 
     //field-centric move function

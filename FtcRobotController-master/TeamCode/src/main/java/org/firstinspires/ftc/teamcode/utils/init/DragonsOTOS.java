@@ -7,9 +7,17 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class DragonsOTOS {
+    public static boolean isValid;
     public static void initialize (HardwareMap hardwareMap) {
-        Consts.sparkFunOTOS = hardwareMap.get(SparkFunOTOS.class, "sparkfun");
-        configureOtos(Consts.sparkFunOTOS);
+        try {
+            Consts.sparkFunOTOS = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+            configureOtos(Consts.sparkFunOTOS);
+            isValid = true;
+        } catch (IllegalArgumentException ex) {
+            Consts.exceptions.append("Configuration Error: ").append("sparkfun_otos").append(" does not exist").append("\n");
+            Consts.exceptionOccurred = true;
+            isValid = false;
+        }
     }
 
     private static void configureOtos(SparkFunOTOS sparkFunOTOS) {
