@@ -22,14 +22,8 @@ public class DragonsDriver {
 
     static int currentPipeline;
     static int runPipeline;
-    static long lastMills=0;
-    static String currentColor = "yellow";
-    static HashMap<String, Integer> pipelines = new HashMap<>(3);
-
+    static int colorPipeline;
     public static void init (HardwareMap hardwareMap, Telemetry telemetry, int pipeline) throws Exception {
-        pipelines.put("blue", 0);
-        pipelines.put("red", 1);
-        pipelines.put("yellow", 2);
 
         Consts.exceptions = new StringBuilder("The following exceptions occurred: \n");
         Consts.exceptionOccurred = false;
@@ -47,7 +41,7 @@ public class DragonsDriver {
         DragonsLimelight.initialize(hardwareMap);
         DragonsLimelight.setPipeline(pipeline);
         currentPipeline = pipeline;
-        runPipeline = pipeline;
+        colorPipeline = pipeline;
 
         DragonsLights.initialize(hardwareMap);
         Consts.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
