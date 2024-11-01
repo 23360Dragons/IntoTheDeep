@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-
-
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -22,7 +20,17 @@ public class DragonsDriver {
     static Gamepad previousGamepad1;
     static Gamepad previousGamepad2;
 
+    static int currentPipeline;
+    static int runPipeline;
+    static long lastMills=0;
+    static String currentColor = "yellow";
+    static HashMap<String, Integer> pipelines = new HashMap<>(3);
+
     public static void init (HardwareMap hardwareMap, Telemetry telemetry, int pipeline) throws Exception {
+        pipelines.put("blue", 0);
+        pipelines.put("red", 1);
+        pipelines.put("yellow", 2);
+
         Consts.exceptions = new StringBuilder("The following exceptions occurred: \n");
         Consts.exceptionOccurred = false;
 
@@ -38,6 +46,8 @@ public class DragonsDriver {
 */
         DragonsLimelight.initialize(hardwareMap);
         DragonsLimelight.setPipeline(pipeline);
+        currentPipeline = pipeline;
+        runPipeline = pipeline;
 
         DragonsLights.initialize(hardwareMap);
         Consts.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
@@ -56,7 +66,7 @@ public class DragonsDriver {
         }
     }
 
-    public static void update (Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2, int colorPipeline) throws InterruptedException {
+    public static void update (Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) throws InterruptedException {
         // Store the gamepad values from the previous loop, which
         // does the same thing as copying them at the end. In the first loop
         // through, it will make it a new gamepad.
@@ -80,13 +90,15 @@ public class DragonsDriver {
             DragonsLimelight.setPipeline(colorPipeline);
         }
 
-        telemetry.addData("Sparkfun angular scalar",      Consts.sparkFunOTOS.getAngularScalar());
-        telemetry.addData("Sparkfun acceleration",  Consts.sparkFunOTOS.getAcceleration());
-        telemetry.addData("Sparkfun velocity",      Consts.sparkFunOTOS.getVelocity());
-        telemetry.addLine();
-        telemetry.addData("x",        Consts.sparkFunOTOS.getPosition().x);
-        telemetry.addData("y",        Consts.sparkFunOTOS.getPosition().y);
-        telemetry.addData("heading",        Consts.sparkFunOTOS.getPosition().h);
+        if (DragonsOTOS.isValid) {
+            telemetry.addData("Sparkfun angular scalar", Consts.sparkFunOTOS.getAngularScalar());
+            telemetry.addData("Sparkfun acceleration", Consts.sparkFunOTOS.getAcceleration());
+            telemetry.addData("Sparkfun velocity", Consts.sparkFunOTOS.getVelocity());
+            telemetry.addLine();
+            telemetry.addData("x", Consts.sparkFunOTOS.getPosition().x);
+            telemetry.addData("y", Consts.sparkFunOTOS.getPosition().y);
+            telemetry.addData("heading", Consts.sparkFunOTOS.getPosition().h);
+        }
 
 
         /*if (currentGamepad1.y) { //provides a way to recalibrate the imu
@@ -126,7 +138,5 @@ public class DragonsDriver {
             Thread.currentThread().interrupt();
         }
     }
-
-
 }
 
