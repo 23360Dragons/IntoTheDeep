@@ -1,21 +1,26 @@
-/*
 package org.firstinspires.ftc.teamcode.Autonomous;
 
-import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsIMU;
+import org.firstinspires.ftc.teamcode.utils.init.DragonsLights;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsLimelight;
+import org.firstinspires.ftc.teamcode.utils.init.DragonsOTOS;
 import org.firstinspires.ftc.teamcode.utils.init.DriveMotor;
-import org.firstinspires.ftc.teamcode.utils.init.InitInfo;
+import org.firstinspires.ftc.teamcode.utils.Global;
 
-import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftFront;
-import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.rightFront;
-import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.leftBack;
-import static org.firstinspires.ftc.teamcode.utils.init.InitInfo.rightBack;
-//TODO: FIX THIS AND UPDATE
+import static org.firstinspires.ftc.teamcode.utils.Global.leftFront;
+import static org.firstinspires.ftc.teamcode.utils.Global.rightFront;
+import static org.firstinspires.ftc.teamcode.utils.Global.leftBack;
+import static org.firstinspires.ftc.teamcode.utils.Global.rightBack;
+//TODO: UPDATE
+
+@Disabled
 @Autonomous
 public class BasicDragonsAuto extends LinearOpMode {
     IMU imu;
@@ -24,27 +29,33 @@ public class BasicDragonsAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        InitInfo.exceptions = new StringBuilder("The following exceptions occurred: \n");
-        InitInfo.exceptionOccurred = false;
+        Global.exceptions = new StringBuilder("The following exceptions occurred: \n");
+        Global.exceptionOccurred = false;
 
+        DriveMotor.initialize(hardwareMap, telemetry);
 
+        DragonsIMU.initialize(hardwareMap, telemetry);
+        DragonsLimelight.initialize(hardwareMap, telemetry);
 
-        DriveMotor.initialize(hardwareMap); //sets the drive motors in init info
+        DragonsLights.initialize(hardwareMap, telemetry);
+        Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
-        imu = DragonsIMU.initialize(hardwareMap);
-
-        limelight.initialize(hardwareMap, 0);
-
-
+        DragonsOTOS.initialize(hardwareMap, telemetry);
 
         //check for configuration issues
-        if (InitInfo.exceptionOccurred) {
-            telemetry.addLine(InitInfo.exceptions.toString());
+        if (Global.exceptionOccurred) {
+            telemetry.addLine(Global.exceptions.toString());
+            telemetry.update();
 
-            Thread.sleep(5000);
             if (!DriveMotor.isValid) {
+                telemetry.addLine("Critical Error Occurred! Exiting...");
+                telemetry.update();
+                sleep(5000);
+
                 requestOpModeStop();
             }
+
+            sleep(5000);
         }
 
         waitForStart();
@@ -52,9 +63,14 @@ public class BasicDragonsAuto extends LinearOpMode {
         if (isStopRequested()) return;
 
         moveRobot(-1, 0, 0, 1, 1);
-        //why not this?
-        //moveRobotRC(0, 1, 0, 0.5);
 
+        double[] movement = MoveRobot.RC(0, 1, 0, 0.7);
+
+        // Send powers to the wheels.
+        leftFront.setPower (movement[0]);
+        rightFront.setPower(movement[1]);
+        leftBack.setPower  (movement[2]);
+        rightBack.setPower (movement[3]);
     }
 
     public void moveRobot(double x, double y, double yaw, double strafe, double strafe1) {
@@ -79,12 +95,5 @@ public class BasicDragonsAuto extends LinearOpMode {
             leftBackPower /= max;
             rightBackPower /= max;
         }
-
-        // Send powers to the wheels.
-        leftFront.setPower(leftFrontPower);
-        rightFront.setPower(rightFrontPower);
-        leftBack.setPower(leftBackPower);
-        rightBack.setPower(rightBackPower);
     }
 }
-*/

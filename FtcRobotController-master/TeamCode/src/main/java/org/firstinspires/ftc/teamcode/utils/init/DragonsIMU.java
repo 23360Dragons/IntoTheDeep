@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.utils.Global;
 
 public class DragonsIMU {
     public static boolean isValid = false;
@@ -17,7 +18,7 @@ public class DragonsIMU {
             telemetry.addLine("Configuring IMU...");
             telemetry.update();
 
-            Consts.imu = hardwareMap.get(IMU.class, "imu");
+            Global.imu = hardwareMap.get(IMU.class, "imu");
 
             isValid = true;
 
@@ -25,13 +26,13 @@ public class DragonsIMU {
                     logoFacingDirection,
                     usbFacingDirection));
 
-            Consts.imu.initialize(parameters);
+            Global.imu.initialize(parameters);
 
             telemetry.addLine("IMU configured!");
             telemetry.update();
         } catch (IllegalArgumentException ex) {
-            Consts.exceptions.append("CRITICAL Configuration Error: ").append("imu").append(" does not exist").append("\n");
-            Consts.exceptionOccurred = true;
+            Global.exceptions.append("CRITICAL Configuration Error: ").append("imu").append(" does not exist").append("\n");
+            Global.exceptionOccurred = true;
             isValid = false;
         }
     }

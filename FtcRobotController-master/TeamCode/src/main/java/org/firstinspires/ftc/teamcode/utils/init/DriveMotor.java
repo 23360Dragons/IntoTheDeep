@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.utils.Global;
 
 public class DriveMotor {
     public static boolean isValid;
@@ -14,58 +15,58 @@ public class DriveMotor {
             telemetry.update();
                 //left front
                 try{
-                    Consts.leftFront = hardwareMap.get(DcMotor.class, "leftFront"); // gets a dcMotor object of the name "name"
-                    Consts.leftFront.setDirection(DcMotor.Direction.REVERSE); // fix faulty drive behavior 10/15
-                    configure(Consts.leftFront);
+                    Global.leftFront = hardwareMap.get(DcMotor.class, "leftFront"); // gets a dcMotor object of the name "name"
+                    Global.leftFront.setDirection(DcMotor.Direction.REVERSE); // fix faulty drive behavior 10/15
+                    configure(Global.leftFront);
                 }
                 catch(IllegalArgumentException e)
                 {
-                    Consts.exceptions.append("Configuration Error: ").append("leftFront").append(" does not exist").append("\n");
-                    Consts.exceptionOccurred = true;
+                    Global.exceptions.append("Configuration Error: ").append("leftFront").append(" does not exist").append("\n");
+                    Global.exceptionOccurred = true;
                 }
 
                 //right front
                 try
                 {
-                    Consts.rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-                    configure(Consts.rightFront);
+                    Global.rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+                    configure(Global.rightFront);
 
                 }
                 catch(IllegalArgumentException e)
                 {
-                    Consts.exceptions.append("Configuration Error: ").append("rightFront").append(" does not exist").append("\n");
-                    Consts.exceptionOccurred = true;
+                    Global.exceptions.append("Configuration Error: ").append("rightFront").append(" does not exist").append("\n");
+                    Global.exceptionOccurred = true;
                 }
 
                 //left back
                 try
                 {
-                    Consts.leftBack = hardwareMap.get(DcMotor.class, "leftBack");
-                    configure(Consts.leftBack);
-                    Consts.leftBack.setDirection(DcMotor.Direction.REVERSE);
+                    Global.leftBack = hardwareMap.get(DcMotor.class, "leftBack");
+                    configure(Global.leftBack);
+                    Global.leftBack.setDirection(DcMotor.Direction.REVERSE);
                 }
                 catch(IllegalArgumentException e)
                 {
-                    Consts.exceptions.append("Configuration Error: ").append("leftBack").append(" does not exist").append("\n");
-                    Consts.exceptionOccurred = true;}
+                    Global.exceptions.append("Configuration Error: ").append("leftBack").append(" does not exist").append("\n");
+                    Global.exceptionOccurred = true;}
                 //right back
                 try
                 {
-                    Consts.rightBack = hardwareMap.get(DcMotor.class, "rightBack");
-                    configure(Consts.rightBack);
+                    Global.rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+                    configure(Global.rightBack);
                 }
                 catch(IllegalArgumentException e)
                 {
-                    Consts.exceptions.append("Configuration Error: ").append("rightBack").append(" does not exist").append("\n");
-                    Consts.exceptionOccurred = true;
+                    Global.exceptions.append("Configuration Error: ").append("rightBack").append(" does not exist").append("\n");
+                    Global.exceptionOccurred = true;
                 }
                 telemetry.addLine("Drive motors configured!");
                 telemetry.update();
         }
         catch(Exception ex)
         {
-            Consts.exceptions.append("Configuration Error: ").append("General Motor Config").append(ex.getMessage()).append("\n");
-            Consts.exceptionOccurred = true;
+            Global.exceptions.append("Configuration Error: ").append("General Motor Config").append(ex.getMessage()).append("\n");
+            Global.exceptionOccurred = true;
         }
     }
 
