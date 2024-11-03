@@ -5,8 +5,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsIMU;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsLights;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsLimelight;
@@ -22,8 +20,10 @@ public class DragonsDriver {
 
     static int currentPipeline;
     static int runPipeline;
-    static int colorPipeline;
-    public static void init (HardwareMap hardwareMap, Telemetry telemetry, int pipeline) throws Exception {
+
+    static String startingPos = "None";
+
+    public static void init (HardwareMap hardwareMap, Telemetry telemetry, int pipeline) throws InterruptedException {
 
         Consts.exceptions = new StringBuilder("The following exceptions occurred: \n");
         Consts.exceptionOccurred = false;
@@ -34,30 +34,59 @@ public class DragonsDriver {
         previousGamepad1 = new Gamepad();
         previousGamepad2 = new Gamepad();
 
-       /* DriveMotor.initialize(hardwareMap);
+        DriveMotor.initialize(hardwareMap, telemetry);
 
-        DragonsIMU.initialize(hardwareMap);
-*/
-        DragonsLimelight.initialize(hardwareMap);
+        DragonsIMU.initialize(hardwareMap, telemetry);
+        DragonsLimelight.initialize(hardwareMap, telemetry);
         DragonsLimelight.setPipeline(pipeline);
         currentPipeline = pipeline;
-        colorPipeline = pipeline;
+        runPipeline = pipeline;
 
-        DragonsLights.initialize(hardwareMap);
+        DragonsLights.initialize(hardwareMap, telemetry);
         Consts.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
-        DragonsOTOS.initialize(hardwareMap);
+        DragonsOTOS.initialize(hardwareMap, telemetry);
 
         //check for configuration issues
         if (Consts.exceptionOccurred) {
             telemetry.addLine(Consts.exceptions.toString());
+            telemetry.update();
 
             sleep(5000);
 
             if (!DragonsIMU.isValid || !DriveMotor.isValid) {
-                throw new Exception();
+                telemetry.addLine("Critical Error Occurred! Exiting...");
+                telemetry.update();
+                sleep(5000);
+
+                throw new InterruptedException();
             }
         }
+    }
+
+    public static void init_loop (Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) throws InterruptedException {
+        telemetry.addLine("Press A for Blue Left");
+        telemetry.addLine("Press B for Blue Right");
+        telemetry.addLine("Press X for Red Left");
+        telemetry.addLine("Press Y for Red Right");
+
+        if (gamepad1.a) {
+            startingPos = ("Blue Left");
+        }
+        else if (gamepad1.b) {
+            startingPos = ("Blue Right");
+        }
+        else if (gamepad1.x) {
+            startingPos = ("Red Left");
+        }
+        else if (gamepad1.y) {
+            startingPos = ("Red Right");
+        }
+
+        telemetry.addLine();
+        telemetry.addData("Current starting position", startingPos);
+
+        telemetry.update();
     }
 
     public static void update (Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) throws InterruptedException {
@@ -81,7 +110,7 @@ public class DragonsDriver {
         if (currentGamepad1.b && !previousGamepad1.b) { //rising edge
             DragonsLimelight.setPipeline(Consts.yellowPipeline);
         } else if (!currentGamepad1.b && previousGamepad1.b) { //falling edge
-            DragonsLimelight.setPipeline(colorPipeline);
+            DragonsLimelight.setPipeline(runPipeline);
         }
 
         if (DragonsOTOS.isValid) {

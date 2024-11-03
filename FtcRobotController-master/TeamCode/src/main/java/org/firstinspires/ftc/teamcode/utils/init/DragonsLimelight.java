@@ -15,8 +15,11 @@ public class DragonsLimelight {
     public static int currentPipeline;
 
 
-    public static void initialize(HardwareMap hardwareMap) {
+    public static void initialize(HardwareMap hardwareMap, Telemetry telemetry) {
         try {
+            telemetry.addLine("Configuring limelight...");
+            telemetry.update();
+
             Consts.limelight = hardwareMap.get(Limelight3A.class, "limelight");
             isValid   = true;
             Consts.limelight.start();

@@ -19,7 +19,17 @@ public class TeleOpBlue extends LinearOpMode {
             requestOpModeStop();
         }
 
-        telemetry.update();
+        while (!isStopRequested() && !isStarted()) {
+            try {
+                DragonsDriver.init_loop(telemetry, gamepad1, gamepad2);
+            } catch (InterruptedException e) {
+                telemetry.addLine(e.getMessage());
+                telemetry.update();
+
+                sleep(10000);
+                requestOpModeStop();
+            }
+        }
 
         waitForStart();
 
@@ -27,7 +37,7 @@ public class TeleOpBlue extends LinearOpMode {
 
         while (opModeIsActive()) {
             try {
-                DragonsDriver.update(telemetry, gamepad1, gamepad2); // todo: finishing touches, maybe add extra params
+                DragonsDriver.update(telemetry, gamepad1, gamepad2);
             } catch (InterruptedException e) {
                 stop();
             }

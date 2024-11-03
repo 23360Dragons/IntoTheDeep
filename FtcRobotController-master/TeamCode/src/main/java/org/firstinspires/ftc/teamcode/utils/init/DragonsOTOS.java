@@ -3,24 +3,27 @@ package org.firstinspires.ftc.teamcode.utils.init;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class DragonsOTOS {
     public static boolean isValid;
-    public static void initialize (HardwareMap hardwareMap) {
+    public static void initialize (HardwareMap hardwareMap, Telemetry telemetry) {
         try {
             Consts.sparkFunOTOS = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
-            configureOtos(Consts.sparkFunOTOS);
+            configureOtos(telemetry, Consts.sparkFunOTOS);
             isValid = true;
         } catch (IllegalArgumentException ex) {
-            Consts.exceptions.append("Configuration Error: ").append("sparkfun_otos").append(" does not exist").append("\n");
+            Consts.exceptions.append("Configuration Error: ").append("sensor_otos").append(" does not exist").append("\n");
             Consts.exceptionOccurred = true;
             isValid = false;
         }
     }
 
-    private static void configureOtos(SparkFunOTOS sparkFunOTOS) {
+    private static void configureOtos(Telemetry telemetry, SparkFunOTOS sparkFunOTOS) {
+        telemetry.addLine("Configuring OTOS...");
+        telemetry.update();
         // Set the desired units for linear and angular measurements. Can be either
         // meters or inches for linear, and radians or degrees for angular. If not
         // set, the default is inches and degrees. Note that this setting is not
@@ -91,5 +94,8 @@ public class DragonsOTOS {
         SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
         SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
         sparkFunOTOS.getVersionInfo(hwVersion, fwVersion);
+
+        telemetry.addLine("OTOS configured!");
+        telemetry.update();
     }
 }

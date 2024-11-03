@@ -3,11 +3,15 @@ package org.firstinspires.ftc.teamcode.utils.init;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class DriveMotor {
     public static boolean isValid;
-    public static void initialize (HardwareMap hardwareMap) {
+    public static void initialize (HardwareMap hardwareMap, Telemetry telemetry) {
         try
         {
+            telemetry.addLine("Configuring drive motors...");
+            telemetry.update();
                 //left front
                 try{
                     Consts.leftFront = hardwareMap.get(DcMotor.class, "leftFront"); // gets a dcMotor object of the name "name"
@@ -55,6 +59,8 @@ public class DriveMotor {
                     Consts.exceptions.append("Configuration Error: ").append("rightBack").append(" does not exist").append("\n");
                     Consts.exceptionOccurred = true;
                 }
+                telemetry.addLine("Drive motors configured!");
+                telemetry.update();
         }
         catch(Exception ex)
         {
