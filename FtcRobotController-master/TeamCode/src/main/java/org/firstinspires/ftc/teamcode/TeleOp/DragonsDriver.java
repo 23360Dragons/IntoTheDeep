@@ -4,6 +4,8 @@ import static org.firstinspires.ftc.teamcode.utils.Global.BLUE;
 import static org.firstinspires.ftc.teamcode.utils.Global.LEFT;
 import static org.firstinspires.ftc.teamcode.utils.Global.RED;
 import static org.firstinspires.ftc.teamcode.utils.Global.RIGHT;
+import static org.firstinspires.ftc.teamcode.utils.Global.yellowPipeline;
+
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -105,8 +107,6 @@ public class DragonsDriver extends LinearOpMode {
         DragonsLimelight.setPipeline(startingColor);
         runPipeline = DragonsLimelight.getPipeline();
 
-        waitForStart();
-
         if (isStopRequested()) return;
 
         // loop
@@ -129,15 +129,14 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             if (currentGamepad1.b && !previousGamepad1.b) { //rising edge
-                DragonsLimelight.setPipeline(Global.yellowPipeline);
+                DragonsLimelight.setPipeline(yellowPipeline);
             } else if (!currentGamepad1.b && previousGamepad1.b) { //falling edge
                 DragonsLimelight.setPipeline(runPipeline);
             }
 
             if (DragonsOTOS.isValid) {
-                telemetry.addData("Sparkfun angular scalar", Global.sparkFunOTOS.getAngularScalar());
-                telemetry.addData("Sparkfun acceleration", Global.sparkFunOTOS.getAcceleration());
-                telemetry.addData("Sparkfun velocity", Global.sparkFunOTOS.getVelocity());
+                telemetry.addData("Sparkfun velocity along x axis", Global.sparkFunOTOS.getVelocity().x);
+                telemetry.addData("Sparkfun velocity along y axis", Global.sparkFunOTOS.getVelocity().y);
                 telemetry.addLine();
                 telemetry.addData("x", Global.sparkFunOTOS.getPosition().x);
                 telemetry.addData("y", Global.sparkFunOTOS.getPosition().y);
