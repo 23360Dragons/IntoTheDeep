@@ -58,7 +58,7 @@ public class DragonsLimelight {
                     telemetry.addLine("Limelight result is null");
 
                 } else if (!result.isValid()) {
-                    telemetry.addLine("Limelight result is REALLY not valid");
+                    telemetry.addLine("Limelight result is not valid");
                     Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
                 }
             }
