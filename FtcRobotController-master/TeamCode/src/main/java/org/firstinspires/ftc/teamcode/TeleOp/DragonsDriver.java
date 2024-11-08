@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsIMU;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsLights;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsLimelight;
@@ -18,12 +19,7 @@ public class DragonsDriver {
     static Gamepad previousGamepad1;
     static Gamepad previousGamepad2;
 
-    static int currentPipeline;
     static int runPipeline;
-
-    static String startingPos = "None";
-    static int count = 0;
-    static int colorPipeline;
 
     public static void init (HardwareMap hardwareMap, Telemetry telemetry, int pipeline) throws InterruptedException {
 //
@@ -38,10 +34,9 @@ public class DragonsDriver {
 
 //        DriveMotor.initialize(hardwareMap, telemetry);
 //        DragonsIMU.initialize(hardwareMap, telemetry);
-//
+
         DragonsLimelight.initialize(hardwareMap, telemetry);
         DragonsLimelight.setPipeline(pipeline);
-        currentPipeline = pipeline;
         runPipeline = pipeline;
 
         DragonsLights.initialize(hardwareMap, telemetry);
@@ -109,33 +104,6 @@ public class DragonsDriver {
         currentGamepad1.copy(gamepad1);
         currentGamepad2.copy(gamepad2);
 
-        boolean color = false;
-        count++;
-
-        if(count > 0 && count < 50)
-        {
-            color=true;
-        }
-        else if (count> 50 && count < 100)
-        {
-            color =false;
-        }
-        else if(count>100)
-        {
-            count=0;
-        }
-
-
-        telemetry.addData("count", count);
-        if(color)
-        {
-            telemetry.addData("color","looking for blue" );
-        }
-        else{
-            telemetry.addData("color", "looking for yellow");
-        }
-
-
         if (currentGamepad1.b && !previousGamepad1.b) { //rising edge
             DragonsLimelight.setPipeline(Consts.yellowPipeline);
         } else if (!currentGamepad1.b && previousGamepad1.b) { //falling edge
@@ -146,14 +114,7 @@ public class DragonsDriver {
             DragonsLimelight.update(telemetry);
         }
 
-        if (!color) { //rising edge
-            DragonsLimelight.setPipeline(Consts.yellowPipeline);
-        } else { //falling edge
-            DragonsLimelight.setPipeline(colorPipeline);
-        }
-
-
-        /*if (DragonsOTOS.isValid) {
+        if (DragonsOTOS.isValid) {
             telemetry.addData("Sparkfun angular scalar", Consts.sparkFunOTOS.getAngularScalar());
             telemetry.addData("Sparkfun acceleration", Consts.sparkFunOTOS.getAcceleration());
             telemetry.addData("Sparkfun velocity", Consts.sparkFunOTOS.getVelocity());
@@ -162,7 +123,6 @@ public class DragonsDriver {
             telemetry.addData("y", Consts.sparkFunOTOS.getPosition().y);
             telemetry.addData("heading", Consts.sparkFunOTOS.getPosition().h);
         }
-*/
 
         /*if (currentGamepad1.y) { //provides a way to recalibrate the imu
             telemetry.addLine("reset imu yaw");
@@ -170,13 +130,14 @@ public class DragonsDriver {
         }*/
 
         /*double botHeading = Consts.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
-        telemetry.addData("IMU heading", botHeading);
+        telemetry.addData("IMU heading", botHeading);*/
 
         //gets input
-        double y = -gamepad1.left_stick_y,
+        double  y = -gamepad1.left_stick_y,
                 x = gamepad1.left_stick_x,
                 rightX = gamepad1.right_stick_x;
 
+        /*
         // calls for movement
         double[] drivePowers = MoveRobot.moveRobotFC(botHeading, x, y, rightX, 1); // x, y, and rightX are the gamepad inputs
         //sets the motors to their corresponding power

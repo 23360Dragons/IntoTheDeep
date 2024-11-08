@@ -14,7 +14,6 @@ public class DragonsLimelight {
     public static boolean isValid = false;
     public static int currentPipeline;
 
-
     public static void initialize(HardwareMap hardwareMap, Telemetry telemetry) {
         try {
             telemetry.addLine("Configuring limelight...");
@@ -46,9 +45,6 @@ public class DragonsLimelight {
                     case 2:
                         Consts.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
                         break;
-                    case 3:
-                        break;
-
                 }
 
                 telemetry.addLine().addData("tx", result.getTx());
@@ -58,9 +54,9 @@ public class DragonsLimelight {
             } else {
                 if (result == null) {
                     telemetry.addLine("Limelight result is null");
-
+                    Consts.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
                 } else if (!result.isValid()) {
-                    telemetry.addLine("Limelight result is REALLY not valid");
+                    telemetry.addLine("Limelight result is not valid");
                     Consts.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
                 }
             }
