@@ -44,9 +44,6 @@ public class DragonsLimelight {
                     case 2:
                         Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
                         break;
-                    case 3:
-                        break;
-
                 }
 
                 telemetry.addLine().addData("tx", result.getTx());
@@ -56,7 +53,7 @@ public class DragonsLimelight {
             } else {
                 if (result == null) {
                     telemetry.addLine("Limelight result is null");
-
+                    Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
                 } else if (!result.isValid()) {
                     telemetry.addLine("Limelight result is not valid");
                     Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);

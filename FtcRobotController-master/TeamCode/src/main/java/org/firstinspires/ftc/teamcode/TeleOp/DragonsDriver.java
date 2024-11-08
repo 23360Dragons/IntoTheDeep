@@ -12,6 +12,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsIMU;
@@ -64,7 +66,7 @@ public class DragonsDriver extends LinearOpMode {
             if (!DragonsIMU.isValid || !DriveMotor.isValid) {
                 telemetry.addLine("Critical Error Occurred! Exiting...");
                 telemetry.update();
-                sleep(5000);
+                sleep(3000);
 
                 requestOpModeStop();
             }
@@ -152,8 +154,9 @@ public class DragonsDriver extends LinearOpMode {
 //            double botHeading = Global.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
 //            telemetry.addData("IMU heading", botHeading);
 
+
             //gets input
-            double y = -gamepad1.left_stick_y,
+            double  y = -gamepad1.left_stick_y,
                     x = gamepad1.left_stick_x,
                     rightX = gamepad1.right_stick_x;
 
