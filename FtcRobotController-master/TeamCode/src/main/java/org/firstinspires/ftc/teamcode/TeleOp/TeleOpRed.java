@@ -19,8 +19,6 @@ public class TeleOpRed extends LinearOpMode {
             requestOpModeStop();
         }
 
-        waitForStart();
-
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
