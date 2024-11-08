@@ -6,17 +6,18 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.utils.Global;
 
 public class DragonsOTOS {
     public static boolean isValid;
     public static void initialize (HardwareMap hardwareMap, Telemetry telemetry) {
         try {
-            Consts.sparkFunOTOS = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
-            configureOtos(telemetry, Consts.sparkFunOTOS);
+            Global.sparkFunOTOS = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+            configureOtos(telemetry, Global.sparkFunOTOS);
             isValid = true;
         } catch (IllegalArgumentException ex) {
-            Consts.exceptions.append("Configuration Error: ").append("sensor_otos").append(" does not exist").append("\n");
-            Consts.exceptionOccurred = true;
+            Global.exceptions.append("Configuration Error: ").append("sensor_otos").append(" does not exist").append("\n");
+            Global.exceptionOccurred = true;
             isValid = false;
         }
     }

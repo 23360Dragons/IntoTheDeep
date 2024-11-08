@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.utils;
 public class MoveRobot
 {
     //robot-centric move function
-    public static double[] moveRobotRC (double x, double y, double rightX, double speed)
+    public static double[] RC (double x, double y, double rightX, double speed)
     {
+        //rightX is yaw
+
         x*=1.1; //counteract imperfect strafing
         double denominator = Math.max(Math.abs(x) + Math.abs(y) + Math.abs(rightX), 1); //normalize the inputs
 
@@ -17,7 +19,7 @@ public class MoveRobot
     }
 
     //field-centric move function
-    public static double[] moveRobotFC(double botHeading, double x, double y, double rightX, double speed)
+    public static double[] FC (double botHeading, double x, double y, double rightX, double speed)
     {
 
         double rotX = (x * Math.cos(-botHeading) - y * Math.sin(-botHeading)) * 1.1; // Counteract imperfect strafing
@@ -46,6 +48,7 @@ public class MoveRobot
         return new double[]{leftFrontPower, rightFrontPower, leftBackPower, rightBackPower};
     }
 
+    // input the angle at which you want to move and it will go that way, relative to the robot
     public static double[] moveRobotAngle (double angle, double speed) {
         double x = Math.abs(-Math.abs(((double) 1 /90) * angle) + 2)-1;
         double y = Math.abs(-Math.abs(((double) 1 /90) * angle - 1) + 2)-1; // math works out.
