@@ -21,6 +21,9 @@ public class DragonsLimelight {
             Global.limelight = hardwareMap.get(Limelight3A.class, "limelight");
             isValid          = true;
             Global.limelight.start();
+
+            telemetry.addLine("Limelight Configured!");
+            telemetry.update();
         } catch (IllegalArgumentException ex) {
             Global.exceptions.append("Configuration Error: ").append("limelight").append(" does not exist").append("\n");
             Global.exceptionOccurred = true;
@@ -36,13 +39,13 @@ public class DragonsLimelight {
 
                 switch (currentPipeline) {
                     case 0:
-                        Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+                        DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
                         break;
                     case 1:
-                        Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                        DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                         break;
                     case 2:
-                        Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                        DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
                         break;
                 }
 
@@ -53,10 +56,10 @@ public class DragonsLimelight {
             } else {
                 if (result == null) {
                     telemetry.addLine("Limelight result is null");
-                    Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+                    DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
                 } else if (!result.isValid()) {
                     telemetry.addLine("Limelight result is not valid");
-                    Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+                    DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
                 }
             }
     }
