@@ -41,7 +41,7 @@ public class DragonsDriver extends LinearOpMode {
 
     @Override
     public void runOpMode () throws InterruptedException {
-        //<editor-fold desc="Initialize Robot Hardware">
+        //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
         Global.exceptions = new StringBuilder("The following exceptions occurred: \n");
         Global.exceptionOccurred = false;
 
@@ -63,7 +63,7 @@ public class DragonsDriver extends LinearOpMode {
         DragonsOTOS.initialize(hardwareMap, telemetry);
         //</editor-fold>
 
-        //check for configuration issues
+        // --------------------- Configuration Error Handing ---------------------
         if (Global.exceptionOccurred) {
             telemetry.addLine(Global.exceptions.toString());
             telemetry.update();
@@ -75,7 +75,7 @@ public class DragonsDriver extends LinearOpMode {
             sleep(5000);
         }
 
-        // init loop
+        // --------------------- Choose Starting Position ---------------------
         while (opModeInInit()) {
             telemetry.addLine("Press A for Blue Left");
             telemetry.addLine("Press B for Blue Right");
@@ -118,7 +118,7 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.update();
         }
 
-        //set limelight pipeline after the field starting position has been determined
+        //<editor-fold desc="--------------------- Set Limelight Pipeline ---------------------">
         if (sideIsSet && colorIsSet) {
             DragonsLimelight.setPipeline(startingColor);
             runPipeline = DragonsLimelight.getPipeline();
@@ -128,6 +128,7 @@ public class DragonsDriver extends LinearOpMode {
             sleep(3000);
             requestOpModeStop();
         }
+        //</editor-fold>
 
         if (isStopRequested()) return;
 
@@ -146,21 +147,25 @@ public class DragonsDriver extends LinearOpMode {
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
-            //gets input
+            // --------------------- Movement ---------------------
             double  y = -currentGamepad1.left_stick_y,
                     x = currentGamepad1.left_stick_x,
                     rightX = currentGamepad1.right_stick_x;
 
-            if (currentGamepad1.b && !previousGamepad1.b) { //rising edge
-                DragonsLimelight.setPipeline(yellowPipeline);
-            } else if (!currentGamepad1.b && previousGamepad1.b) { //falling edge
-                DragonsLimelight.setPipeline(runPipeline);
-            }
 
+            // --------------------- Limelight ---------------------
             if (DragonsLimelight.isValid && DragonsLights.isValid) {
-                DragonsLimelight.update(telemetry);
+                // --------------------- Pipeline Switching ---------------------
+                if (currentGamepad1.b && !previousGamepad1.b) { //rising edge
+                    DragonsLimelight.setPipeline(yellowPipeline);
+                } else if (!currentGamepad1.b && previousGamepad1.b) { //falling edge
+                    DragonsLimelight.setPipeline(runPipeline);
+                }
 
+                DragonsLimelight.update(telemetry);
             }
+
+            // --------------------- SparkFun OTOS ---------------------
             if (DragonsOTOS.isValid) {
                 telemetry.addData("Sparkfun velocity along x axis", Global.sparkFunOTOS.getVelocity().x);
                 telemetry.addData("Sparkfun velocity along y axis", Global.sparkFunOTOS.getVelocity().y);
@@ -170,6 +175,7 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("heading", Global.sparkFunOTOS.getPosition().h);
             }
 
+            // --------------------- Movement ---------------------
             if (DragonsIMU.isValid && DriveMotor.isValid) {
                 if (currentGamepad1.y) { //provides a way to recalibrate the imu
                     telemetry.addLine("reset imu yaw");
