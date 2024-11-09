@@ -38,7 +38,7 @@ public class dRRagonsAuto extends LinearOpMode {
             rightLinear.setDirection(DcMotorSimple.Direction.REVERSE);
         }
     }
-    public class Armz {
+   /* public class Armz {
         private DcMotorEx leftArm, rightArm;
         public Armz (HardwareMap hardwareMap){
             leftArm = hardwareMap.get(DcMotorEx.class, "leftLinear");
@@ -49,7 +49,7 @@ public class dRRagonsAuto extends LinearOpMode {
             rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightArm.setDirection(DcMotorSimple.Direction.REVERSE);
         }
-    }
+    }*/
     public class Artie {
         private Servo leftArtie, rightArtie;
         public Artie(HardwareMap hardwareMap){
@@ -57,7 +57,7 @@ public class dRRagonsAuto extends LinearOpMode {
             rightArtie = hardwareMap.get(Servo.class, "rightArtie");
         }
     }
-    public class Limitz {
+    /*public class Limitz {
         private Servo leftLimit, rightLimit;
         public Limitz (HardwareMap hardwareMap){
             leftLimit = hardwareMap.get(Servo.class, "leftLimit");
@@ -87,7 +87,7 @@ public class dRRagonsAuto extends LinearOpMode {
         public GreenLight (HardwareMap hardwareMap){
             limelight = hardwareMap.get(Limelight3A.class, "limelight");
         }
-    }
+    }*/
     public class FriendlyFire {
         private SparkFunOTOS sensor_otos;
         public FriendlyFire (HardwareMap hardwareMap){
@@ -97,6 +97,7 @@ public class dRRagonsAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        Pose2d initialPose = new Pose2d();
 
     }
 }
