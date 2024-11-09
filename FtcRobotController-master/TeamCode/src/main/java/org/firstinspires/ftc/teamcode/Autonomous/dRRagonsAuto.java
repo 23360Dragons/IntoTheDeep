@@ -95,8 +95,18 @@ public class dRRagonsAuto extends LinearOpMode {
         }
     }
 
+
     @Override
     public void runOpMode() throws InterruptedException {
-//        Pose2d initialPose = new Pose2d();
+        int blueFace, redFace;
+        blueFace = 270;
+        redFace = 90;
+        Pose2d blueStartBasket, blueStartObserve, redStartBasket, redStartObserve, blueBasket, redBasket;
+        blueStartBasket = new Pose2d(35,62,Math.toRadians(blueFace));
+        blueStartObserve = new Pose2d(-12,62,Math.toRadians(blueFace));
+        redStartBasket = new Pose2d(12,60,Math.toRadians(redFace));
+        redStartObserve = new Pose2d(-35,60,Math.toRadians(redFace));
+        blueBasket = new Pose2d(53,53,Math.toRadians(45));
+        redBasket = new Pose2d(-52,-52,Math.toRadians(225));
     }
 }
