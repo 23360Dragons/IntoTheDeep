@@ -4,19 +4,16 @@ import static org.firstinspires.ftc.teamcode.utils.Global.BLUE;
 import static org.firstinspires.ftc.teamcode.utils.Global.LEFT;
 import static org.firstinspires.ftc.teamcode.utils.Global.RED;
 import static org.firstinspires.ftc.teamcode.utils.Global.RIGHT;
-import static org.firstinspires.ftc.teamcode.utils.Global.yellowPipeline;
-
+import static org.firstinspires.ftc.teamcode.utils.Global.YELLOW;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.SuperStructure.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsIMU;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsLights;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsLimelight;
@@ -152,7 +149,7 @@ public class DragonsDriver extends LinearOpMode {
                     rightX = currentGamepad1.right_stick_x;
 
             if (currentGamepad1.b && !previousGamepad1.b) { //rising edge
-                DragonsLimelight.setPipeline(yellowPipeline);
+                DragonsLimelight.setPipeline(YELLOW);
             } else if (!currentGamepad1.b && previousGamepad1.b) { //falling edge
                 DragonsLimelight.setPipeline(runPipeline);
             }
