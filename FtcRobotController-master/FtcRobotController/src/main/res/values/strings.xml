@@ -38,6 +38,24 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <resources>
 
+    <string name="pref_rc_connected">Connected</string>
+    <string name="pref_warn_about_2_4_ghz_band">Warn About 2.4 GHz Band</string>
+    <string name="pref_warn_about_obsolete_software">Warn About Obsolete Software</string>
+    <string name="pref_warn_about_mismatched_app_versions">Warn About Mismatched App Versions</string>
+    <string name="pref_warn_about_incorrect_clocks">Warn About Incorrect Clocks</string>
+    <string name="pref_wifi_automute">WiFi Automute</string>
+    <string name="pref_pairing_kind">Pairing Kind</string>
+    <string name="toastRobotSetupComplete">Robot Setup Complete</string>
+    <string name="toastRestartRobotComplete">Restart Robot Complete</string>
+    <string name="pref_app_theme">App Theme</string>
+    <string name="appThemeChangeRestartNotifyRC">App Theme Change Restart Required</string>
+    <string name="permRcWriteExternalStorageExplain">Explain Write External Storage</string>
+    <string name="permRcReadExternalStorageExplain">Explain Read External Storage</string>
+    <string name="permRcCameraExplain">Explain Perm Rc Camera</string>
+    <string name="permAccessLocationExplain">Explain Perm Access Location</string>
+    <string name="permReadPhoneState">Perm Read Phone State</string>
+    <string name="permGenericExplain">Explain Perm Generic</string>
+
   <string name="app_name">FTC Robot Controller</string>
 
   <!-- Menu -->

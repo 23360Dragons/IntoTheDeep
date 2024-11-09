@@ -3,9 +3,12 @@ import java.text.SimpleDateFormat
 //
 // build.gradle in FtcRobotController
 //
+
+//android.buildFeatures.buildConfig true
 apply plugin: 'com.android.library'
 
 android {
+    buildFeatures { buildConfig = true }
 
     defaultConfig {
         minSdkVersion 24
