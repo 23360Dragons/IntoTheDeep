@@ -101,12 +101,18 @@ public class dRRagonsAuto extends LinearOpMode {
         int blueFace, redFace;
         blueFace = 270;
         redFace = 90;
-        Pose2d blueStartBasket, blueStartObserve, redStartBasket, redStartObserve, blueBasket, redBasket;
+        Pose2d blueStartBasket, blueStartObserve, redStartBasket, redStartObserve, blueSpecimen, redSpecimen, blueBasket, redBasket, redAscent, blueAscent, blueObserve, redObserve;
         blueStartBasket = new Pose2d(35,62,Math.toRadians(blueFace));
         blueStartObserve = new Pose2d(-12,62,Math.toRadians(blueFace));
         redStartBasket = new Pose2d(12,60,Math.toRadians(redFace));
         redStartObserve = new Pose2d(-35,60,Math.toRadians(redFace));
+        blueSpecimen = new Pose2d(0,34, Math.toRadians(blueFace));
+        redSpecimen = new Pose2d(0,-33,Math.toRadians(redFace));
         blueBasket = new Pose2d(53,53,Math.toRadians(45));
         redBasket = new Pose2d(-52,-52,Math.toRadians(225));
+        redAscent = new Pose2d(-25,0,Math.toRadians(0));
+        blueAscent = new Pose2d(25, 0, Math.toRadians(180));
+        blueObserve = new Pose2d(-57,60,Math.toRadians(90));
+        redObserve = new Pose2d(57,-58,Math.toRadians(270));
     }
 }

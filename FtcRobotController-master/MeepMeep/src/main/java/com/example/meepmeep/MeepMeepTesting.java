@@ -22,6 +22,10 @@ public class MeepMeepTesting {
         Vector2d run = new Vector2d(10,43);
         Vector2d backup = new Vector2d(0,43);
         Pose2d redBasket = new Pose2d(-52, -52,Math.toRadians(225));
+        Pose2d redAscent = new Pose2d (-25,0,Math.toRadians(0));
+        Pose2d blueAscent = new Pose2d(25,0, Math.toRadians(180));
+        Pose2d blueObserve = new Pose2d(-57,60,Math.toRadians(90));
+        Pose2d redObserve = new Pose2d(57,-58,Math.toRadians(270));
 
 
 
@@ -32,7 +36,7 @@ public class MeepMeepTesting {
                         .waitSeconds(3)
                         .lineTo(toRedSide)
                         .waitSeconds(3)
-                        .lineToSplineHeading(redBasket)
+                        .lineToSplineHeading(redObserve)
                         .waitSeconds(3)
 
                         //.forward(25)
