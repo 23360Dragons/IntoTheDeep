@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.SuperStructure.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
@@ -54,6 +55,8 @@ public class DragonsDriver extends LinearOpMode {
 
         DragonsLights.initialize(hardwareMap, telemetry);
         Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+
+        Global.superStructure = new SuperStructure(hardwareMap);
 
 //        DragonsOTOS.initialize(hardwareMap, telemetry);
         //</editor-fold>

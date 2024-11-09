@@ -6,6 +6,8 @@ import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.teamcode.SuperStructure.SuperStructure;
+
 public class Global {
     public static StringBuilder exceptions;
     public static boolean exceptionOccurred;
@@ -22,4 +24,5 @@ public class Global {
     public static Limelight3A limelight;
     public static RevBlinkinLedDriver light;
     public static SparkFunOTOS sparkFunOTOS;
+    public static SuperStructure superStructure;
 }

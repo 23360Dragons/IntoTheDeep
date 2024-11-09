@@ -23,6 +23,7 @@ public class DriveMotor {
                 {
                     Global.exceptions.append("Configuration Error: ").append("leftFront").append(" does not exist").append("\n");
                     Global.exceptionOccurred = true;
+                    isValid = false;
                 }
 
                 //right front
@@ -36,6 +37,7 @@ public class DriveMotor {
                 {
                     Global.exceptions.append("Configuration Error: ").append("rightFront").append(" does not exist").append("\n");
                     Global.exceptionOccurred = true;
+                    isValid = false;
                 }
 
                 //left back
@@ -48,7 +50,9 @@ public class DriveMotor {
                 catch(IllegalArgumentException e)
                 {
                     Global.exceptions.append("Configuration Error: ").append("leftBack").append(" does not exist").append("\n");
-                    Global.exceptionOccurred = true;}
+                    Global.exceptionOccurred = true;
+                    isValid = false;
+                }
                 //right back
                 try
                 {
@@ -59,7 +63,9 @@ public class DriveMotor {
                 {
                     Global.exceptions.append("Configuration Error: ").append("rightBack").append(" does not exist").append("\n");
                     Global.exceptionOccurred = true;
+                    isValid = false;
                 }
+
                 telemetry.addLine("Drive motors configured!");
                 telemetry.update();
         }
