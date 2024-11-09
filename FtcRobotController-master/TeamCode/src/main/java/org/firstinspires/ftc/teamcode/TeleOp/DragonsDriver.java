@@ -156,7 +156,7 @@ public class DragonsDriver extends LinearOpMode {
 
 
             // --------------------- Limelight ---------------------
-            if (DragonsLimelight.isValid && DragonsLights.isValid) {
+            if (DragonsLimelight.isValid) {
                 // --------------------- Pipeline Switching ---------------------
                 if (currentGamepad1.b && !previousGamepad1.b) { //rising edge
                     DragonsLimelight.setPipeline(yellowPipeline);
@@ -207,4 +207,3 @@ public class DragonsDriver extends LinearOpMode {
         }
     }
 }
-

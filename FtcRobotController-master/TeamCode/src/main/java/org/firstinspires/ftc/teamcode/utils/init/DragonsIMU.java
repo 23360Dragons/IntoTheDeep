@@ -7,11 +7,12 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
+import static org.firstinspires.ftc.teamcode.utils.Global.logoFacingDirection;
+import static org.firstinspires.ftc.teamcode.utils.Global.usbFacingDirection;
+
+
 public class DragonsIMU {
     public static boolean isValid = false;
-
-    public static RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-    public static RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
 
     public static void initialize(HardwareMap hardwareMap, Telemetry telemetry) {
         try {

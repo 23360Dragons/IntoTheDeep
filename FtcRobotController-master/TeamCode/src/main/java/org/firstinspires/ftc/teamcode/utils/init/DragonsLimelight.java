@@ -37,16 +37,18 @@ public class DragonsLimelight {
             if (result != null && result.isValid()) {
                 Pose3D botpose = result.getBotpose();
 
-                switch (currentPipeline) {
-                    case 0:
-                        DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
-                        break;
-                    case 1:
-                        DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                        break;
-                    case 2:
-                        DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-                        break;
+                if (DragonsLights.isValid) {
+                    switch (currentPipeline) {
+                        case 0:
+                            DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+                            break;
+                        case 1:
+                            DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                            break;
+                        case 2:
+                            DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                            break;
+                    }
                 }
 
                 telemetry.addLine().addData("tx", result.getTx());
@@ -56,10 +58,14 @@ public class DragonsLimelight {
             } else {
                 if (result == null) {
                     telemetry.addLine("Limelight result is null");
-                    DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+
+                    if (DragonsLights.isValid)
+                        DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
                 } else if (!result.isValid()) {
                     telemetry.addLine("Limelight result is not valid");
-                    DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+
+                    if (DragonsLights.isValid)
+                        DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
                 }
             }
     }
