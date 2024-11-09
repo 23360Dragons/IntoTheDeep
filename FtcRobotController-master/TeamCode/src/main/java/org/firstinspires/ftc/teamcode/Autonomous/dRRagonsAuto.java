@@ -97,7 +97,6 @@ public class dRRagonsAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d initialPose = new Pose2d();
-
+//        Pose2d initialPose = new Pose2d();
     }
 }
