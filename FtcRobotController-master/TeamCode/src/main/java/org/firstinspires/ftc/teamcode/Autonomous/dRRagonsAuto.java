@@ -88,9 +88,9 @@ public class dRRagonsAuto extends LinearOpMode {
             limelight = hardwareMap.get(Limelight3A.class, "limelight");
         }
     }
-    public class FunFire {
+    public class FriendlyFire {
         private SparkFunOTOS sensor_otos;
-        public FunFire (HardwareMap hardwareMap){
+        public FriendlyFire (HardwareMap hardwareMap){
             sensor_otos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
         }
     }
