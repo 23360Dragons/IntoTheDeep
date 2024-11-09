@@ -35,7 +35,9 @@ public class DragonsDriver extends LinearOpMode {
 
     static String startingPos = "None";
     static int startingColor; // 0 is blue, 1 is red
+    static boolean colorIsSet = false;
     static int startingSide;  // 0 is left, 1 is right
+    static boolean sideIsSet = false;
 
     @Override
     public void runOpMode () throws InterruptedException {
@@ -48,9 +50,9 @@ public class DragonsDriver extends LinearOpMode {
         previousGamepad1 = new Gamepad();
         previousGamepad2 = new Gamepad();
 
-//        DriveMotor.initialize(hardwareMap, telemetry);
+        DriveMotor.initialize(hardwareMap, telemetry);
 
-//        DragonsIMU.initialize(hardwareMap, telemetry);
+        DragonsIMU.initialize(hardwareMap, telemetry);
         DragonsLimelight.initialize(hardwareMap, telemetry);
 
         DragonsLights.initialize(hardwareMap, telemetry);
@@ -58,7 +60,7 @@ public class DragonsDriver extends LinearOpMode {
 
         Global.superStructure = new SuperStructure(hardwareMap);
 
-//        DragonsOTOS.initialize(hardwareMap, telemetry);
+        DragonsOTOS.initialize(hardwareMap, telemetry);
         //</editor-fold>
 
         //check for configuration issues
@@ -67,13 +69,9 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.update();
 
             if (!DragonsIMU.isValid || !DriveMotor.isValid) {
-                telemetry.addLine("Critical Error Occurred! Exiting...");
+                telemetry.addLine("Critical Error Occurred! The IMU, Motors, and all movement code will not work.");
                 telemetry.update();
-                sleep(3000);
-
-                requestOpModeStop();
             }
-
             sleep(5000);
         }
 
@@ -88,18 +86,30 @@ public class DragonsDriver extends LinearOpMode {
                 startingPos = ("Blue Left");
                 startingColor = BLUE;
                 startingSide = LEFT;
+
+                colorIsSet = true;
+                sideIsSet = true;
             } else if (gamepad1.b) {
                 startingPos = ("Blue Right");
                 startingColor = BLUE;
                 startingSide = RIGHT;
+
+                colorIsSet = true;
+                sideIsSet = true;
             } else if (gamepad1.x) {
                 startingPos = ("Red Left");
                 startingColor = RED;
                 startingSide = LEFT;
+
+                colorIsSet = true;
+                sideIsSet = true;
             } else if (gamepad1.y) {
                 startingPos = ("Red Right");
                 startingColor = RED;
                 startingSide = RIGHT;
+
+                colorIsSet = true;
+                sideIsSet = true;
             }
 
             telemetry.addLine();
@@ -109,8 +119,15 @@ public class DragonsDriver extends LinearOpMode {
         }
 
         //set limelight pipeline after the field starting position has been determined
-        DragonsLimelight.setPipeline(startingColor);
-        runPipeline = DragonsLimelight.getPipeline();
+        if (sideIsSet && colorIsSet) {
+            DragonsLimelight.setPipeline(startingColor);
+            runPipeline = DragonsLimelight.getPipeline();
+        } else {
+            telemetry.addLine("No starting position set; ending opMode.");
+            telemetry.update();
+            sleep(3000);
+            requestOpModeStop();
+        }
 
         if (isStopRequested()) return;
 
@@ -129,9 +146,10 @@ public class DragonsDriver extends LinearOpMode {
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
-            if (DragonsLimelight.isValid && DragonsLights.isValid) {
-                DragonsLimelight.update(telemetry);
-            }
+            //gets input
+            double  y = -currentGamepad1.left_stick_y,
+                    x = currentGamepad1.left_stick_x,
+                    rightX = currentGamepad1.right_stick_x;
 
             if (currentGamepad1.b && !previousGamepad1.b) { //rising edge
                 DragonsLimelight.setPipeline(yellowPipeline);
@@ -139,44 +157,44 @@ public class DragonsDriver extends LinearOpMode {
                 DragonsLimelight.setPipeline(runPipeline);
             }
 
-//            if (DragonsOTOS.isValid) {
-//                telemetry.addData("Sparkfun velocity along x axis", Global.sparkFunOTOS.getVelocity().x);
-//                telemetry.addData("Sparkfun velocity along y axis", Global.sparkFunOTOS.getVelocity().y);
-//                telemetry.addLine();
-//                telemetry.addData("x", Global.sparkFunOTOS.getPosition().x);
-//                telemetry.addData("y", Global.sparkFunOTOS.getPosition().y);
-//                telemetry.addData("heading", Global.sparkFunOTOS.getPosition().h);
-//            }
+            if (DragonsLimelight.isValid && DragonsLights.isValid) {
+                DragonsLimelight.update(telemetry);
 
+            }
+            if (DragonsOTOS.isValid) {
+                telemetry.addData("Sparkfun velocity along x axis", Global.sparkFunOTOS.getVelocity().x);
+                telemetry.addData("Sparkfun velocity along y axis", Global.sparkFunOTOS.getVelocity().y);
+                telemetry.addLine();
+                telemetry.addData("x", Global.sparkFunOTOS.getPosition().x);
+                telemetry.addData("y", Global.sparkFunOTOS.getPosition().y);
+                telemetry.addData("heading", Global.sparkFunOTOS.getPosition().h);
+            }
 
-//            if (currentGamepad1.y) { //provides a way to recalibrate the imu
-//                telemetry.addLine("reset imu yaw");
-//                Global.imu.resetYaw();
-//            }
-//
-//            double botHeading = Global.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
-//            telemetry.addData("IMU heading", botHeading);
+            if (DragonsIMU.isValid && DriveMotor.isValid) {
+                if (currentGamepad1.y) { //provides a way to recalibrate the imu
+                    telemetry.addLine("reset imu yaw");
+                    Global.imu.resetYaw();
+                }
 
+                double botHeading = Global.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
+                telemetry.addData("IMU heading", botHeading);
 
-            //gets input
-            double  y = -gamepad1.left_stick_y,
-                    x = gamepad1.left_stick_x,
-                    rightX = gamepad1.right_stick_x;
+                // calls for movement
+                double[] drivePowers = MoveRobot.FC(botHeading, x, y, rightX, 1); // x, y, and rightX are the gamepad inputs
+                //sets the motors to their corresponding power
+                Global.leftFront.setPower(drivePowers[0]);
+                Global.rightFront.setPower(drivePowers[1]);
+                Global.leftBack.setPower(drivePowers[2]);
+                Global.rightBack.setPower(drivePowers[3]);
 
-            // calls for movement
-//            double[] drivePowers = MoveRobot.FC(botHeading, x, y, rightX, 1); // x, y, and rightX are the gamepad inputs
-//            //sets the motors to their corresponding power
-//            Global.leftFront.setPower(drivePowers[0]);
-//            Global.rightFront.setPower(drivePowers[1]);
-//            Global.leftBack.setPower(drivePowers[2]);
-//            Global.rightBack.setPower(drivePowers[3]);
+                //telemetry
+                telemetry.addLine();
+                telemetry.addData("leftFront power", String.valueOf(Math.round(Global.leftFront.getPower() * 10) / 10));
+                telemetry.addData("rightFront power", String.valueOf(Math.round(Global.rightFront.getPower() * 10) / 10));
+                telemetry.addData("leftBack power", String.valueOf(Math.round(Global.leftBack.getPower() * 10) / 10));
+                telemetry.addData("rightBack power", String.valueOf(Math.round(Global.rightBack.getPower() * 10) / 10));
+            }
 
-            //telemetry
-//            telemetry.addLine();
-//            telemetry.addData("leftFront power",  String.valueOf(Math.round(Global.leftFront.getPower()  * 10)/10));
-//            telemetry.addData("rightFront power", String.valueOf(Math.round(Global.rightFront.getPower() * 10)/10));
-//            telemetry.addData("leftBack power",   String.valueOf(Math.round(Global.leftBack.getPower()   * 10)/10));
-//            telemetry.addData("rightBack power",  String.valueOf(Math.round(Global.rightBack.getPower()  * 10)/10));
             telemetry.update();
         }
     }
