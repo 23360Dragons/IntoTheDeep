@@ -26,6 +26,7 @@ import org.firstinspires.ftc.teamcode.utils.Global;
 
 @TeleOp(name = "DragonsDriver", group = "TeleOp")
 public class DragonsDriver extends LinearOpMode {
+    //<editor-fold desc="--------------------- Local Constants ---------------------">
     static Gamepad currentGamepad1;
     static Gamepad currentGamepad2;
     static Gamepad previousGamepad1;
@@ -38,6 +39,7 @@ public class DragonsDriver extends LinearOpMode {
     static boolean colorIsSet = false;
     static int startingSide;  // 0 is left, 1 is right
     static boolean sideIsSet = false;
+    //</editor-fold>
 
     @Override
     public void runOpMode () throws InterruptedException {
@@ -132,7 +134,7 @@ public class DragonsDriver extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        // loop
+        // --------------------- Main Loop ---------------------
         while (opModeIsActive()) {
             // Store the gamepad values from the previous loop, which
             // does the same thing as copying them at the end. In the first loop
