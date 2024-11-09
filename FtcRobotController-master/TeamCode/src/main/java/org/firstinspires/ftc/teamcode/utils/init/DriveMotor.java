@@ -7,12 +7,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
 public class DriveMotor {
-    public static boolean isValid;
+    public static boolean isValid = true;
     public static void initialize (HardwareMap hardwareMap, Telemetry telemetry) {
         try
         {
             telemetry.addLine("Configuring drive motors...");
             telemetry.update();
+
                 //left front
                 try{
                     Global.leftFront = hardwareMap.get(DcMotor.class, "leftFront"); // gets a dcMotor object of the name "name"
@@ -53,6 +54,7 @@ public class DriveMotor {
                     Global.exceptionOccurred = true;
                     isValid = false;
                 }
+                
                 //right back
                 try
                 {
@@ -73,13 +75,14 @@ public class DriveMotor {
         {
             Global.exceptions.append("Configuration Error: ").append("General Motor Config").append(ex.getMessage()).append("\n");
             Global.exceptionOccurred = true;
+            isValid = false;
         }
     }
 
     private static void configure(DcMotor m) {
         //java passes in the actual object rather than a reference, so this actually changes the passed in variable
         m.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 }
 

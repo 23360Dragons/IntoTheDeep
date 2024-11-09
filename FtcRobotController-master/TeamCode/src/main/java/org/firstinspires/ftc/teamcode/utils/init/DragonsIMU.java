@@ -12,7 +12,7 @@ import static org.firstinspires.ftc.teamcode.utils.Global.usbFacingDirection;
 
 
 public class DragonsIMU {
-    public static boolean isValid = false;
+    public static boolean isValid = true;
 
     public static void initialize(HardwareMap hardwareMap, Telemetry telemetry) {
         try {

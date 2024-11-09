@@ -45,6 +45,7 @@ import org.firstinspires.ftc.teamcode.Autonomous.messages.DriveCommandMessage;
 import org.firstinspires.ftc.teamcode.Autonomous.messages.MecanumCommandMessage;
 import org.firstinspires.ftc.teamcode.Autonomous.messages.MecanumLocalizerInputsMessage;
 import org.firstinspires.ftc.teamcode.Autonomous.messages.PoseMessage;
+import org.firstinspires.ftc.teamcode.utils.Global;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsIMU;
 
 import java.lang.Math;
@@ -59,9 +60,9 @@ public final class MecanumDrive {
         //todo: fill in these values based on
         //   see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting // DONE
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
-                DragonsIMU.logoFacingDirection;
+                Global.logoFacingDirection;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                DragonsIMU.usbFacingDirection;
+                Global.usbFacingDirection;
 
         // drive model parameters
         public double inPerTick = 1;
@@ -164,10 +165,10 @@ public final class MecanumDrive {
             if (!initialized) {
                 initialized = true;
 
-                lastLeftFrontPos = leftFrontPosVel.position;
-                lastLeftBackPos = leftBackPosVel.position;
-                lastRightBackPos = rightBackPosVel.position;
-                lastRightFrontPos = rightFrontPosVel.position;
+                lastLeftFrontPos = (int) leftFrontPosVel.position;
+                lastLeftBackPos = (int) leftBackPosVel.position;
+                lastRightBackPos = (int) rightBackPosVel.position;
+                lastRightFrontPos = (int) rightFrontPosVel.position;
 
                 lastHeading = heading;
 
@@ -197,10 +198,10 @@ public final class MecanumDrive {
                     }).times(PARAMS.inPerTick)
             ));
 
-            lastLeftFrontPos = leftFrontPosVel.position;
-            lastLeftBackPos = leftBackPosVel.position;
-            lastRightBackPos = rightBackPosVel.position;
-            lastRightFrontPos = rightFrontPosVel.position;
+            lastLeftFrontPos = (int) leftFrontPosVel.position;
+            lastLeftBackPos = (int) leftBackPosVel.position;
+            lastRightBackPos = (int) rightBackPosVel.position;
+            lastRightFrontPos = (int) rightFrontPosVel.position;
 
             lastHeading = heading;
 

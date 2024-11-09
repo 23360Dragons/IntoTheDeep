@@ -14,11 +14,11 @@ public class Global {
     public static boolean exceptionOccurred;
 
     public static RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.FORWARD;
-    public static RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
+    public static RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection   = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
 
-    public static final int BLUE = 0;
-    public static final int RED = 1;
-    public static final int yellowPipeline = 2;
+    public static final int BLUE   = 0;
+    public static final int RED    = 1;
+    public static final int YELLOW = 2;
 
     public static final int LEFT  = 0;
     public static final int RIGHT = 1;

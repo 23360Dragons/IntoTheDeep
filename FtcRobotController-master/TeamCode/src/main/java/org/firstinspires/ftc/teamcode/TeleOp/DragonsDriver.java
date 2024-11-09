@@ -4,7 +4,7 @@ import static org.firstinspires.ftc.teamcode.utils.Global.BLUE;
 import static org.firstinspires.ftc.teamcode.utils.Global.LEFT;
 import static org.firstinspires.ftc.teamcode.utils.Global.RED;
 import static org.firstinspires.ftc.teamcode.utils.Global.RIGHT;
-import static org.firstinspires.ftc.teamcode.utils.Global.yellowPipeline;
+import static org.firstinspires.ftc.teamcode.utils.Global.YELLOW;
 
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
@@ -12,11 +12,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.SuperStructure.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsIMU;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsLights;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsLimelight;
@@ -58,7 +56,9 @@ public class DragonsDriver extends LinearOpMode {
         DragonsLimelight.initialize(hardwareMap, telemetry);
 
         DragonsLights.initialize(hardwareMap, telemetry);
-        Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+
+        if (DragonsLights.isValid)
+            Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
         Global.superStructure = new SuperStructure(hardwareMap);
 
@@ -70,11 +70,13 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.addLine(Global.exceptions.toString());
             telemetry.update();
 
+            sleep (3000);
+
             if (!DragonsIMU.isValid || !DriveMotor.isValid) {
                 telemetry.addLine("Critical Error Occurred! The IMU, Motors, and all movement code will not work.");
                 telemetry.update();
+                sleep(3000);
             }
-            sleep(5000);
         }
 
         // --------------------- Choose Starting Position ---------------------
@@ -121,16 +123,31 @@ public class DragonsDriver extends LinearOpMode {
         }
 
         //<editor-fold desc="--------------------- Set Limelight Pipeline ---------------------">
-        if (sideIsSet && colorIsSet) {
+        if (sideIsSet && colorIsSet && DragonsLimelight.isValid && DragonsLights.isValid) {
             DragonsLimelight.setPipeline(startingColor);
             runPipeline = DragonsLimelight.getPipeline();
         } else {
-            telemetry.addLine("No starting position set; ending opMode.");
+            if (!DragonsLimelight.isValid) {
+                telemetry.addLine("Limelight is not valid. It and the lights will not work.");
+            }
+
+            if (!DragonsLights.isValid) {
+                telemetry.addLine("Lights are not valid. It and the limelight will not work.");
+            }
+
+            if (!sideIsSet || !colorIsSet) {
+                telemetry.addLine("The starting position is not set. Exiting OpMode...");
+                telemetry.update();
+
+                sleep(3000);
+                requestOpModeStop();
+            }
+
             telemetry.update();
-            sleep(3000);
-            requestOpModeStop();
+            sleep (3000);
         }
         //</editor-fold>
+        waitForStart();
 
         if (isStopRequested()) return;
 
@@ -154,12 +171,51 @@ public class DragonsDriver extends LinearOpMode {
                     x = currentGamepad1.left_stick_x,
                     rightX = currentGamepad1.right_stick_x;
 
+            boolean SSup = currentGamepad1.dpad_up,
+                    SSdown = currentGamepad1.dpad_down;
+
+            double SSspeed = 0.5;
+            int SSmovement;
+
+            if (SSup) {
+                SSmovement = 1;
+            } else if (SSdown) {
+                SSmovement = -1;
+            } else {
+                SSmovement = 0;
+            }
+
+            boolean  rTrigger = currentGamepad1.right_bumper,
+                    lTrigger = currentGamepad1.left_bumper;
+            double articulatorPower = 0;
+
+            if (rTrigger){
+                articulatorPower= 1;
+            } else if (lTrigger) {
+                articulatorPower = -1;
+            } else {
+                articulatorPower = 0;
+            }
+
+            if (currentGamepad1.x) {
+                SSspeed = 1;
+            }
+            if (currentGamepad1.a) {
+                SSspeed = 0.5;
+            }
+
+            //TODO: add if statement
+            Global.superStructure.setArticulationPower(articulatorPower * SSspeed);
+            Global.superStructure.setSSPower(SSmovement * SSspeed);
+
+            telemetry.addData("SS power", Global.superStructure.getSSPower());
+
 
             // --------------------- Limelight ---------------------
             if (DragonsLimelight.isValid) {
                 // --------------------- Pipeline Switching ---------------------
                 if (currentGamepad1.b && !previousGamepad1.b) { //rising edge
-                    DragonsLimelight.setPipeline(yellowPipeline);
+                    DragonsLimelight.setPipeline(YELLOW);
                 } else if (!currentGamepad1.b && previousGamepad1.b) { //falling edge
                     DragonsLimelight.setPipeline(runPipeline);
                 }
