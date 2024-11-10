@@ -200,7 +200,7 @@ public class DragonsDriver extends LinearOpMode {
                 superStructure.articulation.setPower(articulationPower * SSspeed);
                 superStructure.extension.setPower(extensionPower * SSspeed);
 
-                telemetry.addData("Super Structure extension power", superStructure.extension.getPower());
+                telemetry.addData("Super Structure extension power",    superStructure.extension.getPower());
                 telemetry.addData("Super Structure articulation power", superStructure.articulation.getPower());
                 telemetry.addData("Super Structure speed", SSspeed);
             }
