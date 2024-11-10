@@ -8,19 +8,19 @@ import static org.firstinspires.ftc.teamcode.utils.Global.YELLOW;
 import static org.firstinspires.ftc.teamcode.utils.Global.superStructure;
 
 
-import com.qualcomm.hardware.lynx.LynxModule;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.SuperStructure.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsIMU;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsLights;
-import org.firstinspires.ftc.teamcode.utils.init.DragonsLimelight;
+import org.firstinspires.ftc.teamcode.utils.DragonsLimelight;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsOTOS;
 import org.firstinspires.ftc.teamcode.utils.init.DriveMotor;
 import org.firstinspires.ftc.teamcode.utils.Global;
@@ -44,6 +44,8 @@ public class DragonsDriver extends LinearOpMode {
 
     @Override
     public void runOpMode () throws InterruptedException {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
         Global.exceptions = new StringBuilder("The following exceptions occurred: \n");
         Global.exceptionOccurred = false;
@@ -78,7 +80,7 @@ public class DragonsDriver extends LinearOpMode {
             if (!DragonsIMU.isValid || !DriveMotor.isValid) {
                 telemetry.addLine("Critical Error Occurred! The IMU, Motors, and all movement code will not work.");
                 telemetry.update();
-                sleep(3000);
+                sleep(2000);
             }
         }
 
@@ -142,12 +144,12 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addLine("The starting position is not set. Exiting OpMode...");
                 telemetry.update();
 
-                sleep(3000);
+                sleep(2000);
                 requestOpModeStop();
             }
 
             telemetry.update();
-            sleep (3000);
+            sleep(2000);
         }
         //</editor-fold>
 
@@ -177,7 +179,7 @@ public class DragonsDriver extends LinearOpMode {
 
             //</editor-fold>
 
-            if (superStructure.articulation.isValid && superStructure.extension.isValid) {
+            if (superStructure.isValid) {
                 double SSspeed = 0.5,
                         articulationPower,
                         extensionPower;
@@ -196,7 +198,6 @@ public class DragonsDriver extends LinearOpMode {
                     SSspeed = 1;
                 }
 
-                //TODO: add if statement
                 superStructure.articulation.setPower(articulationPower * SSspeed);
                 superStructure.extension.setPower(extensionPower * SSspeed);
 

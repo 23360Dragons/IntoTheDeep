@@ -8,16 +8,15 @@ import org.firstinspires.ftc.teamcode.utils.Global;
 import org.firstinspires.ftc.teamcode.utils.Positions;
 
 public class SuperStructure {
+    public boolean isValid;
     public Articulation articulation;
     public Extension extension;
 
     public SuperStructure (HardwareMap hardwareMap) {
         this.articulation = new Articulation(hardwareMap);
         this.extension = new Extension(hardwareMap);
-    }
 
-    public double getTPR () {
-        return (articulation.leftMotor.getMotorType().getTicksPerRev()/360);
+        this.isValid = articulation.isValid && extension.isValid;
     }
 
     public static class Articulation {
@@ -61,8 +60,16 @@ public class SuperStructure {
             return this.power;
         }
 
+        public double getTPD () {
+            return this.leftMotor.getMotorType().getTicksPerRev() / 360;
+        }
+
         public Positions getPosition() {
             return new Positions(leftMotor.getCurrentPosition(), rightMotor.getCurrentPosition());
+        }
+
+        public void setPosition (double tickPos) {
+            //todo: put the values from articulation testing into here, make this a pidloop
         }
     }
 
@@ -110,8 +117,12 @@ public class SuperStructure {
             return this.power;
         }
 
+        public double getTPD () {
+            return this.leftMotor.getMotorType().getTicksPerRev() / 360;
+        }
+
         public Positions getPosition() {
-            return new Positions(leftMotor.getCurrentPosition(), rightMotor.getCurrentPosition());
+            return new Positions(leftMotor.getCurrentPosition() / getTPD(), rightMotor.getCurrentPosition() / getTPD());
         }
     }
 }

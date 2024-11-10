@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.utils.init;
+package org.firstinspires.ftc.teamcode.utils;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.teamcode.utils.Global;
+import org.firstinspires.ftc.teamcode.utils.init.DragonsLights;
 
 public class DragonsLimelight {
     public static boolean isValid = false;
@@ -35,8 +35,6 @@ public class DragonsLimelight {
             LLResult result = Global.limelight.getLatestResult();
 
             if (result != null && result.isValid()) {
-                Pose3D botpose = result.getBotpose();
-
                 if (DragonsLights.isValid) {
                     switch (currentPipeline) {
                         case 0:
@@ -53,7 +51,6 @@ public class DragonsLimelight {
 
                 telemetry.addLine().addData("tx", result.getTx());
                 telemetry.addLine().addData("ty", result.getTy());
-                telemetry.addLine().addData("Botpose", botpose.toString());
 
             } else {
                 if (result == null) {

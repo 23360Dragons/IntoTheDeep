@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.utils.init;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -16,7 +17,7 @@ public class DriveMotor {
 
                 //left front
                 try{
-                    Global.leftFront = hardwareMap.get(DcMotor.class, "leftFront"); // gets a dcMotor object of the name "name"
+                    Global.leftFront = hardwareMap.get(DcMotorEx.class, "leftFront"); // gets a dcMotor object of the name "name"
                     Global.leftFront.setDirection(DcMotor.Direction.REVERSE); // fix faulty drive behavior 10/15
                     configure(Global.leftFront);
                 }
@@ -30,7 +31,7 @@ public class DriveMotor {
                 //right front
                 try
                 {
-                    Global.rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+                    Global.rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
                     configure(Global.rightFront);
 
                 }
@@ -44,7 +45,7 @@ public class DriveMotor {
                 //left back
                 try
                 {
-                    Global.leftBack = hardwareMap.get(DcMotor.class, "leftBack");
+                    Global.leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
                     configure(Global.leftBack);
                     Global.leftBack.setDirection(DcMotor.Direction.REVERSE);
                 }
@@ -58,7 +59,7 @@ public class DriveMotor {
                 //right back
                 try
                 {
-                    Global.rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+                    Global.rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
                     configure(Global.rightBack);
                 }
                 catch(IllegalArgumentException e)
@@ -79,7 +80,7 @@ public class DriveMotor {
         }
     }
 
-    private static void configure(DcMotor m) {
+    private static void configure(DcMotorEx m) {
         //java passes in the actual object rather than a reference, so this actually changes the passed in variable
         m.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

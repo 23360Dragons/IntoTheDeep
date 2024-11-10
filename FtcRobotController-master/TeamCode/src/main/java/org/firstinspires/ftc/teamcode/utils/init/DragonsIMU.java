@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.utils.Global;
 import static org.firstinspires.ftc.teamcode.utils.Global.logoFacingDirection;
 import static org.firstinspires.ftc.teamcode.utils.Global.usbFacingDirection;
 
-
 public class DragonsIMU {
     public static boolean isValid = true;
 

@@ -15,7 +15,7 @@ public class ArticulationTesting extends LinearOpMode {
     public static double p = 0, i = 0, d = 0;
     public static double f = 0;
 
-    public static int target = 0;
+    public static int target = 0; // in ticks
 
     double ticks_per_degree;
 
@@ -28,20 +28,24 @@ public class ArticulationTesting extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         superStructure = new SuperStructure(hardwareMap);
-        ticks_per_degree = superStructure.getTPR();
+        ticks_per_degree = superStructure.articulation.getTPD(); //todo: make this final based on reading
+
+        waitForStart();
 
         while (opModeIsActive()) {
             controller.setPID(p,i,d);
-            int armPosition = superStructure.articulation.getPosition().right;
-            double pid = controller.calculate(armPosition, target);
-            double ff = Math.cos(Math.toRadians(superStructure.articulation.getPosition().right / ticks_per_degree)) * f;
 
-            double power = Math.max(-1, Math.min(1, pid + ff));
+            double  armPosition = superStructure.articulation.getPosition().right,
+                    pid = controller.calculate(armPosition, target),
+                    ff = Math.cos(Math.toRadians(superStructure.articulation.getPosition().right / ticks_per_degree)) * f,
+                    power = pid + ff;
 
             superStructure.articulation.setPower(power);
 
             telemetry.addData("Position", armPosition);
             telemetry.addData("Target", target);
+            telemetry.addData("ticks per degree", superStructure.articulation.getTPD());
+            telemetry.addLine();
 
             // TODO: tune this using      192.168.43.1:8080/dash
         }
