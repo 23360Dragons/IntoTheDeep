@@ -5,12 +5,15 @@ import static org.firstinspires.ftc.teamcode.utils.Global.LEFT;
 import static org.firstinspires.ftc.teamcode.utils.Global.RED;
 import static org.firstinspires.ftc.teamcode.utils.Global.RIGHT;
 import static org.firstinspires.ftc.teamcode.utils.Global.YELLOW;
+import static org.firstinspires.ftc.teamcode.utils.Global.superStructure;
 
 
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.SuperStructure.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
@@ -60,7 +63,7 @@ public class DragonsDriver extends LinearOpMode {
         if (DragonsLights.isValid)
             Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
-        Global.superStructure = new SuperStructure(hardwareMap);
+        superStructure = new SuperStructure(hardwareMap);
 
         DragonsOTOS.initialize(hardwareMap, telemetry);
         //</editor-fold>
@@ -147,12 +150,14 @@ public class DragonsDriver extends LinearOpMode {
             sleep (3000);
         }
         //</editor-fold>
-        waitForStart();
 
         if (isStopRequested()) return;
 
         // --------------------- Main Loop ---------------------
         while (opModeIsActive()) {
+
+            //<editor-fold desc=" --------------------- Input ---------------------">
+
             // Store the gamepad values from the previous loop, which
             // does the same thing as copying them at the end. In the first loop
             // through, it will make it a new gamepad.
@@ -166,50 +171,39 @@ public class DragonsDriver extends LinearOpMode {
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
-            // --------------------- Movement ---------------------
             double  y = -currentGamepad1.left_stick_y,
                     x = currentGamepad1.left_stick_x,
                     rightX = currentGamepad1.right_stick_x;
 
-            boolean SSup = currentGamepad1.dpad_up,
-                    SSdown = currentGamepad1.dpad_down;
+            //</editor-fold>
 
-            double SSspeed = 0.5;
-            int SSmovement;
+            if (superStructure.articulation.isValid && superStructure.extension.isValid) {
+                double SSspeed = 0.5,
+                        articulationPower,
+                        extensionPower;
 
-            if (SSup) {
-                SSmovement = 1;
-            } else if (SSdown) {
-                SSmovement = -1;
-            } else {
-                SSmovement = 0;
+                boolean dpadUp = currentGamepad1.dpad_up,
+                        dpadDown = currentGamepad1.dpad_down,
+                        rightBumper = currentGamepad1.right_bumper,
+                        leftBumper = currentGamepad1.left_bumper;
+
+                // if dpadUp, 1, else if down, -1, else 0
+                extensionPower = dpadUp ? 1 : dpadDown ? -1 : 0;
+
+                articulationPower = rightBumper ? 1 : leftBumper ? -1 : 0;
+
+                if (currentGamepad1.x) {
+                    SSspeed = 1;
+                }
+
+                //TODO: add if statement
+                superStructure.articulation.setPower(articulationPower * SSspeed);
+                superStructure.extension.setPower(extensionPower * SSspeed);
+
+                telemetry.addData("Super Structure extension power", superStructure.extension.getPower());
+                telemetry.addData("Super Structure articulation power", superStructure.articulation.getPower());
+                telemetry.addData("Super Structure speed", SSspeed);
             }
-
-            boolean  rTrigger = currentGamepad1.right_bumper,
-                    lTrigger = currentGamepad1.left_bumper;
-            double articulatorPower = 0;
-
-            if (rTrigger){
-                articulatorPower= 1;
-            } else if (lTrigger) {
-                articulatorPower = -1;
-            } else {
-                articulatorPower = 0;
-            }
-
-            if (currentGamepad1.x) {
-                SSspeed = 1;
-            }
-            if (currentGamepad1.a) {
-                SSspeed = 0.5;
-            }
-
-            //TODO: add if statement
-            Global.superStructure.setArticulationPower(articulatorPower * SSspeed);
-            Global.superStructure.setSSPower(SSmovement * SSspeed);
-
-            telemetry.addData("SS power", Global.superStructure.getSSPower());
-
 
             // --------------------- Limelight ---------------------
             if (DragonsLimelight.isValid) {
