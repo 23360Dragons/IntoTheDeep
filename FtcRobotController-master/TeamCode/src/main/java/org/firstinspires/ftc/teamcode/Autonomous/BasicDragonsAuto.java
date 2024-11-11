@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.teamcode.SuperStructure.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsIMU;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsLights;
@@ -18,17 +22,16 @@ import static org.firstinspires.ftc.teamcode.utils.Global.leftFront;
 import static org.firstinspires.ftc.teamcode.utils.Global.rightFront;
 import static org.firstinspires.ftc.teamcode.utils.Global.leftBack;
 import static org.firstinspires.ftc.teamcode.utils.Global.rightBack;
+import static org.firstinspires.ftc.teamcode.utils.Global.superStructure;
 //TODO: UPDATE
 
 @Disabled
 @Autonomous
 public class BasicDragonsAuto extends LinearOpMode {
-    IMU imu;
-
-    DragonsLimelight limelight;
-
-    @Override
     public void runOpMode() throws InterruptedException {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
         Global.exceptions = new StringBuilder("The following exceptions occurred: \n");
         Global.exceptionOccurred = false;
 
@@ -38,24 +41,27 @@ public class BasicDragonsAuto extends LinearOpMode {
         DragonsLimelight.initialize(hardwareMap, telemetry);
 
         DragonsLights.initialize(hardwareMap, telemetry);
-        Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+
+        if (DragonsLights.isValid)
+            Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+
+        superStructure = new SuperStructure(hardwareMap);
 
         DragonsOTOS.initialize(hardwareMap, telemetry);
+        //</editor-fold>
 
-        //check for configuration issues
+        // --------------------- Configuration Error Handing ---------------------
         if (Global.exceptionOccurred) {
             telemetry.addLine(Global.exceptions.toString());
             telemetry.update();
 
-            if (!DriveMotor.isValid) {
-                telemetry.addLine("Critical Error Occurred! Exiting...");
+            sleep (3000);
+
+            if (!DragonsIMU.isValid || !DriveMotor.isValid) {
+                telemetry.addLine("Critical Error Occurred! The IMU, Motors, and all movement code will not work.");
                 telemetry.update();
-                sleep(5000);
-
-                requestOpModeStop();
+                sleep(2000);
             }
-
-            sleep(5000);
         }
 
         waitForStart();

@@ -22,7 +22,7 @@ public class MoveRobot
     public static double[] FC (double botHeading, double x, double y, double rightX, double speed)
     {
 
-        double rotX = (x * Math.cos(-botHeading) - y * Math.sin(-botHeading)) * 1.1; // Counteract imperfect strafing
+        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading); // * 1.1 to counteract imperfect strafing - removed for testing TODO
         double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
         /*
         these are the rotated x and y (i.e. the vector relative to the field rather than to the robot)
@@ -38,7 +38,6 @@ public class MoveRobot
 
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rightX), 1); //makes sure values don't get scaled up by dividing by a decimal
         //takes the sum of all inputs so the total motor power is within the range -1 to 1
-        //TODO: possibly swap speed and denominator - test
 
         double leftFrontPower  = (((rotY + rotX + rightX) * speed) / denominator);
         double rightFrontPower = (((rotY - rotX - rightX) * speed) / denominator);
