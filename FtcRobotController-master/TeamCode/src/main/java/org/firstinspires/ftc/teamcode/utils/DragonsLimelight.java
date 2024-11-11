@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.utils;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -9,9 +10,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsLights;
 
+import java.util.List;
+
 public class DragonsLimelight {
     public static boolean isValid = false;
     private static int currentPipeline;
+    private static LLResult result;
 
     public static void initialize(HardwareMap hardwareMap, Telemetry telemetry) {
         try {
@@ -32,7 +36,7 @@ public class DragonsLimelight {
     }
 
     public static void update (Telemetry telemetry) {
-            LLResult result = Global.limelight.getLatestResult();
+            result = Global.limelight.getLatestResult();
 
             if (result != null && result.isValid()) {
                 if (DragonsLights.isValid) {
@@ -51,6 +55,8 @@ public class DragonsLimelight {
 
                 telemetry.addLine().addData("tx", result.getTx());
                 telemetry.addLine().addData("ty", result.getTy());
+
+                // getting rotation of the result. TODO: make this work
 
             } else {
                 if (result == null) {
@@ -75,4 +81,6 @@ public class DragonsLimelight {
     public static int getPipeline () {
         return currentPipeline;
     }
+
+    public static double getTx () {
 }

@@ -10,11 +10,11 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.teamcode.SuperStructure.SuperStructure;
 
 public class Global {
-    public static StringBuilder exceptions;
-    public static boolean exceptionOccurred;
+    public static StringBuilder exceptions = new StringBuilder("The following exceptions occurred:\n");
+    public static boolean exceptionOccurred = false;
 
-    public static RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.FORWARD;
-    public static RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection   = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
+    public static final RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.FORWARD;
+    public static final RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection   = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
 
     public static final int BLUE   = 0;
     public static final int RED    = 1;

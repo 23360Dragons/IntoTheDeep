@@ -47,9 +47,6 @@ public class DragonsDriver extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
-        Global.exceptions = new StringBuilder("The following exceptions occurred: \n");
-        Global.exceptionOccurred = false;
-
         currentGamepad1  = new Gamepad();
         currentGamepad2  = new Gamepad();
         previousGamepad1 = new Gamepad();

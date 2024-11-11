@@ -6,8 +6,6 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.SuperStructure.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
@@ -32,9 +30,6 @@ public class BasicDragonsAuto extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
-        Global.exceptions = new StringBuilder("The following exceptions occurred: \n");
-        Global.exceptionOccurred = false;
-
         DriveMotor.initialize(hardwareMap, telemetry);
 
         DragonsIMU.initialize(hardwareMap, telemetry);
