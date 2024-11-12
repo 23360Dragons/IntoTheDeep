@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.Testing;
 
 import static org.firstinspires.ftc.teamcode.utils.Global.BLUE;
 import static org.firstinspires.ftc.teamcode.utils.Global.leftBack;
@@ -31,7 +31,7 @@ public class HeadingTesting extends LinearOpMode {
                          d = 0,
                          speed = 0.5,
                          move = 0,
-                         targetDiff = 0;
+                         targetDiff = 0.1;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -40,7 +40,8 @@ public class HeadingTesting extends LinearOpMode {
 
         DriveMotor.initialize(hardwareMap, telemetry);
         DragonsLimelight.initialize(hardwareMap, telemetry);
-        DragonsLimelight.setPipeline(BLUE);
+        if (DragonsLimelight.isValid)
+            DragonsLimelight.setPipeline(BLUE);
         DragonsIMU.initialize(hardwareMap, telemetry);
         DragonsLights.initialize(hardwareMap, telemetry);
 
@@ -58,6 +59,13 @@ public class HeadingTesting extends LinearOpMode {
                 telemetry.addLine("Critical Error Occurred! The IMU, Motors, and all movement code will not work.");
                 telemetry.update();
                 sleep(2000);
+            }
+
+            if (!DragonsLimelight.isValid) {
+                telemetry.addLine("Limelight is invalid! Exiting...");
+                telemetry.update();
+                sleep (2000);
+                requestOpModeStop();
             }
         }
 

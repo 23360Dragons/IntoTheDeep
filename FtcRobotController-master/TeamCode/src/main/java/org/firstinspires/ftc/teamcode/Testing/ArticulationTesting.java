@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.Testing;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -12,8 +12,10 @@ import org.firstinspires.ftc.teamcode.SuperStructure.SuperStructure;
 @Config
 @TeleOp(name="Articulation Test")
 public class ArticulationTesting extends LinearOpMode {
-    public static double p = 0, i = 0, d = 0;
-    public static double f = 0;
+    public static double p = 0,
+                         i = 0,
+                         d = 0,
+                         f = 0;
 
     public static int target = 0; // in ticks
 
@@ -28,6 +30,14 @@ public class ArticulationTesting extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         superStructure = new SuperStructure(hardwareMap);
+
+        if (!superStructure.isValid) {
+            telemetry.addLine("Super Structure is invalid. Exiting...");
+            telemetry.update();
+            sleep (2000);
+            requestOpModeStop();
+        }
+
         ticks_per_degree = superStructure.articulation.getTPD(); //todo: make this final based on reading
 
         waitForStart();
