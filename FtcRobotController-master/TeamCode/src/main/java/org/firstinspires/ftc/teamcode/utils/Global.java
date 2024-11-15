@@ -7,6 +7,7 @@ import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.teamcode.Arm.Arm;
 import org.firstinspires.ftc.teamcode.SuperStructure.SuperStructure;
 
 public class Global {
@@ -14,7 +15,7 @@ public class Global {
     public static boolean exceptionOccurred = false;
 
     public static final RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.FORWARD;
-    public static final RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection   = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
+    public static final RevHubOrientationOnRobot.UsbFacingDirection  usbFacingDirection   = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
 
     public static final int BLUE   = 0;
     public static final int RED    = 1;
@@ -29,4 +30,5 @@ public class Global {
     public static RevBlinkinLedDriver light;
     public static SparkFunOTOS sparkFunOTOS;
     public static SuperStructure superStructure;
+    public static Arm arm;
 }

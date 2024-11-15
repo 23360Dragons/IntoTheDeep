@@ -30,7 +30,7 @@ public class ArticulationTesting extends LinearOpMode {
         controller = new PIDController(p,i,d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        superStructure = new SuperStructure(hardwareMap);
+        superStructure = new SuperStructure(hardwareMap, telemetry);
 
         if (!superStructure.isValid) {
             telemetry.addLine(Global.exceptions.toString());

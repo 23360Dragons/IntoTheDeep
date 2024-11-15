@@ -5,8 +5,6 @@ import static org.firstinspires.ftc.teamcode.utils.Global.LEFT;
 import static org.firstinspires.ftc.teamcode.utils.Global.RED;
 import static org.firstinspires.ftc.teamcode.utils.Global.RIGHT;
 import static org.firstinspires.ftc.teamcode.utils.Global.YELLOW;
-import static org.firstinspires.ftc.teamcode.utils.Global.superStructure;
-
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -15,6 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.Arm.Arm;
 import org.firstinspires.ftc.teamcode.SuperStructure.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -44,9 +43,9 @@ public class DragonsDriver extends LinearOpMode {
 
     @Override
     public void runOpMode () throws InterruptedException {
+        //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
         currentGamepad1  = new Gamepad();
         currentGamepad2  = new Gamepad();
         previousGamepad1 = new Gamepad();
@@ -62,9 +61,11 @@ public class DragonsDriver extends LinearOpMode {
         if (DragonsLights.isValid)
             Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
-        superStructure = new SuperStructure(hardwareMap);
-
         DragonsOTOS.initialize(hardwareMap, telemetry);
+
+        Global.superStructure = new SuperStructure(hardwareMap, telemetry);
+
+        Global.arm = new Arm(hardwareMap, telemetry);
         //</editor-fold>
 
         // --------------------- Configuration Error Handing ---------------------
@@ -87,6 +88,7 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.addLine("Press B for Blue Right");
             telemetry.addLine("Press X for Red Left");
             telemetry.addLine("Press Y for Red Right");
+            telemetry.update();
 
             if (gamepad1.a) {
                 startingPos = ("Blue Left");
@@ -120,8 +122,6 @@ public class DragonsDriver extends LinearOpMode {
 
             telemetry.addLine();
             telemetry.addData("Current starting position", startingPos);
-
-            telemetry.update();
         }
 
         //<editor-fold desc="--------------------- Set Limelight Pipeline ---------------------">
@@ -134,7 +134,7 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             if (!DragonsLights.isValid) {
-                telemetry.addLine("Lights are not valid. It and the limelight will not work.");
+                telemetry.addLine("Lights are not valid. They will not work.");
             }
 
             if (!sideIsSet || !colorIsSet) {
@@ -176,15 +176,15 @@ public class DragonsDriver extends LinearOpMode {
 
             //</editor-fold>
 
-            if (superStructure.isValid) {
+            if (Global.superStructure.isValid) {
                 double SSspeed = 0.5,
                         articulationPower,
                         extensionPower;
 
                 boolean dpadUp = currentGamepad1.dpad_up,
                         dpadDown = currentGamepad1.dpad_down,
-                        rightBumper = currentGamepad1.right_bumper,
-                        leftBumper = currentGamepad1.left_bumper;
+                        rightBumper = gamepad1.right_bumper, // rotates clockwise
+                        leftBumper  = gamepad1.left_bumper;  // rotates counterclockwise
 
                 // if dpadUp, 1, else if down, -1, else 0
                 extensionPower = dpadUp ? 1 : dpadDown ? -1 : 0;
@@ -195,11 +195,11 @@ public class DragonsDriver extends LinearOpMode {
                     SSspeed = 1;
                 }
 
-                superStructure.articulation.setPower(articulationPower * SSspeed);
-                superStructure.extension.setPower(extensionPower * SSspeed);
+                Global.superStructure.articulation.setPower(articulationPower * SSspeed);
+                Global.superStructure.extension.setPower(extensionPower * SSspeed);
 
-                telemetry.addData("Super Structure extension power",    superStructure.extension.getPower());
-                telemetry.addData("Super Structure articulation power", superStructure.articulation.getPower());
+                telemetry.addData("Super Structure extension power",    Global.superStructure.extension.getPower());
+                telemetry.addData("Super Structure articulation power", Global.superStructure.articulation.getPower());
                 telemetry.addData("Super Structure speed", SSspeed);
             }
 
@@ -220,8 +220,8 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("Sparkfun velocity along x axis", Global.sparkFunOTOS.getVelocity().x);
                 telemetry.addData("Sparkfun velocity along y axis", Global.sparkFunOTOS.getVelocity().y);
                 telemetry.addLine();
-                telemetry.addData("x", Global.sparkFunOTOS.getPosition().x);
-                telemetry.addData("y", Global.sparkFunOTOS.getPosition().y);
+                telemetry.addData("x",       Global.sparkFunOTOS.getPosition().x);
+                telemetry.addData("y",       Global.sparkFunOTOS.getPosition().y);
                 telemetry.addData("heading", Global.sparkFunOTOS.getPosition().h);
             }
 
@@ -245,10 +245,10 @@ public class DragonsDriver extends LinearOpMode {
 
                 //telemetry
                 telemetry.addLine();
-                telemetry.addData("leftFront power", String.valueOf(Math.round(Global.leftFront.getPower() * 10) / 10));
+                telemetry.addData("leftFront power",  String.valueOf(Math.round(Global.leftFront.getPower()  * 10) / 10));
                 telemetry.addData("rightFront power", String.valueOf(Math.round(Global.rightFront.getPower() * 10) / 10));
-                telemetry.addData("leftBack power", String.valueOf(Math.round(Global.leftBack.getPower() * 10) / 10));
-                telemetry.addData("rightBack power", String.valueOf(Math.round(Global.rightBack.getPower() * 10) / 10));
+                telemetry.addData("leftBack power",   String.valueOf(Math.round(Global.leftBack.getPower()   * 10) / 10));
+                telemetry.addData("rightBack power",  String.valueOf(Math.round(Global.rightBack.getPower()  * 10) / 10));
             }
 
             telemetry.update();

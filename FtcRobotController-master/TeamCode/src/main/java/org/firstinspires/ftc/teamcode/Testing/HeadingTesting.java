@@ -95,7 +95,6 @@ public class HeadingTesting extends LinearOpMode {
             leftBack.setPower  (drivePowers[2]);
             rightBack.setPower (drivePowers[3]);
 
-
             // telemetry for debugging
             telemetry.addData("tx", tx);
 

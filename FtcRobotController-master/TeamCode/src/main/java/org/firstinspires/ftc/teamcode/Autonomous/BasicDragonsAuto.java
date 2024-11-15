@@ -40,7 +40,7 @@ public class BasicDragonsAuto extends LinearOpMode {
         if (DragonsLights.isValid)
             Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
-        superStructure = new SuperStructure(hardwareMap);
+        superStructure = new SuperStructure(hardwareMap, telemetry);
 
         DragonsOTOS.initialize(hardwareMap, telemetry);
         //</editor-fold>

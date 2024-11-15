@@ -83,6 +83,7 @@ public class DriveMotor {
     private static void configure(DcMotorEx m) {
         //java passes in the actual object rather than a reference, so this actually changes the passed in variable
         m.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        m.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 }
