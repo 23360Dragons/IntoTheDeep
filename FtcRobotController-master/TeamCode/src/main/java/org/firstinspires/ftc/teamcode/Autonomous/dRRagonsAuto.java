@@ -29,7 +29,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 //import org.firstinspires.ftc.teamcode.MecanumDrive;
 @Config
-@Autonomous(name = "dRRagonsAutoTest", group = "Autonomous")
+@Autonomous(name = "dRRagonsAuto", group = "Autonomous")
 public class dRRagonsAuto extends LinearOpMode {
    /* public class Linearz {
         private DcMotorEx rightLinear, leftLinear;
@@ -50,7 +50,7 @@ public class dRRagonsAuto extends LinearOpMode {
             leftArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             leftArm.setDirection(DcMotorSimple.Direction.FORWARD);
 
-            rightArm = hardwareMap.get(DcMotorEx.class, "leftLinear");
+            rightArm = hardwareMap.get(DcMotorEx.class, "rightLinear");
             rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightArm.setDirection(DcMotorSimple.Direction.REVERSE);
         }
@@ -69,12 +69,21 @@ public class dRRagonsAuto extends LinearOpMode {
             rightLimit = hardwareMap.get(Servo.class, "rightLimit");
         }
     }
-    public class Rotary {
-        private Servo rotaryPickup;
-        public Rotary (HardwareMap hardwareMap){
-            rotaryPickup = hardwareMap.get(Servo.class, "rotaryPickup");
+    public class Clawz {
+        private Servo claw;
+        public Clawz (HardwareMap hardwareMap){
+            claw = hardwareMap.get(Servo.class, "claw");
         }
     }
+
+    public class Seesaw {
+        private Servo tilt;
+        public Seesaw (HardwareMap hardwareMap){
+            tilt = hardwareMap.get(Servo.class, "tilt")
+        }
+    }
+
+
     public class TwistNTurn {
         private Servo twist;
         public TwistNTurn (HardwareMap hardwareMap){
@@ -99,6 +108,7 @@ public class dRRagonsAuto extends LinearOpMode {
             sensor_otos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
         }
     }
+
 
 
     @Override
@@ -135,15 +145,15 @@ public class dRRagonsAuto extends LinearOpMode {
             }
             if(starty==1){
                 startPose = blueStartBasket;
-                telemetry.addLine("Starting Position Set To Blue, Basket Side. If inncorrect, please reselect");
+                telemetry.addLine("Starting Position Set To Blue, Basket Side. If incorrect, please reselect");
                 telemetry.update();
             } else if (starty==2) {
                 startPose = redStartBasket;
-                telemetry.addLine("Starting Position Set To Red, Basket Side. If inncorrect, please reselect");
+                telemetry.addLine("Starting Position Set To Red, Basket Side. If incorrect, please reselect");
                 telemetry.update();
             } else if (starty==3) {
                 startPose = blueStartObserve;
-                telemetry.addLine("Starting Position Set To Blue, Observation Zone Side. If inncorrect, please reselect");
+                telemetry.addLine("Starting Position Set To Blue, Observation Zone Side. If incorrect, please reselect");
                 telemetry.update();
             } else if (starty==4) {
                 startPose = redStartObserve;
