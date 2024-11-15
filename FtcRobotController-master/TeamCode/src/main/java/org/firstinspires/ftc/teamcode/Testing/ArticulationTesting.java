@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.SuperStructure.SuperStructure;
+import org.firstinspires.ftc.teamcode.utils.Global;
 
 @Config
 @TeleOp(name="Articulation Test")
@@ -19,19 +20,22 @@ public class ArticulationTesting extends LinearOpMode {
 
     public static int target = 0; // in ticks
 
-    double ticks_per_degree;
+    static double ticks_per_degree;
 
     PIDController controller;
     SuperStructure superStructure;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         controller = new PIDController(p,i,d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         superStructure = new SuperStructure(hardwareMap);
 
         if (!superStructure.isValid) {
+            telemetry.addLine(Global.exceptions.toString());
+            telemetry.update();
+            sleep (3000);
             telemetry.addLine("Super Structure is invalid. Exiting...");
             telemetry.update();
             sleep (2000);
