@@ -110,7 +110,6 @@ public class dRRagonsAuto extends LinearOpMode {
     }
 
 
-
     @Override
     public void runOpMode() throws InterruptedException {
         int blueFace, redFace;
@@ -133,7 +132,8 @@ public class dRRagonsAuto extends LinearOpMode {
         Pose2d startPose = null;
         Pose2d notSelected = new Pose2d(0,0,0);
         int starty = 0;
-        while (opModeInInit()==true){
+        while (opModeInInit()){
+
             if(gamepad1.x){
                 starty=1;
             } else if (gamepad1.b) {
@@ -143,25 +143,32 @@ public class dRRagonsAuto extends LinearOpMode {
             } else if (gamepad2.b) {
                 starty=4;
             }
-            if(starty==1){
-                startPose = blueStartBasket;
-                telemetry.addLine("Starting Position Set To Blue, Basket Side. If incorrect, please reselect");
-                telemetry.update();
-            } else if (starty==2) {
-                startPose = redStartBasket;
-                telemetry.addLine("Starting Position Set To Red, Basket Side. If incorrect, please reselect");
-                telemetry.update();
-            } else if (starty==3) {
-                startPose = blueStartObserve;
-                telemetry.addLine("Starting Position Set To Blue, Observation Zone Side. If incorrect, please reselect");
-                telemetry.update();
-            } else if (starty==4) {
-                startPose = redStartObserve;
-                telemetry.addLine("Starting Position Set To Red, Observation Zone Side. If inncorrect, please reselect");
-                telemetry.update();
-            } else {
-                startPose = notSelected;
-                telemetry.addLine("Please select starting position!");
+
+            switch (starty) {
+                case 1:
+                    startPose = blueStartBasket;
+                    telemetry.addLine("Starting Position Set To Blue, Basket Side. If inncorrect, please reselect");
+                    telemetry.update();
+                    break;
+                case 2:
+                    startPose = redStartBasket;
+                    telemetry.addLine("Starting Position Set To Red, Basket Side. If inncorrect, please reselect");
+                    telemetry.update();
+                    break;
+                case 3:
+                    startPose = blueStartObserve;
+                    telemetry.addLine("Starting Position Set To Blue, Observation Zone Side. If inncorrect, please reselect");
+                    telemetry.update();
+                    break;
+                case 4:
+                    startPose = redStartObserve;
+                    telemetry.addLine("Starting Position Set To Red, Observation Zone Side. If inncorrect, please reselect");
+                    telemetry.update();
+                    break;
+                default:
+                    startPose = notSelected;
+                    telemetry.addLine("Please select starting position!");
+                    break;
             }
         }
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
