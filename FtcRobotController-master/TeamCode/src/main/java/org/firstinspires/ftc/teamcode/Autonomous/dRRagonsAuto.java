@@ -83,7 +83,6 @@ public class dRRagonsAuto extends LinearOpMode {
         }
     }
 
-
     public class TwistNTurn {
         private Servo twist;
         public TwistNTurn (HardwareMap hardwareMap){
@@ -178,6 +177,9 @@ public class dRRagonsAuto extends LinearOpMode {
                 .lineToY(blueSpecimen.y)
                 .waitSeconds(3)
                 .splineToSplineHeading(new Pose2d(blueObserve,Math.toRadians(90)), Math.PI/2);
+        TrajectoryActionBuilder firePit = drive.actionBuilder(startPose)
+                .lineToX(redSpecimen.x)
+                .lineToY(redSpecimen.y);
 
         waitForStart();
 
