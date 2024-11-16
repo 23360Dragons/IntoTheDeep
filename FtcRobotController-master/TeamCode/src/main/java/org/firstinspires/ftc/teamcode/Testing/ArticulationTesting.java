@@ -35,7 +35,7 @@ public class ArticulationTesting extends LinearOpMode {
         if (!superStructure.isValid) {
             telemetry.addLine(Global.exceptions.toString());
             telemetry.update();
-            sleep (3000);
+            sleep (5000);
             telemetry.addLine("Super Structure is invalid. Exiting...");
             telemetry.update();
             sleep (2000);

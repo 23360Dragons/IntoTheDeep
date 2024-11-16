@@ -14,7 +14,6 @@ public class DragonsOTOS {
         try {
             Global.sparkFunOTOS = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
             configureOtos(telemetry, Global.sparkFunOTOS);
-            isValid = true;
         } catch (IllegalArgumentException ex) {
             Global.exceptions.append("Configuration Error: ").append("sensor_otos").append(" does not exist").append("\n");
             Global.exceptionOccurred = true;

@@ -34,7 +34,7 @@ public class HeadingTesting extends LinearOpMode {
                          targetDiff = 0.1;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         controller = new PIDController(p, i, d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -53,7 +53,7 @@ public class HeadingTesting extends LinearOpMode {
             telemetry.addLine(Global.exceptions.toString());
             telemetry.update();
 
-            sleep (3000);
+            sleep (5000);
 
             if (!DragonsIMU.isValid || !DriveMotor.isValid) {
                 telemetry.addLine("Critical Error Occurred! The IMU, Motors, and all movement code will not work.");

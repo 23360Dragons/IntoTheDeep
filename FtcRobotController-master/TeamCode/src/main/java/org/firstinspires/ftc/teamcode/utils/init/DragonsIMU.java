@@ -28,6 +28,8 @@ public class DragonsIMU {
 
             Global.imu.initialize(parameters);
 
+            Global.imu.resetYaw();
+
             telemetry.addLine("IMU configured!");
             telemetry.update();
         } catch (IllegalArgumentException ex) {

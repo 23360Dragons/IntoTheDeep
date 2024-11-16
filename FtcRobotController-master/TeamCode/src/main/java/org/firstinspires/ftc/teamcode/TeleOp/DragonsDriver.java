@@ -73,7 +73,7 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.addLine(Global.exceptions.toString());
             telemetry.update();
 
-            sleep (3000);
+            sleep (5000);
 
             if (!DragonsIMU.isValid || !DriveMotor.isValid) {
                 telemetry.addLine("Critical Error Occurred! The IMU, Motors, and all movement code will not work.");
@@ -176,6 +176,7 @@ public class DragonsDriver extends LinearOpMode {
 
             //</editor-fold>
 
+            // --------------------- SuperStructure ---------------------
             if (Global.superStructure.isValid) {
                 double SSspeed = 0.5,
                         articulationPower,
@@ -217,12 +218,12 @@ public class DragonsDriver extends LinearOpMode {
 
             // --------------------- SparkFun OTOS ---------------------
             if (DragonsOTOS.isValid) {
-                telemetry.addData("Sparkfun velocity along x axis", Global.sparkFunOTOS.getVelocity().x);
-                telemetry.addData("Sparkfun velocity along y axis", Global.sparkFunOTOS.getVelocity().y);
+                telemetry.addData("Sparkfun velocity along x axis", Math.round(Global.sparkFunOTOS.getVelocity().x));
+                telemetry.addData("Sparkfun velocity along y axis", Math.round(Global.sparkFunOTOS.getVelocity().y));
                 telemetry.addLine();
-                telemetry.addData("x",       Global.sparkFunOTOS.getPosition().x);
-                telemetry.addData("y",       Global.sparkFunOTOS.getPosition().y);
-                telemetry.addData("heading", Global.sparkFunOTOS.getPosition().h);
+                telemetry.addData("x",       Math.round(Global.sparkFunOTOS.getPosition().x));
+                telemetry.addData("y",       Math.round(Global.sparkFunOTOS.getPosition().y));
+                telemetry.addData("heading", Math.round(Global.sparkFunOTOS.getPosition().h));
             }
 
             // --------------------- Movement ---------------------
@@ -233,22 +234,22 @@ public class DragonsDriver extends LinearOpMode {
                 }
 
                 double botHeading = Global.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
-                telemetry.addData("IMU heading", botHeading);
+                telemetry.addData("IMU heading", Math.toDegrees(botHeading));
 
                 // calls for movement
                 double[] drivePowers = MoveRobot.FC(botHeading, x, y, rightX, 1); // x, y, and rightX are the gamepad inputs
                 //sets the motors to their corresponding power
-                Global.leftFront.setPower(drivePowers[0]);
+                Global.leftFront.setPower (drivePowers[0]);
                 Global.rightFront.setPower(drivePowers[1]);
-                Global.leftBack.setPower(drivePowers[2]);
-                Global.rightBack.setPower(drivePowers[3]);
+                Global.leftBack.setPower  (drivePowers[2]);
+                Global.rightBack.setPower (drivePowers[3]);
 
                 //telemetry
                 telemetry.addLine();
-                telemetry.addData("leftFront power",  String.valueOf(Math.round(Global.leftFront.getPower()  * 10) / 10));
-                telemetry.addData("rightFront power", String.valueOf(Math.round(Global.rightFront.getPower() * 10) / 10));
-                telemetry.addData("leftBack power",   String.valueOf(Math.round(Global.leftBack.getPower()   * 10) / 10));
-                telemetry.addData("rightBack power",  String.valueOf(Math.round(Global.rightBack.getPower()  * 10) / 10));
+                telemetry.addData("leftFront power ", String.valueOf(Math.round(Global.leftFront.getPower())));
+                telemetry.addData("rightFront power", String.valueOf(Math.round(Global.rightFront.getPower())));
+                telemetry.addData("leftBack power  ", String.valueOf(Math.round(Global.leftBack.getPower())));
+                telemetry.addData("rightBack power ", String.valueOf(Math.round(Global.rightBack.getPower())));
             }
 
             telemetry.update();
