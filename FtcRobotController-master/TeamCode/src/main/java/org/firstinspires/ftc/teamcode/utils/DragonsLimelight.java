@@ -55,13 +55,15 @@ public class DragonsLimelight {
 
                 // getting rotation of the result. TODO: make this work
 
-//                List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
-//
-//                for (LLResultTypes.ColorResult cr : colorResults) {
-//                    List<List<Double>> la = cr.getTargetCorners(); // should return {{0,0}, {1,0}, {1,1}, {0,1}} or something like that; TODO make sure it is enabled in output tab
-//
-//                    telemetry.addData("CR target corners", la.toString());
-//                }
+                List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
+
+                if (!colorResults.isEmpty()) {
+                    for (LLResultTypes.ColorResult cr : colorResults) {
+                        List<List<Double>> la = cr.getTargetCorners(); // should return {{0,0}, {1,0}, {1,1}, {0,1}} or something like that; TODO make sure it is enabled in output tab
+
+                        telemetry.addData("CR target corners", la.toString());
+                    }
+                }
 
             } else {
                 if (result == null) {

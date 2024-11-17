@@ -182,10 +182,10 @@ public class DragonsDriver extends LinearOpMode {
                         articulationPower,
                         extensionPower;
 
-                boolean dpadUp = currentGamepad1.dpad_up,
-                        dpadDown = currentGamepad1.dpad_down,
-                        rightBumper = gamepad1.right_bumper, // rotates clockwise
-                        leftBumper  = gamepad1.left_bumper;  // rotates counterclockwise
+                boolean dpadUp      = currentGamepad1.dpad_up,      // extends
+                        dpadDown    = currentGamepad1.dpad_down,    // retracts
+                        rightBumper = currentGamepad1.right_bumper, // rotates clockwise
+                        leftBumper  = currentGamepad1.left_bumper;  // rotates counterclockwise
 
                 // if dpadUp, 1, else if down, -1, else 0
                 extensionPower = dpadUp ? 1 : dpadDown ? -1 : 0;
@@ -199,9 +199,11 @@ public class DragonsDriver extends LinearOpMode {
                 Global.superStructure.articulation.setPower(articulationPower * SSspeed);
                 Global.superStructure.extension.setPower(extensionPower * SSspeed);
 
-                telemetry.addData("Super Structure extension power",    Global.superStructure.extension.getPower());
-                telemetry.addData("Super Structure articulation power", Global.superStructure.articulation.getPower());
-                telemetry.addData("Super Structure speed", SSspeed);
+                telemetry.addData("Super Structure extension power                ", Global.superStructure.extension.getPower());
+                telemetry.addData("Super Structure current ext position in degrees", Global.superStructure.extension.getPosition().right);
+                telemetry.addData("Super Structure articulation power             ", Global.superStructure.articulation.getPower());
+                telemetry.addData("Super Structure current arm position in degrees", Global.superStructure.articulation.getPosition().right);
+                telemetry.addData("Super Structure speed                          ", SSspeed);
             }
 
             // --------------------- Limelight ---------------------
@@ -218,23 +220,23 @@ public class DragonsDriver extends LinearOpMode {
 
             // --------------------- SparkFun OTOS ---------------------
             if (DragonsOTOS.isValid) {
-                telemetry.addData("Sparkfun velocity along x axis", Math.round(Global.sparkFunOTOS.getVelocity().x));
-                telemetry.addData("Sparkfun velocity along y axis", Math.round(Global.sparkFunOTOS.getVelocity().y));
+                telemetry.addData("                 Sparkfun velocity along x axis", Math.round(Global.sparkFunOTOS.getVelocity().x));
+                telemetry.addData("                 Sparkfun velocity along y axis", Math.round(Global.sparkFunOTOS.getVelocity().y));
                 telemetry.addLine();
-                telemetry.addData("x",       Math.round(Global.sparkFunOTOS.getPosition().x));
-                telemetry.addData("y",       Math.round(Global.sparkFunOTOS.getPosition().y));
-                telemetry.addData("heading", Math.round(Global.sparkFunOTOS.getPosition().h));
+                telemetry.addData("                                     sparkfun x",       Math.round(Global.sparkFunOTOS.getPosition().x));
+                telemetry.addData("                                     sparkfun y",       Math.round(Global.sparkFunOTOS.getPosition().y));
+                telemetry.addData("                               sparkfun heading", Math.round(Global.sparkFunOTOS.getPosition().h));
             }
 
             // --------------------- Movement ---------------------
             if (DragonsIMU.isValid && DriveMotor.isValid) {
                 if (currentGamepad1.y) { //provides a way to recalibrate the imu
-                    telemetry.addLine("reset imu yaw");
+                    telemetry.addLine("                                  reset imu yaw");
                     Global.imu.resetYaw();
                 }
 
                 double botHeading = Global.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
-                telemetry.addData("IMU heading", Math.toDegrees(botHeading));
+                telemetry.addData("                                    IMU heading", Math.toDegrees(botHeading));
 
                 // calls for movement
                 double[] drivePowers = MoveRobot.FC(botHeading, x, y, rightX, 1); // x, y, and rightX are the gamepad inputs
@@ -246,10 +248,10 @@ public class DragonsDriver extends LinearOpMode {
 
                 //telemetry
                 telemetry.addLine();
-                telemetry.addData("leftFront power ", String.valueOf(Math.round(Global.leftFront.getPower())));
-                telemetry.addData("rightFront power", String.valueOf(Math.round(Global.rightFront.getPower())));
-                telemetry.addData("leftBack power  ", String.valueOf(Math.round(Global.leftBack.getPower())));
-                telemetry.addData("rightBack power ", String.valueOf(Math.round(Global.rightBack.getPower())));
+                telemetry.addData("                                leftFront power", String.valueOf(Math.round(Global.leftFront.getPower())));
+                telemetry.addData("                               rightFront power", String.valueOf(Math.round(Global.rightFront.getPower())));
+                telemetry.addData("                                 leftBack power", String.valueOf(Math.round(Global.leftBack.getPower())));
+                telemetry.addData("                                rightBack power", String.valueOf(Math.round(Global.rightBack.getPower())));
             }
 
             telemetry.update();

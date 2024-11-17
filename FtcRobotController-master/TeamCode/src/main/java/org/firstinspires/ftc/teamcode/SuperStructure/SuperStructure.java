@@ -13,6 +13,13 @@ public class SuperStructure {
     public Articulation articulation;
     public Extension extension;
 
+    public enum ARTICULATION_POS {
+        UP,
+        DOWN;
+    }
+
+    ARTICULATION_POS articulationPos;
+
     public SuperStructure (HardwareMap hardwareMap, Telemetry telemetry) {
         telemetry.addLine("Configuring Superstructure Articulation!");
         telemetry.update();
@@ -31,7 +38,7 @@ public class SuperStructure {
         this.isValid = articulation.isValid && extension.isValid;
     }
 
-    public static class Articulation {
+    public class Articulation {
         private DcMotorEx leftMotor;
         private DcMotorEx rightMotor;
 
@@ -61,6 +68,8 @@ public class SuperStructure {
                 Global.exceptionOccurred = true;
                 this.isValid = false;
             }
+
+            articulationPos = ARTICULATION_POS.UP;
         }
 
         public void setPower (double power) {
@@ -81,12 +90,22 @@ public class SuperStructure {
             return new Positions(leftMotor.getCurrentPosition(), rightMotor.getCurrentPosition());
         }
 
-        public void setPosition (double tickPos) {
+        public void moveUp() {
+            setPosition(90);
+            articulationPos = ARTICULATION_POS.UP;
+        }
+
+        public void moveDown() {
+            setPosition(0);
+            articulationPos = ARTICULATION_POS.DOWN;
+        }
+
+        private void setPosition (double tickPos) {
             //todo: put the values from articulation testing into here, make this a pidloop
         }
     }
 
-    public static class Extension {
+    public class Extension {
         private DcMotorEx leftMotor;
         private DcMotorEx rightMotor;
 

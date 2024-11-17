@@ -40,8 +40,10 @@ public class HeadingTesting extends LinearOpMode {
 
         DriveMotor.initialize(hardwareMap, telemetry);
         DragonsLimelight.initialize(hardwareMap, telemetry);
+
         if (DragonsLimelight.isValid)
             DragonsLimelight.setPipeline(BLUE);
+
         DragonsIMU.initialize(hardwareMap, telemetry);
         DragonsLights.initialize(hardwareMap, telemetry);
 
@@ -99,10 +101,10 @@ public class HeadingTesting extends LinearOpMode {
             telemetry.addData("tx", tx);
 
             telemetry.addLine();
-            telemetry.addData("leftFront power",  String.valueOf(Math.round(Global.leftFront.getPower()  * 10) / 10));
-            telemetry.addData("rightFront power", String.valueOf(Math.round(Global.rightFront.getPower() * 10) / 10));
-            telemetry.addData("leftBack power",   String.valueOf(Math.round(Global.leftBack.getPower()   * 10) / 10));
-            telemetry.addData("rightBack power",  String.valueOf(Math.round(Global.rightBack.getPower()  * 10) / 10));
+            telemetry.addData("leftFront power",  Math.round(Global.leftFront.getPower()));
+            telemetry.addData("rightFront power", Math.round(Global.rightFront.getPower()));
+            telemetry.addData("leftBack power",   Math.round(Global.leftBack.getPower()));
+            telemetry.addData("rightBack power",  Math.round(Global.rightBack.getPower()));
 
             telemetry.update();
         }
