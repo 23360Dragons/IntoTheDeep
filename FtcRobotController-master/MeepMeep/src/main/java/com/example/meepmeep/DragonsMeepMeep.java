@@ -23,7 +23,7 @@ public class DragonsMeepMeep {
         Pose2d redBasket = new Pose2d(-52, -52,Math.toRadians(225));
         Pose2d redAscent = new Pose2d (-25,0,Math.toRadians(0));
         Pose2d blueAscent = new Pose2d(25,0, Math.toRadians(180));
-        Pose2d blueObserve = new Pose2d(-57,60,Math.toRadians(90));
+        Vector2d blueObserve = new Vector2d(-57,60);
         Pose2d redObserve = new Pose2d(57,-58,Math.toRadians(270));
 
 
@@ -35,10 +35,16 @@ public class DragonsMeepMeep {
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(redTwo, Math.toRadians(redFace)))
                 .waitSeconds(3)
-                .lineToY(toRedSide.y)
+                .strafeTo(new Vector2d(-48,-42))
                 .waitSeconds(3)
-                .lineToYSplineHeading(redObserve.position.y, redObserve.heading)/*.lineToYSplineHeading(redObserve.position.y, redObserve.heading)*/
+                .strafeToSplineHeading(redBasket.component1(), Math.toRadians(225))
                 .waitSeconds(3)
+                .strafeToSplineHeading(new Vector2d(-58,-42),Math.toRadians(90))
+                .waitSeconds(3)
+                .strafeToSplineHeading(redBasket.component1(), Math.toRadians(225))
+                .strafeToSplineHeading(new Vector2d(-58,-42),Math.toRadians(125))
+                .waitSeconds(3)
+                .strafeToSplineHeading(redBasket.component1(), Math.toRadians(225))
                 .build());
 
 

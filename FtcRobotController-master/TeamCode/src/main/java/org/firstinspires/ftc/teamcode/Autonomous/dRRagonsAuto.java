@@ -115,7 +115,7 @@ public class dRRagonsAuto extends LinearOpMode {
         blueFace = 270;
         redFace = 90;
         Pose2d blueStartBasket, blueStartObserve, redStartBasket, redStartObserve;
-        Vector2d  blueSpecimen, redSpecimen, blueBasket, redBasket, redAscent, blueAscent, blueObserve, redObserve;
+        Vector2d  blueSpecimen, redSpecimen, blueBasket, redBasket, redAscent, blueAscent, blueObserve, redObserve, redYellow1,redYellow2,redYellow3;
         blueStartBasket  = new Pose2d(35,62,Math.toRadians(blueFace));
         blueStartObserve = new Pose2d(-12,62,Math.toRadians(blueFace));
         redStartBasket   = new Pose2d(12,60,Math.toRadians(redFace));
@@ -128,6 +128,9 @@ public class dRRagonsAuto extends LinearOpMode {
         blueAscent       = new Vector2d(25, 0);
         blueObserve      = new Vector2d(-57,60);
         redObserve       = new Vector2d(57,-58);
+        redYellow1       = new Vector2d(-48,-42);
+        redYellow2       = new Vector2d(-58,-42);
+        redYellow3       = new Vector2d(-58,-42);
         Pose2d startPose = null;
         Pose2d notSelected= new Pose2d(0,0,0);
         int starty = 0;
@@ -172,15 +175,31 @@ public class dRRagonsAuto extends LinearOpMode {
         }
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
         FriendlyFire friendlyFire = new FriendlyFire(hardwareMap);
-        TrajectoryActionBuilder waterPool = drive.actionBuilder(startPose)
-                .lineToX(blueSpecimen.x)
-                .lineToY(blueSpecimen.y)
-                .waitSeconds(3)
-                .splineToSplineHeading(new Pose2d(blueObserve,Math.toRadians(90)), Math.PI/2);
-        TrajectoryActionBuilder firePit = drive.actionBuilder(startPose)
-                .lineToX(redSpecimen.x)
-                .lineToY(redSpecimen.y);
 
+        TrajectoryActionBuilder waterPool = drive.actionBuilder(startPose)
+                .strafeTo(blueSpecimen)
+                .waitSeconds(3)
+                .strafeToSplineHeading(blueObserve, 270);
+
+        TrajectoryActionBuilder firePit = drive.actionBuilder(startPose)
+                .strafeTo(redSpecimen)
+                .waitSeconds(3)
+                .strafeToSplineHeading(redObserve,Math.toRadians(90));
+
+       /* TrajectoryActionBuilder tomato = drive.actionBuilder(startPose)
+                .waitSeconds(3)
+                .strafeTo(redYellow1)
+                .waitSeconds(3)
+                .strafeToSplineHeading(redBasket, Math.toRadians(225))
+                .waitSeconds(3)
+                .strafeToSplineHeading(redYellow2 ,Math.toRadians(90))
+                .waitSeconds(3)
+                .strafeToSplineHeading(redBasket, Math.toRadians(225))
+                .strafeToSplineHeading(redYellow3, Math.toRadians(125))
+                .waitSeconds(3)
+                .strafeToSplineHeading(redBasket, Math.toRadians(225))
+                .build();
+*/
         waitForStart();
 
         /*Action autonomousAnonymous = null;
