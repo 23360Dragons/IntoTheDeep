@@ -7,7 +7,9 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsLights;
 
 import java.util.List;
@@ -37,8 +39,21 @@ public class DragonsLimelight {
 
     public static void update (Telemetry telemetry) {
             result = Global.limelight.getLatestResult();
+            result.getTxNC()
 
             if (result != null && result.isValid()) {
+                // Get the pose of the robot
+                Pose3D botpose = result.getBotpose(); // Extract orientation (yaw, pitch, roll
+                Position pos = botpose.getPosition();
+                double x = pos.x; // Display orientation on telemetry
+                double y = pos.y;
+                double z = pos.z;
+                telemetry.addData("Yaw (Z)", z);
+                telemetry.addData("Pitch (Y)", y);
+                telemetry.addData("Roll (X)", x);
+
+
+
                 if (DragonsLights.isValid) {
                     switch (currentPipeline) {
                         case 0:
@@ -56,8 +71,10 @@ public class DragonsLimelight {
                 // getting rotation of the result. TODO: make this work
 
                 List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
+                telemetry.addData("ta", llPose);
 
                 if (!colorResults.isEmpty()) {
+                    telemetry.addLine("true");
                     for (LLResultTypes.ColorResult cr : colorResults) {
                         List<List<Double>> la = cr.getTargetCorners(); // should return {{0,0}, {1,0}, {1,1}, {0,1}} or something like that; TODO make sure it is enabled in output tab
 

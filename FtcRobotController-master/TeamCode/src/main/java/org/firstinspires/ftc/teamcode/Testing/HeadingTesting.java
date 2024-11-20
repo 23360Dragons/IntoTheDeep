@@ -90,21 +90,22 @@ public class HeadingTesting extends LinearOpMode {
             move += pid;
 
             // ---- Movement ----
-            double[] drivePowers = MoveRobot.RC(0, 0, move, speed);
+//            double[] drivePowers = MoveRobot.RC(0, 0, move, speed);
 
-            leftFront.setPower (drivePowers[0]);
-            rightFront.setPower(drivePowers[1]);
-            leftBack.setPower  (drivePowers[2]);
-            rightBack.setPower (drivePowers[3]);
+//            leftFront.setPower (drivePowers[0]);
+//            rightFront.setPower(drivePowers[1]);
+//            leftBack.setPower  (drivePowers[2]);
+//            rightBack.setPower (drivePowers[3]);
 
             // telemetry for debugging
             telemetry.addData("tx", tx);
+            telemetry.addData("move", move);
 
-            telemetry.addLine();
-            telemetry.addData("leftFront power",  Math.round(Global.leftFront.getPower()));
-            telemetry.addData("rightFront power", Math.round(Global.rightFront.getPower()));
-            telemetry.addData("leftBack power",   Math.round(Global.leftBack.getPower()));
-            telemetry.addData("rightBack power",  Math.round(Global.rightBack.getPower()));
+//            telemetry.addLine();
+//            telemetry.addData("leftFront power",  Math.round(Global.leftFront.getPower()));
+//            telemetry.addData("rightFront power", Math.round(Global.rightFront.getPower()));
+//            telemetry.addData("leftBack power",   Math.round(Global.leftBack.getPower()));
+//            telemetry.addData("rightBack power",  Math.round(Global.rightBack.getPower()));
 
             telemetry.update();
         }
