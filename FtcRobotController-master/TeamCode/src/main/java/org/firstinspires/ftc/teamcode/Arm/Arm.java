@@ -62,12 +62,16 @@ public class Arm {
 
         Wrist (HardwareMap hardwareMap) {
             try {
-                servo = hardwareMap.get(Servo.class, "");
+                servo = hardwareMap.get(Servo.class, ""); // todo: set name
             } catch (IllegalArgumentException e) {
                 Global.exceptions.append("Configuration Error: ").append("Wrist pitch").append(" does not exist").append("\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
             }
+        }
+
+        public void setRotation (double rotation) {
+            servo.setPosition(rotation);
         }
     }
 
@@ -75,14 +79,25 @@ public class Arm {
         public boolean isValid;
         private Servo claw;
 
+        private double openRotation   = 90;
+        private double closedRotation = 0;
+
         Claw (HardwareMap hardwareMap) {
             try {
-                claw = hardwareMap.get(Servo.class, "");
+                claw = hardwareMap.get(Servo.class, ""); // todo: set name
             } catch (IllegalArgumentException e) {
                 Global.exceptions.append("Configuration Error: ").append("Claw").append(" does not exist").append("\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
             }
+        }
+
+        public void open  ()  {
+            claw.setPosition(openRotation);
+        }
+
+        public void close () {
+            claw.setPosition(closedRotation);
         }
     }
 }

@@ -19,6 +19,8 @@ public class DragonsLimelight {
     private static int currentPipeline;
     private static LLResult result;
 
+    private static LLResult pythonRes;
+
     public static void initialize(HardwareMap hardwareMap, Telemetry telemetry) {
         try {
             telemetry.addLine("Configuring limelight...");
@@ -39,7 +41,6 @@ public class DragonsLimelight {
 
     public static void update (Telemetry telemetry) {
             result = Global.limelight.getLatestResult();
-            result.getTxNC()
 
             if (result != null && result.isValid()) {
                 // Get the pose of the robot
@@ -68,10 +69,20 @@ public class DragonsLimelight {
                     }
                 }
 
+                if (getPipeline() == 3) {
+                    double[] pythonOutputs = result.getPythonOutput();
+
+                    if (pythonOutputs != null && pythonOutputs.length > 0) {
+                        double firstOutput = pythonOutputs[0];
+                        telemetry.addData("Python output:", firstOutput);
+                    }
+                }
+
+                telemetry.addData("Python Results", pythonRes);
+
                 // getting rotation of the result. TODO: make this work
 
                 List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
-                telemetry.addData("ta", llPose);
 
                 if (!colorResults.isEmpty()) {
                     telemetry.addLine("true");
