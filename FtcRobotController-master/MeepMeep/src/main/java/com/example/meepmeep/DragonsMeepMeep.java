@@ -33,18 +33,20 @@ public class DragonsMeepMeep {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(redTwo, Math.toRadians(redFace)))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(blueOne, Math.toRadians(blueFace)))
                 .waitSeconds(3)
-                .strafeTo(new Vector2d(-48,-42))
+                .strafeTo(new Vector2d(48,42))
                 .waitSeconds(3)
-                .strafeToSplineHeading(redBasket.component1(), Math.toRadians(225))
+                .strafeToSplineHeading(blueBasket.component1(), Math.toRadians(45))
                 .waitSeconds(3)
-                .strafeToSplineHeading(new Vector2d(-58,-42),Math.toRadians(90))
+                .strafeToSplineHeading(new Vector2d(58,42),Math.toRadians(270))
                 .waitSeconds(3)
-                .strafeToSplineHeading(redBasket.component1(), Math.toRadians(225))
-                .strafeToSplineHeading(new Vector2d(-58,-42),Math.toRadians(125))
+                .strafeToSplineHeading(blueBasket.component1(), Math.toRadians(45))
                 .waitSeconds(3)
-                .strafeToSplineHeading(redBasket.component1(), Math.toRadians(225))
+                .strafeToSplineHeading(new Vector2d(55,25),Math.toRadians(0))
+                .waitSeconds(3)
+                .strafeToSplineHeading(blueBasket.component1(), Math.toRadians(45))
+                .waitSeconds(3)
                 .build());
 
 

@@ -95,9 +95,9 @@ public class dRRagonsAuto extends LinearOpMode {
             light = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
         }
     }
-    public class GreenLight {
+    public class LarryLime {
         private Limelight3A limelight;
-        public GreenLight (HardwareMap hardwareMap){
+        public LarryLime (HardwareMap hardwareMap){
             limelight = hardwareMap.get(Limelight3A.class, "limelight");
         }
     }*/
@@ -108,14 +108,13 @@ public class dRRagonsAuto extends LinearOpMode {
         }
     }
 
-
     @Override
     public void runOpMode() throws InterruptedException {
         int blueFace, redFace;
         blueFace = 270;
         redFace = 90;
         Pose2d blueStartBasket, blueStartObserve, redStartBasket, redStartObserve;
-        Vector2d  blueSpecimen, redSpecimen, blueBasket, redBasket, redAscent, blueAscent, blueObserve, redObserve, redYellow1,redYellow2,redYellow3;
+        Vector2d  blueSpecimen, redSpecimen, blueBasket, redBasket, redAscent, blueAscent, blueObserve, redObserve, redYellow1, redYellow2, redYellow3, blueYellow1, blueYellow2, blueYellow3;
         blueStartBasket  = new Pose2d(35,62,Math.toRadians(blueFace));
         blueStartObserve = new Pose2d(-12,62,Math.toRadians(blueFace));
         redStartBasket   = new Pose2d(12,60,Math.toRadians(redFace));
@@ -130,13 +129,16 @@ public class dRRagonsAuto extends LinearOpMode {
         redObserve       = new Vector2d(57,-58);
         redYellow1       = new Vector2d(-48,-42);
         redYellow2       = new Vector2d(-58,-42);
-        redYellow3       = new Vector2d(-58,-42);
+        redYellow3       = new Vector2d(-55,-25);
+        blueYellow1      = new Vector2d(48,42);
+        blueYellow2      = new Vector2d(58,42);
+        blueYellow3      = new Vector2d(55,25);
         Pose2d startPose = null;
         Pose2d notSelected= new Pose2d(0,0,0);
         int starty = 0;
         while (opModeInInit()){
 
-            if(gamepad1.x){
+            if (gamepad1.x){
                 starty=1;
             } else if (gamepad1.b) {
                 starty=2;
@@ -169,10 +171,11 @@ public class dRRagonsAuto extends LinearOpMode {
                     break;
                 default:
                     startPose = notSelected;
-                    telemetry.addLine("Please select starting position!");
+                    telemetry.addLine("Please select starting position! If not selected, the robot will not run during Auto.");
                     break;
             }
         }
+
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
         FriendlyFire friendlyFire = new FriendlyFire(hardwareMap);
 
@@ -186,31 +189,63 @@ public class dRRagonsAuto extends LinearOpMode {
                 .waitSeconds(3)
                 .strafeToSplineHeading(redObserve,Math.toRadians(90));
 
-       /* TrajectoryActionBuilder tomato = drive.actionBuilder(startPose)
+        TrajectoryActionBuilder tomato = drive.actionBuilder(startPose)
                 .waitSeconds(3)
                 .strafeTo(redYellow1)
                 .waitSeconds(3)
                 .strafeToSplineHeading(redBasket, Math.toRadians(225))
                 .waitSeconds(3)
-                .strafeToSplineHeading(redYellow2 ,Math.toRadians(90))
+                .strafeToSplineHeading(redYellow2, Math.toRadians(90))
                 .waitSeconds(3)
                 .strafeToSplineHeading(redBasket, Math.toRadians(225))
+                .waitSeconds(3)
                 .strafeToSplineHeading(redYellow3, Math.toRadians(125))
                 .waitSeconds(3)
-                .strafeToSplineHeading(redBasket, Math.toRadians(225))
-                .build();
-*/
+                .strafeToSplineHeading(redBasket, Math.toRadians(225));
+
+        TrajectoryActionBuilder blueberry = drive.actionBuilder(startPose)
+                .waitSeconds(3)
+                .strafeTo(blueYellow1)
+                .waitSeconds(3)
+                .strafeToSplineHeading(blueBasket, Math.toRadians(45))
+                .waitSeconds(3)
+                .strafeToSplineHeading(blueYellow2, Math.toRadians(270))
+                .waitSeconds(3)
+                .strafeToSplineHeading(blueBasket, Math.toRadians(45))
+                .waitSeconds(3)
+                .strafeToSplineHeading(blueYellow3, Math.toRadians(0))
+                .waitSeconds(3)
+                .strafeToSplineHeading(blueBasket, Math.toRadians(45))
+                .waitSeconds(3);
+
+        TrajectoryActionBuilder stopping = drive.actionBuilder(startPose)
+                .waitSeconds(30);
+
         waitForStart();
 
-        /*Action autonomousAnonymous = null;
-        if (starty==3){
-            autonomousAnonymous = waterPool.build();
+        Action autonomousAnonymous = null;
+        switch (starty) {
+            case 1:
+                autonomousAnonymous = blueberry.build();
+                break;
+            case 2:
+                autonomousAnonymous = tomato.build();
+                break;
+            case 3:
+                autonomousAnonymous = waterPool.build();
+                break;
+            case 4:
+                autonomousAnonymous = firePit.build();
+                break;
+            default:
+                autonomousAnonymous = stopping.build();
+                break;
         }
 
         Actions.runBlocking(
                 new SequentialAction(
                         autonomousAnonymous
                 )
-        );*/
+        );
     }
 }
