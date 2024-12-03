@@ -43,7 +43,7 @@ public class dRRagonsAuto extends LinearOpMode {
             rightLinear.setDirection(DcMotorSimple.Direction.REVERSE);
         }
     }
-   /* public class Armz {
+    public class Armz {
         private DcMotorEx leftArm, rightArm;
         public Armz (HardwareMap hardwareMap){
             leftArm = hardwareMap.get(DcMotorEx.class, "leftLinear");
