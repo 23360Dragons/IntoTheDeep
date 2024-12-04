@@ -47,6 +47,7 @@ public class DragonsMeepMeep {
                 .waitSeconds(3)
                 .strafeToSplineHeading(blueBasket.component1(), Math.toRadians(45))
                 .waitSeconds(3)
+                .turnTo(Math.toRadians(blueFace))
                 .build());
 
 

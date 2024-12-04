@@ -26,12 +26,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.utils.Global;
+import org.firstinspires.ftc.teamcode.utils.init.DragonsLimelight;
 
 //import org.firstinspires.ftc.teamcode.MecanumDrive;
 @Config
 @Autonomous(name = "dRRagonsAuto", group = "Autonomous")
 public class dRRagonsAuto extends LinearOpMode {
-   /* public class Linearz {
+   public class Linearz {
         private DcMotorEx rightLinear, leftLinear;
         public Linearz(HardwareMap hardwareMap){
             leftLinear = hardwareMap.get(DcMotorEx.class, "leftLinear");
@@ -42,65 +44,77 @@ public class dRRagonsAuto extends LinearOpMode {
             rightLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightLinear.setDirection(DcMotorSimple.Direction.REVERSE);
         }
-    }
-    public class Armz {
-        private DcMotorEx leftArm, rightArm;
-        public Armz (HardwareMap hardwareMap){
-            leftArm = hardwareMap.get(DcMotorEx.class, "leftLinear");
-            leftArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            leftArm.setDirection(DcMotorSimple.Direction.FORWARD);
+   }
+   public class Armz {
+       private DcMotorEx leftArm, rightArm;
+       public Armz (HardwareMap hardwareMap){
+           leftArm = hardwareMap.get(DcMotorEx.class, "leftLinear");
+           leftArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+           leftArm.setDirection(DcMotorSimple.Direction.FORWARD);
 
-            rightArm = hardwareMap.get(DcMotorEx.class, "rightLinear");
-            rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            rightArm.setDirection(DcMotorSimple.Direction.REVERSE);
-        }
-    }
-    public class Artie {
-        private Servo leftArtie, rightArtie;
-        public Artie(HardwareMap hardwareMap){
-            leftArtie = hardwareMap.get(Servo.class,"leftArtie");
-            rightArtie = hardwareMap.get(Servo.class, "rightArtie");
-        }
-    }
-    public class Limitz {
-        private Servo leftLimit, rightLimit;
-        public Limitz (HardwareMap hardwareMap){
-            leftLimit = hardwareMap.get(Servo.class, "leftLimit");
-            rightLimit = hardwareMap.get(Servo.class, "rightLimit");
-        }
-    }
-    public class Clawz {
-        private Servo claw;
-        public Clawz (HardwareMap hardwareMap){
-            claw = hardwareMap.get(Servo.class, "claw");
-        }
-    }
+           rightArm = hardwareMap.get(DcMotorEx.class, "rightLinear");
+           rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+           rightArm.setDirection(DcMotorSimple.Direction.REVERSE);
+       }
+   }
+   public class Artie {
+       private Servo leftArtie, rightArtie;
+       public Artie(HardwareMap hardwareMap){
+           leftArtie = hardwareMap.get(Servo.class,"leftArtie");
+           rightArtie = hardwareMap.get(Servo.class, "rightArtie");
+       }
+   }
+   public class Limitz {
+       private Servo leftLimit, rightLimit;
+       public Limitz (HardwareMap hardwareMap){
+           leftLimit = hardwareMap.get(Servo.class, "leftLimit");
+           rightLimit = hardwareMap.get(Servo.class, "rightLimit");
+       }
+   }
+   public class Clawz {
+       private Servo claw;
+       public Clawz (HardwareMap hardwareMap){
+           claw = hardwareMap.get(Servo.class, "claw");
+       }
+   }
+   public class Seesaw {
+       private Servo tilt;
+       public Seesaw (HardwareMap hardwareMap){
+           tilt = hardwareMap.get(Servo.class, "tilt");
+       }
+   }
+   public class TwistNTurn {
+       private Servo twist;
+       public TwistNTurn (HardwareMap hardwareMap){
+           twist = hardwareMap.get(Servo.class, "twist");
+       }
+   }
+   public class LarryLime {
+       private Limelight3A limelight;
+       public LarryLime(HardwareMap hardwareMap) {
+           limelight = hardwareMap.get(Limelight3A.class, "limelight");
+           limelight.start();
+       }
+       public void setPipeline (int larry){
+           limelight.pipelineSwitch(larry);
+       }
+       //TODO make subclass actions to set pipeline
+   }
+   public class ThisLittleLight {
+       private RevBlinkinLedDriver light;
 
-    public class Seesaw {
-        private Servo tilt;
-        public Seesaw (HardwareMap hardwareMap){
-            tilt = hardwareMap.get(Servo.class, "tilt")
-        }
-    }
+       public ThisLittleLight(HardwareMap hardwareMap) {
+           light = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+       }
+       public class Bushel implements Action {
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
 
-    public class TwistNTurn {
-        private Servo twist;
-        public TwistNTurn (HardwareMap hardwareMap){
-            twist = hardwareMap.get(Servo.class, "twist");
-        }
-    }
-    public class ThisLittleLight {
-        private RevBlinkinLedDriver light;
-        public ThisLittleLight (HardwareMap hardwareMap){
-            light = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
-        }
-    }
-    public class LarryLime {
-        private Limelight3A limelight;
-        public LarryLime (HardwareMap hardwareMap){
-            limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        }
-    }*/
+               return false;
+           }
+
+       }
+   }
     public class FriendlyFire {
         private SparkFunOTOS sensor_otos;
         public FriendlyFire (HardwareMap hardwareMap){
@@ -136,6 +150,7 @@ public class dRRagonsAuto extends LinearOpMode {
         Pose2d startPose = null;
         Pose2d notSelected= new Pose2d(0,0,0);
         int starty = 0;
+
         while (opModeInInit()){
 
             if (gamepad1.x){
@@ -151,11 +166,13 @@ public class dRRagonsAuto extends LinearOpMode {
             switch (starty) {
                 case 1:
                     startPose = blueStartBasket;
+
                     telemetry.addLine("Starting Position Set To Blue, Basket Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
                 case 2:
                     startPose = redStartBasket;
+
                     telemetry.addLine("Starting Position Set To Red, Basket Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
@@ -182,12 +199,16 @@ public class dRRagonsAuto extends LinearOpMode {
         TrajectoryActionBuilder waterPool = drive.actionBuilder(startPose)
                 .strafeTo(blueSpecimen)
                 .waitSeconds(3)
-                .strafeToSplineHeading(blueObserve, 270);
+                .strafeToSplineHeading(blueObserve, 270)
+                .waitSeconds(3)
+                .turnTo(Math.toRadians(blueFace));
 
         TrajectoryActionBuilder firePit = drive.actionBuilder(startPose)
                 .strafeTo(redSpecimen)
                 .waitSeconds(3)
-                .strafeToSplineHeading(redObserve,Math.toRadians(90));
+                .strafeToSplineHeading(redObserve,Math.toRadians(90))
+                .waitSeconds(3)
+                .turnTo(Math.toRadians(redFace));
 
         TrajectoryActionBuilder tomato = drive.actionBuilder(startPose)
                 .waitSeconds(3)
@@ -201,7 +222,9 @@ public class dRRagonsAuto extends LinearOpMode {
                 .waitSeconds(3)
                 .strafeToSplineHeading(redYellow3, Math.toRadians(125))
                 .waitSeconds(3)
-                .strafeToSplineHeading(redBasket, Math.toRadians(225));
+                .strafeToSplineHeading(redBasket, Math.toRadians(225))
+                .waitSeconds(3)
+                .turnTo(Math.toRadians(redFace));
 
         TrajectoryActionBuilder blueberry = drive.actionBuilder(startPose)
                 .waitSeconds(3)
@@ -216,7 +239,8 @@ public class dRRagonsAuto extends LinearOpMode {
                 .strafeToSplineHeading(blueYellow3, Math.toRadians(0))
                 .waitSeconds(3)
                 .strafeToSplineHeading(blueBasket, Math.toRadians(45))
-                .waitSeconds(3);
+                .waitSeconds(3)
+                .turnTo(Math.toRadians(blueFace));
 
         TrajectoryActionBuilder stopping = drive.actionBuilder(startPose)
                 .waitSeconds(30);

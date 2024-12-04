@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.utils.Global;
 public class DragonsLimelight {
     public static boolean isValid = false;
     private static int currentPipeline;
-
     public static void initialize(HardwareMap hardwareMap, Telemetry telemetry) {
         try {
             telemetry.addLine("Configuring limelight...");
