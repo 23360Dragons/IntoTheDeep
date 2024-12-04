@@ -177,15 +177,29 @@ public class DragonsDriver extends LinearOpMode {
             //</editor-fold>
 
             // --------------------- SuperStructure ---------------------
+
+            //TODO TODO TODO TESTING DELETE
+            /*if (Global.superStructure.articulation.isValid) {
+                boolean rightBumper = currentGamepad1.right_bumper, // rotates clockwise
+                        leftBumper  = currentGamepad1.left_bumper;  // rotates counterclockwise
+
+                double articulationPower = rightBumper ? 1 : leftBumper ? -1 : 0;
+
+                Global.superStructure.articulation.setPower(articulationPower * 0.25);
+
+                telemetry.addData("Super Structure articulation power             ", Global.superStructure.articulation.getPower());
+//                telemetry.addData("Super Structure current arm position in degrees", Global.superStructure.articulation.getPosition().right);
+            }*/
+
             if (Global.superStructure.isValid) {
                 double SSspeed = 0.5,
                         articulationPower,
                         extensionPower;
 
-                boolean dpadUp      = currentGamepad1.dpad_up,      // extends
-                        dpadDown    = currentGamepad1.dpad_down,    // retracts
-                        rightBumper = currentGamepad1.right_bumper, // rotates clockwise
-                        leftBumper  = currentGamepad1.left_bumper;  // rotates counterclockwise
+                boolean dpadUp      = currentGamepad2.dpad_up,      // extends
+                        dpadDown    = currentGamepad2.dpad_down,    // retracts
+                        rightBumper = currentGamepad2.right_bumper, // rotates clockwise
+                        leftBumper  = currentGamepad2.left_bumper;  // rotates counterclockwise
 
                 // if dpadUp, 1, else if down, -1, else 0
                 extensionPower = dpadUp ? 1 : dpadDown ? -1 : 0;
@@ -209,9 +223,9 @@ public class DragonsDriver extends LinearOpMode {
             // --------------------- Limelight ---------------------
             if (DragonsLimelight.isValid) {
                 // --------------------- Pipeline Switching ---------------------
-                if (currentGamepad1.b && !previousGamepad1.b) { //rising edge
+                if (currentGamepad2.b && !previousGamepad2.b) { //rising edge
                     DragonsLimelight.setPipeline(YELLOW);
-                } else if (!currentGamepad1.b && previousGamepad1.b) { //falling edge
+                } else if (!currentGamepad2.b && previousGamepad2.b) { //falling edge
                     DragonsLimelight.setPipeline(runPipeline);
                 }
 
@@ -236,7 +250,7 @@ public class DragonsDriver extends LinearOpMode {
                 }
 
                 double botHeading = Global.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
-                telemetry.addData("                                    IMU heading", Math.toDegrees(botHeading));
+                telemetry.addData("IMU heading", Math.toDegrees(botHeading));
 
                 // calls for movement
                 double[] drivePowers = MoveRobot.FC(botHeading, x, y, rightX, 1); // x, y, and rightX are the gamepad inputs
@@ -248,10 +262,10 @@ public class DragonsDriver extends LinearOpMode {
 
                 //telemetry
                 telemetry.addLine();
-                telemetry.addData("                                leftFront power", String.valueOf(Math.round(Global.leftFront.getPower())));
-                telemetry.addData("                               rightFront power", String.valueOf(Math.round(Global.rightFront.getPower())));
-                telemetry.addData("                                 leftBack power", String.valueOf(Math.round(Global.leftBack.getPower())));
-                telemetry.addData("                                rightBack power", String.valueOf(Math.round(Global.rightBack.getPower())));
+                telemetry.addData("leftFront power", String.valueOf(Math.round(Global.leftFront.getPower())));
+                telemetry.addData("rightFront power", String.valueOf(Math.round(Global.rightFront.getPower())));
+                telemetry.addData("leftBack power", String.valueOf(Math.round(Global.leftBack.getPower())));
+                telemetry.addData("rightBack power", String.valueOf(Math.round(Global.rightBack.getPower())));
             }
 
             telemetry.update();

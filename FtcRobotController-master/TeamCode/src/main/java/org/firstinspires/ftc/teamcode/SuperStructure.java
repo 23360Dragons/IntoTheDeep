@@ -83,7 +83,7 @@ public class SuperStructure {
         }
 
         public double getTPD () {
-            return this.rightMotor.getMotorType().getTicksPerRev() / 360;
+            return this.leftMotor.getMotorType().getTicksPerRev() / 360;
         }
 
         public Positions getPosition() {

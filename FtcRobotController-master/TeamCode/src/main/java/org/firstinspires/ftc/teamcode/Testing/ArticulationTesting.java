@@ -49,8 +49,8 @@ public class ArticulationTesting extends LinearOpMode {
         while (opModeIsActive()) {
             controller.setPID(p,i,d);
 
-            double  armPosition = (superStructure.articulation.getPosition().right / ticks_per_degree) * 60 /* to account for gearbox*/, // in degrees
-                    pid = controller.calculate(armPosition, target),
+            double  armPosition = (superStructure.articulation.getPosition().left / ticks_per_degree) * 60; /* to account for gearbox*/ // in degrees
+                    double pid = controller.calculate(armPosition, target),
                     ff = Math.cos(Math.toRadians(superStructure.articulation.getPosition().right)) * f,
                     power = pid + ff;
 

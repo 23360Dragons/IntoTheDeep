@@ -18,8 +18,6 @@ public class DragonsLimelight {
     private static int currentPipeline;
     private static LLResult result;
 
-    private static LLResult pythonRes;
-
     public static void initialize(HardwareMap hardwareMap, Telemetry telemetry) {
         try {
             telemetry.addLine("Configuring limelight...");
@@ -48,11 +46,9 @@ public class DragonsLimelight {
                 double x = pos.x; // Display orientation on telemetry
                 double y = pos.y;
                 double z = pos.z;
-                telemetry.addData("Yaw (Z)", z);
+                telemetry.addData("Yaw (Z)",   z);
                 telemetry.addData("Pitch (Y)", y);
-                telemetry.addData("Roll (X)", x);
-
-
+                telemetry.addData("Roll (X)",  x);
 
                 if (DragonsLights.isValid) {
                     switch (currentPipeline) {
@@ -77,18 +73,20 @@ public class DragonsLimelight {
                     }
                 }
 
-                telemetry.addData("Python Results", pythonRes);
-
                 // getting rotation of the result. TODO: make this work
 
                 List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
 
                 if (!colorResults.isEmpty()) {
                     telemetry.addLine("true");
-                    for (LLResultTypes.ColorResult cr : colorResults) {
-                        List<List<Double>> la = cr.getTargetCorners(); // should return {{0,0}, {1,0}, {1,1}, {0,1}} or something like that; TODO make sure it is enabled in output tab
 
-                        telemetry.addData("CR target corners", la.toString());
+                    for (LLResultTypes.ColorResult cr : colorResults) {
+                        List<List<Double>> la = cr.getTargetCorners(); // should return {{0,0}, {1,0}, {1,1}, {0,1}} or something like that
+
+                        telemetry.addData("CR target corners", la.get(0).toString());
+                        telemetry.addData("CR target corners", la.get(1).toString());
+
+
                     }
                 }
 
