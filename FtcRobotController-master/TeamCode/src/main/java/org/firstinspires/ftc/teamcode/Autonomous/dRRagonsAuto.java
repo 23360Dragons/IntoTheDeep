@@ -95,6 +95,14 @@ public class dRRagonsAuto extends LinearOpMode {
            limelight = hardwareMap.get(Limelight3A.class, "limelight");
            limelight.start();
        }
+       public class LarryBlues implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               
+               return false;
+           }
+       }
        public void setPipeline (int larry){
            limelight.pipelineSwitch(larry);
        }
