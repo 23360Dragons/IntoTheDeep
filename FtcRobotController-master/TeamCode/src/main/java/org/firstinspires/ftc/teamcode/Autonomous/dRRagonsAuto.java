@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.InstantFunction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
@@ -27,7 +26,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.utils.Global;
-import org.firstinspires.ftc.teamcode.utils.init.DragonsLimelight;
 
 //import org.firstinspires.ftc.teamcode.MecanumDrive;
 @Config
@@ -42,7 +40,17 @@ public class dRRagonsAuto extends LinearOpMode {
 
             rightLinear = hardwareMap.get(DcMotorEx.class, "rightLinear");
             rightLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            rightLinear.setDirection(DcMotorSimple.Direction.REVERSE);
+            rightLinear.setDirection(DcMotorSimple.Direction.FORWARD);
+        }
+        public class ElevatorUp implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                //TODO make linear slide code using encoders based on limelight view of sample
+                return false;
+            }
+        }
+        public Action LiftUp() {
+            return new ElevatorUp();
         }
    }
    public class Armz {
@@ -64,17 +72,18 @@ public class dRRagonsAuto extends LinearOpMode {
            rightArtie = hardwareMap.get(Servo.class, "rightArtie");
        }
    }
-   public class Limitz {
-       private Servo leftLimit, rightLimit;
-       public Limitz (HardwareMap hardwareMap){
-           leftLimit = hardwareMap.get(Servo.class, "leftLimit");
-           rightLimit = hardwareMap.get(Servo.class, "rightLimit");
-       }
-   }
    public class Clawz {
        private Servo claw;
        public Clawz (HardwareMap hardwareMap){
            claw = hardwareMap.get(Servo.class, "claw");
+       }
+       public class CloseClawz implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
+               return false;
+           }
        }
    }
    public class Seesaw {
@@ -90,39 +99,91 @@ public class dRRagonsAuto extends LinearOpMode {
        }
    }
    public class LarryLime {
-       private Limelight3A limelight;
+       public Limelight3A littleLarryLime;
        public LarryLime(HardwareMap hardwareMap) {
-           limelight = hardwareMap.get(Limelight3A.class, "limelight");
-           limelight.start();
+           littleLarryLime = hardwareMap.get(Limelight3A.class, "limelight");
+           littleLarryLime.start();
        }
-       public class LarryBlues implements Action {
+       public class LarryLimeBluest implements Action {
 
            @Override
-           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               
+           public boolean run(@NonNull TelemetryPacket packet) {
+               littleLarryLime.pipelineSwitch(Global.BLUE);
                return false;
            }
        }
-       public void setPipeline (int larry){
-           limelight.pipelineSwitch(larry);
+       public Action LarryLimeBlues() {
+           return new LarryLimeBluest();
        }
-       //TODO make subclass actions to set pipeline
+       public class LarryLimeRed implements Action {
+           @Override
+           public boolean run(@NonNull TelemetryPacket packet){
+               littleLarryLime.pipelineSwitch(Global.RED);
+               return false;
+           }
+       }
+       public Action LarryLimeRedTV() {
+           return new LarryLimeRed();
+       }
+       public class LarryLimeYeller implements Action {
+           @Override
+           public boolean run(@NonNull TelemetryPacket packet){
+               littleLarryLime.pipelineSwitch(Global.YELLOW);
+               return false;
+           }
+       }
+       public Action LarryLimeYellow() {
+           return new LarryLimeYeller();
+       }
    }
    public class ThisLittleLight {
-       private RevBlinkinLedDriver light;
+       private RevBlinkinLedDriver lilLight;
 
        public ThisLittleLight(HardwareMap hardwareMap) {
-           light = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+           lilLight = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
        }
-       public class Bushel implements Action {
+       public class Bushels implements Action {
            @Override
-           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-
+           public boolean run(@NonNull TelemetryPacket packet) {
+               lilLight.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
                return false;
            }
-
+       }
+       public Action Bushel (){
+           return new Bushels();
+       }
+       public class YellowGlow implements Action {
+           @Override
+           public boolean run(@NonNull TelemetryPacket packet){
+               lilLight.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+               return false;
+           }
+       }
+       public Action LetTheYellowShine (){
+           return new YellowGlow();
+       }
+       public class BlueGlow implements Action {
+           @Override
+           public boolean run(@NonNull TelemetryPacket packet){
+               lilLight.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+               return false;
+           }
+       }
+       public Action LetTheBlueShine (){
+           return new BlueGlow();
+       }
+       public class RedGlow implements Action {
+           @Override
+           public boolean run(@NonNull TelemetryPacket packet){
+               lilLight.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+               return false;
+           }
+       }
+       public Action LetTheRedShine (){
+           return new RedGlow();
        }
    }
+
     public class FriendlyFire {
         private SparkFunOTOS sensor_otos;
         public FriendlyFire (HardwareMap hardwareMap){
@@ -158,6 +219,15 @@ public class dRRagonsAuto extends LinearOpMode {
         Pose2d startPose = null;
         Pose2d notSelected= new Pose2d(0,0,0);
         int starty = 0;
+        Linearz linearSlidez = new Linearz(hardwareMap);
+        Armz ourArmz = new Armz(hardwareMap);
+        Artie littleArtie = new Artie(hardwareMap);
+        Clawz clawz = new Clawz(hardwareMap);
+        Seesaw seesaw = new Seesaw(hardwareMap);
+        TwistNTurn twistyturny = new TwistNTurn(hardwareMap);
+        LarryLime littleLarryLime = new LarryLime(hardwareMap);
+        ThisLittleLight littleLight = new ThisLittleLight(hardwareMap);
+
 
         while (opModeInInit()){
 
@@ -174,23 +244,25 @@ public class dRRagonsAuto extends LinearOpMode {
             switch (starty) {
                 case 1:
                     startPose = blueStartBasket;
-
+                    Actions.runBlocking(littleLarryLime.LarryLimeYellow());
                     telemetry.addLine("Starting Position Set To Blue, Basket Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
                 case 2:
                     startPose = redStartBasket;
-
+                    Actions.runBlocking(littleLarryLime.LarryLimeYellow());
                     telemetry.addLine("Starting Position Set To Red, Basket Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
                 case 3:
                     startPose = blueStartObserve;
+                    Actions.runBlocking(littleLarryLime.LarryLimeBlues());
                     telemetry.addLine("Starting Position Set To Blue, Observation Zone Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
                 case 4:
                     startPose = redStartObserve;
+                    Actions.runBlocking(littleLarryLime.LarryLimeRedTV());
                     telemetry.addLine("Starting Position Set To Red, Observation Zone Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
@@ -200,6 +272,8 @@ public class dRRagonsAuto extends LinearOpMode {
                     break;
             }
         }
+
+
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
         FriendlyFire friendlyFire = new FriendlyFire(hardwareMap);
@@ -277,6 +351,7 @@ public class dRRagonsAuto extends LinearOpMode {
         Actions.runBlocking(
                 new SequentialAction(
                         autonomousAnonymous
+
                 )
         );
     }
