@@ -79,8 +79,8 @@ public class Arm {
         public boolean isValid;
         private Servo claw;
 
-        private double openRotation   = 90;
-        private double closedRotation = 0;
+        private final double openRotation   = 90;
+        private final double closedRotation = 0;
 
         Claw (HardwareMap hardwareMap) {
             try {

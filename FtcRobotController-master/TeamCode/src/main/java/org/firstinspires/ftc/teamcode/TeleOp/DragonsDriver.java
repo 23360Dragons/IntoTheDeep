@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.utils.Global.RIGHT;
 import static org.firstinspires.ftc.teamcode.utils.Global.YELLOW;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -24,6 +25,7 @@ import org.firstinspires.ftc.teamcode.utils.init.DragonsOTOS;
 import org.firstinspires.ftc.teamcode.utils.init.DriveMotor;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
+@Config
 @TeleOp(name = "DragonsDriver", group = "TeleOp")
 public class DragonsDriver extends LinearOpMode {
     //<editor-fold desc="--------------------- Local Constants ---------------------">
@@ -31,6 +33,8 @@ public class DragonsDriver extends LinearOpMode {
     static Gamepad currentGamepad2;
     static Gamepad previousGamepad1;
     static Gamepad previousGamepad2;
+
+    public static double SSspeed = 0.25;
 
     static int runPipeline;
 
@@ -90,28 +94,28 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.addLine("Press Y for Red Right");
             telemetry.update();
 
-            if (gamepad1.a) {
+            if (gamepad2.a) {
                 startingPos = ("Blue Left");
                 startingColor = BLUE;
                 startingSide = LEFT;
 
                 colorIsSet = true;
                 sideIsSet = true;
-            } else if (gamepad1.b) {
+            } else if (gamepad2.b) {
                 startingPos = ("Blue Right");
                 startingColor = BLUE;
                 startingSide = RIGHT;
 
                 colorIsSet = true;
                 sideIsSet = true;
-            } else if (gamepad1.x) {
+            } else if (gamepad2.x) {
                 startingPos = ("Red Left");
                 startingColor = RED;
                 startingSide = LEFT;
 
                 colorIsSet = true;
                 sideIsSet = true;
-            } else if (gamepad1.y) {
+            } else if (gamepad2.y) {
                 startingPos = ("Red Right");
                 startingColor = RED;
                 startingSide = RIGHT;
@@ -178,46 +182,38 @@ public class DragonsDriver extends LinearOpMode {
 
             // --------------------- SuperStructure ---------------------
 
-            //TODO TODO TODO TESTING DELETE
-            /*if (Global.superStructure.articulation.isValid) {
-                boolean rightBumper = currentGamepad1.right_bumper, // rotates clockwise
-                        leftBumper  = currentGamepad1.left_bumper;  // rotates counterclockwise
-
-                double articulationPower = rightBumper ? 1 : leftBumper ? -1 : 0;
-
-                Global.superStructure.articulation.setPower(articulationPower * 0.25);
-
-                telemetry.addData("Super Structure articulation power             ", Global.superStructure.articulation.getPower());
-//                telemetry.addData("Super Structure current arm position in degrees", Global.superStructure.articulation.getPosition().right);
-            }*/
-
             if (Global.superStructure.isValid) {
-                double SSspeed = 0.5,
-                        articulationPower,
-                        extensionPower;
+//                double  articulationPower,
+//                        extensionPower;
+//
+//                boolean dpadUp      = currentGamepad2.dpad_up,      // extends
+//                        dpadDown    = currentGamepad2.dpad_down,    // retracts
+//                        rightBumper = currentGamepad2.right_bumper, // rotates up
+//                        leftBumper  = currentGamepad2.left_bumper;  // rotates down
+//
+//                // if dpadUp, 1, else if down, -1, else 0
+//                extensionPower = dpadUp ? 1 : dpadDown ? -1 : 0;
+//
+                double  leftMotPow = -gamepad2.left_stick_y,
+                        rightMotPow /*previously extensionPower*/ = -gamepad2.right_stick_y;
 
-                boolean dpadUp      = currentGamepad2.dpad_up,      // extends
-                        dpadDown    = currentGamepad2.dpad_down,    // retracts
-                        rightBumper = currentGamepad2.right_bumper, // rotates clockwise
-                        leftBumper  = currentGamepad2.left_bumper;  // rotates counterclockwise
-
-                // if dpadUp, 1, else if down, -1, else 0
-                extensionPower = dpadUp ? 1 : dpadDown ? -1 : 0;
-
-                articulationPower = rightBumper ? 1 : leftBumper ? -1 : 0;
-
-                if (currentGamepad1.x) {
+                if (currentGamepad2.x) {
                     SSspeed = 1;
                 }
 
-                Global.superStructure.articulation.setPower(articulationPower * SSspeed);
-                Global.superStructure.extension.setPower(extensionPower * SSspeed);
+                Global.superStructure.extension.setLeftPower (leftMotPow  * SSspeed);
+                Global.superStructure.extension.setRightPower(rightMotPow * SSspeed);
+
+//                Global.superStructure.articulation.setPower(articulationPower * SSspeed);
+//                Global.superStructure.extension.setPower(extensionPower * SSspeed);
 
                 telemetry.addData("Super Structure extension power                ", Global.superStructure.extension.getPower());
-                telemetry.addData("Super Structure current ext position in degrees", Global.superStructure.extension.getPosition().right);
-                telemetry.addData("Super Structure articulation power             ", Global.superStructure.articulation.getPower());
-                telemetry.addData("Super Structure current arm position in degrees", Global.superStructure.articulation.getPosition().right);
-                telemetry.addData("Super Structure speed                          ", SSspeed);
+                telemetry.addData("Left Motor Power Input", leftMotPow);
+                telemetry.addData("Right Motor Power Input", rightMotPow);
+//                telemetry.addData("Super Structure current ext position in degrees", Global.superStructure.extension.getPosition().right);
+//                telemetry.addData("Super Structure articulation power             ", Global.superStructure.articulation.getPower());
+//                telemetry.addData("Super Structure right arm position in degrees",   Global.superStructure.articulation.getPosition().right);
+//                telemetry.addData("Super Structure left arm position in degrees",    Global.superStructure.articulation.getPosition().left);
             }
 
             // --------------------- Limelight ---------------------

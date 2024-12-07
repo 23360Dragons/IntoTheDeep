@@ -47,9 +47,12 @@ public class SuperStructure {
 
         Articulation (HardwareMap hardwareMap) {
             try {
-                leftMotor = hardwareMap.get(DcMotorEx.class, "leftArticulationMotor");
+                leftMotor = hardwareMap.get(DcMotorEx.class, "leftArtie");
                 leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                // STOP AND Reset CANNOT BE AFTER RUN WITHOUT ENCODER - NOTHING WORKS IF YOU DO
                 leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+                //todo possibly swap order?
                 leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             } catch (IllegalArgumentException e) {
                 Global.exceptions.append("Configuration Error: ").append("leftArticulationMotor").append(" does not exist").append("\n");
@@ -58,11 +61,10 @@ public class SuperStructure {
             }
 
             try {
-                rightMotor = hardwareMap.get(DcMotorEx.class, "rightArticulationMotor");
+                rightMotor = hardwareMap.get(DcMotorEx.class, "rightArtie");
                 rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                rightMotor.setDirection(DcMotor.Direction.REVERSE);
             } catch (IllegalArgumentException e) {
                 Global.exceptions.append("Configuration Error: ").append("rightArticulationMotor").append(" does not exist").append("\n");
                 Global.exceptionOccurred = true;
@@ -105,21 +107,19 @@ public class SuperStructure {
         }
     }
 
-    public class Extension {
-        private DcMotorEx leftMotor;
-        private DcMotorEx rightMotor;
+    public static class Extension {
+        private DcMotor leftMotor;
+        private DcMotor rightMotor;
 
-        public boolean isValid;
+        public boolean isValid = true;
         private double power;
 
         Extension (HardwareMap hardwareMap) {
             try {
-                leftMotor = hardwareMap.get(DcMotorEx.class, "leftExtensionMotor");
-                leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                leftMotor = hardwareMap.get(DcMotor.class, "leftLinear");
+//                leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-                leftMotor.setDirection(DcMotor.Direction.REVERSE);
             } catch (IllegalArgumentException e) {
                 Global.exceptions.append("Configuration Error: ").append("left extension motor").append(" does not exist").append("\n");
                 Global.exceptionOccurred = true;
@@ -127,9 +127,9 @@ public class SuperStructure {
             }
 
             try {
-                rightMotor = hardwareMap.get(DcMotorEx.class, "rightExtensionMotor");
-                rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                rightMotor = hardwareMap.get(DcMotor.class, "rightLinear");
+//                rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             } catch (IllegalArgumentException e) {
                 Global.exceptions.append("Configuration Error: ").append("right extension motor").append(" does not exist").append("\n");
@@ -144,6 +144,14 @@ public class SuperStructure {
 
             this.power = power;
         }
+        
+        public void setLeftPower (double power) {
+            leftMotor.setPower(power);
+        }
+
+        public void setRightPower (double power) {
+            rightMotor.setPower(power);
+        }
 
         public double getPower() {
             return this.power;
@@ -153,8 +161,8 @@ public class SuperStructure {
             return this.rightMotor.getMotorType().getTicksPerRev() / 360;
         }
 
-        public Positions getPosition() {
-            return new Positions(leftMotor.getCurrentPosition() / getTPD(), rightMotor.getCurrentPosition() / getTPD());
-        }
+//        public Positions getPosition() {
+//            return new Positions(leftMotor.getCurrentPosition() / getTPD(), rightMotor.getCurrentPosition() / getTPD());
+//        }
     }
 }

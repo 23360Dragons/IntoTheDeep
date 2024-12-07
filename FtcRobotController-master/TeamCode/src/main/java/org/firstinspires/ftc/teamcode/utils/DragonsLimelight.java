@@ -83,10 +83,10 @@ public class DragonsLimelight {
                     for (LLResultTypes.ColorResult cr : colorResults) {
                         List<List<Double>> la = cr.getTargetCorners(); // should return {{0,0}, {1,0}, {1,1}, {0,1}} or something like that
 
+                        double angle = rotateClaw(la);
                         telemetry.addData("CR target corners", la.get(0).toString());
                         telemetry.addData("CR target corners", la.get(1).toString());
-
-
+                        telemetry.addData("Target Angle", angle);
                     }
                 }
 
@@ -108,6 +108,16 @@ public class DragonsLimelight {
     public static void setPipeline (int targetPipeline) {
         Global.limelight.pipelineSwitch(targetPipeline);
         currentPipeline = targetPipeline;
+    }
+
+    public static double rotateClaw (List<List<Double>> cr) {
+        List<Double> tl = cr.get(0),
+                     tr = cr.get(1);
+
+        double rise  = Math.abs(tl.get(0) - tr.get(0)),
+                run  = Math.abs(tl.get(1) - tr.get(1));
+
+        return Math.toDegrees(Math.tan(Math.toRadians(rise/run))) + 30;
     }
 
     public static int getPipeline () {
