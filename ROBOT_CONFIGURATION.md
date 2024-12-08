@@ -10,7 +10,7 @@
 - PORT 1 : claw
 - PORT 2 : twist
 - PORT 3 : tilt
-### Limelight
+### USB
 - USB-A 3.0 : Limelight 3A
 
 ## Expansion Hub
