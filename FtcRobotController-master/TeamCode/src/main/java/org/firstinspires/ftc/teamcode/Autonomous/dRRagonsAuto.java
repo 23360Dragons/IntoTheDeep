@@ -13,11 +13,14 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 
 // Non-RR imports
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -26,6 +29,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.utils.Global;
+
+import java.util.List;
 
 //import org.firstinspires.ftc.teamcode.MecanumDrive;
 @Config
@@ -42,10 +47,12 @@ public class dRRagonsAuto extends LinearOpMode {
             rightLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightLinear.setDirection(DcMotorSimple.Direction.FORWARD);
         }
+
         public class ElevatorUp implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                //TODO make linear slide code using encoders based on limelight view of sample
+                leftLinear.setTargetPosition(0);
+
                 return false;
             }
         }
@@ -81,9 +88,23 @@ public class dRRagonsAuto extends LinearOpMode {
 
            @Override
            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-
+               claw.setPosition(0.5);
                return false;
            }
+       }
+       public Action CloseClaw(){
+           return new CloseClawz();
+       }
+       public class OpenClawz implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               claw.setPosition(1);
+               return false;
+           }
+       }
+       public Action OpenClaw(){
+           return new OpenClawz();
        }
    }
    public class Seesaw {
@@ -96,6 +117,25 @@ public class dRRagonsAuto extends LinearOpMode {
        private Servo twist;
        public TwistNTurn (HardwareMap hardwareMap){
            twist = hardwareMap.get(Servo.class, "twist");
+       }
+       public class GoingHome implements Action {
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               twist.setPosition(0.49);
+               return false;
+           }
+       }
+       public Action Resetting() {
+           return new GoingHome();
+       }
+
+       public class Postitioning implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
+               return false;
+           }
        }
    }
    public class LarryLime {
@@ -134,6 +174,35 @@ public class dRRagonsAuto extends LinearOpMode {
        }
        public Action LarryLimeYellow() {
            return new LarryLimeYeller();
+       }
+       public double rotateClaw (List<List<Double>> cr) {
+           List<Double> tl = cr.get(0),
+                   tr = cr.get(1);
+
+           double rise  = Math.abs(tl.get(0) - tr.get(0)),
+                   run  = Math.abs(tl.get(1) - tr.get(1));
+
+           return Math.toDegrees(Math.tan(Math.toRadians(rise/run))) + 30;
+       }
+       public double CalcAngle () {
+               LLResult larrysJudgement = littleLarryLime.getLatestResult();
+               List<LLResultTypes.ColorResult> colorResults = larrysJudgement.getColorResults();
+               double myAngle = 0;
+
+               if (!colorResults.isEmpty()) {
+                   telemetry.addLine("true");
+
+                   for (LLResultTypes.ColorResult cr : colorResults) {
+                       List<List<Double>> la = cr.getTargetCorners(); // should return {{0,0}, {1,0}, {1,1}, {0,1}} or something like that
+
+                       double angle = rotateClaw(la);
+                       telemetry.addData("CR target corners", la.get(0).toString());
+                       telemetry.addData("CR target corners", la.get(1).toString());
+                       telemetry.addData("Target Angle", angle);
+                       myAngle = angle;
+                   }
+               }
+               return myAngle;
        }
    }
    public class ThisLittleLight {
@@ -183,7 +252,6 @@ public class dRRagonsAuto extends LinearOpMode {
            return new RedGlow();
        }
    }
-
     public class FriendlyFire {
         private SparkFunOTOS sensor_otos;
         public FriendlyFire (HardwareMap hardwareMap){
