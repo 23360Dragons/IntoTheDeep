@@ -11,7 +11,7 @@
 - PORT 2 : twist
 - PORT 3 : tilt
 ### USB
-- USB-A 3.0 : Limelight 3A
+- USB-A 3.0 : limelight
 
 ## Expansion Hub
 ### Motors
