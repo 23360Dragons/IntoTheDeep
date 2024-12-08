@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -8,23 +9,23 @@ import org.firstinspires.ftc.teamcode.utils.Global;
 
 public class Arm {
     public boolean isValid;
-    public Elbow   elbow;
-    public Wrist   wrist;
-    public Claw    claw;
+    public Tilt  tilt;
+    public Twist twist;
+    public Claw  claw;
 
     public Arm (HardwareMap hardwareMap, Telemetry telemetry) {
         telemetry.addLine("Configuring Arm Elbow!");
         telemetry.update();
 
-        this.elbow = new Elbow(hardwareMap);
+        this.tilt = new Tilt(hardwareMap);
 
-        telemetry.addData("Arm Elbow configured", elbow.isValid);
+        telemetry.addData("Arm Elbow configured", tilt.isValid);
         telemetry.addLine("Configuring Arm Wrist!");
         telemetry.update();
 
-        this.wrist = new Wrist(hardwareMap);
+        this.twist = new Twist(hardwareMap);
 
-        telemetry.addData("Arm Wrist configured", wrist.isValid);
+        telemetry.addData("Arm Wrist configured", twist.isValid);
         telemetry.addLine("Configuring Arm Claw!");
         telemetry.update();
 
@@ -34,12 +35,12 @@ public class Arm {
         telemetry.update();
     }
 
-    public static class Elbow {
+    public static class Tilt {
         private Servo servo;
         public boolean isValid;
-        Elbow (HardwareMap hardwareMap) {
+        Tilt (HardwareMap hardwareMap) {
             try {
-                servo = hardwareMap.get(Servo.class, "");
+                servo = hardwareMap.get(Servo.class, "tilt");
             } catch (IllegalArgumentException e) {
                 Global.exceptions.append("Configuration Error: ").append("Elbow Servo").append(" does not exist").append("\n");
                 Global.exceptionOccurred = true;
@@ -56,13 +57,13 @@ public class Arm {
         }
     }
 
-    public static class Wrist {
+    public static class Twist {
         public boolean isValid;
         private Servo servo;
 
-        Wrist (HardwareMap hardwareMap) {
+        Twist (HardwareMap hardwareMap) {
             try {
-                servo = hardwareMap.get(Servo.class, ""); // todo: set name
+                servo = hardwareMap.get(Servo.class, "twist"); // todo: set name
             } catch (IllegalArgumentException e) {
                 Global.exceptions.append("Configuration Error: ").append("Wrist pitch").append(" does not exist").append("\n");
                 Global.exceptionOccurred = true;
@@ -79,12 +80,13 @@ public class Arm {
         public boolean isValid;
         private Servo claw;
 
-        private final double openRotation   = 90;
+        private final double openRotation   = 1;
         private final double closedRotation = 0;
 
         Claw (HardwareMap hardwareMap) {
             try {
-                claw = hardwareMap.get(Servo.class, ""); // todo: set name
+                claw = hardwareMap.get(Servo.class, "claw"); // todo: set name
+                claw.scaleRange(0.45, 1);
             } catch (IllegalArgumentException e) {
                 Global.exceptions.append("Configuration Error: ").append("Claw").append(" does not exist").append("\n");
                 Global.exceptionOccurred = true;

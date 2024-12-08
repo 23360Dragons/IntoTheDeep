@@ -47,12 +47,11 @@ public class SuperStructure {
 
         Articulation (HardwareMap hardwareMap) {
             try {
-                leftMotor = hardwareMap.get(DcMotorEx.class, "leftArtie");
+                leftMotor = hardwareMap.get(DcMotorEx.class, "leftArm");
                 leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 // STOP AND Reset CANNOT BE AFTER RUN WITHOUT ENCODER - NOTHING WORKS IF YOU DO
                 leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-                //todo possibly swap order?
                 leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             } catch (IllegalArgumentException e) {
                 Global.exceptions.append("Configuration Error: ").append("leftArticulationMotor").append(" does not exist").append("\n");
@@ -61,7 +60,7 @@ public class SuperStructure {
             }
 
             try {
-                rightMotor = hardwareMap.get(DcMotorEx.class, "rightArtie");
+                rightMotor = hardwareMap.get(DcMotorEx.class, "rightArm");
                 rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -161,8 +160,8 @@ public class SuperStructure {
             return this.rightMotor.getMotorType().getTicksPerRev() / 360;
         }
 
-//        public Positions getPosition() {
-//            return new Positions(leftMotor.getCurrentPosition() / getTPD(), rightMotor.getCurrentPosition() / getTPD());
-//        }
+        public Positions getPosition() {
+            return new Positions(leftMotor.getCurrentPosition() / getTPD(), rightMotor.getCurrentPosition() / getTPD());
+        }
     }
 }

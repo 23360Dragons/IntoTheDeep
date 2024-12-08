@@ -86,7 +86,7 @@ public class DragonsLimelight {
                         double angle = rotateClaw(la);
                         telemetry.addData("CR target corners", la.get(0).toString());
                         telemetry.addData("CR target corners", la.get(1).toString());
-                        telemetry.addData("Target Angle", angle);
+                        telemetry.addData("Rotate to angle", angle);
                     }
                 }
 
@@ -111,13 +111,15 @@ public class DragonsLimelight {
     }
 
     public static double rotateClaw (List<List<Double>> cr) {
+        int offset = 30;
+
         List<Double> tl = cr.get(0),
                      tr = cr.get(1);
 
         double rise  = Math.abs(tl.get(0) - tr.get(0)),
                 run  = Math.abs(tl.get(1) - tr.get(1));
 
-        return Math.toDegrees(Math.tan(Math.toRadians(rise/run))) + 30;
+        return Math.toDegrees(Math.tan(Math.toRadians(rise/run))) + offset;
     }
 
     public static int getPipeline () {
