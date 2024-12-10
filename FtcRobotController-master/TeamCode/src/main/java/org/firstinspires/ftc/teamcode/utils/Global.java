@@ -27,6 +27,6 @@ public class Global {
     public static SparkFunOTOS sparkFunOTOS;
     public static SuperStructure superStructure;
 
-    public static RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.FORWARD;
-    public static RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection   = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
+    public static RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+    public static RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection   = RevHubOrientationOnRobot.UsbFacingDirection.DOWN;
 }

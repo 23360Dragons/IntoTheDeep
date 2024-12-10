@@ -114,11 +114,11 @@ public class DragonsDriver {
 
         if(count > 0 && count < 50)
         {
-            color=true;
+            color = true;
         }
         else if (count> 50 && count < 100)
         {
-            color =false;
+            color = false;
         }
         else if(count>100)
         {
