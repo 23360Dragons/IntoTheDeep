@@ -2,15 +2,14 @@ package org.firstinspires.ftc.teamcode;
 
 
 
-import static com.acmerobotics.roadrunner.ftc.OTOSKt.OTOSPoseToRRPose;
-import static com.acmerobotics.roadrunner.ftc.OTOSKt.RRPoseToOTOSPose;
+//import static com.acmerobotics.roadrunner.ftc.OTOSKt.OTOSPoseToRRPose;
+//import static com.acmerobotics.roadrunner.ftc.OTOSKt.RRPoseToOTOSPose;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.DownsampledWriter;
 import com.acmerobotics.roadrunner.ftc.FlightRecorder;
-import com.acmerobotics.roadrunner.ftc.SparkFunOTOSCorrected;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -62,7 +61,7 @@ public class SparkFunOTOSDrive extends MecanumDrive {
     }
 
     public static SparkFunOTOSDrive.Params PARAMS = new SparkFunOTOSDrive.Params();
-    public SparkFunOTOSCorrected otos;
+    public SparkFunOTOS otos;
     private Pose2d lastOtosPose = pose;
 
     private final DownsampledWriter estimatedPoseWriter = new DownsampledWriter("ESTIMATED_POSE", 50_000_000);
@@ -70,7 +69,7 @@ public class SparkFunOTOSDrive extends MecanumDrive {
     public SparkFunOTOSDrive(HardwareMap hardwareMap, Pose2d pose) {
         super(hardwareMap, pose);
         FlightRecorder.write("OTOS_PARAMS",PARAMS);
-        otos = hardwareMap.get(SparkFunOTOSCorrected.class,"sensor_otos");
+        otos = hardwareMap.get(SparkFunOTOS.class,"sensor_otos");
         // RR localizer note:
         // don't change the units, it will stop Dashboard field view from working properly
         // and might cause various other issues
@@ -82,7 +81,7 @@ public class SparkFunOTOSDrive extends MecanumDrive {
         System.out.println(otos.setLinearScalar(PARAMS.linearScalar));
         System.out.println(otos.setAngularScalar(PARAMS.angularScalar));
 
-        otos.setPosition(RRPoseToOTOSPose(pose));
+//        otos.setPosition(RRPoseToOTOSPose(pose));
         // The IMU on the OTOS includes a gyroscope and accelerometer, which could
         // have an offset. Note that as of firmware version 1.0, the calibration
         // will be lost after a power cycle; the OTOS performs a quick calibration
@@ -113,7 +112,7 @@ public class SparkFunOTOSDrive extends MecanumDrive {
             // I don't like this solution at all, but it preserves compatibility.
             // The only alternative is to add getter and setters, but that breaks compat.
             // Potential alternate solution: timestamp the pose set and backtrack it based on speed?
-            otos.setPosition(RRPoseToOTOSPose(pose));
+//            otos.setPosition(RRPoseToOTOSPose(pose));
         }
         // RR localizer note:
         // The values are passed by reference, so we create variables first,
@@ -127,7 +126,7 @@ public class SparkFunOTOSDrive extends MecanumDrive {
         SparkFunOTOS.Pose2D otosVel = new SparkFunOTOS.Pose2D();
         SparkFunOTOS.Pose2D otosAcc = new SparkFunOTOS.Pose2D();
         otos.getPosVelAcc(otosPose,otosVel,otosAcc);
-        pose = OTOSPoseToRRPose(otosPose);
+//        pose = OTOSPoseToRRPose(otosPose);
         lastOtosPose = pose;
 
         // RR standard
