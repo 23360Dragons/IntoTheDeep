@@ -20,7 +20,6 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -36,6 +35,8 @@ import java.util.List;
 @Config
 @Autonomous(name = "dRRagonsAuto", group = "Autonomous")
 public class dRRagonsAuto extends LinearOpMode {
+   public double amnt;
+   double myAngle;
    public class Linearz {
         private DcMotorEx rightLinear, leftLinear;
         public Linearz(HardwareMap hardwareMap){
@@ -51,15 +52,32 @@ public class dRRagonsAuto extends LinearOpMode {
         public class ElevatorUp implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                leftLinear.setTargetPosition(0);
-
+                leftLinear.setPower(0.1);
+                rightLinear.setPower(0.1);
+                sleep(1000);
+                leftLinear.setPower(0);
+                rightLinear.setPower(0);
                 return false;
             }
         }
-        public Action LiftUp() {
+        public Action GoUp() {
             return new ElevatorUp();
         }
-   }
+        public class ElevatorDown implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                leftLinear.setPower(-0.1);
+                rightLinear.setPower(-0.1);
+                sleep(1000);
+                leftLinear.setPower(0);
+                rightLinear.setPower(0);
+                return false;
+            }
+        }
+        public Action GoDown(){
+            return new ElevatorDown();
+        }
+   } //yes TODO test and more maybe
    public class Armz {
        private DcMotorEx leftArm, rightArm;
        public Armz (HardwareMap hardwareMap){
@@ -71,14 +89,14 @@ public class dRRagonsAuto extends LinearOpMode {
            rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
            rightArm.setDirection(DcMotorSimple.Direction.REVERSE);
        }
-   }
+   } //TODO make this
    public class Artie {
        private Servo leftArtie, rightArtie;
        public Artie(HardwareMap hardwareMap){
            leftArtie = hardwareMap.get(Servo.class,"leftArtie");
            rightArtie = hardwareMap.get(Servo.class, "rightArtie");
        }
-   }
+   } //TODO make this
    public class Clawz {
        private Servo claw;
        public Clawz (HardwareMap hardwareMap){
@@ -99,20 +117,20 @@ public class dRRagonsAuto extends LinearOpMode {
 
            @Override
            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               claw.setPosition(1);
+               claw.setPosition(0.8);
                return false;
            }
        }
        public Action OpenClaw(){
            return new OpenClawz();
        }
-   }
+   } //yes done? test?
    public class Seesaw {
        private Servo tilt;
        public Seesaw (HardwareMap hardwareMap){
            tilt = hardwareMap.get(Servo.class, "tilt");
        }
-   }
+   } //what is this again?? TODO make this
    public class TwistNTurn {
        private Servo twist;
        public TwistNTurn (HardwareMap hardwareMap){
@@ -128,6 +146,17 @@ public class dRRagonsAuto extends LinearOpMode {
        public Action Resetting() {
            return new GoingHome();
        }
+       public class ThisWay implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               twist.setPosition(amnt);
+               return false;
+           }
+       }
+       public Action TurnClaw () {
+           return new ThisWay();
+       }
 
        public class Postitioning implements Action {
 
@@ -137,7 +166,7 @@ public class dRRagonsAuto extends LinearOpMode {
                return false;
            }
        }
-   }
+   } //yes done? test?
    public class LarryLime {
        public Limelight3A littleLarryLime;
        public LarryLime(HardwareMap hardwareMap) {
@@ -187,7 +216,7 @@ public class dRRagonsAuto extends LinearOpMode {
        public double CalcAngle () {
                LLResult larrysJudgement = littleLarryLime.getLatestResult();
                List<LLResultTypes.ColorResult> colorResults = larrysJudgement.getColorResults();
-               double myAngle = 0;
+               myAngle = 0;
 
                if (!colorResults.isEmpty()) {
                    telemetry.addLine("true");
@@ -204,7 +233,18 @@ public class dRRagonsAuto extends LinearOpMode {
                }
                return myAngle;
        }
-   }
+       public class AngleSet implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               amnt = CalcAngle();
+               return false;
+           }
+       }
+       public Action SetAngle () {
+           return new AngleSet();
+       }
+   } //yes done!
    public class ThisLittleLight {
        private RevBlinkinLedDriver lilLight;
 
@@ -251,13 +291,13 @@ public class dRRagonsAuto extends LinearOpMode {
        public Action LetTheRedShine (){
            return new RedGlow();
        }
-   }
-    public class FriendlyFire {
+   } //yes done!
+    public class Sparky {
         private SparkFunOTOS sensor_otos;
-        public FriendlyFire (HardwareMap hardwareMap){
+        public Sparky(HardwareMap hardwareMap){
             sensor_otos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
         }
-    }
+    } //idk what to do here, TODO ??
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -295,6 +335,7 @@ public class dRRagonsAuto extends LinearOpMode {
         TwistNTurn twistyturny = new TwistNTurn(hardwareMap);
         LarryLime littleLarryLime = new LarryLime(hardwareMap);
         ThisLittleLight littleLight = new ThisLittleLight(hardwareMap);
+
 
 
         while (opModeInInit()){
@@ -344,7 +385,7 @@ public class dRRagonsAuto extends LinearOpMode {
 
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
-        FriendlyFire friendlyFire = new FriendlyFire(hardwareMap);
+        Sparky friendlyFire = new Sparky(hardwareMap);
 
         TrajectoryActionBuilder waterPool = drive.actionBuilder(startPose)
                 .strafeTo(blueSpecimen)
@@ -416,10 +457,16 @@ public class dRRagonsAuto extends LinearOpMode {
                 break;
         }
 
+        Action grabby = new SequentialAction (
+                littleLarryLime.SetAngle(),
+                twistyturny.TurnClaw(),
+                clawz.CloseClaw()
+        );
+
         Actions.runBlocking(
                 new SequentialAction(
-                        autonomousAnonymous
-
+                        autonomousAnonymous,
+                        grabby
                 )
         );
     }
