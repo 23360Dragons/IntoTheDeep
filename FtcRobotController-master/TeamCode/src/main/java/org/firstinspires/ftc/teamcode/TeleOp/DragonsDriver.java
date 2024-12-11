@@ -34,7 +34,8 @@ public class DragonsDriver extends LinearOpMode {
     static Gamepad previousGamepad1;
     static Gamepad previousGamepad2;
 
-    public static double SSspeed = 0.25;
+    public static double SSspeed = 0.4;
+    public static double extSpeed = 0.5;
 
     static int runPipeline;
 
@@ -176,22 +177,19 @@ public class DragonsDriver extends LinearOpMode {
 
             //gamepad 1 (DRIVER)
 
-            double  y              = -currentGamepad1.left_stick_y,
-                    x              = currentGamepad1.left_stick_x,
-                    rightX         = currentGamepad1.right_stick_x;
+            double  y      = -currentGamepad1.left_stick_y,
+                    x      = currentGamepad1.left_stick_x,
+                    rightX = currentGamepad1.right_stick_x;
 
             // gamepad 2 (MANUPULATOR)
-            double  leftMotPow     = -currentGamepad2.left_stick_y,
-                    rightMotPow    = -currentGamepad2.right_stick_y;
+            double  articulationPower = -currentGamepad2.left_stick_y,
+                    extensionPower    = -currentGamepad2.right_stick_y;
 
-            boolean SSFullSpeed    = currentGamepad2.x,
+            boolean openClaw       = currentGamepad2.right_bumper, closeClaw = currentGamepad2.left_bumper,
+                    SSFullSpeed    = currentGamepad2.x,
                     recalibrateIMU = currentGamepad1.y,
-                    currentB2      = currentGamepad2.b,
-                    previousB2     = previousGamepad2.b,
-                    linearExtend   = currentGamepad2.dpad_up,
-                    linearRetract  = currentGamepad2.dpad_down,
-                    armRotateUp    = currentGamepad2.right_bumper,
-                    armRotateDOwn  = currentGamepad2.left_bumper;
+                    // set limelight pipeline
+                    currentB2      = currentGamepad2.b, previousB2 = previousGamepad2.b;
 
 
             //</editor-fold>
@@ -199,30 +197,26 @@ public class DragonsDriver extends LinearOpMode {
             // --------------------- SuperStructure ---------------------
 
             if (Global.superStructure.isValid) {
-//                double  articulationPower,
-//                        extensionPower;
-//
-//                // if dpadUp, 1, else if down, -1, else 0
-//                extensionPower = linearExtend ? 1 : linearRetract ? -1 : 0;
-//                articulationPower = armRotateUp ? 1 : armRotateDOwn ? -1 : 0;
-
                 if (SSFullSpeed) {
                     SSspeed = 1;
                 }
 
-                Global.superStructure.extension.setLeftPower(leftMotPow * SSspeed);
-                Global.superStructure.extension.setRightPower(rightMotPow * SSspeed);
+                Global.superStructure.articulation.setPower(articulationPower * SSspeed);
+                Global.superStructure.extension.setPower(extensionPower * extSpeed);
 
-//                Global.superStructure.articulation.setPower(articulationPower * SSspeed);
-//                Global.superStructure.extension.setPower(extensionPower * SSspeed);
+                telemetry.addData("Super Structure extension power", Global.superStructure.extension.getPower());
+                telemetry.addData("Super Structure current ext position in degrees", Global.superStructure.extension.getPosition().right);
+                telemetry.addData("Super Structure articulation power             ", Global.superStructure.articulation.getPower());
+                telemetry.addData("Super Structure right arm position in degrees",   Global.superStructure.articulation.getPosition().right);
+                telemetry.addData("Super Structure left arm position in degrees",    Global.superStructure.articulation.getPosition().left);
+            }
 
-                telemetry.addData("Left Motor Power Input", leftMotPow);
-                telemetry.addData("Right Motor Power Input", rightMotPow);
-//                telemetry.addData("Super Structure extension power", Global.superStructure.extension.getPower());
-//                telemetry.addData("Super Structure current ext position in degrees", Global.superStructure.extension.getPosition().right);
-//                telemetry.addData("Super Structure articulation power             ", Global.superStructure.articulation.getPower());
-//                telemetry.addData("Super Structure right arm position in degrees",   Global.superStructure.articulation.getPosition().right);
-//                telemetry.addData("Super Structure left arm position in degrees",    Global.superStructure.articulation.getPosition().left);
+            // --------------------- Arm ---------------------
+            if (Global.arm.isValid) {
+                if (openClaw)
+                    Global.arm.claw.open();
+                else if (closeClaw)
+                    Global.arm.claw.close();
             }
 
             // --------------------- Limelight ---------------------

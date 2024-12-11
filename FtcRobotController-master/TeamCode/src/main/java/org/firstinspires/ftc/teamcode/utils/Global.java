@@ -14,8 +14,8 @@ public class Global {
     public static StringBuilder exceptions = new StringBuilder("The following exceptions occurred:\n");
     public static boolean exceptionOccurred = false;
 
-    public static final RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.FORWARD;
-    public static final RevHubOrientationOnRobot.UsbFacingDirection  usbFacingDirection   = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
+    public static final RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+    public static final RevHubOrientationOnRobot.UsbFacingDirection  usbFacingDirection   = RevHubOrientationOnRobot.UsbFacingDirection.DOWN;
 
     public static final int BLUE   = 0;
     public static final int RED    = 1;
