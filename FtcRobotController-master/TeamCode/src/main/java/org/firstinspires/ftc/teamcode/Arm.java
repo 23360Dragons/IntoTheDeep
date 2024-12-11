@@ -17,13 +17,13 @@ public class Arm {
         telemetry.addLine("Configuring Arm Elbow!");
         telemetry.update();
 
-        this.tilt = new Tilt(hardwareMap);
+        this.tilt = new Tilt (hardwareMap);
 
         telemetry.addData("Arm Elbow configured", tilt.isValid);
         telemetry.addLine("Configuring Arm Wrist!");
         telemetry.update();
 
-        this.twist = new Twist(hardwareMap);
+        this.twist = new Twist (hardwareMap);
 
         telemetry.addData("Arm Wrist configured", twist.isValid);
         telemetry.addLine("Configuring Arm Claw!");
@@ -63,7 +63,7 @@ public class Arm {
 
         Twist (HardwareMap hardwareMap) {
             try {
-                servo = hardwareMap.get(Servo.class, "twist"); // todo: set name
+                servo = hardwareMap.get(Servo.class, "twist");
             } catch (IllegalArgumentException e) {
                 Global.exceptions.append("Configuration Error: ").append("Wrist pitch").append(" does not exist").append("\n");
                 Global.exceptionOccurred = true;
@@ -85,7 +85,7 @@ public class Arm {
 
         Claw (HardwareMap hardwareMap) {
             try {
-                claw = hardwareMap.get(Servo.class, "claw"); // todo: set name
+                claw = hardwareMap.get(Servo.class, "claw");
                 claw.scaleRange(0.45, 1);
             } catch (IllegalArgumentException e) {
                 Global.exceptions.append("Configuration Error: ").append("Claw").append(" does not exist").append("\n");

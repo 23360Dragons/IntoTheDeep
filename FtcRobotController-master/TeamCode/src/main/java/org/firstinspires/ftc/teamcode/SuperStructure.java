@@ -54,7 +54,7 @@ public class SuperStructure {
 
                 leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             } catch (IllegalArgumentException e) {
-                Global.exceptions.append("Configuration Error: ").append("leftArticulationMotor").append(" does not exist").append("\n");
+                Global.exceptions.append("Configuration Error: ").append("leftArm").append(" does not exist").append("\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
             }
@@ -65,7 +65,7 @@ public class SuperStructure {
                 rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             } catch (IllegalArgumentException e) {
-                Global.exceptions.append("Configuration Error: ").append("rightArticulationMotor").append(" does not exist").append("\n");
+                Global.exceptions.append("Configuration Error: ").append("rightArm").append(" does not exist").append("\n");
                 Global.exceptionOccurred = true;
                 this.isValid = false;
             }
@@ -120,7 +120,7 @@ public class SuperStructure {
 //                leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             } catch (IllegalArgumentException e) {
-                Global.exceptions.append("Configuration Error: ").append("left extension motor").append(" does not exist").append("\n");
+                Global.exceptions.append("Configuration Error: ").append("leftLinear").append(" does not exist").append("\n");
                 Global.exceptionOccurred = true;
                 this.isValid = false;
             }
@@ -131,7 +131,7 @@ public class SuperStructure {
 //                rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             } catch (IllegalArgumentException e) {
-                Global.exceptions.append("Configuration Error: ").append("right extension motor").append(" does not exist").append("\n");
+                Global.exceptions.append("Configuration Error: ").append("rightLinear").append(" does not exist").append("\n");
                 Global.exceptionOccurred = true;
                 this.isValid = false;
             }
