@@ -1,6 +1,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-public class myEncoder {/* Copyright (c) 2017 FIRST. All rights reserved.
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+@TeleOp
+public class myEncoder extends LinearOpMode{/* Copyright (c) 2017 FIRST. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
@@ -29,13 +36,8 @@ public class myEncoder {/* Copyright (c) 2017 FIRST. All rights reserved.
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+//package org.firstinspires.ftc.robotcontroller.external.samples;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
     /*
      * This OpMode illustrates the concept of driving a path based on encoder counts.
@@ -63,9 +65,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
      * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
      */
 
-    @Autonomous(name="Robot: Auto Drive By Encoder", group="Robot")
-    @Disabled
-    public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
+   // @Autonomous(name="Robot: Auto Drive By Encoder", group="Robot")
+    //@Disabled
+    //public class RobotAutoDriveByEncoder_Linear extends LinearOpMode {
 
         /* Declare OpMode members. */
         private DcMotor         leftDrive   = null;
@@ -188,5 +190,5 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         }
     }
 
-}
+//}
 
