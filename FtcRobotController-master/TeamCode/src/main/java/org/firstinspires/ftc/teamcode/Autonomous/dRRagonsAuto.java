@@ -71,6 +71,15 @@ public class dRRagonsAuto extends LinearOpMode {
            rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
            rightArm.setDirection(DcMotorSimple.Direction.REVERSE);
        }
+       public class ArmToBasket implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               
+               return false;
+           }
+       }
+
    }
    public class Artie {
        private Servo leftArtie, rightArtie;
