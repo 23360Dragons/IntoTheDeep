@@ -1,23 +1,25 @@
 package org.firstinspires.ftc.teamcode.utils.init;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.apache.commons.math3.optim.linear.LinearConstraint;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
 public class DriveMotor {
     public static boolean isValid = true;
-    public static void initialize (HardwareMap hardwareMap, Telemetry telemetry) {
+    public static void initialize (LinearOpMode opmode) {
         try
         {
-            telemetry.addLine("Configuring drive motors...");
-            telemetry.update();
+            opmode.telemetry.addLine("Configuring drive motors...");
+            opmode.telemetry.update();
 
                 //left front
                 try{
-                    Global.leftFront = hardwareMap.get(DcMotorEx.class, "leftFront"); // gets a dcMotor object of the name "name"
+                    Global.leftFront = opmode.hardwareMap.get(DcMotorEx.class, "leftFront"); // gets a dcMotor object of the name "name"
                     Global.leftFront.setDirection(DcMotor.Direction.REVERSE); // fix faulty drive behavior 10/15
                     configure(Global.leftFront);
                 }
@@ -31,7 +33,7 @@ public class DriveMotor {
                 //right front
                 try
                 {
-                    Global.rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+                    Global.rightFront = opmode.hardwareMap.get(DcMotorEx.class, "rightFront");
                     configure(Global.rightFront);
 
                 }
@@ -45,7 +47,7 @@ public class DriveMotor {
                 //left back
                 try
                 {
-                    Global.leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
+                    Global.leftBack = opmode.hardwareMap.get(DcMotorEx.class, "leftBack");
                     configure(Global.leftBack);
                     Global.leftBack.setDirection(DcMotor.Direction.REVERSE);
                 }
@@ -59,7 +61,7 @@ public class DriveMotor {
                 //right back
                 try
                 {
-                    Global.rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
+                    Global.rightBack = opmode.hardwareMap.get(DcMotorEx.class, "rightBack");
                     configure(Global.rightBack);
                 }
                 catch(IllegalArgumentException e)
@@ -69,8 +71,8 @@ public class DriveMotor {
                     isValid = false;
                 }
 
-                telemetry.addLine("Drive motors configured!");
-                telemetry.update();
+                opmode.telemetry.addLine("Drive motors configured!");
+                opmode.telemetry.update();
         }
         catch(Exception ex)
         {

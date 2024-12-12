@@ -36,8 +36,9 @@ public class DragonsLimelight {
         }
     }
 
-    public static void update (Telemetry telemetry) {
+    public static double update (Telemetry telemetry) {
             result = Global.limelight.getLatestResult();
+            double angle = 0;
 
             if (result != null && result.isValid()) {
                 // Get the pose of the robot
@@ -83,7 +84,7 @@ public class DragonsLimelight {
                     for (LLResultTypes.ColorResult cr : colorResults) {
                         List<List<Double>> la = cr.getTargetCorners(); // should return {{0,0}, {1,0}, {1,1}, {0,1}} or something like that
 
-                        double angle = rotateClaw(la);
+                        angle = rotateClaw(la);
                         telemetry.addData("CR target corners", la.get(0).toString());
                         telemetry.addData("CR target corners", la.get(1).toString());
                         telemetry.addData("Rotate to angle", angle);
@@ -103,6 +104,7 @@ public class DragonsLimelight {
                         DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
                 }
             }
+            return angle;
     }
 
     public static void setPipeline (int targetPipeline) {
@@ -116,10 +118,17 @@ public class DragonsLimelight {
         List<Double> tl = cr.get(0),
                      tr = cr.get(1);
 
-        double rise  = Math.abs(tl.get(0) - tr.get(0)),
-                run  = Math.abs(tl.get(1) - tr.get(1));
+        boolean isFacingLeft = tl.get(1) - tr.get(1) < 0;
 
-        return Math.toDegrees(Math.tan(Math.toRadians(rise/run))) + offset;
+        double  rise = Math.abs(tl.get(1) - tr.get(1)),
+                run  = Math.abs(tl.get(0) - tr.get(0));
+
+        double target = Math.toDegrees(Math.tan(Math.toRadians(rise/run)));
+        if (isFacingLeft) {
+            return target + offset;
+        } else {
+            return target - offset;
+        }
     }
 
     public static int getPipeline () {

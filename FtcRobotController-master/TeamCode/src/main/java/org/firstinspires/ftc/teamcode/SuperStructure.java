@@ -116,8 +116,8 @@ public class SuperStructure {
         Extension (HardwareMap hardwareMap) {
             try {
                 leftMotor = hardwareMap.get(DcMotor.class, "leftLinear");
-//                leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             } catch (IllegalArgumentException e) {
                 Global.exceptions.append("Configuration Error: ").append("leftLinear").append(" does not exist").append("\n");
@@ -127,8 +127,8 @@ public class SuperStructure {
 
             try {
                 rightMotor = hardwareMap.get(DcMotor.class, "rightLinear");
-//                rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             } catch (IllegalArgumentException e) {
                 Global.exceptions.append("Configuration Error: ").append("rightLinear").append(" does not exist").append("\n");
@@ -161,7 +161,7 @@ public class SuperStructure {
         }
 
         public Positions getPosition() {
-            return new Positions(leftMotor.getCurrentPosition() / getTPD(), rightMotor.getCurrentPosition() / getTPD());
+            return new Positions(leftMotor.getCurrentPosition(), rightMotor.getCurrentPosition());
         }
     }
 }

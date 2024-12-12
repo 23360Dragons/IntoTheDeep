@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.utils.Global.LEFT;
 import static org.firstinspires.ftc.teamcode.utils.Global.RED;
 import static org.firstinspires.ftc.teamcode.utils.Global.RIGHT;
 import static org.firstinspires.ftc.teamcode.utils.Global.YELLOW;
+import static org.firstinspires.ftc.teamcode.utils.Global.exceptions;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -37,6 +38,8 @@ public class DragonsDriver extends LinearOpMode {
     public static double SSspeed = 0.4;
     public static double extSpeed = 0.5;
 
+    public static double LLAlignAngle = 0;
+
     static int runPipeline;
 
     static String startingPos = "None";
@@ -50,13 +53,13 @@ public class DragonsDriver extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
+        Global.exceptions.delete(0, exceptions.capacity()).append("The following exceptions occurred:\n");
         currentGamepad1  = new Gamepad();
         currentGamepad2  = new Gamepad();
         previousGamepad1 = new Gamepad();
         previousGamepad2 = new Gamepad();
 
-        DriveMotor.initialize(hardwareMap, telemetry);
+        DriveMotor.initialize(this);
 
         DragonsIMU.initialize(hardwareMap, telemetry);
         DragonsLimelight.initialize(hardwareMap, telemetry);
@@ -125,12 +128,11 @@ public class DragonsDriver extends LinearOpMode {
                 sideIsSet = true;
             }
 
-            telemetry.addLine();
             telemetry.addData("Current starting position", startingPos);
         }
 
         //<editor-fold desc="--------------------- Set Limelight Pipeline ---------------------">
-        if (sideIsSet && colorIsSet && DragonsLimelight.isValid && DragonsLights.isValid) {
+        if (sideIsSet && colorIsSet && DragonsLimelight.isValid) {
             DragonsLimelight.setPipeline(startingColor);
             runPipeline = DragonsLimelight.getPipeline();
         } else {
@@ -153,6 +155,7 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.update();
             sleep(2000);
         }
+
         //</editor-fold>
 
         if (isStopRequested()) return;
@@ -181,15 +184,19 @@ public class DragonsDriver extends LinearOpMode {
                     x      = currentGamepad1.left_stick_x,
                     rightX = currentGamepad1.right_stick_x;
 
+            boolean recalibrateIMU = currentGamepad1.y;
+
             // gamepad 2 (MANUPULATOR)
+
             double  articulationPower = -currentGamepad2.left_stick_y,
                     extensionPower    = -currentGamepad2.right_stick_y;
 
             boolean openClaw       = currentGamepad2.right_bumper, closeClaw = currentGamepad2.left_bumper,
                     SSFullSpeed    = currentGamepad2.x,
-                    recalibrateIMU = currentGamepad1.y,
                     // set limelight pipeline
-                    currentB2      = currentGamepad2.b, previousB2 = previousGamepad2.b;
+                    currentB2      = currentGamepad2.b, previousB2 = previousGamepad2.b,
+                    armDown        = currentGamepad2.dpad_down,
+                    armUp          = currentGamepad2.dpad_up;
 
 
             //</editor-fold>
@@ -199,6 +206,8 @@ public class DragonsDriver extends LinearOpMode {
             if (Global.superStructure.isValid) {
                 if (SSFullSpeed) {
                     SSspeed = 1;
+                    extSpeed = 1;
+                    telemetry.addLine("SS FUll SPeed!");
                 }
 
                 Global.superStructure.articulation.setPower(articulationPower * SSspeed);
@@ -206,17 +215,9 @@ public class DragonsDriver extends LinearOpMode {
 
                 telemetry.addData("Super Structure extension power", Global.superStructure.extension.getPower());
                 telemetry.addData("Super Structure current ext position in degrees", Global.superStructure.extension.getPosition().right);
-                telemetry.addData("Super Structure articulation power             ", Global.superStructure.articulation.getPower());
+                telemetry.addData("Super Structure articulation power             ", SSspeed * articulationPower);
                 telemetry.addData("Super Structure right arm position in degrees",   Global.superStructure.articulation.getPosition().right);
                 telemetry.addData("Super Structure left arm position in degrees",    Global.superStructure.articulation.getPosition().left);
-            }
-
-            // --------------------- Arm ---------------------
-            if (Global.arm.isValid) {
-                if (openClaw)
-                    Global.arm.claw.open();
-                else if (closeClaw)
-                    Global.arm.claw.close();
             }
 
             // --------------------- Limelight ---------------------
@@ -228,7 +229,30 @@ public class DragonsDriver extends LinearOpMode {
                     DragonsLimelight.setPipeline(runPipeline);
                 }
 
-                DragonsLimelight.update(telemetry);
+                LLAlignAngle = Math.min(Math.abs(DragonsLimelight.update(telemetry)), 180);
+                telemetry.addData("LLalignTarget", LLAlignAngle);
+            }
+
+            // --------------------- Arm ---------------------
+            if (Global.arm.claw.isValid) {
+                if (openClaw)
+                    Global.arm.claw.open();
+                else if (closeClaw)
+                    Global.arm.claw.close();
+            }
+
+            if (Global.arm.twist.isValid) {
+                Global.arm.twist.setRotation(LLAlignAngle / 270);
+            }
+
+            if (Global.arm.artie.isValid) {
+                if (armUp)
+                    Global.arm.artie.setPosition(Arm.Artie.ArtiePos.UP);
+                else if (armDown)
+                    Global.arm.artie.setPosition(Arm.Artie.ArtiePos.DOWN);
+
+                Global.arm.artie.updatePosition();
+                telemetry.addData("artie pos", Global.arm.artie.getPosition().name());
             }
 
             // --------------------- SparkFun OTOS ---------------------
