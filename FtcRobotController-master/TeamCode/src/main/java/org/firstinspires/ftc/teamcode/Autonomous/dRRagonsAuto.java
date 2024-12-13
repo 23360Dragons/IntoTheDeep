@@ -27,6 +27,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.SparkFunOTOSDrive;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
 import java.util.List;
@@ -50,22 +51,21 @@ public class dRRagonsAuto extends LinearOpMode {
             leftLinear.setDirection(DcMotorSimple.Direction.FORWARD);
             leftLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             leftLinear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            leftLinear.setTargetPositionTolerance(25);
 
             rightLinear = hardwareMap.get(DcMotorEx.class, "rightLinear");
             rightLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightLinear.setDirection(DcMotorSimple.Direction.FORWARD);
             rightLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightLinear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rightLinear.setTargetPositionTolerance(25);
         }
 
         public class ElevatorUp implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                leftLinear.setPower(0.1);
-                rightLinear.setPower(0.1);
-                sleep(1000);
-                leftLinear.setPower(0);
-                rightLinear.setPower(0);
+                //leftLinear.setTargetPosition();
+                //rightLinear.setTargetPosition();
                 return false;
             }
         }
@@ -75,18 +75,15 @@ public class dRRagonsAuto extends LinearOpMode {
         public class ElevatorDown implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                leftLinear.setPower(-0.1);
-                rightLinear.setPower(-0.1);
-                sleep(1000);
-                leftLinear.setPower(0);
-                rightLinear.setPower(0);
+                leftLinear.setTargetPosition(0);
+                rightLinear.setTargetPosition(0);
                 return false;
             }
         }
         public Action GoDown(){
             return new ElevatorDown();
         }
-   } //yes TODO test and more maybe
+   } //finish making when you learn the # of ticks to fully extend
    public class Armz {
        private DcMotorEx leftArm, rightArm;
        public Armz (HardwareMap hardwareMap){
@@ -129,13 +126,15 @@ public class dRRagonsAuto extends LinearOpMode {
            return new ArmToGrab();
        }
 
-   }
-    //TODO make this
+   } //test?
+
    public class Artie {
        private Servo leftArtie, rightArtie;
        public Artie(HardwareMap hardwareMap){
            leftArtie = hardwareMap.get(Servo.class,"leftArtie");
+           leftArtie.scaleRange(0,1);
            rightArtie = hardwareMap.get(Servo.class, "rightArtie");
+           rightArtie.scaleRange(0,1);
            rightArtie.setDirection(Servo.Direction.REVERSE);
        }
 
@@ -176,18 +175,18 @@ public class dRRagonsAuto extends LinearOpMode {
            return new ArtieBack();
        }
 
-   }
-    //TODO make this
+   } //test?
    public class Clawz {
        private Servo claw;
        public Clawz (HardwareMap hardwareMap){
            claw = hardwareMap.get(Servo.class, "claw");
+           claw.scaleRange(0.49, 0.9);
        }
        public class CloseClawz implements Action {
 
            @Override
            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               claw.setPosition(0.47);
+               claw.setPosition(0);
                return false;
            }
        }
@@ -198,24 +197,59 @@ public class dRRagonsAuto extends LinearOpMode {
 
            @Override
            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               claw.setPosition(0.9);
+               claw.setPosition(1);
                return false;
            }
        }
        public Action OpenClaw(){
            return new OpenClawz();
        }
-   } //yes done? test?
+   } //test?
    public class Seesaw {
        private Servo tilt;
-       public Seesaw (HardwareMap hardwareMap){
+       public Seesaw (HardwareMap hardwareMap) {
            tilt = hardwareMap.get(Servo.class, "tilt");
+           tilt.scaleRange(0,1);
        }
-   } //what is this again?? TODO make this
+       public class TiltUp implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               //tilt.setPosition();
+               return false;
+           }
+       }
+       public Action tiltUp (){
+           return new TiltUp();
+       }
+       public class TiltDown implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               //tilt.setPosition();
+               return false;
+           }
+       }
+       public Action tiltDown (){
+           return new TiltDown();
+       }
+       public class TiltBack implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               //tilt.setPosition();
+               return false;
+           }
+       }
+       public Action tiltBack(){
+           return new TiltBack();
+       }
+   } //finish once you find out positions
    public class TwistNTurn {
        private Servo twist;
        public TwistNTurn (HardwareMap hardwareMap){
            twist = hardwareMap.get(Servo.class, "twist");
+           twist.scaleRange(0.167, 0.833);
        }
        public class GoingHome implements Action {
            @Override
@@ -238,16 +272,7 @@ public class dRRagonsAuto extends LinearOpMode {
        public Action TurnClaw () {
            return new ThisWay();
        }
-
-       public class Postitioning implements Action {
-
-           @Override
-           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-
-               return false;
-           }
-       }
-   } //yes done? test?
+   } //test?
    public class LarryLime {
        public Limelight3A littleLarryLime;
        public LarryLime(HardwareMap hardwareMap) {
@@ -325,7 +350,7 @@ public class dRRagonsAuto extends LinearOpMode {
        public Action SetAngle () {
            return new AngleSet();
        }
-   } //yes done!
+   } //test?
    public class ThisLittleLight {
        private RevBlinkinLedDriver lilLight;
 
@@ -372,13 +397,17 @@ public class dRRagonsAuto extends LinearOpMode {
        public Action LetTheRedShine (){
            return new RedGlow();
        }
-   } //yes done!
-    public class Sparky {
+   } //test?
+   public class Sparky extends SparkFunOTOSDrive {
         private SparkFunOTOS sensor_otos;
-        public Sparky(HardwareMap hardwareMap){
+
+        public Sparky(HardwareMap hardwareMap, Pose2d pose) {
+            super(hardwareMap, pose);
             sensor_otos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
         }
-    } //idk what to do here, TODO ??
+
+
+    } //I think this is right... idk tho, gotta test
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -465,7 +494,7 @@ public class dRRagonsAuto extends LinearOpMode {
 
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
-        Sparky friendlyFire = new Sparky(hardwareMap);
+        Sparky friendlyFire = new Sparky(hardwareMap, startPose);
 
         TrajectoryActionBuilder waterPool = drive.actionBuilder(startPose)
                 .strafeTo(blueSpecimen)
