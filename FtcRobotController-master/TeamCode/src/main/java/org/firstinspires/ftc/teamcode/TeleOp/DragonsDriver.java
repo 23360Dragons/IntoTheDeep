@@ -19,11 +19,11 @@ import org.firstinspires.ftc.teamcode.Arm;
 import org.firstinspires.ftc.teamcode.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.utils.init.DriveMotors;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsIMU;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsLights;
 import org.firstinspires.ftc.teamcode.utils.DragonsLimelight;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsOTOS;
-import org.firstinspires.ftc.teamcode.utils.init.DriveMotor;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
 @Config
@@ -47,11 +47,18 @@ public class DragonsDriver extends LinearOpMode {
     static boolean colorIsSet = false;
     static int startingSide;  // 0 is left, 1 is right
     static boolean sideIsSet = false;
+
+    public DriveMotors driveMotors;
+    public DragonsIMU dragonsIMU;
+    public DragonsLimelight dragonsLimelight;
+    public DragonsLights dragonsLights;
+    public DragonsOTOS dragonsOTOS;
+    public SuperStructure superStructure;
+    public Arm arm;
     //</editor-fold>
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         Global.exceptions.delete(0, exceptions.capacity()).append("The following exceptions occurred:\n");
         currentGamepad1  = new Gamepad();
@@ -59,21 +66,22 @@ public class DragonsDriver extends LinearOpMode {
         previousGamepad1 = new Gamepad();
         previousGamepad2 = new Gamepad();
 
-        DriveMotor.initialize(this);
+        //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
+        driveMotors = new DriveMotors(this);
 
-        DragonsIMU.initialize(hardwareMap, telemetry);
-        DragonsLimelight.initialize(hardwareMap, telemetry);
+        dragonsIMU = new DragonsIMU(this);
+        dragonsLimelight = new DragonsLimelight(this);
 
-        DragonsLights.initialize(hardwareMap, telemetry);
+        dragonsLights = new DragonsLights(this);
 
-        if (DragonsLights.isValid)
-            Global.light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+        if (dragonsLights.isValid)
+            dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
-        DragonsOTOS.initialize(hardwareMap, telemetry);
+        dragonsOTOS = new DragonsOTOS(this);
 
-        Global.superStructure = new SuperStructure(hardwareMap, telemetry);
+        superStructure = new SuperStructure(this);
 
-        Global.arm = new Arm(hardwareMap, telemetry);
+        arm = new Arm(this);
         //</editor-fold>
 
         // --------------------- Configuration Error Handing ---------------------
@@ -83,7 +91,7 @@ public class DragonsDriver extends LinearOpMode {
 
             sleep(5000);
 
-            if (!DragonsIMU.isValid || !DriveMotor.isValid) {
+            if (!dragonsIMU.isValid || !driveMotors.isValid) {
                 telemetry.addLine("Critical Error Occurred! The IMU, Motors, and all movement code will not work.");
                 telemetry.update();
                 sleep(2000);
@@ -132,15 +140,15 @@ public class DragonsDriver extends LinearOpMode {
         }
 
         //<editor-fold desc="--------------------- Set Limelight Pipeline ---------------------">
-        if (sideIsSet && colorIsSet && DragonsLimelight.isValid) {
-            DragonsLimelight.setPipeline(startingColor);
-            runPipeline = DragonsLimelight.getPipeline();
+        if (sideIsSet && colorIsSet && dragonsLimelight.isValid) {
+            dragonsLimelight.setPipeline(startingColor);
+            runPipeline = dragonsLimelight.getPipeline();
         } else {
-            if (!DragonsLimelight.isValid) {
+            if (!dragonsLimelight.isValid) {
                 telemetry.addLine("Limelight is not valid. It and the lights will not work.");
             }
 
-            if (!DragonsLights.isValid) {
+            if (!dragonsLights.isValid) {
                 telemetry.addLine("Lights are not valid. They will not work.");
             }
 
@@ -204,7 +212,7 @@ public class DragonsDriver extends LinearOpMode {
 
             // --------------------- SuperStructure ---------------------
 
-            if (Global.superStructure.articulation.isValid) {
+            if (superStructure.articulation.isValid) {
                 if (SSFullSpeed > 0.1) {
                     if (SSspeed != 1)
                         SSspeed = 1;
@@ -214,14 +222,14 @@ public class DragonsDriver extends LinearOpMode {
                     extSpeed = 0.5;
                 }
 
-                Global.superStructure.articulation.setPower(articulationPower * SSspeed);
+                superStructure.articulation.setPower(articulationPower * SSspeed);
 
-                telemetry.addData("Super Structure articulation power             ", Global.superStructure.articulation.getPower());
-                telemetry.addData("Super Structure right arm position in degrees",   Global.superStructure.articulation.getPosition().right);
-                telemetry.addData("Super Structure left arm position in degrees",    Global.superStructure.articulation.getPosition().left);
+                telemetry.addData("Super Structure articulation power             ", superStructure.articulation.getPower());
+                telemetry.addData("Super Structure right arm position in degrees",   superStructure.articulation.getPosition().right);
+                telemetry.addData("Super Structure left arm position in degrees",    superStructure.articulation.getPosition().left);
             }
 
-            if (Global.superStructure.extension.isValid) {
+            if (superStructure.extension.isValid) {
                 if (SSFullSpeed > 0.1) {
                     if (extSpeed != 1)
                         extSpeed = 1;
@@ -230,82 +238,79 @@ public class DragonsDriver extends LinearOpMode {
                     extSpeed = 0.5;
                 }
 
-                Global.superStructure.extension.setPower(extensionPower * extSpeed);
+                superStructure.extension.setPower(extensionPower * extSpeed);
 
-                telemetry.addData("Super Structure extension power", Global.superStructure.extension.getPower());
+                telemetry.addData("Super Structure extension power", superStructure.extension.getPower());
             }
 
             // --------------------- Limelight ---------------------
-            if (DragonsLimelight.isValid) {
+            if (dragonsLimelight.isValid) {
                 // --------------------- Pipeline Switching ---------------------
                 if (currentB2 && !previousB2) { //rising edge
-                    DragonsLimelight.setPipeline(YELLOW);
+                    dragonsLimelight.setPipeline(YELLOW);
                 } else if (!currentB2 && previousB2) { //falling edge
-                    DragonsLimelight.setPipeline(runPipeline);
+                    dragonsLimelight.setPipeline(runPipeline);
                 }
 
-                LLAlignAngle = Math.min(Math.abs(DragonsLimelight.update(telemetry)), 180);
+                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(telemetry)), 180);
                 telemetry.addData("LLalignTarget", LLAlignAngle);
             }
 
             // --------------------- Arm ---------------------
-            if (Global.arm.claw.isValid) {
+            if (arm.claw.isValid) {
                 if (openClaw)
-                    Global.arm.claw.open();
+                    arm.claw.open();
                 else if (closeClaw)
-                    Global.arm.claw.close();
+                    arm.claw.close();
             }
 
-            if (Global.arm.twist.isValid) {
-                Global.arm.twist.setRotation(LLAlignAngle / 270);
+            if (arm.twist.isValid) {
+                arm.twist.setRotation(LLAlignAngle / 270);
             }
 
-            if (Global.arm.artie.isValid) {
+            if (arm.artie.isValid) {
                 if (armUp)
-                    Global.arm.artie.setPosition(Arm.Artie.ArtiePos.UP);
+                    arm.artie.setPosition(Arm.Artie.ArtiePos.UP);
                 else if (armDown)
-                    Global.arm.artie.setPosition(Arm.Artie.ArtiePos.DOWN);
+                    arm.artie.setPosition(Arm.Artie.ArtiePos.DOWN);
                 else if (armBack)
-                    Global.arm.artie.setPosition(Arm.Artie.ArtiePos.BACK);
+                    arm.artie.setPosition(Arm.Artie.ArtiePos.BACK);
 
-                Global.arm.artie.updatePosition();
-                telemetry.addData("artie pos", Global.arm.artie.getPosition().name());
+                arm.artie.updatePosition();
+                telemetry.addData("artie pos", arm.artie.getPosition().name());
             }
 
             // --------------------- SparkFun OTOS ---------------------
-            if (DragonsOTOS.isValid) {
-                telemetry.addData("Sparkfun velocity along x axis", Math.round(Global.sparkFunOTOS.getVelocity().x));
-                telemetry.addData("Sparkfun velocity along y axis", Math.round(Global.sparkFunOTOS.getVelocity().y));
+            if (dragonsOTOS.isValid) {
+                telemetry.addData("Sparkfun velocity along x axis", Math.round(dragonsOTOS.sparkFunOTOS.getVelocity().x));
+                telemetry.addData("Sparkfun velocity along y axis", Math.round(dragonsOTOS.sparkFunOTOS.getVelocity().y));
                 telemetry.addLine();
-                telemetry.addData("sparkfun x", Math.round(Global.sparkFunOTOS.getPosition().x));
-                telemetry.addData("sparkfun y", Math.round(Global.sparkFunOTOS.getPosition().y));
-                telemetry.addData("sparkfun heading", Math.round(Global.sparkFunOTOS.getPosition().h));
+                telemetry.addData("sparkfun x", Math.round(dragonsOTOS.sparkFunOTOS.getPosition().x));
+                telemetry.addData("sparkfun y", Math.round(dragonsOTOS.sparkFunOTOS.getPosition().y));
+                telemetry.addData("sparkfun heading", Math.round(dragonsOTOS.sparkFunOTOS.getPosition().h));
             }
 
             // --------------------- Movement ---------------------
-            if (DragonsIMU.isValid && DriveMotor.isValid) {
+            if (dragonsIMU.isValid && driveMotors.isValid) {
                 if (recalibrateIMU) {
-                    telemetry.addLine("                                  reset imu yaw");
-                    Global.imu.resetYaw();
+                    telemetry.addLine("reset imu yaw");
+                    dragonsIMU.imu.resetYaw();
                 }
 
-                double botHeading = Global.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
+                double botHeading = dragonsIMU.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
                 telemetry.addData("IMU heading", Math.toDegrees(botHeading));
 
                 // calls for movement
                 double[] drivePowers = MoveRobot.FC(botHeading, x, y, rightX, 1); // x, y, and rightX are the gamepad inputs
                 //sets the motors to their corresponding power
-                Global.leftFront.setPower(drivePowers[0]);
-                Global.rightFront.setPower(drivePowers[1]);
-                Global.leftBack.setPower(drivePowers[2]);
-                Global.rightBack.setPower(drivePowers[3]);
+                driveMotors.setPower(drivePowers);
 
                 //telemetry
                 telemetry.addLine();
-                telemetry.addData("leftFront power", String.valueOf(Math.round(Global.leftFront.getPower())));
-                telemetry.addData("rightFront power", String.valueOf(Math.round(Global.rightFront.getPower())));
-                telemetry.addData("leftBack power", String.valueOf(Math.round(Global.leftBack.getPower())));
-                telemetry.addData("rightBack power", String.valueOf(Math.round(Global.rightBack.getPower())));
+                telemetry.addData("leftFront power",  String.valueOf(Math.round(driveMotors.getPower()[0])));
+                telemetry.addData("rightFront power", String.valueOf(Math.round(driveMotors.getPower()[1])));
+                telemetry.addData("leftBack power",   String.valueOf(Math.round(driveMotors.getPower()[2])));
+                telemetry.addData("rightBack power",  String.valueOf(Math.round(driveMotors.getPower()[3])));
             }
 
             telemetry.update();

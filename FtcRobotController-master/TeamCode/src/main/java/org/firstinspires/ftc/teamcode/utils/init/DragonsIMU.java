@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.utils.init;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -11,14 +12,15 @@ import static org.firstinspires.ftc.teamcode.utils.Global.logoFacingDirection;
 import static org.firstinspires.ftc.teamcode.utils.Global.usbFacingDirection;
 
 public class DragonsIMU {
-    public static boolean isValid = true;
+    public boolean isValid = true;
+    public IMU imu;
 
-    public static void initialize(HardwareMap hardwareMap, Telemetry telemetry) {
+    public DragonsIMU (LinearOpMode opmode) {
         try {
-            telemetry.addLine("Configuring IMU...");
-            telemetry.update();
+            opmode.telemetry.addLine("Configuring IMU...");
+            opmode.telemetry.update();
 
-            Global.imu = hardwareMap.get(IMU.class, "imu");
+            imu = opmode.hardwareMap.get(IMU.class, "imu");
 
             isValid = true;
 
@@ -26,12 +28,12 @@ public class DragonsIMU {
                     logoFacingDirection,
                     usbFacingDirection));
 
-            Global.imu.initialize(parameters);
+            imu.initialize(parameters);
 
-            Global.imu.resetYaw();
+            imu.resetYaw();
 
-            telemetry.addLine("IMU configured!");
-            telemetry.update();
+            opmode.telemetry.addLine("IMU configured!");
+            opmode.telemetry.update();
         } catch (IllegalArgumentException ex) {
             Global.exceptions.append("CRITICAL Configuration Error: ").append("imu").append(" does not exist").append("\n");
             Global.exceptionOccurred = true;

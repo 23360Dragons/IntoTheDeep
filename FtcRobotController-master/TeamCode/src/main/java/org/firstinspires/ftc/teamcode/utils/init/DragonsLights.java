@@ -1,24 +1,25 @@
 package org.firstinspires.ftc.teamcode.utils.init;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
 public class DragonsLights {
-    public static boolean isValid;
+    public boolean isValid = true;
+    public RevBlinkinLedDriver lights;
 
-    public static void initialize (HardwareMap hardwareMap, Telemetry telemetry) {
+    public DragonsLights (LinearOpMode opmode) {
         try {
-            telemetry.addLine("Configuring lights...");
-            telemetry.update();
+            opmode.telemetry.addLine("Configuring lights...");
+            opmode.telemetry.update();
 
-            Global.light = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
-            isValid = true;
+            lights = opmode.hardwareMap.get(RevBlinkinLedDriver.class, "lights");
 
-            telemetry.addLine("Lights configured!");
-            telemetry.update();
+            opmode.telemetry.addLine("Lights configured!");
+            opmode.telemetry.update();
         } catch (IllegalArgumentException ex) {
             Global.exceptions.append("Configuration Error: ").append("lights").append(" does not exist").append("\n");
             Global.exceptionOccurred = true;
@@ -26,7 +27,7 @@ public class DragonsLights {
         }
     }
 
-    public static void setPattern (RevBlinkinLedDriver.BlinkinPattern pattern) {
-        Global.light.setPattern(pattern);
+    public void setPattern (RevBlinkinLedDriver.BlinkinPattern pattern) {
+        lights.setPattern(pattern);
     }
 }

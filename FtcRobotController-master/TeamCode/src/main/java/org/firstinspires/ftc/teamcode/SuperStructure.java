@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.utils.Global;
 import org.firstinspires.ftc.teamcode.utils.Positions;
 
@@ -20,20 +19,20 @@ public class SuperStructure {
 
     ARTICULATION_POS articulationPos;
 
-    public SuperStructure (HardwareMap hardwareMap, Telemetry telemetry) {
-        telemetry.addLine("Configuring Superstructure Articulation!");
-        telemetry.update();
+    public SuperStructure (LinearOpMode opmode) {
+        opmode.telemetry.addLine("Configuring Superstructure Articulation!");
+        opmode.telemetry.update();
 
-        this.articulation = new Articulation(hardwareMap);
+        this.articulation = new Articulation(opmode);
 
-        telemetry.addData("Superstructure Articulation configured", articulation.isValid);
-        telemetry.addLine("Configuring Superstructure Extension!");
-        telemetry.update();
+        opmode.telemetry.addData("Superstructure Articulation configured", articulation.isValid);
+        opmode.telemetry.addLine("Configuring Superstructure Extension!");
+        opmode.telemetry.update();
 
-        this.extension    = new Extension(hardwareMap);
+        this.extension    = new Extension(opmode);
 
-        telemetry.addData("Superstructure Extension configured", extension.isValid);
-        telemetry.update();
+        opmode.telemetry.addData("Superstructure Extension configured", extension.isValid);
+        opmode.telemetry.update();
 
         this.isValid = articulation.isValid && extension.isValid;
     }
@@ -45,9 +44,9 @@ public class SuperStructure {
         public boolean isValid = true;
         private double power;
 
-        Articulation (HardwareMap hardwareMap) {
+        Articulation (LinearOpMode opmode) {
             try {
-                leftMotor = hardwareMap.get(DcMotorEx.class, "leftArm");
+                leftMotor = opmode.hardwareMap.get(DcMotorEx.class, "leftArm");
                 leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 // STOP AND Reset CANNOT BE AFTER RUN WITHOUT ENCODER - NOTHING WORKS IF YOU DO
                 leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -60,7 +59,7 @@ public class SuperStructure {
             }
 
             try {
-                rightMotor = hardwareMap.get(DcMotorEx.class, "rightArm");
+                rightMotor = opmode.hardwareMap.get(DcMotorEx.class, "rightArm");
                 rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -113,9 +112,9 @@ public class SuperStructure {
         public boolean isValid = true;
         private double power;
 
-        Extension (HardwareMap hardwareMap) {
+        Extension (LinearOpMode opmode) {
             try {
-                leftMotor = hardwareMap.get(DcMotor.class, "leftLinear");
+                leftMotor = opmode.hardwareMap.get(DcMotor.class, "leftLinear");
                 leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -126,7 +125,7 @@ public class SuperStructure {
             }
 
             try {
-                rightMotor = hardwareMap.get(DcMotor.class, "rightLinear");
+                rightMotor = opmode.hardwareMap.get(DcMotor.class, "rightLinear");
                 rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

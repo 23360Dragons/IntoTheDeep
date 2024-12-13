@@ -3,25 +3,25 @@ package org.firstinspires.ftc.teamcode.utils.init;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.apache.commons.math3.optim.linear.LinearConstraint;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
-public class DriveMotor {
-    public static boolean isValid = true;
-    public static void initialize (LinearOpMode opmode) {
+public class DriveMotors {
+    public boolean isValid = true;
+    public DcMotorEx leftFront, rightFront, leftBack, rightBack;
+
+    public DriveMotors (LinearOpMode opmode) {
         try
         {
             opmode.telemetry.addLine("Configuring drive motors...");
             opmode.telemetry.update();
 
                 //left front
-                try{
-                    Global.leftFront = opmode.hardwareMap.get(DcMotorEx.class, "leftFront"); // gets a dcMotor object of the name "name"
-                    Global.leftFront.setDirection(DcMotor.Direction.REVERSE); // fix faulty drive behavior 10/15
-                    configure(Global.leftFront);
+                try
+                {
+                    leftFront = opmode.hardwareMap.get(DcMotorEx.class, "leftFront"); // gets a dcMotor object of the name "name"
+                    leftFront.setDirection(DcMotor.Direction.REVERSE); // fix faulty drive behavior 10/15
+                    configure(leftFront);
                 }
                 catch(IllegalArgumentException e)
                 {
@@ -33,8 +33,8 @@ public class DriveMotor {
                 //right front
                 try
                 {
-                    Global.rightFront = opmode.hardwareMap.get(DcMotorEx.class, "rightFront");
-                    configure(Global.rightFront);
+                    rightFront = opmode.hardwareMap.get(DcMotorEx.class, "rightFront");
+                    configure(rightFront);
 
                 }
                 catch(IllegalArgumentException e)
@@ -47,9 +47,9 @@ public class DriveMotor {
                 //left back
                 try
                 {
-                    Global.leftBack = opmode.hardwareMap.get(DcMotorEx.class, "leftBack");
-                    configure(Global.leftBack);
-                    Global.leftBack.setDirection(DcMotor.Direction.REVERSE);
+                    leftBack = opmode.hardwareMap.get(DcMotorEx.class, "leftBack");
+                    leftBack.setDirection(DcMotor.Direction.REVERSE);
+                    configure(leftBack);
                 }
                 catch(IllegalArgumentException e)
                 {
@@ -61,8 +61,8 @@ public class DriveMotor {
                 //right back
                 try
                 {
-                    Global.rightBack = opmode.hardwareMap.get(DcMotorEx.class, "rightBack");
-                    configure(Global.rightBack);
+                    rightBack = opmode.hardwareMap.get(DcMotorEx.class, "rightBack");
+                    configure(rightBack);
                 }
                 catch(IllegalArgumentException e)
                 {
@@ -82,11 +82,27 @@ public class DriveMotor {
         }
     }
 
-    private static void configure(DcMotorEx m) {
+    private void configure(DcMotorEx m) {
         //java passes in the actual object rather than a reference, so this actually changes the passed in variable
         m.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         m.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public void setPower (double[] drivePowers) {
+        leftFront.setPower(drivePowers[0]);
+        rightFront.setPower(drivePowers[1]);
+        leftBack.setPower(drivePowers[2]);
+        rightBack.setPower(drivePowers[3]);
+    }
+
+    public double[] getPower () {
+        return new double[]{
+            leftFront.getPower(),
+            rightFront.getPower(),
+            leftBack.getPower(),
+            rightBack.getPower()
+        };
     }
 }
 

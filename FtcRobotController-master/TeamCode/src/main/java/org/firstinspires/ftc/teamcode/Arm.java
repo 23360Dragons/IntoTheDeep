@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -18,7 +19,7 @@ public class Arm {
     public Claw  claw;
     public Artie artie;
 
-    public Arm (HardwareMap hardwareMap, Telemetry telemetry) {
+    public Arm (LinearOpMode opmode) {
         telemetry.addLine("Configuring Arm Elbow!");
         telemetry.update();
 
