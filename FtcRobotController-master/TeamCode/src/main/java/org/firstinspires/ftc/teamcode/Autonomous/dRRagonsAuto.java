@@ -128,7 +128,7 @@ public class dRRagonsAuto extends LinearOpMode {
 
            @Override
            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               claw.setPosition(0.5);
+               claw.setPosition(0.47);
                return false;
            }
        }
@@ -139,7 +139,7 @@ public class dRRagonsAuto extends LinearOpMode {
 
            @Override
            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               claw.setPosition(1);
+               claw.setPosition(0.9);
                return false;
            }
        }
