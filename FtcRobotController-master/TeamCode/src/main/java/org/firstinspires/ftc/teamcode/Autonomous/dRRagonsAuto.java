@@ -38,11 +38,11 @@ import java.util.List;
 public class dRRagonsAuto extends LinearOpMode {
    public double amnt;
    double myAngle;
-    public enum ARM_POS {
+   public enum ARM_POS {
         UP,
         DOWN,
     }
-    ARM_POS armPos;
+   ARM_POS armPos;
    public class Linearz {
         private DcMotorEx rightLinear, leftLinear;
         public Linearz(HardwareMap hardwareMap){
@@ -66,6 +66,8 @@ public class dRRagonsAuto extends LinearOpMode {
             public boolean run(@NonNull TelemetryPacket packet) {
                 //leftLinear.setTargetPosition();
                 //rightLinear.setTargetPosition();
+                leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 return false;
             }
         }
@@ -77,6 +79,8 @@ public class dRRagonsAuto extends LinearOpMode {
             public boolean run(@NonNull TelemetryPacket packet) {
                 leftLinear.setTargetPosition(0);
                 rightLinear.setTargetPosition(0);
+                leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 return false;
             }
         }
@@ -92,19 +96,25 @@ public class dRRagonsAuto extends LinearOpMode {
            leftArm.setDirection(DcMotorSimple.Direction.FORWARD);
            leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
            leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+           leftArm.setTargetPositionTolerance(25);
 
            rightArm = hardwareMap.get(DcMotorEx.class, "rightLinear");
            rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
            rightArm.setDirection(DcMotorSimple.Direction.REVERSE);
            rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
            rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+           rightArm.setTargetPositionTolerance(25);
        }
        public class ArmToBasket implements Action {
 
            @Override
            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               leftArm.setTargetPosition(90);
-               rightArm.setTargetPosition(90);
+               //leftArm.setTargetPosition();
+               leftArm.getTargetPositionTolerance();
+              // rightArm.setTargetPosition();
+               rightArm.getTargetPositionTolerance();
+               leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+               rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                armPos = ARM_POS.UP;
                return false;
            }
@@ -116,8 +126,10 @@ public class dRRagonsAuto extends LinearOpMode {
 
            @Override
            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               leftArm.setTargetPosition(0);
-               rightArm.setTargetPosition(0);
+               //leftArm.setTargetPosition();
+               //rightArm.setTargetPosition();
+               leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+               rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                armPos = ARM_POS.DOWN;
                return false;
            }
@@ -126,8 +138,7 @@ public class dRRagonsAuto extends LinearOpMode {
            return new ArmToGrab();
        }
 
-   } //test?
-
+   } //finish once you find out positions
    public class Artie {
        private Servo leftArtie, rightArtie;
        public Artie(HardwareMap hardwareMap){
@@ -142,8 +153,8 @@ public class dRRagonsAuto extends LinearOpMode {
 
            @Override
            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               leftArtie.setPosition(1);
-               rightArtie.setPosition(1);
+               //leftArtie.setPosition();
+               //rightArtie.setPosition();
                return false;
            }
        }
@@ -154,8 +165,8 @@ public class dRRagonsAuto extends LinearOpMode {
 
            @Override
            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               leftArtie.setPosition(0.6);
-               rightArtie.setPosition(0.6);
+               //leftArtie.setPosition();
+               //rightArtie.setPosition();
                return false;
            }
        }
@@ -166,8 +177,8 @@ public class dRRagonsAuto extends LinearOpMode {
 
            @Override
            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               leftArtie.setPosition(0.8);
-               rightArtie.setPosition(0.8);
+               //leftArtie.setPosition();
+               //rightArtie.setPosition();
                return false;
            }
        }
@@ -175,7 +186,7 @@ public class dRRagonsAuto extends LinearOpMode {
            return new ArtieBack();
        }
 
-   } //test?
+   } //finish once you find out positions
    public class Clawz {
        private Servo claw;
        public Clawz (HardwareMap hardwareMap){
@@ -569,8 +580,10 @@ public class dRRagonsAuto extends LinearOpMode {
         Action grabby = new SequentialAction (
                 littleLarryLime.SetAngle(),
                 twistyturny.TurnClaw(),
+
                 clawz.CloseClaw()
         );
+
 
         Actions.runBlocking(
                 new SequentialAction(
