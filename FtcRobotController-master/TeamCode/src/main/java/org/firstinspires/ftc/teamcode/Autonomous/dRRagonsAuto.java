@@ -47,16 +47,20 @@ public class dRRagonsAuto extends LinearOpMode {
             leftLinear = hardwareMap.get(DcMotorEx.class, "leftLinear");
             leftLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             leftLinear.setDirection(DcMotorSimple.Direction.FORWARD);
+            leftLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftLinear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
             rightLinear = hardwareMap.get(DcMotorEx.class, "rightLinear");
             rightLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightLinear.setDirection(DcMotorSimple.Direction.FORWARD);
+            rightLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightLinear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
 
         public class ElevatorUp implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                leftLinear.setTargetPosition(0);
+                //leftLinear.setTargetPosition();
 
                 return false;
             }
