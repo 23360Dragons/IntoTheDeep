@@ -93,7 +93,19 @@ public class dRRagonsAuto extends LinearOpMode {
        public Action ToBasket () {
            return new ArmToBasket();
        }
-       
+       public class ArmToGrab implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               leftArm.setTargetPosition(0);
+               rightArm.setTargetPosition(0);
+               armPos = ARM_POS.DOWN;
+               return false;
+           }
+       }
+       public Action ToGrab (){
+           return new ArmToGrab();
+       }
 
    }
    public class Artie {
