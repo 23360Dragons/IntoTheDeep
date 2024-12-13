@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
-
 import androidx.annotation.NonNull;
 
 // RR-specific imports
@@ -31,7 +30,6 @@ import org.firstinspires.ftc.teamcode.SparkFunOTOSDrive;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
 import java.util.List;
-
 //import org.firstinspires.ftc.teamcode.MecanumDrive;
 @Config
 @Autonomous(name = "dRRagonsAuto", group = "Autonomous")
@@ -419,7 +417,6 @@ public class dRRagonsAuto extends LinearOpMode {
 
 
     } //I think this is right... idk tho, gotta test
-
     @Override
     public void runOpMode() throws InterruptedException {
         int blueFace, redFace;
