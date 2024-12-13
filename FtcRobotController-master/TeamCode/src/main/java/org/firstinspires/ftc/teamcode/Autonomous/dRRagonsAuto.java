@@ -36,6 +36,11 @@ import java.util.List;
 @Config
 @Autonomous(name = "dRRagonsAuto", group = "Autonomous")
 public class dRRagonsAuto extends LinearOpMode {
+    public enum ARM_POS {
+        UP,
+        DOWN,
+    }
+    ARM_POS armPos;
    public class Linearz {
         private DcMotorEx rightLinear, leftLinear;
         public Linearz(HardwareMap hardwareMap){
@@ -66,19 +71,29 @@ public class dRRagonsAuto extends LinearOpMode {
            leftArm = hardwareMap.get(DcMotorEx.class, "leftLinear");
            leftArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
            leftArm.setDirection(DcMotorSimple.Direction.FORWARD);
+           leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+           leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
            rightArm = hardwareMap.get(DcMotorEx.class, "rightLinear");
            rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
            rightArm.setDirection(DcMotorSimple.Direction.REVERSE);
+           rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+           rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
        }
        public class ArmToBasket implements Action {
 
            @Override
            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               
+               leftArm.setTargetPosition(90);
+               rightArm.setTargetPosition(90);
+               armPos = ARM_POS.UP;
                return false;
            }
        }
+       public Action ToBasket () {
+           return new ArmToBasket();
+       }
+       
 
    }
    public class Artie {
