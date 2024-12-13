@@ -37,16 +37,25 @@ import java.util.List;
 public class dRRagonsAuto extends LinearOpMode {
    public double amnt;
    double myAngle;
+    public enum ARM_POS {
+        UP,
+        DOWN,
+    }
+    ARM_POS armPos;
    public class Linearz {
         private DcMotorEx rightLinear, leftLinear;
         public Linearz(HardwareMap hardwareMap){
             leftLinear = hardwareMap.get(DcMotorEx.class, "leftLinear");
             leftLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             leftLinear.setDirection(DcMotorSimple.Direction.FORWARD);
+            leftLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftLinear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
             rightLinear = hardwareMap.get(DcMotorEx.class, "rightLinear");
             rightLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightLinear.setDirection(DcMotorSimple.Direction.FORWARD);
+            rightLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightLinear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
 
         public class ElevatorUp implements Action {
@@ -84,19 +93,91 @@ public class dRRagonsAuto extends LinearOpMode {
            leftArm = hardwareMap.get(DcMotorEx.class, "leftLinear");
            leftArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
            leftArm.setDirection(DcMotorSimple.Direction.FORWARD);
+           leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+           leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
            rightArm = hardwareMap.get(DcMotorEx.class, "rightLinear");
            rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
            rightArm.setDirection(DcMotorSimple.Direction.REVERSE);
+           rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+           rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
        }
-   } //TODO make this
+       public class ArmToBasket implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               leftArm.setTargetPosition(90);
+               rightArm.setTargetPosition(90);
+               armPos = ARM_POS.UP;
+               return false;
+           }
+       }
+       public Action ToBasket () {
+           return new ArmToBasket();
+       }
+       public class ArmToGrab implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               leftArm.setTargetPosition(0);
+               rightArm.setTargetPosition(0);
+               armPos = ARM_POS.DOWN;
+               return false;
+           }
+       }
+       public Action ToGrab (){
+           return new ArmToGrab();
+       }
+
+   }
+    //TODO make this
    public class Artie {
        private Servo leftArtie, rightArtie;
        public Artie(HardwareMap hardwareMap){
            leftArtie = hardwareMap.get(Servo.class,"leftArtie");
            rightArtie = hardwareMap.get(Servo.class, "rightArtie");
+           rightArtie.setDirection(Servo.Direction.REVERSE);
        }
-   } //TODO make this
+
+       public class ArtieUp implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               leftArtie.setPosition(1);
+               rightArtie.setPosition(1);
+               return false;
+           }
+       }
+       public Action artieUp (){
+           return new ArtieUp();
+       }
+       public class ArtieDown implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               leftArtie.setPosition(0.6);
+               rightArtie.setPosition(0.6);
+               return false;
+           }
+       }
+       public Action artieDown (){
+           return new ArtieDown();
+       }
+       public class ArtieBack implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               leftArtie.setPosition(0.8);
+               rightArtie.setPosition(0.8);
+               return false;
+           }
+       }
+       public Action artieBack (){
+           return new ArtieBack();
+       }
+
+   }
+    //TODO make this
    public class Clawz {
        private Servo claw;
        public Clawz (HardwareMap hardwareMap){
@@ -106,7 +187,7 @@ public class dRRagonsAuto extends LinearOpMode {
 
            @Override
            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               claw.setPosition(0.5);
+               claw.setPosition(0.47);
                return false;
            }
        }
@@ -117,7 +198,7 @@ public class dRRagonsAuto extends LinearOpMode {
 
            @Override
            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               claw.setPosition(0.8);
+               claw.setPosition(0.9);
                return false;
            }
        }
@@ -335,7 +416,6 @@ public class dRRagonsAuto extends LinearOpMode {
         TwistNTurn twistyturny = new TwistNTurn(hardwareMap);
         LarryLime littleLarryLime = new LarryLime(hardwareMap);
         ThisLittleLight littleLight = new ThisLittleLight(hardwareMap);
-
 
 
         while (opModeInInit()){
