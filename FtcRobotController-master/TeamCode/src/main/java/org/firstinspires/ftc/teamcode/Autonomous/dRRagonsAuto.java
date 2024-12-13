@@ -117,6 +117,20 @@ public class dRRagonsAuto extends LinearOpMode {
        public Artie(HardwareMap hardwareMap){
            leftArtie = hardwareMap.get(Servo.class,"leftArtie");
            rightArtie = hardwareMap.get(Servo.class, "rightArtie");
+           rightArtie.setDirection(Servo.Direction.REVERSE);
+       }
+
+       public class ArtieUp implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               leftArtie.setPosition(1);
+               rightArtie.setPosition(1);
+               return false;
+           }
+       }
+       public Action artieUp (){
+           return new ArtieUp();
        }
    }
    public class Clawz {
