@@ -124,8 +124,9 @@ public class Arm {
         private ArtiePos artiePos;
         private ArtiePos lastArtiePos;
 
-        private double down = 0.6;
-        private double up = 1;
+        private double down = 0.6; // todo : update these through testing
+        private double up   = 1;
+        private double back = 0.8;
 
         Artie (HardwareMap hardwareMap) {
             try {
@@ -153,7 +154,8 @@ public class Arm {
 
         public enum ArtiePos {
             UP,
-            DOWN
+            DOWN,
+            BACK
         }
 
         public void setPosition (ArtiePos pos) {
@@ -167,7 +169,10 @@ public class Arm {
 
         public void updatePosition () {
             if (artiePos != lastArtiePos) {
-                moveServos(artiePos == ArtiePos.UP ? up : artiePos == ArtiePos.DOWN ? down : left.getPosition());
+                moveServos(artiePos == ArtiePos.UP   ? up
+                         : artiePos == ArtiePos.DOWN ? down
+                         : artiePos == ArtiePos.BACK ? back
+                         : left.getPosition());
             }
 
             lastArtiePos = artiePos;

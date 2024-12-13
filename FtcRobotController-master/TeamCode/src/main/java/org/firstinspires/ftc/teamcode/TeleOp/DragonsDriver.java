@@ -35,8 +35,8 @@ public class DragonsDriver extends LinearOpMode {
     static Gamepad previousGamepad1;
     static Gamepad previousGamepad2;
 
-    public static double SSspeed = 0.4;
-    public static double extSpeed = 0.5;
+    public static double SSspeed;
+    public static double extSpeed;
 
     public static double LLAlignAngle = 0;
 
@@ -188,14 +188,15 @@ public class DragonsDriver extends LinearOpMode {
 
             // gamepad 2 (MANUPULATOR)
 
-            double  articulationPower = -currentGamepad2.left_stick_y,
+            double  SSFullSpeed       = currentGamepad2.right_trigger,
+                    articulationPower = -currentGamepad2.left_stick_y,
                     extensionPower    = -currentGamepad2.right_stick_y;
 
             boolean openClaw       = currentGamepad2.right_bumper, closeClaw = currentGamepad2.left_bumper,
-                    SSFullSpeed    = currentGamepad2.x,
                     // set limelight pipeline
                     currentB2      = currentGamepad2.b, previousB2 = previousGamepad2.b,
                     armDown        = currentGamepad2.dpad_down,
+                    armBack        = currentGamepad2.dpad_right,
                     armUp          = currentGamepad2.dpad_up;
 
 
@@ -203,21 +204,35 @@ public class DragonsDriver extends LinearOpMode {
 
             // --------------------- SuperStructure ---------------------
 
-            if (Global.superStructure.isValid) {
-                if (SSFullSpeed) {
-                    SSspeed = 1;
-                    extSpeed = 1;
-                    telemetry.addLine("SS FUll SPeed!");
+            if (Global.superStructure.articulation.isValid) {
+                if (SSFullSpeed > 0.1) {
+                    if (SSspeed != 1)
+                        SSspeed = 1;
+                    telemetry.addLine("SS Full Speed!");
+                } else if (SSspeed != 0.4 && extSpeed != 0.5) {
+                    SSspeed  = 0.4;
+                    extSpeed = 0.5;
                 }
 
                 Global.superStructure.articulation.setPower(articulationPower * SSspeed);
+
+                telemetry.addData("Super Structure articulation power             ", Global.superStructure.articulation.getPower());
+                telemetry.addData("Super Structure right arm position in degrees",   Global.superStructure.articulation.getPosition().right);
+                telemetry.addData("Super Structure left arm position in degrees",    Global.superStructure.articulation.getPosition().left);
+            }
+
+            if (Global.superStructure.extension.isValid) {
+                if (SSFullSpeed > 0.1) {
+                    if (extSpeed != 1)
+                        extSpeed = 1;
+                    telemetry.addLine("Ext Full Speed!");
+                } else if (extSpeed != 0.5) {
+                    extSpeed = 0.5;
+                }
+
                 Global.superStructure.extension.setPower(extensionPower * extSpeed);
 
                 telemetry.addData("Super Structure extension power", Global.superStructure.extension.getPower());
-                telemetry.addData("Super Structure current ext position in degrees", Global.superStructure.extension.getPosition().right);
-                telemetry.addData("Super Structure articulation power             ", SSspeed * articulationPower);
-                telemetry.addData("Super Structure right arm position in degrees",   Global.superStructure.articulation.getPosition().right);
-                telemetry.addData("Super Structure left arm position in degrees",    Global.superStructure.articulation.getPosition().left);
             }
 
             // --------------------- Limelight ---------------------
@@ -250,6 +265,8 @@ public class DragonsDriver extends LinearOpMode {
                     Global.arm.artie.setPosition(Arm.Artie.ArtiePos.UP);
                 else if (armDown)
                     Global.arm.artie.setPosition(Arm.Artie.ArtiePos.DOWN);
+                else if (armBack)
+                    Global.arm.artie.setPosition(Arm.Artie.ArtiePos.BACK);
 
                 Global.arm.artie.updatePosition();
                 telemetry.addData("artie pos", Global.arm.artie.getPosition().name());
