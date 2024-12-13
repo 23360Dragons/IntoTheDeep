@@ -15,7 +15,7 @@ public class SuperStructure {
 
     public enum ARTICULATION_POS {
         UP,
-        DOWN;
+        DOWN,
     }
 
     ARTICULATION_POS articulationPos;
