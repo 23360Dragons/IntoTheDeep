@@ -132,6 +132,31 @@ public class dRRagonsAuto extends LinearOpMode {
        public Action artieUp (){
            return new ArtieUp();
        }
+       public class ArtieDown implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               leftArtie.setPosition(0.6);
+               rightArtie.setPosition(0.6);
+               return false;
+           }
+       }
+       public Action artieDown (){
+           return new ArtieDown();
+       }
+       public class ArtieBack implements Action {
+
+           @Override
+           public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               leftArtie.setPosition(0.8);
+               rightArtie.setPosition(0.8);
+               return false;
+           }
+       }
+       public Action artieBack (){
+           return new ArtieBack();
+       }
+
    }
    public class Clawz {
        private Servo claw;
