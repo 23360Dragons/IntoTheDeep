@@ -37,7 +37,7 @@ public class DragonsLimelight {
         }
     }
 
-    public double update (Telemetry telemetry) {
+    public double update (LinearOpMode opmode, DragonsLights dragonsLights) {
             result = limelight.getLatestResult();
             double angle = 0;
 
@@ -48,20 +48,20 @@ public class DragonsLimelight {
                 double x = pos.x; // Display orientation on telemetry
                 double y = pos.y;
                 double z = pos.z;
-                telemetry.addData("Yaw (Z)",   z);
-                telemetry.addData("Pitch (Y)", y);
-                telemetry.addData("Roll (X)",  x);
+                opmode.telemetry.addData("Yaw (Z)",   z);
+                opmode.telemetry.addData("Pitch (Y)", y);
+                opmode.telemetry.addData("Roll (X)",  x);
 
-                if (DragonsLights.isValid) {
+                if (dragonsLights.isValid) {
                     switch (currentPipeline) {
                         case 0:
-                            DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+                            dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
                             break;
                         case 1:
-                            DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                            dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                             break;
                         case 2:
-                            DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                            dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
                             break;
                     }
                 }
@@ -71,7 +71,7 @@ public class DragonsLimelight {
 
                     if (pythonOutputs != null && pythonOutputs.length > 0) {
                         double firstOutput = pythonOutputs[0];
-                        telemetry.addData("Python output:", firstOutput);
+                        opmode.telemetry.addData("Python output:", firstOutput);
                     }
                 }
 
@@ -80,29 +80,29 @@ public class DragonsLimelight {
                 List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
 
                 if (!colorResults.isEmpty()) {
-                    telemetry.addLine("true");
+                    opmode.telemetry.addLine("true");
 
                     for (LLResultTypes.ColorResult cr : colorResults) {
                         List<List<Double>> la = cr.getTargetCorners(); // should return {{0,0}, {1,0}, {1,1}, {0,1}} or something like that
 
                         angle = rotateClaw(la);
-                        telemetry.addData("CR target corners", la.get(0).toString());
-                        telemetry.addData("CR target corners", la.get(1).toString());
-                        telemetry.addData("Rotate to angle", angle);
+                        opmode.telemetry.addData("CR target corners", la.get(0).toString());
+                        opmode.telemetry.addData("CR target corners", la.get(1).toString());
+                        opmode.telemetry.addData("Rotate to angle", angle);
                     }
                 }
 
             } else {
                 if (result == null) {
-                    telemetry.addLine("Limelight result is null");
+                    opmode.telemetry.addLine("Limelight result is null");
 
-                    if (DragonsLights.isValid)
-                        DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+                    if (dragonsLights.isValid)
+                        dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
                 } else if (!result.isValid()) {
-                    telemetry.addLine("Limelight result is not valid");
+                    opmode.telemetry.addLine("Limelight result is not valid");
 
-                    if (DragonsLights.isValid)
-                        DragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+                    if (dragonsLights.isValid)
+                        dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
                 }
             }
             return angle;

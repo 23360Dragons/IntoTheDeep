@@ -20,31 +20,31 @@ public class Arm {
     public Artie artie;
 
     public Arm (LinearOpMode opmode) {
-        telemetry.addLine("Configuring Arm Elbow!");
-        telemetry.update();
+        opmode.telemetry.addLine("Configuring Arm Elbow!");
+        opmode.telemetry.update();
 
-        this.tilt = new Tilt (hardwareMap);
+        this.tilt = new Tilt (opmode.hardwareMap);
 
-        telemetry.addData("Arm Elbow configured", tilt.isValid);
-        telemetry.addLine("Configuring Arm Wrist!");
-        telemetry.update();
+        opmode.telemetry.addData("Arm Elbow configured", tilt.isValid);
+        opmode.telemetry.addLine("Configuring Arm Wrist!");
+        opmode.telemetry.update();
 
-        this.twist = new Twist (hardwareMap);
+        this.twist = new Twist (opmode.hardwareMap);
 
-        telemetry.addData("Arm Wrist configured", twist.isValid);
-        telemetry.addLine("Configuring Arm Claw!");
-        telemetry.update();
+        opmode.telemetry.addData("Arm Wrist configured", twist.isValid);
+        opmode.telemetry.addLine("Configuring Arm Claw!");
+        opmode.telemetry.update();
 
-        this.claw  = new Claw (hardwareMap);
+        this.claw  = new Claw (opmode.hardwareMap);
 
-        telemetry.addData("Arm Claw configured", claw.isValid);
-        telemetry.addLine("Configuring Arm Artie!");
-        telemetry.update();
+        opmode.telemetry.addData("Arm Claw configured", claw.isValid);
+        opmode.telemetry.addLine("Configuring Arm Artie!");
+        opmode.telemetry.update();
 
-        this.artie = new Artie(hardwareMap);
+        this.artie = new Artie(opmode.hardwareMap);
 
-        telemetry.addData("Arm Artie configured", artie.isValid);
-        telemetry.update();
+        opmode.telemetry.addData("Arm Artie configured", artie.isValid);
+        opmode.telemetry.update();
     }
 
     public static class Tilt {

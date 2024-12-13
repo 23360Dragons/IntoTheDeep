@@ -252,7 +252,7 @@ public class DragonsDriver extends LinearOpMode {
                     dragonsLimelight.setPipeline(runPipeline);
                 }
 
-                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(telemetry)), 180);
+                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this, dragonsLights)), 180);
                 telemetry.addData("LLalignTarget", LLAlignAngle);
             }
 
