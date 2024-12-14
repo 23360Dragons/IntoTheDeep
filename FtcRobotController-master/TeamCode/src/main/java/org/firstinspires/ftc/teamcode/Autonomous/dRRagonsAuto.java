@@ -34,6 +34,13 @@ public class dRRagonsAuto extends LinearOpMode {
     ARM_POS armPos;
     public class Linearz {
         private DcMotorEx rightLinear, leftLinear;
+        int bottomTicks = 0;
+        int fewTicks = 533;
+        int halfTicks = 1065;
+        int mostTicks = 1597;
+        int maxTicks = 2125;
+        double linearAverage = ((leftLinear.getCurrentPosition()+rightLinear.getCurrentPosition())/2);
+        //actual max is 2130, so we don't overextend we subtract five
         public Linearz(HardwareMap hardwareMap){
             leftLinear = hardwareMap.get(DcMotorEx.class, "leftLinear");
             leftLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -53,10 +60,24 @@ public class dRRagonsAuto extends LinearOpMode {
         public class ElevatorUp implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                //leftLinear.setTargetPosition();
-                //rightLinear.setTargetPosition();
-                leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                if (linearAverage < mostTicks) {
+                    leftLinear.setTargetPosition(maxTicks);
+                    rightLinear.setTargetPosition(mostTicks);
+                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    leftLinear.setPower(0.75);
+                    rightLinear.setPower(0.75);
+                } else if (linearAverage >= mostTicks && linearAverage < maxTicks) {
+                    leftLinear.setTargetPosition(maxTicks);
+                    rightLinear.setTargetPosition(maxTicks);
+                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    leftLinear.setPower(0.2);
+                    rightLinear.setPower(0.2);
+                } else {
+                    leftLinear.setPower(0);
+                    rightLinear.setPower(0);
+                }
                 return false;
             }
         }
@@ -66,17 +87,59 @@ public class dRRagonsAuto extends LinearOpMode {
         public class ElevatorDown implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                leftLinear.setTargetPosition(0);
-                rightLinear.setTargetPosition(0);
-                leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                if (linearAverage > fewTicks) {
+                    leftLinear.setTargetPosition(bottomTicks);
+                    rightLinear.setTargetPosition(bottomTicks);
+                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    leftLinear.setPower(0.75);
+                    rightLinear.setPower(0.75);
+                } else if (linearAverage <= fewTicks && linearAverage > bottomTicks) {
+                    leftLinear.setTargetPosition(bottomTicks);
+                    rightLinear.setTargetPosition(bottomTicks);
+                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    leftLinear.setPower(0.2);
+                    rightLinear.setPower(0.2);
+                } else {
+                    leftLinear.setPower(0);
+                    rightLinear.setPower(0);
+                }
                 return false;
             }
         }
         public Action GoDown(){
             return new ElevatorDown();
         }
-    } //finish making when you learn the # of ticks to fully extend
+        public class ElevatorHalf implements Action {
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (linearAverage < fewTicks || linearAverage > mostTicks) {
+                    leftLinear.setTargetPosition(halfTicks);
+                    rightLinear.setTargetPosition(halfTicks);
+                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    leftLinear.setPower(0.75);
+                    rightLinear.setPower(0.75);
+                } else if (linearAverage >= fewTicks && linearAverage != halfTicks || linearAverage <= mostTicks && linearAverage != halfTicks) {
+                    leftLinear.setTargetPosition(halfTicks);
+                    rightLinear.setTargetPosition(halfTicks);
+                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    leftLinear.setPower(0.2);
+                    rightLinear.setPower(0.2);
+                } else {
+                    leftLinear.setPower(0);
+                    rightLinear.setPower(0);
+                }
+                return false;
+            }
+        }
+        public Action GoHalf (){
+            return new ElevatorHalf();
+        }
+    } //test?
     public class Armz {
         private DcMotorEx leftArm, rightArm;
         public Armz (HardwareMap hardwareMap){
@@ -94,17 +157,38 @@ public class dRRagonsAuto extends LinearOpMode {
             rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             rightArm.setTargetPositionTolerance(25);
         }
+        double armzAvg = (leftArm.getCurrentPosition()+rightArm.getCurrentPosition())/2;
+        int armUp = 0;
+        int armMost;
+        int armLittle;
+        int armDown;
         public class ArmToBasket implements Action {
-
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                //leftArm.setTargetPosition();
-                leftArm.getTargetPositionTolerance();
-                // rightArm.setTargetPosition();
-                rightArm.getTargetPositionTolerance();
-                leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                if (armzAvg < armMost) {
+                    leftArm.setTargetPosition(armUp);
+                    leftArm.getTargetPositionTolerance();
+                    rightArm.setTargetPosition(armUp);
+                    rightArm.getTargetPositionTolerance();
+                    leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    leftArm.setPower(0.75);
+                    rightArm.setPower(0.75);
+                } else if (armzAvg >= armMost && armzAvg < armUp) {
+                    leftArm.setTargetPosition(armUp);
+                    leftArm.getTargetPositionTolerance();
+                    rightArm.setTargetPosition(armUp);
+                    rightArm.getTargetPositionTolerance();
+                    leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    leftArm.setPower(0.3);
+                    rightArm.setPower(0.3);
+                } else {
+                    leftArm.setPower(0);
+                    rightArm.setPower(0);
+                }
                 armPos = ARM_POS.UP;
+
                 return false;
             }
         }
@@ -112,13 +196,30 @@ public class dRRagonsAuto extends LinearOpMode {
             return new ArmToBasket();
         }
         public class ArmToGrab implements Action {
-
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                //leftArm.setTargetPosition();
-                //rightArm.setTargetPosition();
-                leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                if (armzAvg < armLittle) {
+                    leftArm.setTargetPosition(armDown);
+                    leftArm.getTargetPositionTolerance();
+                    rightArm.setTargetPosition(armDown);
+                    rightArm.getTargetPositionTolerance();
+                    leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    leftArm.setPower(0.75);
+                    rightArm.setPower(0.75);
+                } else if (armzAvg >= armLittle && armzAvg > armDown) {
+                    leftArm.setTargetPosition(armDown);
+                    leftArm.getTargetPositionTolerance();
+                    rightArm.setTargetPosition(armDown);
+                    rightArm.getTargetPositionTolerance();
+                    leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    leftArm.setPower(0.3);
+                    rightArm.setPower(0.3);
+                } else {
+                    leftArm.setPower(0);
+                    rightArm.setPower(0);
+                }
                 armPos = ARM_POS.DOWN;
                 return false;
             }
@@ -137,13 +238,15 @@ public class dRRagonsAuto extends LinearOpMode {
             rightArtie.scaleRange(0,1);
             rightArtie.setDirection(Servo.Direction.REVERSE);
         }
-
+        double artieUP = 1;
+        double artieDOWN = 0.5;
+        double artieDOWNmore = 0.4;
+        double artieBACK;
         public class ArtieUp implements Action {
-
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                //leftArtie.setPosition();
-                //rightArtie.setPosition();
+                leftArtie.setPosition(artieUP);
+                rightArtie.setPosition(artieUP);
                 return false;
             }
         }
@@ -154,8 +257,8 @@ public class dRRagonsAuto extends LinearOpMode {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                //leftArtie.setPosition();
-                //rightArtie.setPosition();
+                leftArtie.setPosition(artieDOWN);
+                rightArtie.setPosition(artieDOWN);
                 return false;
             }
         }
@@ -166,13 +269,25 @@ public class dRRagonsAuto extends LinearOpMode {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                //leftArtie.setPosition();
-                //rightArtie.setPosition();
+                leftArtie.setPosition(artieBACK);
+                rightArtie.setPosition(artieBACK);
                 return false;
             }
         }
         public Action artieBack (){
             return new ArtieBack();
+        }
+        public class ArtieDownMore implements Action {
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                leftArtie.setPosition(artieDOWNmore);
+                rightArtie.setPosition(artieDOWNmore);
+                return false;
+            }
+        }
+        public Action artieDownMore (){
+            return new ArtieDownMore();
         }
 
     } //finish once you find out positions
@@ -211,11 +326,14 @@ public class dRRagonsAuto extends LinearOpMode {
             tilt = hardwareMap.get(Servo.class, "tilt");
             tilt.scaleRange(0,1);
         }
+        int tiltUP;
+        int tiltDOWN;
+        int tiltBACK;
         public class TiltUp implements Action {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                //tilt.setPosition();
+                tilt.setPosition(tiltUP);
                 return false;
             }
         }
@@ -226,7 +344,7 @@ public class dRRagonsAuto extends LinearOpMode {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                //tilt.setPosition();
+                tilt.setPosition(tiltDOWN);
                 return false;
             }
         }
@@ -237,7 +355,7 @@ public class dRRagonsAuto extends LinearOpMode {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                //tilt.setPosition();
+                tilt.setPosition(tiltBACK);
                 return false;
             }
         }
@@ -262,7 +380,6 @@ public class dRRagonsAuto extends LinearOpMode {
             return new GoingHome();
         }
         public class ThisWay implements Action {
-
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 twist.setPosition(amnt);
@@ -554,11 +671,43 @@ public class dRRagonsAuto extends LinearOpMode {
                 autonomousAnonymous = stopping.build();
                 break;
         }
-
+//47 in to top at full ext artie up
+//19 in to top at no ext artie up
+//41 in to top at full ext artie out/down
+//13 in to top at no ext artie out/down
+// artie up +6 in, artie out/down -6in
+        Action toGrabby = new SequentialAction();
         Action grabby = new SequentialAction (
                 littleLarryLime.SetAngle(),
                 twistyturny.TurnClaw(),
-                clawz.CloseClaw()
+                littleArtie.artieDown(),
+                clawz.CloseClaw(),
+                littleArtie.artieUp(),
+                twistyturny.Resetting()
+        );
+        Action depositTop = new SequentialAction(
+                linearSlidez.GoUp(),
+                littleArtie.artieBack(),
+                seesaw.tiltBack(),
+                clawz.OpenClaw()
+        );
+        Action depositBottom = new SequentialAction(
+                linearSlidez.GoHalf(),
+                littleArtie.artieBack(),
+                seesaw.tiltBack(),
+                clawz.OpenClaw()
+        );
+        Action sampleBottom = new SequentialAction(
+                linearSlidez.GoDown(),
+                seesaw.tiltUp(),
+                littleArtie.artieDownMore(),
+                clawz.OpenClaw()
+        );
+        Action sampleTop = new SequentialAction(
+                linearSlidez.GoHalf(),
+                seesaw.tiltUp(),
+                littleArtie.artieDownMore(),
+                clawz.OpenClaw()
         );
 
         Actions.runBlocking(
