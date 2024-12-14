@@ -1,4 +1,6 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
+import static org.firstinspires.ftc.teamcode.utils.StartingPosPicker.*;
+
 import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -21,10 +23,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.utils.Global;
+import org.firstinspires.ftc.teamcode.utils.StartingPosPicker;
+
 import java.util.List;
 @Config
 @Autonomous(name = "dRRagonsAuto", group = "Autonomous")
 public class dRRagonsAuto extends LinearOpMode {
+    public Object pickStart1;
+    public static int myStart;
     public double amnt;
     double myAngle;
     public enum ARM_POS {
@@ -61,17 +67,9 @@ public class dRRagonsAuto extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (linearAverage < mostTicks) {
-                    leftLinear.setTargetPosition(maxTicks);
-                    rightLinear.setTargetPosition(mostTicks);
-                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftLinear.setPower(0.75);
                     rightLinear.setPower(0.75);
                 } else if (linearAverage >= mostTicks && linearAverage < maxTicks) {
-                    leftLinear.setTargetPosition(maxTicks);
-                    rightLinear.setTargetPosition(maxTicks);
-                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftLinear.setPower(0.2);
                     rightLinear.setPower(0.2);
                 } else {
@@ -88,17 +86,9 @@ public class dRRagonsAuto extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (linearAverage > fewTicks) {
-                    leftLinear.setTargetPosition(bottomTicks);
-                    rightLinear.setTargetPosition(bottomTicks);
-                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftLinear.setPower(0.75);
                     rightLinear.setPower(0.75);
                 } else if (linearAverage <= fewTicks && linearAverage > bottomTicks) {
-                    leftLinear.setTargetPosition(bottomTicks);
-                    rightLinear.setTargetPosition(bottomTicks);
-                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftLinear.setPower(0.2);
                     rightLinear.setPower(0.2);
                 } else {
@@ -116,17 +106,9 @@ public class dRRagonsAuto extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 if (linearAverage < fewTicks || linearAverage > mostTicks) {
-                    leftLinear.setTargetPosition(halfTicks);
-                    rightLinear.setTargetPosition(halfTicks);
-                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftLinear.setPower(0.75);
                     rightLinear.setPower(0.75);
                 } else if (linearAverage >= fewTicks && linearAverage != halfTicks || linearAverage <= mostTicks && linearAverage != halfTicks) {
-                    leftLinear.setTargetPosition(halfTicks);
-                    rightLinear.setTargetPosition(halfTicks);
-                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftLinear.setPower(0.2);
                     rightLinear.setPower(0.2);
                 } else {
@@ -166,21 +148,9 @@ public class dRRagonsAuto extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 if (armzAvg < armMost) {
-                    leftArm.setTargetPosition(armUp);
-                    leftArm.getTargetPositionTolerance();
-                    rightArm.setTargetPosition(armUp);
-                    rightArm.getTargetPositionTolerance();
-                    leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftArm.setPower(0.75);
                     rightArm.setPower(0.75);
                 } else if (armzAvg >= armMost && armzAvg < armUp) {
-                    leftArm.setTargetPosition(armUp);
-                    leftArm.getTargetPositionTolerance();
-                    rightArm.setTargetPosition(armUp);
-                    rightArm.getTargetPositionTolerance();
-                    leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftArm.setPower(0.3);
                     rightArm.setPower(0.3);
                 } else {
@@ -199,21 +169,9 @@ public class dRRagonsAuto extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 if (armzAvg < armLittle) {
-                    leftArm.setTargetPosition(armDown);
-                    leftArm.getTargetPositionTolerance();
-                    rightArm.setTargetPosition(armDown);
-                    rightArm.getTargetPositionTolerance();
-                    leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftArm.setPower(0.75);
                     rightArm.setPower(0.75);
                 } else if (armzAvg >= armLittle && armzAvg > armDown) {
-                    leftArm.setTargetPosition(armDown);
-                    leftArm.getTargetPositionTolerance();
-                    rightArm.setTargetPosition(armDown);
-                    rightArm.getTargetPositionTolerance();
-                    leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftArm.setPower(0.3);
                     rightArm.setPower(0.3);
                 } else {
@@ -542,7 +500,7 @@ public class dRRagonsAuto extends LinearOpMode {
         blueYellow3      = new Vector2d(55,25);
         Pose2d startPose = null;
         Pose2d notSelected= new Pose2d(0,0,0);
-        int starty = 0;
+
         Linearz linearSlidez = new Linearz(hardwareMap);
         Armz ourArmz = new Armz(hardwareMap);
         Artie littleArtie = new Artie(hardwareMap);
@@ -555,17 +513,9 @@ public class dRRagonsAuto extends LinearOpMode {
 
         while (opModeInInit()){
 
-            if (gamepad1.x){
-                starty=1;
-            } else if (gamepad1.b) {
-                starty=2;
-            } else if (gamepad2.x) {
-                starty=3;
-            } else if (gamepad2.b) {
-                starty=4;
-            }
-
-            switch (starty) {
+            pickStart1 = pickStart;
+            myStart = starty;
+            switch (StartingPosPicker.starty) {
                 case 1:
                     startPose = blueStartBasket;
                     Actions.runBlocking(littleLarryLime.LarryLimeYellow());
