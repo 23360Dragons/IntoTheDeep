@@ -12,6 +12,8 @@
 - PORT 3 : tilt
 ### USB
 - USB-A 3.0 : limelight
+### I2C Ports
+- I2C Port 0 : Sparkfun OTOS
 
 ## Expansion Hub
 ### Motors
