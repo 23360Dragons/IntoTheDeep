@@ -30,6 +30,7 @@ import java.util.List;
 @Autonomous(name = "dRRagonsAuto", group = "Autonomous")
 public class dRRagonsAuto extends LinearOpMode {
     public Object pickStart1;
+    public int myStart;
     public double amnt;
     double myAngle;
     public enum ARM_POS {
@@ -66,17 +67,9 @@ public class dRRagonsAuto extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (linearAverage < mostTicks) {
-                    leftLinear.setTargetPosition(maxTicks);
-                    rightLinear.setTargetPosition(mostTicks);
-                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftLinear.setPower(0.75);
                     rightLinear.setPower(0.75);
                 } else if (linearAverage >= mostTicks && linearAverage < maxTicks) {
-                    leftLinear.setTargetPosition(maxTicks);
-                    rightLinear.setTargetPosition(maxTicks);
-                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftLinear.setPower(0.2);
                     rightLinear.setPower(0.2);
                 } else {
@@ -93,17 +86,9 @@ public class dRRagonsAuto extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (linearAverage > fewTicks) {
-                    leftLinear.setTargetPosition(bottomTicks);
-                    rightLinear.setTargetPosition(bottomTicks);
-                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftLinear.setPower(0.75);
                     rightLinear.setPower(0.75);
                 } else if (linearAverage <= fewTicks && linearAverage > bottomTicks) {
-                    leftLinear.setTargetPosition(bottomTicks);
-                    rightLinear.setTargetPosition(bottomTicks);
-                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftLinear.setPower(0.2);
                     rightLinear.setPower(0.2);
                 } else {
@@ -121,17 +106,9 @@ public class dRRagonsAuto extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 if (linearAverage < fewTicks || linearAverage > mostTicks) {
-                    leftLinear.setTargetPosition(halfTicks);
-                    rightLinear.setTargetPosition(halfTicks);
-                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftLinear.setPower(0.75);
                     rightLinear.setPower(0.75);
                 } else if (linearAverage >= fewTicks && linearAverage != halfTicks || linearAverage <= mostTicks && linearAverage != halfTicks) {
-                    leftLinear.setTargetPosition(halfTicks);
-                    rightLinear.setTargetPosition(halfTicks);
-                    leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftLinear.setPower(0.2);
                     rightLinear.setPower(0.2);
                 } else {
@@ -171,21 +148,9 @@ public class dRRagonsAuto extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 if (armzAvg < armMost) {
-                    leftArm.setTargetPosition(armUp);
-                    leftArm.getTargetPositionTolerance();
-                    rightArm.setTargetPosition(armUp);
-                    rightArm.getTargetPositionTolerance();
-                    leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftArm.setPower(0.75);
                     rightArm.setPower(0.75);
                 } else if (armzAvg >= armMost && armzAvg < armUp) {
-                    leftArm.setTargetPosition(armUp);
-                    leftArm.getTargetPositionTolerance();
-                    rightArm.setTargetPosition(armUp);
-                    rightArm.getTargetPositionTolerance();
-                    leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftArm.setPower(0.3);
                     rightArm.setPower(0.3);
                 } else {
@@ -204,21 +169,9 @@ public class dRRagonsAuto extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 if (armzAvg < armLittle) {
-                    leftArm.setTargetPosition(armDown);
-                    leftArm.getTargetPositionTolerance();
-                    rightArm.setTargetPosition(armDown);
-                    rightArm.getTargetPositionTolerance();
-                    leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftArm.setPower(0.75);
                     rightArm.setPower(0.75);
                 } else if (armzAvg >= armLittle && armzAvg > armDown) {
-                    leftArm.setTargetPosition(armDown);
-                    leftArm.getTargetPositionTolerance();
-                    rightArm.setTargetPosition(armDown);
-                    rightArm.getTargetPositionTolerance();
-                    leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     leftArm.setPower(0.3);
                     rightArm.setPower(0.3);
                 } else {
@@ -561,7 +514,7 @@ public class dRRagonsAuto extends LinearOpMode {
         while (opModeInInit()){
 
             pickStart1 = pickStart;
-            int starter = starty;
+            myStart = starty;
             switch (StartingPosPicker.starty) {
                 case 1:
                     startPose = blueStartBasket;
