@@ -223,8 +223,8 @@ public class DragonsDriver extends LinearOpMode {
 //                    if (SSspeed != 1)
 //                        SSspeed = 1;
 //                    telemetry.addLine("SS Full Speed!");
-                /*} else */if (SSspeed != 0.7 && extSpeed != 0.5) {
-                    SSspeed  = 0.7;
+                /*} else */if (SSspeed != 0.5 && extSpeed != 0.5) {
+                    SSspeed  = 0.5;
                     extSpeed = 0.5;
                 }
 
