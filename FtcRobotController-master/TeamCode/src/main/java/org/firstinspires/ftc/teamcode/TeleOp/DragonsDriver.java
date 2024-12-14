@@ -240,7 +240,8 @@ public class DragonsDriver extends LinearOpMode {
 
                 superStructure.extension.setPower(extensionPower * extSpeed);
 
-                telemetry.addData("Super Structure extension power", superStructure.extension.getPower());
+                telemetry.addData("Super Structure extension power",     superStructure.extension.getPower());
+                telemetry.addData("Super Structure extension position",  superStructure.extension.getPosition().right);
             }
 
             // --------------------- Limelight ---------------------
@@ -256,7 +257,7 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("LLalignTarget", LLAlignAngle);
             }
 
-            // --------------------- Arm ---------------------
+            // <editor-fold desc=" --------------------- Arm ---------------------">
             if (arm.claw.isValid) {
                 if (openClaw)
                     arm.claw.open();
@@ -264,9 +265,9 @@ public class DragonsDriver extends LinearOpMode {
                     arm.claw.close();
             }
 
-            if (arm.twist.isValid) {
-                arm.twist.setRotation(LLAlignAngle / 270);
-            }
+//            if (arm.twist.isValid) {
+//                arm.twist.setRotation(LLAlignAngle / 270);
+//            }
 
             if (arm.artie.isValid) {
                 if (armUp)
@@ -279,6 +280,7 @@ public class DragonsDriver extends LinearOpMode {
                 arm.artie.updatePosition();
                 telemetry.addData("artie pos", arm.artie.getPosition().name());
             }
+            //</editor-fold>
 
             // --------------------- SparkFun OTOS ---------------------
             if (dragonsOTOS.isValid) {
