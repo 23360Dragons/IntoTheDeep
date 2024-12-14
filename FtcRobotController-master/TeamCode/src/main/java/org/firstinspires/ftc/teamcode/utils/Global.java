@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.utils;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 
 public class Global {
-    public static StringBuilder exceptions = new StringBuilder("The following exceptions occurred:\n");
+    public static StringBuilder exceptions = new StringBuilder("The following were not found:\n");
     public static boolean exceptionOccurred = false;
 
     public static final RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;

@@ -61,6 +61,7 @@ public class Arm {
             }
         }
 
+        // 0 tilts it back, 1 tilts it forward
         public void setPosition (double position) {
             servo.setPosition(position);
         }
@@ -72,12 +73,12 @@ public class Arm {
 
     public static class Twist {
         public boolean isValid = true;
-        private Servo servo;
+        private CRServo servo;
 
         Twist (HardwareMap hardwareMap) {
             try {
-                servo = hardwareMap.get(Servo.class, "twist");
-                servo.scaleRange(0.167, 0.833);
+                servo = hardwareMap.get(CRServo.class, "twist");
+//                servo.scaleRange(0.167, 0.833);
 
             } catch (IllegalArgumentException e) {
                 Global.exceptions.append("Configuration Error: ").append("Wrist pitch").append(" does not exist").append("\n");
@@ -86,8 +87,11 @@ public class Arm {
             }
         }
 
-        public void setRotation (double rotation) {
-            servo.setPosition(rotation);
+//        public void setRotation (double rotation) {
+//            servo.setPosition(rotation);
+//        }
+        public void setPower (double power) {
+            servo.setPower(power);
         }
     }
 
@@ -125,10 +129,6 @@ public class Arm {
         private ArtiePos artiePos;
         private ArtiePos lastArtiePos;
 
-        private double down = 0.6; // todo : update these through testing
-        private double up   = 1;
-        private double back = 0.8;
-
         Artie (HardwareMap hardwareMap) {
             try {
                 left = hardwareMap.get(Servo.class, "leftArtie");
@@ -137,7 +137,9 @@ public class Arm {
                 Global.exceptions.append("Configuration Error: ").append("leftArtie").append(" does not exist").append("\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
-            }
+            } // left motor - right goes back
+
+            // right motor - left goes back ( so 0)
 
             try {
                 right = hardwareMap.get(Servo.class, "rightArtie");
@@ -164,12 +166,20 @@ public class Arm {
         }
 
         private void moveServos (double pos) {
+            double rPos = 1 - pos; // makes it flipped because the servo is flipped
+
             left.setPosition(pos);
-            right.setPosition(pos);
+            right.setPosition(rPos);
         }
 
         public void updatePosition () {
             if (artiePos != lastArtiePos) {
+                // todo : update these through testing
+
+                final double back = 1;
+                final double down = 0.5;
+                final double up   = 0.8;
+
                 moveServos(artiePos == ArtiePos.UP   ? up
                          : artiePos == ArtiePos.DOWN ? down
                          : artiePos == ArtiePos.BACK ? back

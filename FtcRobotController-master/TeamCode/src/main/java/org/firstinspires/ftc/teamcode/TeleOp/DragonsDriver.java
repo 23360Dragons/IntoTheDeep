@@ -60,7 +60,7 @@ public class DragonsDriver extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        Global.exceptions.delete(0, exceptions.capacity()).append("The following exceptions occurred:\n");
+        Global.exceptions.delete(0, exceptions.capacity()).append("The following were not found:\n");
         currentGamepad1  = new Gamepad();
         currentGamepad2  = new Gamepad();
         previousGamepad1 = new Gamepad();
@@ -196,16 +196,22 @@ public class DragonsDriver extends LinearOpMode {
 
             // gamepad 2 (MANUPULATOR)
 
-            double  SSFullSpeed       = currentGamepad2.right_trigger,
-                    articulationPower = -currentGamepad2.left_stick_y,
+            double  articulationPower = -currentGamepad2.left_stick_y,
                     extensionPower    = -currentGamepad2.right_stick_y;
 
-            boolean openClaw       = currentGamepad2.right_bumper, closeClaw = currentGamepad2.left_bumper,
+            boolean openClaw       = currentGamepad2.right_bumper,
+                    closeClaw      = currentGamepad2.left_bumper,
+//                    SSFullSpeed    = currentGamepad2.x,
                     // set limelight pipeline
                     currentB2      = currentGamepad2.b, previousB2 = previousGamepad2.b,
-                    armDown        = currentGamepad2.dpad_down,
-                    armBack        = currentGamepad2.dpad_right,
-                    armUp          = currentGamepad2.dpad_up;
+                    armDown        = currentGamepad2.a,
+                    armBack        = currentGamepad2.x,
+                    armUp          = currentGamepad2.y,
+                    twistLeft      = currentGamepad2.dpad_left,
+                    twistRight     = currentGamepad2.dpad_right,
+                    tiltUp         = currentGamepad2.dpad_up,
+                    tiltDown       = currentGamepad2.dpad_down;
+
 
 
             //</editor-fold>
@@ -213,12 +219,12 @@ public class DragonsDriver extends LinearOpMode {
             // --------------------- SuperStructure ---------------------
 
             if (superStructure.articulation.isValid) {
-                if (SSFullSpeed > 0.1) {
-                    if (SSspeed != 1)
-                        SSspeed = 1;
-                    telemetry.addLine("SS Full Speed!");
-                } else if (SSspeed != 0.4 && extSpeed != 0.5) {
-                    SSspeed  = 0.4;
+//                if (SSFullSpeed) {
+//                    if (SSspeed != 1)
+//                        SSspeed = 1;
+//                    telemetry.addLine("SS Full Speed!");
+                /*} else */if (SSspeed != 0.7 && extSpeed != 0.5) {
+                    SSspeed  = 0.7;
                     extSpeed = 0.5;
                 }
 
@@ -230,11 +236,11 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             if (superStructure.extension.isValid) {
-                if (SSFullSpeed > 0.1) {
-                    if (extSpeed != 1)
-                        extSpeed = 1;
-                    telemetry.addLine("Ext Full Speed!");
-                } else if (extSpeed != 0.5) {
+//                if (SSFullSpeed) {
+//                    if (extSpeed != 1)
+//                        extSpeed = 1;
+//                    telemetry.addLine("Ext Full Speed!");
+                /*} else*/ if (extSpeed != 0.5) {
                     extSpeed = 0.5;
                 }
 
@@ -265,9 +271,18 @@ public class DragonsDriver extends LinearOpMode {
                     arm.claw.close();
             }
 
-//            if (arm.twist.isValid) {
+            if (arm.twist.isValid) {
 //                arm.twist.setRotation(LLAlignAngle / 270);
-//            }
+                double coef = 0.4;
+                double power = twistLeft ? -1 : twistRight ? 1 : 0;
+                arm.twist.setPower(power);
+            }
+
+            if (arm.tilt.isValid) {
+                double power = tiltUp ? -1 : tiltDown ? 1 : 0;
+                arm.tilt.setPosition(power);
+                telemetry.addData("TiltPos", power);
+            }
 
             if (arm.artie.isValid) {
                 if (armUp)

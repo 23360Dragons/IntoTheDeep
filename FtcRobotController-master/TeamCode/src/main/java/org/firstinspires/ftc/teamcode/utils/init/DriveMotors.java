@@ -25,7 +25,7 @@ public class DriveMotors {
                 }
                 catch(IllegalArgumentException e)
                 {
-                    Global.exceptions.append("Configuration Error: ").append("leftFront").append(" does not exist").append("\n");
+                    Global.exceptions.append("leftFront\n");
                     Global.exceptionOccurred = true;
                     isValid = false;
                 }
@@ -39,7 +39,7 @@ public class DriveMotors {
                 }
                 catch(IllegalArgumentException e)
                 {
-                    Global.exceptions.append("Configuration Error: ").append("rightFront").append(" does not exist").append("\n");
+                    Global.exceptions.append("rightFront\n");
                     Global.exceptionOccurred = true;
                     isValid = false;
                 }
@@ -53,7 +53,7 @@ public class DriveMotors {
                 }
                 catch(IllegalArgumentException e)
                 {
-                    Global.exceptions.append("Configuration Error: ").append("leftBack").append(" does not exist").append("\n");
+                    Global.exceptions.append("leftBack\n");
                     Global.exceptionOccurred = true;
                     isValid = false;
                 }
@@ -66,7 +66,7 @@ public class DriveMotors {
                 }
                 catch(IllegalArgumentException e)
                 {
-                    Global.exceptions.append("Configuration Error: ").append("rightBack").append(" does not exist").append("\n");
+                    Global.exceptions.append("rightBack").append(" does not exist").append("\n");
                     Global.exceptionOccurred = true;
                     isValid = false;
                 }
@@ -76,7 +76,7 @@ public class DriveMotors {
         }
         catch(Exception ex)
         {
-            Global.exceptions.append("Configuration Error: ").append("General Motor Config").append(ex.getMessage()).append("\n");
+            Global.exceptions.append("General Motor Config: ").append(ex.getMessage()).append("\n");
             Global.exceptionOccurred = true;
             isValid = false;
         }
