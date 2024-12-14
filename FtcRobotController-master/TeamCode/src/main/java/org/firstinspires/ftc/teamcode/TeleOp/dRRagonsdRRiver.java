@@ -15,6 +15,7 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -196,13 +197,13 @@ public class dRRagonsdRRiver extends LinearOpMode {
 
     } //test?
     public class Artie {
-        private Servo leftArtie, rightArtie;
+        private CRServo leftArtie, rightArtie;
         public Artie(HardwareMap hardwareMap){
-            leftArtie = hardwareMap.get(Servo.class,"leftArtie");
-            leftArtie.scaleRange(0,1);
-            rightArtie = hardwareMap.get(Servo.class, "rightArtie");
-            rightArtie.scaleRange(0,1);
-            rightArtie.setDirection(Servo.Direction.REVERSE);
+            leftArtie = hardwareMap.get(CRServo.class,"leftArtie");
+            //leftArtie.scaleRange(0,1);
+            rightArtie = hardwareMap.get(CRServo.class, "rightArtie");
+            //rightArtie.scaleRange(0,1);
+            rightArtie.setDirection(CRServo.Direction.REVERSE);
         }
         double artieUP = 1;
         double artieDOWN = 0.5;
@@ -211,8 +212,8 @@ public class dRRagonsdRRiver extends LinearOpMode {
         public class ArtieUp implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                leftArtie.setPosition(artieUP);
-                rightArtie.setPosition(artieUP);
+                //leftArtie.setPosition(artieUP);
+                //rightArtie.setPosition(artieUP);
                 return false;
             }
         }
@@ -223,8 +224,8 @@ public class dRRagonsdRRiver extends LinearOpMode {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                leftArtie.setPosition(artieDOWN);
-                rightArtie.setPosition(artieDOWN);
+                //leftArtie.setPosition(artieDOWN);
+                //rightArtie.setPosition(artieDOWN);
                 return false;
             }
         }
@@ -235,8 +236,8 @@ public class dRRagonsdRRiver extends LinearOpMode {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                leftArtie.setPosition(artieBACK);
-                rightArtie.setPosition(artieBACK);
+                //leftArtie.setPosition(artieBACK);
+                //rightArtie.setPosition(artieBACK);
                 return false;
             }
         }
@@ -247,8 +248,8 @@ public class dRRagonsdRRiver extends LinearOpMode {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                leftArtie.setPosition(artieDOWNmore);
-                rightArtie.setPosition(artieDOWNmore);
+                //leftArtie.setPosition(artieDOWNmore);
+                //rightArtie.setPosition(artieDOWNmore);
                 return false;
             }
         }
