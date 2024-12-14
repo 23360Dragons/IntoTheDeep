@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
 public class DragonsOTOS {
-    public boolean isValid;
+    public boolean isValid = true;
     public SparkFunOTOS sparkFunOTOS;
 
     public DragonsOTOS (LinearOpMode opmode) {
