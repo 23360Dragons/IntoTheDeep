@@ -13,6 +13,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Arm;
@@ -61,6 +62,7 @@ public class DragonsDriver extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         Global.exceptions.delete(0, exceptions.capacity()).append("The following were not found:\n");
+        Global.exceptionOccurred = false;
         currentGamepad1  = new Gamepad();
         currentGamepad2  = new Gamepad();
         previousGamepad1 = new Gamepad();
@@ -89,7 +91,7 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.addLine(Global.exceptions.toString());
             telemetry.update();
 
-            sleep(5000);
+            sleep(3000);
 
             if (!dragonsIMU.isValid || !driveMotors.isValid) {
                 telemetry.addLine("Critical Error Occurred! The IMU, Motors, and all movement code will not work.");
@@ -190,40 +192,39 @@ public class DragonsDriver extends LinearOpMode {
 
             double  y      = -currentGamepad1.left_stick_y,
                     x      = currentGamepad1.left_stick_x,
-                    rightX = currentGamepad1.right_stick_x;
+                    rightX = currentGamepad1.right_stick_x,
+                    creepSpeed = currentGamepad1.left_trigger;
 
             boolean recalibrateIMU = currentGamepad1.y;
 
-            // gamepad 2 (MANUPULATOR)
+            // gamepad 2 (MANIPULATOR)
 
             double  articulationPower = -currentGamepad2.left_stick_y,
                     extensionPower    = -currentGamepad2.right_stick_y;
 
-            boolean openClaw       = currentGamepad2.right_bumper,
-                    closeClaw      = currentGamepad2.left_bumper,
-//                    SSFullSpeed    = currentGamepad2.x,
+            boolean openClaw          = currentGamepad2.right_bumper,
+                    closeClaw         = currentGamepad2.left_bumper,
+//                    SSFullSpeed       = currentGamepad2.x,
                     // set limelight pipeline
-                    currentB2      = currentGamepad2.b, previousB2 = previousGamepad2.b,
-                    armDown        = currentGamepad2.a,
-                    armBack        = currentGamepad2.x,
-                    armUp          = currentGamepad2.y,
-                    twistLeft      = currentGamepad2.dpad_left,
-                    twistRight     = currentGamepad2.dpad_right,
-                    tiltUp         = currentGamepad2.dpad_up,
-                    tiltDown       = currentGamepad2.dpad_down;
-
-
+                    currentB2         = currentGamepad2.b, previousB2 = previousGamepad2.b,
+                    armDown           = currentGamepad2.a,
+//                    armBack           = currentGamepad2.x,
+                    armUp             = currentGamepad2.y,
+                    twistLeft         = currentGamepad2.dpad_left,
+                    twistRight        = currentGamepad2.dpad_right,
+                    tiltUp            = currentGamepad2.dpad_up,
+                    tiltDown          = currentGamepad2.dpad_down;
 
             //</editor-fold>
 
-            // --------------------- SuperStructure ---------------------
+            // <editor-fold desc="--------------------- SuperStructure ---------------------">
 
             if (superStructure.articulation.isValid) {
-//                if (SSFullSpeed) {
-//                    if (SSspeed != 1)
-//                        SSspeed = 1;
-//                    telemetry.addLine("SS Full Speed!");
-                /*} else */if (SSspeed != 0.5 && extSpeed != 0.5) {
+                /*if (SSFullSpeed) {
+                    if (SSspeed != 1)
+                        SSspeed = 1;
+                    telemetry.addLine("SS Full Speed!");
+                } else*/ if (SSspeed != 0.5 && extSpeed != 0.5) {
                     SSspeed  = 0.5;
                     extSpeed = 0.5;
                 }
@@ -236,11 +237,11 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             if (superStructure.extension.isValid) {
-//                if (SSFullSpeed) {
-//                    if (extSpeed != 1)
-//                        extSpeed = 1;
-//                    telemetry.addLine("Ext Full Speed!");
-                /*} else*/ if (extSpeed != 0.5) {
+                /*if (SSFullSpeed) {
+                    if (extSpeed != 1)
+                        extSpeed = 1;
+                    telemetry.addLine("Ext Full Speed!");
+                } else*/ if (extSpeed != 0.5) {
                     extSpeed = 0.5;
                 }
 
@@ -250,75 +251,109 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("Super Structure extension position",  superStructure.extension.getPosition().right);
             }
 
-            // --------------------- Limelight ---------------------
-            if (dragonsLimelight.isValid) {
-                // --------------------- Pipeline Switching ---------------------
-                if (currentB2 && !previousB2) { //rising edge
-                    dragonsLimelight.setPipeline(YELLOW);
-                } else if (!currentB2 && previousB2) { //falling edge
-                    dragonsLimelight.setPipeline(runPipeline);
-                }
+            //</editor-fold>
 
-                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this, dragonsLights)), 180);
-                telemetry.addData("LLalignTarget", LLAlignAngle);
-            }
+            // --------------------- Limelight ---------------------
+//            if (dragonsLimelight.isValid) {
+//                // --------------------- Pipeline Switching ---------------------
+//                if (currentB2 && !previousB2) { //rising edge
+//                    dragonsLimelight.setPipeline(YELLOW);
+//                } else if (!currentB2 && previousB2) { //falling edge
+//                    dragonsLimelight.setPipeline(runPipeline);
+//                }
+//
+//                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this, dragonsLights)), 180);
+//                telemetry.addData("LLalignTarget", LLAlignAngle);
+//            }
 
             // <editor-fold desc=" --------------------- Arm ---------------------">
             if (arm.claw.isValid) {
-                if (openClaw)
-                    arm.claw.open();
-                else if (closeClaw)
-                    arm.claw.close();
+//                if (openClaw) {
+//                    arm.claw.open();
+//                    telemetry.addLine("Open claw");
+//                }
+//                if (closeClaw) {
+//                    arm.claw.close();
+//                    telemetry.addLine("Close claw");
+//                }
+//
+//                telemetry.addData("claw Position", arm.claw.getPosition());
+
+                double power = openClaw ? 1 : closeClaw ? -1 : 0;
+                arm.claw.setPower(power);
+                telemetry.addData("Arm claw power", power);
             }
 
             if (arm.twist.isValid) {
 //                arm.twist.setRotation(LLAlignAngle / 270);
-                double coef = 0.4;
                 double power = twistLeft ? -1 : twistRight ? 1 : 0;
                 arm.twist.setPower(power);
+                telemetry.addData("Arm twist power", power);
             }
 
             if (arm.tilt.isValid) {
-                double power = tiltUp ? -1 : tiltDown ? 1 : 0;
-                arm.tilt.setPosition(power);
-                telemetry.addData("TiltPos", power);
+//                if (tiltUp) {
+//                    arm.tilt.up();
+//                    telemetry.addLine("moving tilt up");
+//                }
+//                else if (tiltDown) {
+//                    arm.tilt.down();
+//                    telemetry.addLine("moving tilt down");
+//                }
+
+                double power = tiltUp ? 1 : tiltDown ? -1 : 0;
+                arm.tilt.setPower(power);
+                telemetry.addData("Arm tilt power", power);
             }
 
-            if (arm.artie.isValid) {
-                if (armUp)
-                    arm.artie.setPosition(Arm.Artie.ArtiePos.UP);
-                else if (armDown)
-                    arm.artie.setPosition(Arm.Artie.ArtiePos.DOWN);
-                else if (armBack)
-                    arm.artie.setPosition(Arm.Artie.ArtiePos.BACK);
 
-                arm.artie.updatePosition();
-                telemetry.addData("artie pos", arm.artie.getPosition().name());
+            if (arm.artie.isValid) {
+//                if (armUp)
+//                    arm.artie.setPosition(Arm.Artie.ArtiePos.UP);
+//                if (armDown)
+//                    arm.artie.setPosition(Arm.Artie.ArtiePos.DOWN);
+//                if (armBack)
+//                    arm.artie.setPosition(Arm.Artie.ArtiePos.BACK);
+//
+//                arm.artie.updatePosition();
+//                telemetry.addData("artie pos", arm.artie.getPosition().name());
+                double power = armUp ? 1 : armDown ? -1 : 0;
+
+                arm.artie.setPower(power);
+                telemetry.addData ("Arm artie power", power);
             }
             //</editor-fold>
 
             // --------------------- SparkFun OTOS ---------------------
-            if (dragonsOTOS.isValid) {
-                telemetry.addData("Sparkfun velocity along x axis", Math.round(dragonsOTOS.sparkFunOTOS.getVelocity().x));
-                telemetry.addData("Sparkfun velocity along y axis", Math.round(dragonsOTOS.sparkFunOTOS.getVelocity().y));
-                telemetry.addLine();
-                telemetry.addData("sparkfun x", Math.round(dragonsOTOS.sparkFunOTOS.getPosition().x));
-                telemetry.addData("sparkfun y", Math.round(dragonsOTOS.sparkFunOTOS.getPosition().y));
-                telemetry.addData("sparkfun heading", Math.round(dragonsOTOS.sparkFunOTOS.getPosition().h));
-            }
+//            if (dragonsOTOS.isValid) {
+//                telemetry.addData("Sparkfun velocity along x axis", Math.round(dragonsOTOS.sparkFunOTOS.getVelocity().x));
+//                telemetry.addData("Sparkfun velocity along y axis", Math.round(dragonsOTOS.sparkFunOTOS.getVelocity().y));
+//                telemetry.addLine();
+//                telemetry.addData("sparkfun x", Math.round(dragonsOTOS.sparkFunOTOS.getPosition().x));
+//                telemetry.addData("sparkfun y", Math.round(dragonsOTOS.sparkFunOTOS.getPosition().y));
+//                telemetry.addData("sparkfun heading", Math.round(dragonsOTOS.sparkFunOTOS.getPosition().h));
+//            }
 
             // --------------------- Movement ---------------------
             if (dragonsIMU.isValid && driveMotors.isValid) {
+                double driveSpeed = 1;
+
+                if (creepSpeed > 0.1) {
+                    driveSpeed *= 0.3;
+                }
+
                 if (recalibrateIMU) {
                     telemetry.addLine("reset imu yaw");
                     dragonsIMU.imu.resetYaw();
                 }
 
+
+
                 double botHeading = dragonsIMU.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
                 telemetry.addData("IMU heading", Math.toDegrees(botHeading));
 
                 // calls for movement
-                double[] drivePowers = MoveRobot.FC(botHeading, x, y, rightX, 1); // x, y, and rightX are the gamepad inputs
+                double[] drivePowers = MoveRobot.FC(botHeading, x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
                 //sets the motors to their corresponding power
                 driveMotors.setPower(drivePowers);
 

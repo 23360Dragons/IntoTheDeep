@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -49,26 +50,43 @@ public class Arm {
 
     public static class Tilt {
         public boolean isValid = true;
-        private Servo servo;
+        private CRServo servo;
+        private final double up = 0.8;
+        private final double down = 0.2;
+
         Tilt (HardwareMap hardwareMap) {
             try {
-                servo = hardwareMap.get(Servo.class, "tilt");
-                servo.scaleRange(0,1);
+                servo = hardwareMap.get(CRServo.class, "tilt");
+                servo.setDirection(DcMotorSimple.Direction.FORWARD);
+//                servo.scaleRange(0,1);
+//                up();
             } catch (IllegalArgumentException e) {
-                Global.exceptions.append("Configuration Error: ").append("Elbow Servo").append(" does not exist").append("\n");
+                Global.exceptions.append("Tilt\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
             }
         }
 
         // 0 tilts it back, 1 tilts it forward
-        public void setPosition (double position) {
-            servo.setPosition(position);
+//        public void setPosition (double position) {
+//            servo.setPosition(position);
+//        }
+
+        public void setPower (double power){
+            servo.setPower(power);
         }
 
-        public double getPosition () {
-            return servo.getPosition();
-        }
+//        public double getPosition () {
+//            return servo.getPosition();
+//        }
+
+//        public void up () {
+//            servo.setPosition(up);
+//        }
+
+//        public void down () {
+//            servo.setPosition(down);
+//        }
     }
 
     public static class Twist {
@@ -78,10 +96,11 @@ public class Arm {
         Twist (HardwareMap hardwareMap) {
             try {
                 servo = hardwareMap.get(CRServo.class, "twist");
+                servo.setDirection(DcMotorSimple.Direction.FORWARD);
 //                servo.scaleRange(0.167, 0.833);
 
             } catch (IllegalArgumentException e) {
-                Global.exceptions.append("Configuration Error: ").append("Wrist pitch").append(" does not exist").append("\n");
+                Global.exceptions.append("Twist\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
             }
@@ -97,44 +116,52 @@ public class Arm {
 
     public static class Claw {
         public boolean isValid = true;
-        private Servo claw;
+        private CRServo claw;
 
-        private final double openRotation   = 1;
+        private final double openRotation   = 0.45;
         private final double closedRotation = 0;
 
         Claw (HardwareMap hardwareMap) {
             try {
-                claw = hardwareMap.get(Servo.class, "claw");
-                claw.scaleRange(0.47, 0.9);
+                claw = hardwareMap.get(CRServo.class, "claw");
+//                claw.scaleRange(0, 1);
             } catch (IllegalArgumentException e) {
-                Global.exceptions.append("Configuration Error: ").append("Claw").append(" does not exist").append("\n");
+                Global.exceptions.append("Claw\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
             }
         }
 
-        public void open  ()  {
-            claw.setPosition(openRotation);
-        }
+//        public void open  ()  {
+//            claw.setPosition(openRotation);
+//        }
+//
+//        public void close () {
+//            claw.setPosition(closedRotation);
+//        }
+//
+//        public double getPosition () {
+//            return claw.getPosition();
+//        }
 
-        public void close () {
-            claw.setPosition(closedRotation);
+        public void setPower (double power) {
+            claw.setPower(power);
         }
     }
 
     public static class Artie {
         public boolean isValid = true;
-        private Servo left;
-        private Servo right;
-        private ArtiePos artiePos;
-        private ArtiePos lastArtiePos;
+        private CRServo left;
+        private CRServo right;
+//        private ArtiePos artiePos;
+//        private ArtiePos lastArtiePos;
 
         Artie (HardwareMap hardwareMap) {
             try {
-                left = hardwareMap.get(Servo.class, "leftArtie");
-                left.scaleRange(0,1);
+                left = hardwareMap.get(CRServo.class, "leftArtie");
+//                left.scaleRange(0,1);
             } catch (IllegalArgumentException e) {
-                Global.exceptions.append("Configuration Error: ").append("leftArtie").append(" does not exist").append("\n");
+                Global.exceptions.append("leftArtie\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
             } // left motor - right goes back
@@ -142,55 +169,61 @@ public class Arm {
             // right motor - left goes back ( so 0)
 
             try {
-                right = hardwareMap.get(Servo.class, "rightArtie");
-                right.setDirection(Servo.Direction.REVERSE);
-                right.scaleRange(0,1);
+                right = hardwareMap.get(CRServo.class, "rightArtie");
+                right.setDirection(CRServo.Direction.REVERSE);
+//                right.scaleRange(0,1);
             } catch (IllegalArgumentException e) {
-                Global.exceptions.append("Configuration Error: ").append("rightArtie").append(" does not exist").append("\n");
+                Global.exceptions.append("rightArtie\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
             }
 
-            artiePos = ArtiePos.DOWN;
-            lastArtiePos = artiePos;
+//            artiePos = ArtiePos.DOWN;
+//            lastArtiePos = artiePos;
         }
 
-        public enum ArtiePos {
-            UP,
-            DOWN,
-            BACK
-        }
+//        public enum ArtiePos {
+//            UP,
+//            DOWN,
+//            BACK
+//        }
+//
+//        public void setPosition (ArtiePos pos) {
+//            artiePos = pos;
+//        }
+//
+//        private void moveServos (double pos) {
+//
+//            left.setPosition(pos);
+//            right.setPosition(pos);
+//        }
 
-        public void setPosition (ArtiePos pos) {
-            artiePos = pos;
-        }
+//        public void updatePosition () {
+//            if (artiePos != lastArtiePos) {
+//                 todo : update these through testing
+//
+//                final double back = 1;
+//                final double down = 0.5;
+//                final double up   = 0.8;
+//
+//                if (artiePos == ArtiePos.UP)
+//                    moveServos(up);
+//                else if (artiePos == ArtiePos.DOWN)
+//                    moveServos(down);
+//                else if (artiePos == ArtiePos.BACK)
+//                    moveServos(back);
+//            }
+//
+//            lastArtiePos = artiePos;
+//        }
 
-        private void moveServos (double pos) {
-            double rPos = 1 - pos; // makes it flipped because the servo is flipped
+//        public ArtiePos getPosition () {
+//            return artiePos;
+//        }
 
-            left.setPosition(pos);
-            right.setPosition(rPos);
-        }
-
-        public void updatePosition () {
-            if (artiePos != lastArtiePos) {
-                // todo : update these through testing
-
-                final double back = 1;
-                final double down = 0.5;
-                final double up   = 0.8;
-
-                moveServos(artiePos == ArtiePos.UP   ? up
-                         : artiePos == ArtiePos.DOWN ? down
-                         : artiePos == ArtiePos.BACK ? back
-                         : left.getPosition());
-            }
-
-            lastArtiePos = artiePos;
-        }
-
-        public ArtiePos getPosition () {
-            return artiePos;
+        public void setPower (double pow) {
+            left.setPower(pow);
+            right.setPower(pow);
         }
     }
 }
