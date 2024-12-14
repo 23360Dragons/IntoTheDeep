@@ -22,6 +22,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.utils.Global;
+import org.firstinspires.ftc.teamcode.Autonomous.dRRagonsAuto;
 import java.util.List;
 @Config
 @TeleOp(name = "dRRagonsAuto", group = "TeleOp")
@@ -556,43 +557,30 @@ public class dRRagonsdRRiver extends LinearOpMode {
 
         while (opModeInInit()){
 
-            if (gamepad1.x){
-                starty=1;
-            } else if (gamepad1.b) {
-                starty=2;
-            } else if (gamepad2.x) {
-                starty=3;
-            } else if (gamepad2.b) {
-                starty=4;
-            }
+            //int dRRagonsAuto.pickStart1;
 
             switch (starty) {
                 case 1:
-                    startPose = blueStartBasket;
                     Actions.runBlocking(littleLarryLime.LarryLimeYellow());
                     telemetry.addLine("Starting Position Set To Blue, Basket Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
                 case 2:
-                    startPose = redStartBasket;
                     Actions.runBlocking(littleLarryLime.LarryLimeYellow());
                     telemetry.addLine("Starting Position Set To Red, Basket Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
                 case 3:
-                    startPose = blueStartObserve;
                     Actions.runBlocking(littleLarryLime.LarryLimeBlues());
                     telemetry.addLine("Starting Position Set To Blue, Observation Zone Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
                 case 4:
-                    startPose = redStartObserve;
                     Actions.runBlocking(littleLarryLime.LarryLimeRedTV());
                     telemetry.addLine("Starting Position Set To Red, Observation Zone Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
                 default:
-                    startPose = notSelected;
                     telemetry.addLine("Please select starting position! If not selected, the robot will not run during Auto.");
                     break;
             }

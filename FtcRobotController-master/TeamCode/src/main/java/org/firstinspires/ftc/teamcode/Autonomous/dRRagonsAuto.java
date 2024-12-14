@@ -1,4 +1,6 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
+import static org.firstinspires.ftc.teamcode.utils.StartingPosPicker.*;
+
 import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -21,10 +23,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.utils.Global;
+import org.firstinspires.ftc.teamcode.utils.StartingPosPicker;
+
 import java.util.List;
 @Config
 @Autonomous(name = "dRRagonsAuto", group = "Autonomous")
 public class dRRagonsAuto extends LinearOpMode {
+    public Object pickStart1;
     public double amnt;
     double myAngle;
     public enum ARM_POS {
@@ -542,7 +547,7 @@ public class dRRagonsAuto extends LinearOpMode {
         blueYellow3      = new Vector2d(55,25);
         Pose2d startPose = null;
         Pose2d notSelected= new Pose2d(0,0,0);
-        int starty = 0;
+
         Linearz linearSlidez = new Linearz(hardwareMap);
         Armz ourArmz = new Armz(hardwareMap);
         Artie littleArtie = new Artie(hardwareMap);
@@ -555,17 +560,9 @@ public class dRRagonsAuto extends LinearOpMode {
 
         while (opModeInInit()){
 
-            if (gamepad1.x){
-                starty=1;
-            } else if (gamepad1.b) {
-                starty=2;
-            } else if (gamepad2.x) {
-                starty=3;
-            } else if (gamepad2.b) {
-                starty=4;
-            }
-
-            switch (starty) {
+            pickStart1 = pickStart;
+            int starter = starty;
+            switch (StartingPosPicker.starty) {
                 case 1:
                     startPose = blueStartBasket;
                     Actions.runBlocking(littleLarryLime.LarryLimeYellow());
