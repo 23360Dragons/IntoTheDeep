@@ -241,8 +241,8 @@ public class DragonsDriver extends LinearOpMode {
                     if (extSpeed != 1)
                         extSpeed = 1;
                     telemetry.addLine("Ext Full Speed!");
-                } else*/ if (extSpeed != 0.5) {
-                    extSpeed = 0.5;
+                } else*/ if (extSpeed != 0.7) {
+                    extSpeed = 0.7;
                 }
 
                 superStructure.extension.setPower(extensionPower * extSpeed);
@@ -286,7 +286,7 @@ public class DragonsDriver extends LinearOpMode {
 
             if (arm.twist.isValid) {
 //                arm.twist.setRotation(LLAlignAngle / 270);
-                double power = twistLeft ? -1 : twistRight ? 1 : 0;
+                double power = twistLeft ? 1 : twistRight ? -1 : 0;
                 arm.twist.setPower(power);
                 telemetry.addData("Arm twist power", power);
             }
@@ -353,7 +353,7 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("IMU heading", Math.toDegrees(botHeading));
 
                 // calls for movement
-                double[] drivePowers = MoveRobot.FC(botHeading, x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
+                double[] drivePowers = MoveRobot.RC(x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
                 //sets the motors to their corresponding power
                 driveMotors.setPower(drivePowers);
 

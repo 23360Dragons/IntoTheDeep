@@ -52,8 +52,8 @@ public class SuperStructure {
                 leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
                 leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            } catch (IllegalArgumentException e) {
-                Global.exceptions.append("Configuration Error: ").append("leftArm").append(" does not exist").append("\n");
+            } catch (Exception e) {
+                Global.exceptions.append("leftArm\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
             }
@@ -63,8 +63,8 @@ public class SuperStructure {
                 rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            } catch (IllegalArgumentException e) {
-                Global.exceptions.append("Configuration Error: ").append("rightArm").append(" does not exist").append("\n");
+            } catch (Exception e) {
+                Global.exceptions.append("rightArm\n");
                 Global.exceptionOccurred = true;
                 this.isValid = false;
             }
@@ -118,8 +118,8 @@ public class SuperStructure {
                 leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            } catch (IllegalArgumentException e) {
-                Global.exceptions.append("Configuration Error: ").append("leftLinear").append(" does not exist").append("\n");
+            } catch (Exception e) {
+                Global.exceptions.append("leftLinear\n");
                 Global.exceptionOccurred = true;
                 this.isValid = false;
             }
@@ -129,8 +129,8 @@ public class SuperStructure {
                 rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            } catch (IllegalArgumentException e) {
-                Global.exceptions.append("Configuration Error: ").append("rightLinear").append(" does not exist").append("\n");
+            } catch (Exception e) {
+                Global.exceptions.append("rightLinear\n");
                 Global.exceptionOccurred = true;
                 this.isValid = false;
             }

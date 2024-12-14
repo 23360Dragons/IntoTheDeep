@@ -64,9 +64,9 @@ public class DriveMotors {
                     rightBack = opmode.hardwareMap.get(DcMotorEx.class, "rightBack");
                     configure(rightBack);
                 }
-                catch(IllegalArgumentException e)
+                catch(Exception e)
                 {
-                    Global.exceptions.append("rightBack").append(" does not exist").append("\n");
+                    Global.exceptions.append("rightBack\n");
                     Global.exceptionOccurred = true;
                     isValid = false;
                 }

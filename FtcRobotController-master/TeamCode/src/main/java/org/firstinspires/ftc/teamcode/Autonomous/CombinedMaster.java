@@ -91,16 +91,16 @@ CombinedMaster extends LinearOpMode{
         //encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
         // LF LB   RF RB
 //strafe right 2 feet
-        encoderDrive(DRIVE_SPEED,  -24,  24, 24, -24, 5.0);  // S1: Forward 48 Inches with 5 Sec timeou
-
-//go foward 4 feet
-        encoderDrive(DRIVE_SPEED,  48,  48, 48, 48, 5.0);  // S1: Forward 48 Inches with 5 Sec timeou
-
-//strafe right 1 foot
         encoderDrive(DRIVE_SPEED,  -12,  12, 12, -12, 5.0);  // S1: Forward 48 Inches with 5 Sec timeou
 
+//go foward 4 feet
+        encoderDrive(DRIVE_SPEED,  24,  24, 24, 24, 5.0);  // S1: Forward 48 Inches with 5 Sec timeou
+
+//strafe right 1 foot
+        encoderDrive(DRIVE_SPEED,  -6,  6, 6, -6, 5.0);  // S1: Forward 48 Inches with 5 Sec timeou
+
 //go backwards 4 feet
-        encoderDrive(DRIVE_SPEED,  -48,  -48, -48, -48, 5.0);  // S1: Forward 48 Inches with 5 Sec timeou
+        encoderDrive(DRIVE_SPEED,  -24,  -24, -24, -24, 5.0);  // S1: Forward 48 Inches with 5 Sec timeou
 
 //go foward 4 feet
         encoderDrive(DRIVE_SPEED,  48,  48, 48, 48, 5.0);  // S1: Forward 48 Inches with 5 Sec timeou

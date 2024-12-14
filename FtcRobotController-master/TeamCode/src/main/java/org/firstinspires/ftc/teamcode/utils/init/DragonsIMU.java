@@ -34,8 +34,8 @@ public class DragonsIMU {
 
             opmode.telemetry.addLine("IMU configured!");
             opmode.telemetry.update();
-        } catch (IllegalArgumentException ex) {
-            Global.exceptions.append("CRITICAL Configuration Error: ").append("imu").append(" does not exist").append("\n");
+        } catch (Exception ex) {
+            Global.exceptions.append("imu\n");
             Global.exceptionOccurred = true;
             isValid = false;
         }

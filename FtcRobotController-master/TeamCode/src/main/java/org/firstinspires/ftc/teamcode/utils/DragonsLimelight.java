@@ -30,8 +30,8 @@ public class DragonsLimelight {
 
             opmode.telemetry.addLine("Limelight Configured!");
             opmode.telemetry.update();
-        } catch (IllegalArgumentException ex) {
-            Global.exceptions.append("Configuration Error: ").append("limelight").append(" does not exist").append("\n");
+        } catch (Exception ex) {
+            Global.exceptions.append("limelight\n");
             Global.exceptionOccurred = true;
             isValid = false;
         }

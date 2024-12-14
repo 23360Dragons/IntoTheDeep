@@ -20,8 +20,8 @@ public class DragonsLights {
 
             opmode.telemetry.addLine("Lights configured!");
             opmode.telemetry.update();
-        } catch (IllegalArgumentException ex) {
-            Global.exceptions.append("Configuration Error: ").append("lights").append(" does not exist").append("\n");
+        } catch (Exception ex) {
+            Global.exceptions.append("lights\n");
             Global.exceptionOccurred = true;
             isValid = false;
         }

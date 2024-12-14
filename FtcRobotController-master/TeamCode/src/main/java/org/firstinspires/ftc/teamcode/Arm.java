@@ -60,7 +60,7 @@ public class Arm {
                 servo.setDirection(DcMotorSimple.Direction.FORWARD);
 //                servo.scaleRange(0,1);
 //                up();
-            } catch (IllegalArgumentException e) {
+            } catch (Exception e) {
                 Global.exceptions.append("Tilt\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
@@ -99,7 +99,7 @@ public class Arm {
                 servo.setDirection(DcMotorSimple.Direction.FORWARD);
 //                servo.scaleRange(0.167, 0.833);
 
-            } catch (IllegalArgumentException e) {
+            } catch (Exception e) {
                 Global.exceptions.append("Twist\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
@@ -125,7 +125,7 @@ public class Arm {
             try {
                 claw = hardwareMap.get(CRServo.class, "claw");
 //                claw.scaleRange(0, 1);
-            } catch (IllegalArgumentException e) {
+            } catch (Exception e) {
                 Global.exceptions.append("Claw\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
@@ -160,7 +160,7 @@ public class Arm {
             try {
                 left = hardwareMap.get(CRServo.class, "leftArtie");
 //                left.scaleRange(0,1);
-            } catch (IllegalArgumentException e) {
+            } catch (Exception e) {
                 Global.exceptions.append("leftArtie\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
@@ -172,7 +172,7 @@ public class Arm {
                 right = hardwareMap.get(CRServo.class, "rightArtie");
                 right.setDirection(CRServo.Direction.REVERSE);
 //                right.scaleRange(0,1);
-            } catch (IllegalArgumentException e) {
+            } catch (Exception e) {
                 Global.exceptions.append("rightArtie\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
