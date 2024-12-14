@@ -15,6 +15,7 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -27,6 +28,7 @@ import java.util.List;
 @Config
 @TeleOp(name = "dRRagonsAuto", group = "TeleOp")
 public class dRRagonsdRRiver extends LinearOpMode {
+    double y = -gamepad2.left_stick_y;
     public double amnt;
     double myAngle;
     public enum ARM_POS {
@@ -117,6 +119,17 @@ public class dRRagonsdRRiver extends LinearOpMode {
         public Action GoHalf (){
             return new ElevatorHalf();
         }
+        public class LinearzManual implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                leftLinear.setPower(y);
+                rightLinear.setPower(y);
+                return false;
+            }
+        }
+        public Action manualLinear (){
+            return new LinearzManual();
+        }
     } //test?
     public class Armz {
         private DcMotorEx leftArm, rightArm;
@@ -184,13 +197,13 @@ public class dRRagonsdRRiver extends LinearOpMode {
 
     } //test?
     public class Artie {
-        private Servo leftArtie, rightArtie;
+        private CRServo leftArtie, rightArtie;
         public Artie(HardwareMap hardwareMap){
-            leftArtie = hardwareMap.get(Servo.class,"leftArtie");
-            leftArtie.scaleRange(0,1);
-            rightArtie = hardwareMap.get(Servo.class, "rightArtie");
-            rightArtie.scaleRange(0,1);
-            rightArtie.setDirection(Servo.Direction.REVERSE);
+            leftArtie = hardwareMap.get(CRServo.class,"leftArtie");
+            //leftArtie.scaleRange(0,1);
+            rightArtie = hardwareMap.get(CRServo.class, "rightArtie");
+            //rightArtie.scaleRange(0,1);
+            rightArtie.setDirection(CRServo.Direction.REVERSE);
         }
         double artieUP = 1;
         double artieDOWN = 0.5;
@@ -199,8 +212,8 @@ public class dRRagonsdRRiver extends LinearOpMode {
         public class ArtieUp implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                leftArtie.setPosition(artieUP);
-                rightArtie.setPosition(artieUP);
+                //leftArtie.setPosition(artieUP);
+                //rightArtie.setPosition(artieUP);
                 return false;
             }
         }
@@ -211,8 +224,8 @@ public class dRRagonsdRRiver extends LinearOpMode {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                leftArtie.setPosition(artieDOWN);
-                rightArtie.setPosition(artieDOWN);
+                //leftArtie.setPosition(artieDOWN);
+                //rightArtie.setPosition(artieDOWN);
                 return false;
             }
         }
@@ -223,8 +236,8 @@ public class dRRagonsdRRiver extends LinearOpMode {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                leftArtie.setPosition(artieBACK);
-                rightArtie.setPosition(artieBACK);
+                //leftArtie.setPosition(artieBACK);
+                //rightArtie.setPosition(artieBACK);
                 return false;
             }
         }
@@ -235,8 +248,8 @@ public class dRRagonsdRRiver extends LinearOpMode {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                leftArtie.setPosition(artieDOWNmore);
-                rightArtie.setPosition(artieDOWNmore);
+                //leftArtie.setPosition(artieDOWNmore);
+                //rightArtie.setPosition(artieDOWNmore);
                 return false;
             }
         }
@@ -496,7 +509,6 @@ public class dRRagonsdRRiver extends LinearOpMode {
         blueYellow3      = new Vector2d(55,25);
         Pose2d startPose = null;
         Pose2d notSelected= new Pose2d(0,0,0);
-        int starty = 0;
         Linearz linearSlidez = new Linearz(hardwareMap);
         Armz ourArmz = new Armz(hardwareMap);
         Artie littleArtie = new Artie(hardwareMap);
@@ -509,27 +521,19 @@ public class dRRagonsdRRiver extends LinearOpMode {
 
         while (opModeInInit()){
 
-            //int dRRagonsAuto.pickStart1;
+            int starty2 = dRRagonsAuto.myStart;
 
-            switch (starty) {
+            switch (starty2) {
                 case 1:
-                    Actions.runBlocking(littleLarryLime.LarryLimeYellow());
-                    telemetry.addLine("Starting Position Set To Blue, Basket Side. If inncorrect, please reselect");
+                case 3:
+                    Actions.runBlocking(littleLarryLime.LarryLimeBlues());
+                    telemetry.addLine("Limelight Set To Blue");
                     telemetry.update();
                     break;
                 case 2:
-                    Actions.runBlocking(littleLarryLime.LarryLimeYellow());
-                    telemetry.addLine("Starting Position Set To Red, Basket Side. If inncorrect, please reselect");
-                    telemetry.update();
-                    break;
-                case 3:
-                    Actions.runBlocking(littleLarryLime.LarryLimeBlues());
-                    telemetry.addLine("Starting Position Set To Blue, Observation Zone Side. If inncorrect, please reselect");
-                    telemetry.update();
-                    break;
                 case 4:
                     Actions.runBlocking(littleLarryLime.LarryLimeRedTV());
-                    telemetry.addLine("Starting Position Set To Red, Observation Zone Side. If inncorrect, please reselect");
+                    telemetry.addLine("Limelight Set To Red");
                     telemetry.update();
                     break;
                 default:
@@ -541,83 +545,17 @@ public class dRRagonsdRRiver extends LinearOpMode {
 
 
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
-
-        TrajectoryActionBuilder waterPool = drive.actionBuilder(startPose)
-                .strafeTo(blueSpecimen)
-                .waitSeconds(3)
-                .strafeToSplineHeading(blueObserve, 270)
-                .waitSeconds(3)
-                .turnTo(Math.toRadians(blueFace));
-
-        TrajectoryActionBuilder firePit = drive.actionBuilder(startPose)
-                .strafeTo(redSpecimen)
-                .waitSeconds(3)
-                .strafeToSplineHeading(redObserve,Math.toRadians(90))
-                .waitSeconds(3)
-                .turnTo(Math.toRadians(redFace));
-
-        TrajectoryActionBuilder tomato = drive.actionBuilder(startPose)
-                .waitSeconds(3)
-                .strafeTo(redYellow1)
-                .waitSeconds(3)
-                .strafeToSplineHeading(redBasket, Math.toRadians(225))
-                .waitSeconds(3)
-                .strafeToSplineHeading(redYellow2, Math.toRadians(90))
-                .waitSeconds(3)
-                .strafeToSplineHeading(redBasket, Math.toRadians(225))
-                .waitSeconds(3)
-                .strafeToSplineHeading(redYellow3, Math.toRadians(125))
-                .waitSeconds(3)
-                .strafeToSplineHeading(redBasket, Math.toRadians(225))
-                .waitSeconds(3)
-                .turnTo(Math.toRadians(redFace));
-
-        TrajectoryActionBuilder blueberry = drive.actionBuilder(startPose)
-                .waitSeconds(3)
-                .strafeTo(blueYellow1)
-                .waitSeconds(3)
-                .strafeToSplineHeading(blueBasket, Math.toRadians(45))
-                .waitSeconds(3)
-                .strafeToSplineHeading(blueYellow2, Math.toRadians(270))
-                .waitSeconds(3)
-                .strafeToSplineHeading(blueBasket, Math.toRadians(45))
-                .waitSeconds(3)
-                .strafeToSplineHeading(blueYellow3, Math.toRadians(0))
-                .waitSeconds(3)
-                .strafeToSplineHeading(blueBasket, Math.toRadians(45))
-                .waitSeconds(3)
-                .turnTo(Math.toRadians(blueFace));
-
-        TrajectoryActionBuilder stopping = drive.actionBuilder(startPose)
-                .waitSeconds(30);
-
-        waitForStart();
-
-        Action autonomousAnonymous = null;
-        switch (starty) {
-            case 1:
-                autonomousAnonymous = blueberry.build();
-                break;
-            case 2:
-                autonomousAnonymous = tomato.build();
-                break;
-            case 3:
-                autonomousAnonymous = waterPool.build();
-                break;
-            case 4:
-                autonomousAnonymous = firePit.build();
-                break;
-            default:
-                autonomousAnonymous = stopping.build();
-                break;
-        }
+        MecanumDrive drive = new MecanumDrive(hardwareMap, null);
 //47 in to top at full ext artie up
 //19 in to top at no ext artie up
 //41 in to top at full ext artie out/down
 //13 in to top at no ext artie out/down
 // artie up +6 in, artie out/down -6in
-        Action toGrabby = new SequentialAction();
+        Action locateSample = new SequentialAction();
+        Action toGrabby = new SequentialAction(
+                ourArmz.ToGrab(),
+                linearSlidez.GoHalf()
+        );
         Action grabby = new SequentialAction (
                 littleLarryLime.SetAngle(),
                 twistyturny.TurnClaw(),
@@ -638,24 +576,44 @@ public class dRRagonsdRRiver extends LinearOpMode {
                 seesaw.tiltBack(),
                 clawz.OpenClaw()
         );
-        Action sampleBottom = new SequentialAction(
+        Action specimenBottom = new SequentialAction(
                 linearSlidez.GoDown(),
                 seesaw.tiltUp(),
                 littleArtie.artieDownMore(),
                 clawz.OpenClaw()
         );
-        Action sampleTop = new SequentialAction(
+        Action specimenTop = new SequentialAction(
                 linearSlidez.GoHalf(),
                 seesaw.tiltUp(),
                 littleArtie.artieDownMore(),
                 clawz.OpenClaw()
         );
+        waitForStart();
 
-        Actions.runBlocking(
-                new SequentialAction(
-                        autonomousAnonymous,
-                        grabby
-                )
-        );
+
+        if (y != 0){
+            Actions.runBlocking(linearSlidez.manualLinear());
+        }
+        if (gamepad2.x) {
+            Actions.runBlocking(grabby);
+        }
+        if (gamepad2.y){
+            Actions.runBlocking(specimenTop);
+        }
+        if (gamepad2.a){
+            Actions.runBlocking(specimenBottom);
+        }
+        if (gamepad2.b){
+            Actions.runBlocking(locateSample);
+        }
+        if (gamepad2.dpad_up){
+            Actions.runBlocking(depositTop);
+        }
+        if (gamepad2.dpad_down){
+            Actions.runBlocking(depositBottom);
+        }
+        if (gamepad2.dpad_right){
+
+        }
     }
 }
