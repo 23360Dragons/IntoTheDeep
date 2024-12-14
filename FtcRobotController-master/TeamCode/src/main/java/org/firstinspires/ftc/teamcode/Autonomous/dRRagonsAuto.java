@@ -30,7 +30,7 @@ import java.util.List;
 @Autonomous(name = "dRRagonsAuto", group = "Autonomous")
 public class dRRagonsAuto extends LinearOpMode {
     public Object pickStart1;
-    public int myStart;
+    public static int myStart;
     public double amnt;
     double myAngle;
     public enum ARM_POS {
