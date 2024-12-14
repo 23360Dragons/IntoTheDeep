@@ -7,7 +7,6 @@
 - PORT 3 : leftArm
 ### Servos
 - PORT 0 : leftArtie
-- PORT 1 : claw
 - PORT 2 : twist
 - PORT 3 : tilt
 ### USB
@@ -24,3 +23,4 @@
 ### Servos
 - PORT 0 : rightArtie
 - PORT 1 : lights
+- PORT 2 : claw

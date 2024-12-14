@@ -23,7 +23,7 @@ public class DragonsOTOS {
         }
     }
 
-    private void configureOtos(Telemetry telemetry, SparkFunOTOS sparkFunOTOS) {
+    private void configureOtos (Telemetry telemetry, SparkFunOTOS sparkFunOTOS) {
         telemetry.addLine("Configuring OTOS...");
         telemetry.update();
         // Set the desired units for linear and angular measurements. Can be either

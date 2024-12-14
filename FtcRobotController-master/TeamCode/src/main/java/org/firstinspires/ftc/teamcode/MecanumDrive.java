@@ -62,13 +62,13 @@ public final class MecanumDrive {
                 Global.usbFacingDirection;
 
         // drive model parameters
-        public double inPerTick = 1;
-        public double lateralInPerTick = inPerTick;
-        public double trackWidthTicks = 0;
+        public double inPerTick = 0.02262;
+        public double lateralInPerTick = 0.02431;
+        public double trackWidthTicks = 1343.1464;
 
         // feedforward parameters (in tick units)
-        public double kS = 0;
-        public double kV = 0;
+        public double kS = 1.62763;
+        public double kV = 0.00383;
         public double kA = 0;
 
         // path profile parameters (in inches)
@@ -138,7 +138,9 @@ public final class MecanumDrive {
             imu = lazyImu.get();
 
             // TODO: reverse encoders if needed
-            //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+            leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+               leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+               rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
         }
 
         @Override
@@ -482,3 +484,6 @@ public final class MecanumDrive {
         );
     }
 }
+
+// 5214.75 / 118 forward = 0.02262
+// 4853    / 118 lateral = 0.02431
