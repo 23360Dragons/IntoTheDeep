@@ -41,13 +41,13 @@ public class DragonsDriver extends LinearOpMode {
 
     public static double LLAlignAngle = 0;
 
-    static int runPipeline;
+//    static int runPipeline;
 
-    static String startingPos = "None";
-    static int startingColor; // 0 is blue, 1 is red
-    static boolean colorIsSet = false;
-    static int startingSide;  // 0 is left, 1 is right
-    static boolean sideIsSet = false;
+//    static String startingPos = "None";
+//    static int startingColor; // 0 is blue, 1 is red
+//    static boolean colorIsSet = false;
+//    static int startingSide;  // 0 is left, 1 is right
+//    static boolean sideIsSet = false;
 
     public DriveMotors driveMotors;
     public DragonsIMU dragonsIMU;
@@ -100,73 +100,7 @@ public class DragonsDriver extends LinearOpMode {
             }
         }
 
-        // --------------------- Choose Starting Position ---------------------
-        while (opModeInInit()) {
-            telemetry.addLine("Press A for Blue Left");
-            telemetry.addLine("Press B for Blue Right");
-            telemetry.addLine("Press X for Red Left");
-            telemetry.addLine("Press Y for Red Right");
-            telemetry.update();
-
-            if (gamepad2.a) {
-                startingPos = ("Blue Left");
-                startingColor = BLUE;
-                startingSide = LEFT;
-
-                colorIsSet = true;
-                sideIsSet = true;
-            } else if (gamepad2.b) {
-                startingPos = ("Blue Right");
-                startingColor = BLUE;
-                startingSide = RIGHT;
-
-                colorIsSet = true;
-                sideIsSet = true;
-            } else if (gamepad2.x) {
-                startingPos = ("Red Left");
-                startingColor = RED;
-                startingSide = LEFT;
-
-                colorIsSet = true;
-                sideIsSet = true;
-            } else if (gamepad2.y) {
-                startingPos = ("Red Right");
-                startingColor = RED;
-                startingSide = RIGHT;
-
-                colorIsSet = true;
-                sideIsSet = true;
-            }
-
-            telemetry.addData("Current starting position", startingPos);
-        }
-
-        //<editor-fold desc="--------------------- Set Limelight Pipeline ---------------------">
-        if (sideIsSet && colorIsSet && dragonsLimelight.isValid) {
-            dragonsLimelight.setPipeline(startingColor);
-            runPipeline = dragonsLimelight.getPipeline();
-        } else {
-            if (!dragonsLimelight.isValid) {
-                telemetry.addLine("Limelight is not valid. It and the lights will not work.");
-            }
-
-            if (!dragonsLights.isValid) {
-                telemetry.addLine("Lights are not valid. They will not work.");
-            }
-
-            if (!sideIsSet || !colorIsSet) {
-                telemetry.addLine("The starting position is not set. Exiting OpMode...");
-                telemetry.update();
-
-                sleep(2000);
-                requestOpModeStop();
-            }
-
-            telemetry.update();
-            sleep(2000);
-        }
-
-        //</editor-fold>
+        waitForStart();
 
         if (isStopRequested()) return;
 
@@ -195,7 +129,10 @@ public class DragonsDriver extends LinearOpMode {
                     rightX = currentGamepad1.right_stick_x,
                     creepSpeed = currentGamepad1.left_trigger;
 
-            boolean recalibrateIMU = currentGamepad1.y;
+            boolean recalibrateIMU = currentGamepad1.a,
+                    bluePipeline   = currentGamepad1.x,
+                    yellowPipeline = currentGamepad1.y,
+                    redPipeline    = currentGamepad1.b;
 
             // gamepad 2 (MANIPULATOR)
 
@@ -205,8 +142,6 @@ public class DragonsDriver extends LinearOpMode {
             boolean openClaw          = currentGamepad2.right_bumper,
                     closeClaw         = currentGamepad2.left_bumper,
 //                    SSFullSpeed       = currentGamepad2.x,
-                    // set limelight pipeline
-                    currentB2         = currentGamepad2.b, previousB2 = previousGamepad2.b,
                     armDown           = currentGamepad2.a,
 //                    armBack           = currentGamepad2.x,
                     armUp             = currentGamepad2.y,
@@ -254,17 +189,26 @@ public class DragonsDriver extends LinearOpMode {
             //</editor-fold>
 
             // --------------------- Limelight ---------------------
-//            if (dragonsLimelight.isValid) {
-//                // --------------------- Pipeline Switching ---------------------
+            if (dragonsLimelight.isValid) {
+                // --------------------- Pipeline Switching ---------------------
 //                if (currentB2 && !previousB2) { //rising edge
 //                    dragonsLimelight.setPipeline(YELLOW);
 //                } else if (!currentB2 && previousB2) { //falling edge
-//                    dragonsLimelight.setPipeline(runPipeline);
+//                    dragonsLimelight.setPipeline();
 //                }
-//
-//                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this, dragonsLights)), 180);
-//                telemetry.addData("LLalignTarget", LLAlignAngle);
-//            }
+
+                if (bluePipeline && dragonsLimelight.getPipeline().num != BLUE)
+                    dragonsLimelight.setPipeline(BLUE);
+                else if (redPipeline && dragonsLimelight.getPipeline().num != RED)
+                    dragonsLimelight.setPipeline(RED);
+                else if (yellowPipeline && dragonsLimelight.getPipeline().num != YELLOW)
+                    dragonsLimelight.setPipeline(YELLOW);
+
+                telemetry.addData("Limelight Pipeline", dragonsLimelight.getPipeline().getName());
+
+                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this, dragonsLights)), 180);
+                telemetry.addData("LLalignTarget", LLAlignAngle);
+            }
 
             // <editor-fold desc=" --------------------- Arm ---------------------">
             if (arm.claw.isValid) {

@@ -66,7 +66,7 @@ public class DragonsLimelight {
                     }
                 }
 
-                if (getPipeline() == 3) {
+                if (getPipeline().num == 3) {
                     double[] pythonOutputs = result.getPythonOutput();
 
                     if (pythonOutputs != null && pythonOutputs.length > 0) {
@@ -132,8 +132,8 @@ public class DragonsLimelight {
         }
     }
 
-    public int getPipeline () {
-        return currentPipeline;
+    public LLPipeline getPipeline () {
+        return new LLPipeline(currentPipeline);
     }
 
     public double getTx () {
