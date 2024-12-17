@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.utils.Global;
-import org.firstinspires.ftc.teamcode.SuperStructure;
+import org.firstinspires.ftc.teamcode.utils.SuperStructure;
 
 @TeleOp(name="Extension PIDF Test")
 public class ExtensionTest extends LinearOpMode {

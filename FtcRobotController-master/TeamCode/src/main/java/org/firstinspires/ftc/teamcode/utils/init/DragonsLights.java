@@ -17,6 +17,7 @@ public class DragonsLights {
             opmode.telemetry.update();
 
             lights = opmode.hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+            setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
             opmode.telemetry.addLine("Lights configured!");
             opmode.telemetry.update();

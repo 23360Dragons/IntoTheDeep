@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.teamcode.TeleOp.DragonsDriver;
 import org.firstinspires.ftc.teamcode.utils.init.DragonsLights;
 
 import java.util.List;
@@ -37,7 +38,8 @@ public class DragonsLimelight {
         }
     }
 
-    public double update (LinearOpMode opmode, DragonsLights dragonsLights) {
+    public double update (DragonsDriver opmode) {
+        DragonsLights dragonsLights = opmode.dragonsLights;
             result = limelight.getLatestResult();
             double angle = 0;
 

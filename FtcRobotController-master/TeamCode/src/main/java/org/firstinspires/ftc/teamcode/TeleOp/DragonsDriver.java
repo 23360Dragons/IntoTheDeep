@@ -1,23 +1,19 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import static org.firstinspires.ftc.teamcode.utils.Global.BLUE;
-import static org.firstinspires.ftc.teamcode.utils.Global.LEFT;
 import static org.firstinspires.ftc.teamcode.utils.Global.RED;
-import static org.firstinspires.ftc.teamcode.utils.Global.RIGHT;
 import static org.firstinspires.ftc.teamcode.utils.Global.YELLOW;
 import static org.firstinspires.ftc.teamcode.utils.Global.exceptions;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.Arm;
-import org.firstinspires.ftc.teamcode.SuperStructure;
+import org.firstinspires.ftc.teamcode.utils.Arm;
+import org.firstinspires.ftc.teamcode.utils.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.utils.init.DriveMotors;
@@ -36,19 +32,6 @@ public class DragonsDriver extends LinearOpMode {
     static Gamepad previousGamepad1;
     static Gamepad previousGamepad2;
 
-    public static double SSspeed;
-    public static double extSpeed;
-
-    public static double LLAlignAngle = 0;
-
-//    static int runPipeline;
-
-//    static String startingPos = "None";
-//    static int startingColor; // 0 is blue, 1 is red
-//    static boolean colorIsSet = false;
-//    static int startingSide;  // 0 is left, 1 is right
-//    static boolean sideIsSet = false;
-
     public DriveMotors driveMotors;
     public DragonsIMU dragonsIMU;
     public DragonsLimelight dragonsLimelight;
@@ -56,37 +39,35 @@ public class DragonsDriver extends LinearOpMode {
     public DragonsOTOS dragonsOTOS;
     public SuperStructure superStructure;
     public Arm arm;
+
+    public static double SSspeed;
+    public static double extSpeed;
+    public static double LLAlignAngle = 0;
     //</editor-fold>
 
     @Override
     public void runOpMode() throws InterruptedException {
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        //<editor-fold desc="--------------------- Housekeeping ---------------------">
         Global.exceptions.delete(0, exceptions.capacity()).append("The following were not found:\n");
         Global.exceptionOccurred = false;
+        telemetry        = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         currentGamepad1  = new Gamepad();
         currentGamepad2  = new Gamepad();
         previousGamepad1 = new Gamepad();
         previousGamepad2 = new Gamepad();
-
-        //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
-        driveMotors = new DriveMotors(this);
-
-        dragonsIMU = new DragonsIMU(this);
-        dragonsLimelight = new DragonsLimelight(this);
-
-        dragonsLights = new DragonsLights(this);
-
-        if (dragonsLights.isValid)
-            dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-
-        dragonsOTOS = new DragonsOTOS(this);
-
-        superStructure = new SuperStructure(this);
-
-        arm = new Arm(this);
         //</editor-fold>
 
-        // --------------------- Configuration Error Handing ---------------------
+        //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
+        driveMotors      = new DriveMotors(this);
+        dragonsIMU       = new DragonsIMU(this);
+        dragonsLimelight = new DragonsLimelight(this);
+        dragonsLights    = new DragonsLights(this);
+        dragonsOTOS      = new DragonsOTOS(this);
+        superStructure   = new SuperStructure(this);
+        arm              = new Arm(this);
+        //</editor-fold>
+
+        //<editor-fold desc="--------------------- Configuration Error Handing ---------------------">
         if (Global.exceptionOccurred) {
             telemetry.addLine(Global.exceptions.toString());
             telemetry.update();
@@ -99,16 +80,18 @@ public class DragonsDriver extends LinearOpMode {
                 sleep(2000);
             }
         }
+        //</editor-fold>
 
+        //<editor-fold desc="--------------------- Wait For Start ---------------------">
         waitForStart();
 
         if (isStopRequested()) return;
+        //</editor-fold>
 
-        // --------------------- Main Loop ---------------------
+        //<editor-fold desc="--------------------- Main Loop ---------------------">
         while (opModeIsActive()) {
 
             //<editor-fold desc=" --------------------- Input ---------------------">
-
             // Store the gamepad values from the previous loop, which
             // does the same thing as copying them at the end. In the first loop
             // through, it will make it a new gamepad.
@@ -124,9 +107,9 @@ public class DragonsDriver extends LinearOpMode {
 
             //gamepad 1 (DRIVER)
 
-            double  y      = -currentGamepad1.left_stick_y,
-                    x      = currentGamepad1.left_stick_x,
-                    rightX = currentGamepad1.right_stick_x,
+            double  y          = -currentGamepad1.left_stick_y,
+                    x          = currentGamepad1.left_stick_x,
+                    rightX     = currentGamepad1.right_stick_x,
                     creepSpeed = currentGamepad1.left_trigger;
 
             boolean recalibrateIMU = currentGamepad1.a,
@@ -153,13 +136,13 @@ public class DragonsDriver extends LinearOpMode {
             //</editor-fold>
 
             // <editor-fold desc="--------------------- SuperStructure ---------------------">
-
             if (superStructure.articulation.isValid) {
-                /*if (SSFullSpeed) {
-                    if (SSspeed != 1)
-                        SSspeed = 1;
-                    telemetry.addLine("SS Full Speed!");
-                } else*/ if (SSspeed != 0.5 && extSpeed != 0.5) {
+//                if (SSFullSpeed) {
+//                    if (SSspeed != 1)
+//                        SSspeed = 1;
+//                    telemetry.addLine("SS Full Speed!");
+//                } else
+                if (SSspeed != 0.5 && extSpeed != 0.5) {
                     SSspeed  = 0.5;
                     extSpeed = 0.5;
                 }
@@ -172,11 +155,12 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             if (superStructure.extension.isValid) {
-                /*if (SSFullSpeed) {
-                    if (extSpeed != 1)
-                        extSpeed = 1;
-                    telemetry.addLine("Ext Full Speed!");
-                } else*/ if (extSpeed != 0.7) {
+//                if (SSFullSpeed) {
+//                    if (extSpeed != 1)
+//                        extSpeed = 1;
+//                    telemetry.addLine("Ext Full Speed!");
+//                } else
+                if (extSpeed != 0.7) {
                     extSpeed = 0.7;
                 }
 
@@ -185,10 +169,9 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("Super Structure extension power",     superStructure.extension.getPower());
                 telemetry.addData("Super Structure extension position",  superStructure.extension.getPosition().right);
             }
-
             //</editor-fold>
 
-            // --------------------- Limelight ---------------------
+            //<editor-fold desc="--------------------- Limelight ---------------------">
             if (dragonsLimelight.isValid) {
                 // --------------------- Pipeline Switching ---------------------
 //                if (currentB2 && !previousB2) { //rising edge
@@ -206,9 +189,10 @@ public class DragonsDriver extends LinearOpMode {
 
                 telemetry.addData("Limelight Pipeline", dragonsLimelight.getPipeline().getName());
 
-                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this, dragonsLights)), 180);
+                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this)), 180);
                 telemetry.addData("LLalignTarget", LLAlignAngle);
             }
+            //</editor-fold>
 
             // <editor-fold desc=" --------------------- Arm ---------------------">
             if (arm.claw.isValid) {
@@ -268,7 +252,7 @@ public class DragonsDriver extends LinearOpMode {
             }
             //</editor-fold>
 
-            // --------------------- SparkFun OTOS ---------------------
+            //<editor-fold desc="--------------------- SparkFun OTOS ---------------------">
 //            if (dragonsOTOS.isValid) {
 //                telemetry.addData("Sparkfun velocity along x axis", Math.round(dragonsOTOS.sparkFunOTOS.getVelocity().x));
 //                telemetry.addData("Sparkfun velocity along y axis", Math.round(dragonsOTOS.sparkFunOTOS.getVelocity().y));
@@ -277,8 +261,9 @@ public class DragonsDriver extends LinearOpMode {
 //                telemetry.addData("sparkfun y", Math.round(dragonsOTOS.sparkFunOTOS.getPosition().y));
 //                telemetry.addData("sparkfun heading", Math.round(dragonsOTOS.sparkFunOTOS.getPosition().h));
 //            }
+            //</editor-fold>
 
-            // --------------------- Movement ---------------------
+            //<editor-fold desc="--------------------- Movement ---------------------">
             if (dragonsIMU.isValid && driveMotors.isValid) {
                 double driveSpeed = 1;
 
@@ -308,8 +293,10 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("leftBack power",   String.valueOf(Math.round(driveMotors.getPower()[2])));
                 telemetry.addData("rightBack power",  String.valueOf(Math.round(driveMotors.getPower()[3])));
             }
+            //</editor-fold>
 
             telemetry.update();
         }
+        //</editor-fold>
     }
 }
