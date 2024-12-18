@@ -33,8 +33,8 @@ public class DragonsOTOS {
         // OpModes if using the non-default value.
         sparkFunOTOS.setLinearUnit(DistanceUnit.METER);
 //        sparkFunOTOS.setLinearUnit(DistanceUnit.INCH);
-        sparkFunOTOS.setAngularUnit(AngleUnit.RADIANS);
-//        sparkFunOTOS.setAngularUnit(AngleUnit.DEGREES);
+//        sparkFunOTOS.setAngularUnit(AngleUnit.RADIANS);
+        sparkFunOTOS.setAngularUnit(AngleUnit.DEGREES);
 
         // Assuming you've mounted your sensor to a robot and it's not centered,
         // you can specify the offset for the sensor relative to the center of the
@@ -67,7 +67,7 @@ public class DragonsOTOS {
         // inverse of the error. For example, if you move the robot 100 inches and
         // the sensor reports 103 inches, set the linear scalar to 100/103 = 0.971
         sparkFunOTOS.setLinearScalar(1.0);
-        sparkFunOTOS.setAngularScalar(1.0);
+        sparkFunOTOS.setAngularScalar(0.992);
 
         // The IMU on the OTOS includes a gyroscope and accelerometer, which could
         // have an offset. Note that as of firmware version 1.0, the calibration

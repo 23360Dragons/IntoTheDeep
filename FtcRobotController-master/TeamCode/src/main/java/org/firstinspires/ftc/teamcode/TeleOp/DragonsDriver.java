@@ -142,9 +142,8 @@ public class DragonsDriver extends LinearOpMode {
 //                        SSspeed = 1;
 //                    telemetry.addLine("SS Full Speed!");
 //                } else
-                if (SSspeed != 0.5 && extSpeed != 0.5) {
+                if (SSspeed != 0.5) {
                     SSspeed  = 0.5;
-                    extSpeed = 0.5;
                 }
 
                 superStructure.articulation.setPower(articulationPower * SSspeed);
@@ -253,14 +252,14 @@ public class DragonsDriver extends LinearOpMode {
             //</editor-fold>
 
             //<editor-fold desc="--------------------- SparkFun OTOS ---------------------">
-//            if (dragonsOTOS.isValid) {
-//                telemetry.addData("Sparkfun velocity along x axis", Math.round(dragonsOTOS.sparkFunOTOS.getVelocity().x));
-//                telemetry.addData("Sparkfun velocity along y axis", Math.round(dragonsOTOS.sparkFunOTOS.getVelocity().y));
-//                telemetry.addLine();
-//                telemetry.addData("sparkfun x", Math.round(dragonsOTOS.sparkFunOTOS.getPosition().x));
-//                telemetry.addData("sparkfun y", Math.round(dragonsOTOS.sparkFunOTOS.getPosition().y));
-//                telemetry.addData("sparkfun heading", Math.round(dragonsOTOS.sparkFunOTOS.getPosition().h));
-//            }
+            if (dragonsOTOS.isValid) {
+                telemetry.addData("Sparkfun velocity along x axis", (dragonsOTOS.sparkFunOTOS.getVelocity().x));
+                telemetry.addData("Sparkfun velocity along y axis", (dragonsOTOS.sparkFunOTOS.getVelocity().y));
+                telemetry.addLine();
+                telemetry.addData("sparkfun x", (dragonsOTOS.sparkFunOTOS.getPosition().x));
+                telemetry.addData("sparkfun y", (dragonsOTOS.sparkFunOTOS.getPosition().y));
+                telemetry.addData("sparkfun heading", (dragonsOTOS.sparkFunOTOS.getPosition().h));
+            }
             //</editor-fold>
 
             //<editor-fold desc="--------------------- Movement ---------------------">
@@ -282,7 +281,7 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("IMU heading", Math.toDegrees(botHeading));
 
                 // calls for movement
-                double[] drivePowers = MoveRobot.RC(x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
+                double[] drivePowers = MoveRobot.FC(botHeading, x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
                 //sets the motors to their corresponding power
                 driveMotors.setPower(drivePowers);
 
