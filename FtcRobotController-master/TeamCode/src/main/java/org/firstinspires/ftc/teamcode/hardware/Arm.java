@@ -1,9 +1,12 @@
-package org.firstinspires.ftc.teamcode.utils;
+package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.teamcode.utils.Global;
 
 public class Arm {
     public boolean isValid;
@@ -108,15 +111,17 @@ public class Arm {
 
     public static class Claw {
         public boolean isValid = true;
-        private CRServo claw;
+//        private CRServo claw;
+        private Servo claw;
 
-        private final double openRotation   = 0.45;
-        private final double closedRotation = 0;
+        private final double openRotation   = 1;
+        private final double closedRotation = 0.5;
 
         Claw (HardwareMap hardwareMap) {
             try {
-                claw = hardwareMap.get(CRServo.class, "claw");
-//                claw.scaleRange(0, 1);
+//                claw = hardwareMap.get(CRServo.class, "claw");
+                claw = hardwareMap.get(Servo.class, "claw");
+                claw.scaleRange(0, 1);
             } catch (Exception e) {
                 Global.exceptions.append("Claw\n");
                 Global.exceptionOccurred = true;
@@ -124,21 +129,21 @@ public class Arm {
             }
         }
 
-//        public void open  ()  {
-//            claw.setPosition(openRotation);
-//        }
-//
-//        public void close () {
-//            claw.setPosition(closedRotation);
-//        }
-//
-//        public double getPosition () {
-//            return claw.getPosition();
-//        }
-
-        public void setPower (double power) {
-            claw.setPower(power);
+        public void open  ()  {
+            claw.setPosition(openRotation);
         }
+
+        public void close () {
+            claw.setPosition(closedRotation);
+        }
+
+        public double getPosition () {
+            return claw.getPosition();
+        }
+//
+//        public void setPower (double power) {
+//            claw.setPower(power);
+//        }
     }
 
     public static class Artie {

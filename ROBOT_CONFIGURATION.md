@@ -7,8 +7,8 @@
 - PORT 3 : leftArm
 ### Servos
 - PORT 0 : leftArtie
+- PORT 1 : tilt
 - PORT 2 : twist
-- PORT 3 : tilt
 ### USB
 - USB-A 3.0 : limelight
 ### I2C Ports
@@ -22,5 +22,6 @@
 - PORT 3 : rightArm
 ### Servos
 - PORT 0 : rightArtie
-- PORT 1 : lights
-- PORT 2 : claw
+- PORT 1 : claw
+- PORT 2 : lights
+

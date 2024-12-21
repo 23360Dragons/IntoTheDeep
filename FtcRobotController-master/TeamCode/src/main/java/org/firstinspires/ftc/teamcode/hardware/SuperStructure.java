@@ -1,8 +1,12 @@
-package org.firstinspires.ftc.teamcode.utils;
+package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.utils.Global;
+import org.firstinspires.ftc.teamcode.utils.Positions;
 
 public class SuperStructure {
     public boolean isValid;
@@ -38,8 +42,10 @@ public class SuperStructure {
         private DcMotorEx leftMotor;
         private DcMotorEx rightMotor;
 
-        public boolean isValid = true;
-        private double power;
+        public boolean       isValid = true;
+        private double       power;
+        private double       targetPosition;
+        private final double tolerance = 10;
 
         Articulation (LinearOpMode opmode) {
             try {
@@ -88,17 +94,24 @@ public class SuperStructure {
         }
 
         public void moveUp() {
-            setPosition(90);
+            setPosition(0);
             articulationPos = ARTICULATION_POS.UP;
         }
 
         public void moveDown() {
-            setPosition(0);
+            setPosition(-334);
             articulationPos = ARTICULATION_POS.DOWN;
         }
 
         private void setPosition (double tickPos) {
-            //todo: put the values from articulation testing into here, make this a pidloop
+            targetPosition = tickPos;
+        }
+
+        public void updatePosition() {
+            double error = targetPosition - getPosition().right;
+
+            if (Math.abs(error) > tolerance)
+                setPower(error * 0.029);
         }
     }
 

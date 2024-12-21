@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.utils.init;
+package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.utils.StartingPosPicker;
 
 import java.util.List;
 @Config
-@Autonomous(name = "dRRagonsAuto", group = "Autonomous")
+@Autonomous(name = "dRRagonsAuto", group = "Autonomous", preselectTeleOp = "DragonsDriver")
 public class dRRagonsAuto extends LinearOpMode {
     public Object pickStart1;
     public static int myStart;
@@ -45,7 +45,8 @@ public class dRRagonsAuto extends LinearOpMode {
         int halfTicks = 1065;
         int mostTicks = 1597;
         int maxTicks = 2125;
-        double linearAverage = ((leftLinear.getCurrentPosition()+rightLinear.getCurrentPosition())/2);
+        double linearAverage = ((leftLinear.getCurrentPosition() + rightLinear.getCurrentPosition()) /2);
+        //todo: this causes an NPE, bad
         //actual max is 2130, so we don't overextend we subtract five
         public Linearz(HardwareMap hardwareMap){
             leftLinear = hardwareMap.get(DcMotorEx.class, "leftLinear");
