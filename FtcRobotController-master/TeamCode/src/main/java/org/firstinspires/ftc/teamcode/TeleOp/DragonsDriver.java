@@ -229,9 +229,22 @@ public class DragonsDriver extends LinearOpMode {
 
             if (arm.twist.isValid) {
 //                arm.twist.setRotation(LLAlignAngle / 270);
-                double power = twistLeft ? 1 : twistRight ? -1 : 0;
-                arm.twist.setPower(power);
-                telemetry.addData("Arm twist power", power);
+
+//                double power = twistLeft ? 1 : twistRight ? -1 : 0;
+
+                double power = twistLeft ? 0.001 : twistRight ? -0.001 : 0;
+                double targetPosition;
+//                arm.twist.setPower(power);
+                telemetry.addData("Arm twist power", power * 100);
+
+
+                if (power != 0) {
+                    targetPosition = arm.twist.getPosition() + power;
+
+                    arm.twist.setPosition(targetPosition);
+                }
+
+                telemetry.addData("twist pos", arm.twist.getPosition());
             }
 
             if (arm.tilt.isValid) {

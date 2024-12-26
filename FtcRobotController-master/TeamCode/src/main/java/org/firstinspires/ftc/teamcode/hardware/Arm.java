@@ -86,13 +86,13 @@ public class Arm {
 
     public static class Twist {
         public boolean isValid = true;
-        private CRServo servo;
+        private /*CR*/Servo servo;
 
         Twist (HardwareMap hardwareMap) {
             try {
-                servo = hardwareMap.get(CRServo.class, "twist");
-                servo.setDirection(DcMotorSimple.Direction.FORWARD);
-//                servo.scaleRange(0.167, 0.833);
+                servo = hardwareMap.get(/*CR*/Servo.class, "twist");
+                /*servo.setDirection(DcMotorSimple.Direction.FORWARD)*/;
+                servo.scaleRange(0.15, 0.833);
 
             } catch (Exception e) {
                 Global.exceptions.append("Twist\n");
@@ -101,12 +101,16 @@ public class Arm {
             }
         }
 
-//        public void setRotation (double rotation) {
-//            servo.setPosition(rotation);
-//        }
-        public void setPower (double power) {
-            servo.setPower(power);
+        public double getPosition () {
+            return servo.getPosition();
         }
+
+        public void setPosition (double rotation) {
+            servo.setPosition(rotation);
+        }
+        /*public void setPower (double power) {
+            servo.setPower(power);
+        }*/
     }
 
     public static class Claw {
