@@ -46,7 +46,7 @@ public class dRRagonsAuto extends LinearOpMode {
         int mostTicks = 1597;
         int maxTicks = 2125;
         double linearAverage = ((leftLinear.getCurrentPosition() + rightLinear.getCurrentPosition()) /2);
-        //todo: this causes an NPE, bad
+        //todo: this causes an NPE, bad!!!!!!!!!
         //actual max is 2130, so we don't overextend we subtract five
         public Linearz(HardwareMap hardwareMap){
             leftLinear = hardwareMap.get(DcMotorEx.class, "leftLinear");
@@ -481,26 +481,26 @@ public class dRRagonsAuto extends LinearOpMode {
         redFace = 90;
         Pose2d blueStartBasket, blueStartObserve, redStartBasket, redStartObserve;
         Vector2d  blueSpecimen, redSpecimen, blueBasket, redBasket, redAscent, blueAscent, blueObserve, redObserve, redYellow1, redYellow2, redYellow3, blueYellow1, blueYellow2, blueYellow3;
-        blueStartBasket  = new Pose2d(35,62,Math.toRadians(blueFace));
-        blueStartObserve = new Pose2d(-12,62,Math.toRadians(blueFace));
-        redStartBasket   = new Pose2d(12,60,Math.toRadians(redFace));
-        redStartObserve  = new Pose2d(-35,60,Math.toRadians(redFace));
-        blueSpecimen     = new Vector2d(0,34);
-        redSpecimen      = new Vector2d(0,-33);
-        blueBasket       = new Vector2d(53,53);
-        redBasket        = new Vector2d(-52,-52);
-        redAscent        = new Vector2d(-25,0);
-        blueAscent       = new Vector2d(25, 0);
-        blueObserve      = new Vector2d(-57,60);
-        redObserve       = new Vector2d(57,-58);
-        redYellow1       = new Vector2d(-48,-42);
-        redYellow2       = new Vector2d(-58,-42);
-        redYellow3       = new Vector2d(-55,-25);
-        blueYellow1      = new Vector2d(48,42);
-        blueYellow2      = new Vector2d(58,42);
-        blueYellow3      = new Vector2d(55,25);
-        Pose2d startPose = null;
-        Pose2d notSelected= new Pose2d(0,0,0);
+        blueStartBasket    = new Pose2d(35,62,Math.toRadians(blueFace));
+        blueStartObserve   = new Pose2d(-12,62,Math.toRadians(blueFace));
+        redStartBasket     = new Pose2d(12,60,Math.toRadians(redFace));
+        redStartObserve    = new Pose2d(-35,60,Math.toRadians(redFace));
+        blueSpecimen       = new Vector2d(0,34);
+        redSpecimen        = new Vector2d(0,-33);
+        blueBasket         = new Vector2d(53,53);
+        redBasket          = new Vector2d(-52,-52);
+        redAscent          = new Vector2d(-25,0);
+        blueAscent         = new Vector2d(25, 0);
+        blueObserve        = new Vector2d(-57,60);
+        redObserve         = new Vector2d(57,-58);
+        redYellow1         = new Vector2d(-48,-42);
+        redYellow2         = new Vector2d(-58,-42);
+        redYellow3         = new Vector2d(-55,-25);
+        blueYellow1        = new Vector2d(48,42);
+        blueYellow2        = new Vector2d(58,42);
+        blueYellow3        = new Vector2d(55,25);
+        Pose2d startPose   = null;
+        Pose2d notSelected = new Pose2d(0,0,0);
 
         Linearz linearSlidez = new Linearz(hardwareMap);
         Armz ourArmz = new Armz(hardwareMap);

@@ -18,7 +18,7 @@ public class SuperStructure {
         DOWN,
     }
 
-    ARTICULATION_POS articulationPos;
+    private ARTICULATION_POS articulationPos;
 
     public SuperStructure (LinearOpMode opmode) {
         opmode.telemetry.addLine("Configuring Superstructure Articulation!");
@@ -44,7 +44,7 @@ public class SuperStructure {
 
         public boolean       isValid = true;
         private double       power;
-        private double       targetPosition;
+//        private double       targetPosition;
         private final double tolerance = 10;
 
         Articulation (LinearOpMode opmode) {
@@ -75,6 +75,14 @@ public class SuperStructure {
             articulationPos = ARTICULATION_POS.UP;
         }
 
+        public void setState (ARTICULATION_POS pos) {
+            articulationPos = pos;
+        }
+
+        public ARTICULATION_POS getState () {
+            return articulationPos;
+        }
+
         public void setPower (double power) {
             leftMotor.setPower (power);
             rightMotor.setPower(power);
@@ -93,31 +101,33 @@ public class SuperStructure {
             return new Positions(leftMotor.getCurrentPosition(), rightMotor.getCurrentPosition());
         }
 
-        public void moveUp() {
-            setPosition(0);
-            articulationPos = ARTICULATION_POS.UP;
-        }
+//        public void moveUp() {
+//            setPosition(0);
+//            articulationPos = ARTICULATION_POS.UP;
+//        }
+//
+//        public void moveDown() {
+//            setPosition(-334);
+//            articulationPos = ARTICULATION_POS.DOWN;
+//        }
 
-        public void moveDown() {
-            setPosition(-334);
-            articulationPos = ARTICULATION_POS.DOWN;
-        }
+//        private void setPosition (double tickPos) {
+//            targetPosition = tickPos;
+//        }
 
-        private void setPosition (double tickPos) {
-            targetPosition = tickPos;
-        }
-
-        public void updatePosition() {
-            double error = targetPosition - getPosition().right;
-
-            if (Math.abs(error) > tolerance)
-                setPower(error * 0.029);
-        }
+//        public void updatePosition() {
+//            double error = targetPosition - getPosition().right;
+//
+//            if (Math.abs(error) > tolerance)
+//                setPower(error * 0.029);
+//        }
     }
 
     public static class Extension {
         private DcMotor leftMotor;
         private DcMotor rightMotor;
+
+        public double maxDownExtension = 1600;
 
         public boolean isValid = true;
         private double power;

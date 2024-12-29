@@ -40,8 +40,6 @@ public class DragonsDriver extends LinearOpMode {
     public SuperStructure superStructure;
     public Arm arm;
 
-    public static double SSSpeed;
-    public static double extSpeed;
     public static double LLAlignAngle = 0;
     //</editor-fold>
 
@@ -69,6 +67,16 @@ public class DragonsDriver extends LinearOpMode {
         arm              = new Arm(this);
         //</editor-fold>
 
+        //<editor-fold desc="--------------------- Part Speeds ---------------------">
+        double SSSpeed = 0.5;
+        double SSFullSpeed = 0.8;
+
+        double extSpeed = 0.7;
+        double extFullSpeed = 1;
+
+        double twistSpeed = 5;
+        //</editor-fold>
+
         //<editor-fold desc="--------------------- Configuration Error Handing ---------------------">
         if (Global.exceptionOccurred) {
             telemetry.addLine(Global.exceptions.toString());
@@ -89,6 +97,10 @@ public class DragonsDriver extends LinearOpMode {
 
         if (isStopRequested()) return;
         telemetry.clearAll();
+        //</editor-fold>
+
+        //<editor-fold desc="--------------------- Set Twist Default Pos ---------------------">
+        arm.twist.setPosition(0.5);
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Main Loop ---------------------">
@@ -129,7 +141,7 @@ public class DragonsDriver extends LinearOpMode {
 
             boolean openClaw          = currentGamepad2.right_bumper,
                     closeClaw         = currentGamepad2.left_bumper,
-                    SSFullSpeed       = currentGamepad2.x,
+                    SSFullPower       = currentGamepad2.x,
 //                    armDown           = currentGamepad2.a,
 //                    armBack           = currentGamepad2.x,
 //                    armUp             = currentGamepad2.y,
@@ -142,16 +154,23 @@ public class DragonsDriver extends LinearOpMode {
 
             // <editor-fold desc="--------------------- SuperStructure ---------------------">
             if (superStructure.articulation.isValid) {
-                if (SSFullSpeed) {
-                    if (SSSpeed != 0.8)
-                        SSSpeed = 0.8;
+                double speed;
+
+                if (SSFullPower) {
+                    speed = SSFullSpeed;
                     telemetry.addLine("SS Full Speed!");
-                } else
-                if (SSSpeed != 0.5) {
-                    SSSpeed  = 0.5;
+                } else {
+                    speed = SSSpeed;
                 }
 
-                superStructure.articulation.setPower(articulationPower * SSSpeed);
+                superStructure.articulation.setPower(articulationPower * speed);
+
+                if (superStructure.articulation.getPosition().right <= -300) {
+                    superStructure.articulation.setState(SuperStructure.ARTICULATION_POS.DOWN);
+                } else {
+                    superStructure.articulation.setState(SuperStructure.ARTICULATION_POS.UP);
+                }
+
 //                if (articulationPower >= 0.3 && previousArticulationPower < 0.3) {
 //                    superStructure.articulation.moveUp();
 //                    telemetry.addLine("Articulation Up");
@@ -170,16 +189,29 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             if (superStructure.extension.isValid) {
-                if (SSFullSpeed) {
-                    if (extSpeed != 1)
-                        extSpeed = 1;
+                double speed;
+
+                if (SSFullPower) {
+                    speed = extFullSpeed;
                     telemetry.addLine("Ext Full Speed!");
-                } else
-                if (extSpeed != 0.7) {
-                    extSpeed = 0.7;
+                } else {
+                    speed = extSpeed;
                 }
 
-                superStructure.extension.setPower(extensionPower * extSpeed);
+                if (superStructure.articulation.getState() == SuperStructure.ARTICULATION_POS.DOWN) {
+                    if (extensionPower > 0) {
+                        if (superStructure.extension.getPosition().avg > superStructure.extension.maxDownExtension) {
+                            telemetry.addLine("Extension cannot extend more, as the arms are down!");
+                        } else
+                            superStructure.extension.setPower(extensionPower * speed);
+                    } else
+                        superStructure.extension.setPower(extensionPower * speed);
+                } else
+                    superStructure.extension.setPower(extensionPower * speed);
+
+
+
+                superStructure.extension.setPower(extensionPower * speed);
 
                 telemetry.addData("Super Structure extension power",     superStructure.extension.getPower());
                 telemetry.addData("Super Structure extension position",  superStructure.extension.getPosition().right);
@@ -232,7 +264,7 @@ public class DragonsDriver extends LinearOpMode {
 
 //                double power = twistLeft ? 1 : twistRight ? -1 : 0;
 
-                double power = twistLeft ? 0.001 : twistRight ? -0.001 : 0;
+                double power = twistLeft ? 0.001 * twistSpeed : twistRight ? -0.001 * twistSpeed : 0;
                 double targetPosition;
 //                arm.twist.setPower(power);
                 telemetry.addData("Arm twist power", power * 100);
