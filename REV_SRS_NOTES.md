@@ -2,9 +2,7 @@
 
 ## Angle limits
 - to set center point:
-	1. move to center point
-	2. press program to set center point
-	3. press program to set changes
+	1. you can't
 - to set sides:
 	1. move to side, at least 20 degrees away from center point
 	2. press "left" or "right", depending on the way it is rotated from the center point

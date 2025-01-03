@@ -8,38 +8,38 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.utils.Global;
 
-public class Arm {
+public class MiniStructure {
     public boolean isValid;
     public Tilt  tilt;
     public Twist twist;
     public Claw  claw;
-    public Artie artie;
+    public Arm   arm;
 
-    public Arm (LinearOpMode opmode) {
-        opmode.telemetry.addLine("Configuring Arm Elbow!");
+    public MiniStructure(LinearOpMode opmode) {
+        opmode.telemetry.addLine("Configuring MiniStructure Elbow!");
         opmode.telemetry.update();
 
         this.tilt = new Tilt (opmode.hardwareMap);
 
-        opmode.telemetry.addData("Arm Elbow configured", tilt.isValid);
-        opmode.telemetry.addLine("Configuring Arm Wrist!");
+        opmode.telemetry.addData("MiniStructure Elbow configured", tilt.isValid);
+        opmode.telemetry.addLine("Configuring MiniStructure Wrist!");
         opmode.telemetry.update();
 
         this.twist = new Twist (opmode.hardwareMap);
 
-        opmode.telemetry.addData("Arm Wrist configured", twist.isValid);
-        opmode.telemetry.addLine("Configuring Arm Claw!");
+        opmode.telemetry.addData("MiniStructure Wrist configured", twist.isValid);
+        opmode.telemetry.addLine("Configuring MiniStructure Claw!");
         opmode.telemetry.update();
 
         this.claw  = new Claw (opmode.hardwareMap);
 
-        opmode.telemetry.addData("Arm Claw configured", claw.isValid);
-        opmode.telemetry.addLine("Configuring Arm Artie!");
+        opmode.telemetry.addData("MiniStructure Claw configured", claw.isValid);
+        opmode.telemetry.addLine("Configuring MiniStructure Arm!");
         opmode.telemetry.update();
 
-        this.artie = new Artie(opmode.hardwareMap);
+        this.arm = new Arm(opmode.hardwareMap);
 
-        opmode.telemetry.addData("Arm Artie configured", artie.isValid);
+        opmode.telemetry.addData("MiniStructure Arm configured", arm.isValid);
         opmode.telemetry.update();
     }
 
@@ -150,14 +150,14 @@ public class Arm {
 //        }
     }
 
-    public static class Artie {
+    public static class Arm {
         public boolean isValid = true;
         private CRServo left;
         private CRServo right;
 //        private ArtiePos artiePos;
 //        private ArtiePos lastArtiePos;
 
-        Artie (HardwareMap hardwareMap) {
+        Arm(HardwareMap hardwareMap) {
             try {
                 left = hardwareMap.get(CRServo.class, "leftArtie");
 //                left.scaleRange(0,1);

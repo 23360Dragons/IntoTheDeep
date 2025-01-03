@@ -12,11 +12,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.hardware.Arm;
+import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
 import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.hardware.DriveMotors;
+import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
 import org.firstinspires.ftc.teamcode.hardware.DragonsLights;
 import org.firstinspires.ftc.teamcode.hardware.DragonsLimelight;
@@ -32,13 +32,13 @@ public class DragonsDriver extends LinearOpMode {
     static Gamepad previousGamepad1;
     static Gamepad previousGamepad2;
 
-    public DriveMotors driveMotors;
-    public DragonsIMU dragonsIMU;
+    public Drivetrain       drivetrain;
+    public DragonsIMU       dragonsIMU;
     public DragonsLimelight dragonsLimelight;
-    public DragonsLights dragonsLights;
-    public DragonsOTOS dragonsOTOS;
-    public SuperStructure superStructure;
-    public Arm arm;
+    public DragonsLights    dragonsLights;
+    public DragonsOTOS      dragonsOTOS;
+    public SuperStructure   superStructure;
+    public MiniStructure    miniStructure;
 
     public static double LLAlignAngle = 0;
     //</editor-fold>
@@ -58,13 +58,13 @@ public class DragonsDriver extends LinearOpMode {
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
-        driveMotors      = new DriveMotors(this);
+        drivetrain = new Drivetrain(this);
         dragonsIMU       = new DragonsIMU(this);
         dragonsLimelight = new DragonsLimelight(this);
         dragonsLights    = new DragonsLights(this);
         dragonsOTOS      = new DragonsOTOS(this);
         superStructure   = new SuperStructure(this);
-        arm              = new Arm(this);
+        miniStructure = new MiniStructure(this);
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Part Speeds ---------------------">
@@ -84,7 +84,7 @@ public class DragonsDriver extends LinearOpMode {
 
             sleep(3000);
 
-            if (!dragonsIMU.isValid || !driveMotors.isValid) {
+            if (!dragonsIMU.isValid || !drivetrain.isValid) {
                 telemetry.addLine("Critical Error Occurred! The IMU, Motors, and all movement code will not work.");
                 telemetry.update();
                 sleep(2000);
@@ -100,7 +100,7 @@ public class DragonsDriver extends LinearOpMode {
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Set Twist Default Pos ---------------------">
-        arm.twist.setPosition(1);
+        miniStructure.twist.setPosition(1);
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Main Loop ---------------------">
@@ -241,25 +241,25 @@ public class DragonsDriver extends LinearOpMode {
             }
             //</editor-fold>
 
-            // <editor-fold desc=" --------------------- Arm ---------------------">
-            if (arm.claw.isValid) {
+            // <editor-fold desc=" --------------------- MiniStructure ---------------------">
+            if (miniStructure.claw.isValid) {
                 if (openClaw) {
-                    arm.claw.open();
+                    miniStructure.claw.open();
                     telemetry.addLine("Open claw");
                 }
                 if (closeClaw) {
-                    arm.claw.close();
+                    miniStructure.claw.close();
                     telemetry.addLine("Close claw");
                 }
 
-                telemetry.addData("claw Position", arm.claw.getPosition());
+                telemetry.addData("claw Position", miniStructure.claw.getPosition());
 
 //                double power = openClaw ? 1 : closeClaw ? -1 : 0;
 //                arm.claw.setPower(power);
-//                telemetry.addData("Arm claw power", power);
+//                telemetry.addData("MiniStructure claw power", power);
             }
 
-            if (arm.twist.isValid) {
+            if (miniStructure.twist.isValid) {
 //                arm.twist.setRotation(LLAlignAngle / 270);
 
 //                double power = twistLeft ? 1 : twistRight ? -1 : 0;
@@ -267,19 +267,19 @@ public class DragonsDriver extends LinearOpMode {
                 double power = twistLeft ? 0.001 * twistSpeed : twistRight ? -0.001 * twistSpeed : 0;
                 double targetPosition;
 //                arm.twist.setPower(power);
-                telemetry.addData("Arm twist power", power * 100);
+                telemetry.addData("MiniStructure twist power", power * 100);
 
 
                 if (power != 0) {
-                    targetPosition = arm.twist.getPosition() + power;
+                    targetPosition = miniStructure.twist.getPosition() + power;
 
-                    arm.twist.setPosition(targetPosition);
+                    miniStructure.twist.setPosition(targetPosition);
                 }
 
-                telemetry.addData("twist pos", arm.twist.getPosition());
+                telemetry.addData("twist pos", miniStructure.twist.getPosition());
             }
 
-            if (arm.tilt.isValid) {
+            if (miniStructure.tilt.isValid) {
 //                if (tiltUp) {
 //                    arm.tilt.up();
 //                    telemetry.addLine("moving tilt up");
@@ -290,18 +290,18 @@ public class DragonsDriver extends LinearOpMode {
 //                }
 
                 double power = tiltUp ? 1 : tiltDown ? -1 : 0;
-                arm.tilt.setPower(power);
-                telemetry.addData("Arm tilt power", power);
+                miniStructure.tilt.setPower(power);
+                telemetry.addData("MiniStructure tilt power", power);
             }
 
 
-            if (arm.artie.isValid) {
+            if (miniStructure.arm.isValid) {
 //                if (armUp)
-//                    arm.artie.setPosition(Arm.Artie.ArtiePos.UP);
+//                    arm.artie.setPosition(MiniStructure.Arm.ArtiePos.UP);
 //                if (armDown)
-//                    arm.artie.setPosition(Arm.Artie.ArtiePos.DOWN);
+//                    arm.artie.setPosition(MiniStructure.Arm.ArtiePos.DOWN);
 //                if (armBack)
-//                    arm.artie.setPosition(Arm.Artie.ArtiePos.BACK);
+//                    arm.artie.setPosition(MiniStructure.Arm.ArtiePos.BACK);
 //
 //                arm.artie.updatePosition();
 //                telemetry.addData("artie pos", arm.artie.getPosition().name());
@@ -309,8 +309,8 @@ public class DragonsDriver extends LinearOpMode {
 
                 double power = armUp - armDown;
 
-                arm.artie.setPower(power);
-                telemetry.addData ("Arm artie power", power);
+                miniStructure.arm.setPower(power);
+                telemetry.addData ("MiniStructure artie power", power);
             }
             //</editor-fold>
 
@@ -326,7 +326,7 @@ public class DragonsDriver extends LinearOpMode {
             //</editor-fold>
 
             //<editor-fold desc="--------------------- Movement ---------------------">
-            if (dragonsIMU.isValid && driveMotors.isValid) {
+            if (dragonsIMU.isValid && drivetrain.isValid) {
                 double driveSpeed = 1;
 
                 if (creepSpeed > 0.1) {
@@ -344,14 +344,14 @@ public class DragonsDriver extends LinearOpMode {
                 // calls for movement
                 double[] drivePowers = MoveRobot.FC(botHeading, x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
                 //sets the motors to their corresponding power
-                driveMotors.setPower(drivePowers);
+                drivetrain.setPower(drivePowers);
 
                 //telemetry
                 telemetry.addLine();
-                telemetry.addData("leftFront power",  String.valueOf(Math.round(driveMotors.getPower()[0])));
-                telemetry.addData("rightFront power", String.valueOf(Math.round(driveMotors.getPower()[1])));
-                telemetry.addData("leftBack power",   String.valueOf(Math.round(driveMotors.getPower()[2])));
-                telemetry.addData("rightBack power",  String.valueOf(Math.round(driveMotors.getPower()[3])));
+                telemetry.addData("leftFront power",  String.valueOf(Math.round(drivetrain.getPower()[0])));
+                telemetry.addData("rightFront power", String.valueOf(Math.round(drivetrain.getPower()[1])));
+                telemetry.addData("leftBack power",   String.valueOf(Math.round(drivetrain.getPower()[2])));
+                telemetry.addData("rightBack power",  String.valueOf(Math.round(drivetrain.getPower()[3])));
             }
             //</editor-fold>
 

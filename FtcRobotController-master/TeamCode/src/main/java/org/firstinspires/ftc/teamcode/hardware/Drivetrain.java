@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.utils.Global;
 
-public class DriveMotors {
+public class Drivetrain {
     public boolean isValid = true;
     public DcMotorEx leftFront, rightFront, leftBack, rightBack;
 
-    public DriveMotors (LinearOpMode opmode) {
+    public Drivetrain(LinearOpMode opmode) {
         try
         {
             opmode.telemetry.addLine("Configuring drive motors...");
