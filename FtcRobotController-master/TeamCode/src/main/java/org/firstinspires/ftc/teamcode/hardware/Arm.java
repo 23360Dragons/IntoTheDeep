@@ -92,7 +92,7 @@ public class Arm {
             try {
                 servo = hardwareMap.get(/*CR*/Servo.class, "twist");
                 /*servo.setDirection(DcMotorSimple.Direction.FORWARD)*/;
-                servo.scaleRange(0.15, 0.833);
+                servo.scaleRange(0.5, 0.875);
 
             } catch (Exception e) {
                 Global.exceptions.append("Twist\n");

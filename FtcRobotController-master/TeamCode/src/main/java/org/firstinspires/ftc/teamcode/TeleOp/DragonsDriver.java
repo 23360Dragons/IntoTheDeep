@@ -74,7 +74,7 @@ public class DragonsDriver extends LinearOpMode {
         double extSpeed = 0.7;
         double extFullSpeed = 1;
 
-        double twistSpeed = 5;
+        double twistSpeed = 55;
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Configuration Error Handing ---------------------">
@@ -100,7 +100,7 @@ public class DragonsDriver extends LinearOpMode {
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Set Twist Default Pos ---------------------">
-        arm.twist.setPosition(0.5);
+        arm.twist.setPosition(1);
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Main Loop ---------------------">
