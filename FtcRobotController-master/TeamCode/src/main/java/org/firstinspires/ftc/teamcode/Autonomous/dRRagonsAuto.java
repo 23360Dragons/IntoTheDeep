@@ -669,3 +669,13 @@ public class dRRagonsAuto extends LinearOpMode {
         );
     }
 }
+/*
+Positions:
+Arm:
+    When SS is Up:
+        down-0
+        out-0.2742
+        up-0.7736
+        back-1
+    When SS is Down:
+ */
