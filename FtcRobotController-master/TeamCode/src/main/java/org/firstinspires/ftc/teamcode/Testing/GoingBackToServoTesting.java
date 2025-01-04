@@ -11,8 +11,8 @@ public class GoingBackToServoTesting extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Servo leftArtie, rightArtie, claw, tilt, twist;
-        leftArtie = hardwareMap.get(Servo.class, "leftArtie");
-        rightArtie = hardwareMap.get(Servo.class, "rightArtie");
+        leftArtie = hardwareMap.get(Servo.class, "leftArm");
+        rightArtie = hardwareMap.get(Servo.class, "rightArm");
         rightArtie.setDirection(Servo.Direction.REVERSE);
         claw = hardwareMap.get(Servo.class, "claw");
         tilt = hardwareMap.get(Servo.class, "tilt");
