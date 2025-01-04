@@ -48,6 +48,7 @@ public class DragonsDriver extends LinearOpMode {
         //<editor-fold desc="--------------------- Housekeeping ---------------------">
         telemetry.clearAll();
         telemetry.update();
+        // clear exceptions, then re add stuff
         Global.exceptions.delete(0, exceptions.capacity()).append("The following were not found:\n");
         Global.exceptionOccurred = false;
         telemetry        = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -64,7 +65,7 @@ public class DragonsDriver extends LinearOpMode {
         dragonsLights    = new DragonsLights(this);
         dragonsOTOS      = new DragonsOTOS(this);
         superStructure   = new SuperStructure(this);
-        miniStructure = new MiniStructure(this);
+        miniStructure    = new MiniStructure(this);
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Part Speeds ---------------------">
@@ -75,6 +76,8 @@ public class DragonsDriver extends LinearOpMode {
         double extFullSpeed = 1;
 
         double twistSpeed = 55;
+        double tiltSpeed = 20;
+        double armSpeed  = 7;
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Configuration Error Handing ---------------------">
@@ -101,6 +104,8 @@ public class DragonsDriver extends LinearOpMode {
 
         //<editor-fold desc="--------------------- Set Twist Default Pos ---------------------">
         miniStructure.twist.setPosition(1);
+        miniStructure.arm.setPosition(0.5);
+        miniStructure.tilt.setPosition(0.2);
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Main Loop ---------------------">
@@ -247,6 +252,7 @@ public class DragonsDriver extends LinearOpMode {
                     miniStructure.claw.open();
                     telemetry.addLine("Open claw");
                 }
+
                 if (closeClaw) {
                     miniStructure.claw.close();
                     telemetry.addLine("Close claw");
@@ -261,22 +267,14 @@ public class DragonsDriver extends LinearOpMode {
 
             if (miniStructure.twist.isValid) {
 //                arm.twist.setRotation(LLAlignAngle / 270);
-
 //                double power = twistLeft ? 1 : twistRight ? -1 : 0;
 
                 double power = twistLeft ? 0.001 * twistSpeed : twistRight ? -0.001 * twistSpeed : 0;
-                double targetPosition;
-//                arm.twist.setPower(power);
-                telemetry.addData("MiniStructure twist power", power * 100);
+                double targetPosition = miniStructure.twist.getPosition() + power;
 
-
-                if (power != 0) {
-                    targetPosition = miniStructure.twist.getPosition() + power;
-
-                    miniStructure.twist.setPosition(targetPosition);
-                }
-
-                telemetry.addData("twist pos", miniStructure.twist.getPosition());
+                miniStructure.twist.setPosition(targetPosition);
+                telemetry.addData("MiniStructure twist power", power);
+                telemetry.addData("MiniStructure twist position", miniStructure.twist.getPosition());
             }
 
             if (miniStructure.tilt.isValid) {
@@ -289,9 +287,12 @@ public class DragonsDriver extends LinearOpMode {
 //                    telemetry.addLine("moving tilt down");
 //                }
 
-                double power = tiltUp ? 1 : tiltDown ? -1 : 0;
-                miniStructure.tilt.setPower(power);
+                double power = tiltUp ? 0.001 * tiltSpeed : tiltDown ? -0.001 * tiltSpeed : 0;
+                double targetPosition = miniStructure.tilt.getPosition() + power;
+
+                miniStructure.tilt.setPosition(targetPosition);
                 telemetry.addData("MiniStructure tilt power", power);
+                telemetry.addData("MiniStructure tilt position", miniStructure.tilt.getPosition());
             }
 
 
@@ -307,10 +308,12 @@ public class DragonsDriver extends LinearOpMode {
 //                telemetry.addData("artie pos", arm.artie.getPosition().name());
 //                double power = armUp ? 1 : armDown ? -1 : 0;
 
-                double power = armUp - armDown;
+                double power = (armUp - armDown) * (0.001 * armSpeed);
+                double targetPosition = miniStructure.arm.getPosition().avg + power;
 
-                miniStructure.arm.setPower(power);
-                telemetry.addData ("MiniStructure artie power", power);
+                miniStructure.arm.setPosition(targetPosition);
+                telemetry.addData("MiniStructure arm power", power);
+                telemetry.addData("MiniStructure arm position", miniStructure.arm.getPosition().avg);
             }
             //</editor-fold>
 

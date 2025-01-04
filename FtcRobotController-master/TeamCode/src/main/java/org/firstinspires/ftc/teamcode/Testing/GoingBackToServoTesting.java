@@ -17,19 +17,24 @@ public class GoingBackToServoTesting extends LinearOpMode {
         claw = hardwareMap.get(Servo.class, "claw");
         tilt = hardwareMap.get(Servo.class, "tilt");
         twist = hardwareMap.get(Servo.class, "twist");
-        waitForStart();
-        double lA = leftArtie.getPosition();
-        double rA = rightArtie.getPosition();
-        double aA = (lA+rA)/2;
-        double cL = claw.getPosition();
-        double tI = tilt.getPosition();
-        double tW = twist.getPosition();
-        telemetry.addData("left Arm Pos:", lA);
-        telemetry.addData("right Arm Pos:", rA);
-        telemetry.addData("average Arm Pos:", aA);
-        telemetry.addData("claw Pos:", cL);
-        telemetry.addData("tilt Pos:", tI);
-        telemetry.addData("twist Pos:", tW);
-    }
 
+        waitForStart();
+        if (isStopRequested()) return;
+
+        while(opModeIsActive()) {
+            double lA = leftArtie.getPosition();
+            double rA = rightArtie.getPosition();
+            double aA = (lA + rA) / 2;
+            double cL = claw.getPosition();
+            double tI = tilt.getPosition();
+            double tW = twist.getPosition();
+            telemetry.addData("left Arm Pos:", lA);
+            telemetry.addData("right Arm Pos:", rA);
+            telemetry.addData("average Arm Pos:", aA);
+            telemetry.addData("claw Pos:", cL);
+            telemetry.addData("tilt Pos:", tI);
+            telemetry.addData("twist Pos:", tW);
+            telemetry.update();
+        }
+    }
 }

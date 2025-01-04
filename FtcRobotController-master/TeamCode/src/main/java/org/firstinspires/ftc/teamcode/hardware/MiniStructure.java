@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.utils.Global;
+import org.firstinspires.ftc.teamcode.utils.Positions;
 
 public class MiniStructure {
     public boolean isValid;
@@ -45,16 +46,14 @@ public class MiniStructure {
 
     public static class Tilt {
         public boolean isValid = true;
-        private CRServo servo;
+        private Servo servo;
         private final double up = 0.8;
         private final double down = 0.2;
 
         Tilt (HardwareMap hardwareMap) {
             try {
-                servo = hardwareMap.get(CRServo.class, "tilt");
-                servo.setDirection(DcMotorSimple.Direction.FORWARD);
-//                servo.scaleRange(0,1);
-//                up();
+                servo = hardwareMap.get(Servo.class, "tilt");
+                servo.scaleRange(0,0.6);
             } catch (Exception e) {
                 Global.exceptions.append("Tilt\n");
                 Global.exceptionOccurred = true;
@@ -62,36 +61,35 @@ public class MiniStructure {
             }
         }
 
-        // 0 tilts it back, 1 tilts it forward
-//        public void setPosition (double position) {
-//            servo.setPosition(position);
-//        }
-
-        public void setPower (double power){
-            servo.setPower(power);
+//         0 tilts it back, 1 tilts it forward
+        public void setPosition (double position) {
+            servo.setPosition(position);
         }
 
-//        public double getPosition () {
-//            return servo.getPosition();
+//        public void setPower (double power){
+//            servo.setPower(power);
 //        }
 
-//        public void up () {
-//            servo.setPosition(up);
-//        }
+        public double getPosition () {
+            return servo.getPosition();
+        }
 
-//        public void down () {
-//            servo.setPosition(down);
-//        }
+        public void up () {
+            servo.setPosition(up);
+        }
+
+        public void down () {
+            servo.setPosition(down);
+        }
     }
 
     public static class Twist {
         public boolean isValid = true;
-        private /*CR*/Servo servo;
+        private Servo servo;
 
         Twist (HardwareMap hardwareMap) {
             try {
-                servo = hardwareMap.get(/*CR*/Servo.class, "twist");
-                /*servo.setDirection(DcMotorSimple.Direction.FORWARD)*/;
+                servo = hardwareMap.get(Servo.class, "twist");
                 servo.scaleRange(0.5, 0.875);
 
             } catch (Exception e) {
@@ -108,9 +106,6 @@ public class MiniStructure {
         public void setPosition (double rotation) {
             servo.setPosition(rotation);
         }
-        /*public void setPower (double power) {
-            servo.setPower(power);
-        }*/
     }
 
     public static class Claw {
@@ -119,11 +114,10 @@ public class MiniStructure {
         private Servo claw;
 
         private final double openRotation   = 1;
-        private final double closedRotation = 0.5;
+        private final double closedRotation = 0.46;
 
         Claw (HardwareMap hardwareMap) {
             try {
-//                claw = hardwareMap.get(CRServo.class, "claw");
                 claw = hardwareMap.get(Servo.class, "claw");
                 claw.scaleRange(0, 1);
             } catch (Exception e) {
@@ -144,35 +138,32 @@ public class MiniStructure {
         public double getPosition () {
             return claw.getPosition();
         }
-//
-//        public void setPower (double power) {
-//            claw.setPower(power);
-//        }
     }
 
     public static class Arm {
         public boolean isValid = true;
-        private CRServo left;
-        private CRServo right;
+        private Servo left;
+        private Servo right;
 //        private ArtiePos artiePos;
 //        private ArtiePos lastArtiePos;
 
-        Arm(HardwareMap hardwareMap) {
+        Arm (HardwareMap hardwareMap) {
             try {
-                left = hardwareMap.get(CRServo.class, "leftArtie");
-//                left.scaleRange(0,1);
+                left = hardwareMap.get(Servo.class, "leftArm");
+                left.scaleRange(0,1);
             } catch (Exception e) {
                 Global.exceptions.append("leftArtie\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
-            } // left motor - right goes back
+            }
 
+            // left motor - right goes back
             // right motor - left goes back ( so 0)
 
             try {
-                right = hardwareMap.get(CRServo.class, "rightArtie");
-                right.setDirection(CRServo.Direction.REVERSE);
-//                right.scaleRange(0,1);
+                right = hardwareMap.get(Servo.class, "rightArm");
+                right.setDirection(Servo.Direction.REVERSE);
+                right.scaleRange(0,1);
             } catch (Exception e) {
                 Global.exceptions.append("rightArtie\n");
                 Global.exceptionOccurred = true;
@@ -182,7 +173,6 @@ public class MiniStructure {
 //            artiePos = ArtiePos.DOWN;
 //            lastArtiePos = artiePos;
         }
-
 //        public enum ArtiePos {
 //            UP,
 //            DOWN,
@@ -192,12 +182,15 @@ public class MiniStructure {
 //        public void setPosition (ArtiePos pos) {
 //            artiePos = pos;
 //        }
-//
-//        private void moveServos (double pos) {
-//
-//            left.setPosition(pos);
-//            right.setPosition(pos);
-//        }
+
+        public void setPosition (double pos) {
+            left.setPosition(pos);
+            right.setPosition(pos);
+        }
+
+        public Positions getPosition(){
+            return new Positions(left.getPosition(), right.getPosition());
+        }
 
 //        public void updatePosition () {
 //            if (artiePos != lastArtiePos) {
@@ -217,14 +210,14 @@ public class MiniStructure {
 //
 //            lastArtiePos = artiePos;
 //        }
-
+//
 //        public ArtiePos getPosition () {
 //            return artiePos;
 //        }
-
-        public void setPower (double pow) {
-            left.setPower(pow);
-            right.setPower(pow);
-        }
+//
+//        public void setPower (double pow) {
+//            left.setPower(pow);
+//            right.setPower(pow);
+//        }
     }
 }

@@ -49,7 +49,7 @@ public class SuperStructure {
 
         Articulation (LinearOpMode opmode) {
             try {
-                leftMotor = opmode.hardwareMap.get(DcMotorEx.class, "leftArm");
+                leftMotor = opmode.hardwareMap.get(DcMotorEx.class, "leftArtie");
                 leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 // STOP AND Reset CANNOT BE AFTER RUN WITHOUT ENCODER - NOTHING WORKS IF YOU DO
                 leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -62,7 +62,7 @@ public class SuperStructure {
             }
 
             try {
-                rightMotor = opmode.hardwareMap.get(DcMotorEx.class, "rightArm");
+                rightMotor = opmode.hardwareMap.get(DcMotorEx.class, "rightArtie");
                 rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
