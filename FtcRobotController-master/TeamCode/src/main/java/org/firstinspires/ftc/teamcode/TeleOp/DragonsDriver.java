@@ -48,6 +48,7 @@ public class DragonsDriver extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         //<editor-fold desc="--------------------- Housekeeping ---------------------">
+        boolean debugMode = false;
         telemetry.clearAll();
         telemetry.update();
         // clear exceptions, then re add stuff
@@ -137,7 +138,9 @@ public class DragonsDriver extends LinearOpMode {
             boolean recalibrateIMU    = currentGamepad1.a,
                     bluePipeline      = currentGamepad1.x,
                     yellowPipeline    = currentGamepad1.y,
-                    redPipeline       = currentGamepad1.b;
+                    redPipeline       = currentGamepad1.b,
+                    lDebugMode        = currentGamepad1.left_stick_button,
+                    rDebugMode        = currentGamepad1.right_stick_button;
 
             // gamepad 2 (MANIPULATOR)
 
@@ -154,10 +157,22 @@ public class DragonsDriver extends LinearOpMode {
                     tiltUp            = currentGamepad2.dpad_up,
                     tiltDown          = currentGamepad2.dpad_down;
 
+            //</editor-fold>\
+
+            //<editor-fold desc="--------------------- Debug Mode ---------------------">
+            if (lDebugMode && rDebugMode) {
+                debugMode = !debugMode;
+            }
+
+            telemetry.addData("Debug Mode", debugMode);
             //</editor-fold>
 
             // <editor-fold desc="--------------------- SuperStructure ---------------------">
+            telemetry.addLine("-----Super Structure-----");
+
             if (superStructure.articulation.isValid) {
+
+                double velocity = superStructure.articulation.getVelocity().avg;
                 double speed;
 
                 if (SSFullPower) {
@@ -167,29 +182,33 @@ public class DragonsDriver extends LinearOpMode {
                     speed = SSSpeed;
                 }
 
+                // handles articulation state for limiting extension
                 if (superStructure.articulation.getPosition().avg <= -300) {
                     superStructure.articulation.setState(SuperStructure.ARTICULATION_POS.DOWN);
                 } else {
                     superStructure.articulation.setState(SuperStructure.ARTICULATION_POS.UP);
                 }
 
-                if (superStructure.extension.isValid) {
-                    if (superStructure.articulation.getState() == SuperStructure.ARTICULATION_POS.UP) {
-                        if (superStructure.extension.getPosition().avg > superStructure.extension.maxDownExtension) {
-                            if (articulationPower < 0) {
-                                telemetry.addLine("Articulation cannot go down, as extension is too extended!");
-                            } else
-                                superStructure.articulation.setPower(articulationPower * speed);
-                        } else
-                            superStructure.articulation.setPower(articulationPower * speed);
-                    } else
-                        superStructure.articulation.setPower(articulationPower * speed);
-                } else
-                    superStructure.articulation.setPower(articulationPower * speed);
+                if (Math.abs(velocity) > 25) {
+                    articulationPower += velocity / -25;
+                }
 
-                telemetry.addData("Super Structure   articulation power", superStructure.articulation.getPower());
-                telemetry.addData("Super Structure right artie position", superStructure.articulation.getPosition().right);
-                telemetry.addData("Super Structure  left artie position", superStructure.articulation.getPosition().left);
+                if (superStructure.extension.isValid
+                        && superStructure.articulation.getState() == SuperStructure.ARTICULATION_POS.UP
+                        && superStructure.extension.getPosition().avg > superStructure.extension.maxDownExtension
+                        && articulationPower < 0
+                ) {
+                    telemetry.addLine("Articulation cannot go down, as extension is too extended!");
+                } else {
+                    superStructure.articulation.setPower(articulationPower * speed);
+                }
+
+                if (debugMode) {
+                    telemetry.addData("Super Structure   articulation power", superStructure.articulation.getPower());
+                    telemetry.addData("Super Structure right artie position", superStructure.articulation.getPosition().right);
+                    telemetry.addData("Super Structure  left artie position", superStructure.articulation.getPosition().left);
+                }
+
                 telemetry.addData("Super Structure        enum position", superStructure.articulation.getState());
             }
 
@@ -203,27 +222,26 @@ public class DragonsDriver extends LinearOpMode {
                     speed = extSpeed;
                 }
 
-                if (superStructure.articulation.isValid) {
-                    if (superStructure.articulation.getState() == SuperStructure.ARTICULATION_POS.DOWN) {
-                        if (extensionPower > 0) {
-                            if (superStructure.extension.getPosition().avg > superStructure.extension.maxDownExtension) {
-                                telemetry.addLine("Extension cannot extend more, as the arms are down!");
-                            } else
-                                superStructure.extension.setPower(extensionPower * speed);
-                        } else
-                            superStructure.extension.setPower(extensionPower * speed);
-                    } else
-                        superStructure.extension.setPower(extensionPower * speed);
-                } else
+                if (superStructure.articulation.isValid
+                        && superStructure.articulation.getState() == SuperStructure.ARTICULATION_POS.DOWN
+                        && extensionPower > 0
+                        && superStructure.extension.getPosition().avg > superStructure.extension.maxDownExtension
+                ) {
+                    telemetry.addLine("Extension cannot extend more, as the arms are down!");
+                } else {
                     superStructure.extension.setPower(extensionPower * speed);
+                }
 
-
-                telemetry.addData("Super Structure extension power",     superStructure.extension.getPower());
-                telemetry.addData("Super Structure extension position",  superStructure.extension.getPosition().right);
+                if(debugMode) {
+                    telemetry.addData("Super Structure extension power", superStructure.extension.getPower());
+                    telemetry.addData("Super Structure extension position", superStructure.extension.getPosition().right);
+                }
             }
             //</editor-fold>
 
             //<editor-fold desc="--------------------- Limelight ---------------------">
+            telemetry.addLine("-----Limelight-----");
+
             if (dragonsLimelight.isValid) {
                 // --------------------- Pipeline Switching ---------------------
 //                if (currentB2 && !previousB2) { //rising edge
@@ -242,11 +260,16 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("Limelight Pipeline", dragonsLimelight.getPipeline().getName());
 
                 LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this)), 180);
+
+                if (debugMode) {
                 telemetry.addData("LLAlignAngle", LLAlignAngle);
+                }
             }
             //</editor-fold>
 
             // <editor-fold desc=" --------------------- MiniStructure ---------------------">
+            telemetry.addLine("-----Mini Structure-----");
+
             if (miniStructure.claw.isValid) {
                 if (openClaw) {
                     miniStructure.claw.open();
@@ -318,6 +341,7 @@ public class DragonsDriver extends LinearOpMode {
             //</editor-fold>
 
             //<editor-fold desc="--------------------- SparkFun OTOS ---------------------">
+            telemetry.addLine("-----Sparkfun OTOS-----");
             DecimalFormat sparkfunDF = new DecimalFormat("#.###");
             //todo: make sure this works
 
@@ -331,6 +355,7 @@ public class DragonsDriver extends LinearOpMode {
             //</editor-fold>
 
             //<editor-fold desc="--------------------- Movement ---------------------">
+            telemetry.addLine("-----Drivetrain-----");
             if (dragonsIMU.isValid && drivetrain.isValid) {
                 double driveSpeed = 1;
 
@@ -352,11 +377,13 @@ public class DragonsDriver extends LinearOpMode {
                 drivetrain.setPower(drivePowers);
 
                 //telemetry
-                telemetry.addLine();
-                telemetry.addData("leftFront power",  String.valueOf(Math.round(drivetrain.getPower()[0])));
-                telemetry.addData("rightFront power", String.valueOf(Math.round(drivetrain.getPower()[1])));
-                telemetry.addData("leftBack power",   String.valueOf(Math.round(drivetrain.getPower()[2])));
-                telemetry.addData("rightBack power",  String.valueOf(Math.round(drivetrain.getPower()[3])));
+                if (debugMode) {
+                    telemetry.addLine();
+                    telemetry.addData("leftFront power", String.valueOf(Math.round(drivetrain.getPower()[0])));
+                    telemetry.addData("rightFront power", String.valueOf(Math.round(drivetrain.getPower()[1])));
+                    telemetry.addData("leftBack power", String.valueOf(Math.round(drivetrain.getPower()[2])));
+                    telemetry.addData("rightBack power", String.valueOf(Math.round(drivetrain.getPower()[3])));
+                }
             }
             //</editor-fold>
 

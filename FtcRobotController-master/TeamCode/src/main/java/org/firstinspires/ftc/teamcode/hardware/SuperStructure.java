@@ -42,10 +42,8 @@ public class SuperStructure {
         private DcMotorEx leftMotor;
         private DcMotorEx rightMotor;
 
-        public boolean       isValid = true;
-        private double       power;
-//        private double       targetPosition;
-        private final double tolerance = 10;
+        public boolean isValid = true;
+        private double power;
 
         Articulation (LinearOpMode opmode) {
             try {
@@ -101,31 +99,14 @@ public class SuperStructure {
             return new Positions(leftMotor.getCurrentPosition(), rightMotor.getCurrentPosition());
         }
 
-//        public void moveUp() {
-//            setPosition(0);
-//            articulationPos = ARTICULATION_POS.UP;
-//        }
-//
-//        public void moveDown() {
-//            setPosition(-334);
-//            articulationPos = ARTICULATION_POS.DOWN;
-//        }
-
-//        private void setPosition (double tickPos) {
-//            targetPosition = tickPos;
-//        }
-
-//        public void updatePosition() {
-//            double error = targetPosition - getPosition().right;
-//
-//            if (Math.abs(error) > tolerance)
-//                setPower(error * 0.029);
-//        }
+        public Positions getVelocity () {
+            return new Positions(leftMotor.getVelocity(AngleUnit.DEGREES), rightMotor.getVelocity(AngleUnit.DEGREES));
+        }
     }
 
     public static class Extension {
-        private DcMotor leftMotor;
-        private DcMotor rightMotor;
+        private DcMotorEx leftMotor;
+        private DcMotorEx rightMotor;
 
         public double maxDownExtension = 1600;
 
@@ -134,7 +115,7 @@ public class SuperStructure {
 
         Extension (LinearOpMode opmode) {
             try {
-                leftMotor = opmode.hardwareMap.get(DcMotor.class, "leftLinear");
+                leftMotor = opmode.hardwareMap.get(DcMotorEx.class, "leftLinear");
                 leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -145,7 +126,7 @@ public class SuperStructure {
             }
 
             try {
-                rightMotor = opmode.hardwareMap.get(DcMotor.class, "rightLinear");
+                rightMotor = opmode.hardwareMap.get(DcMotorEx.class, "rightLinear");
                 rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
