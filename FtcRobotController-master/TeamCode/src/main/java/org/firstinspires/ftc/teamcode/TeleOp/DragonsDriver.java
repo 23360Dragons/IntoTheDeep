@@ -78,9 +78,9 @@ public class DragonsDriver extends LinearOpMode {
         double extSpeed = 0.7;
         double extFullSpeed = 1;
 
-        double twistSpeed = 55;
-        double tiltSpeed = 20;
-        double armSpeed  = 7;
+        double twistSpeed = 40;
+        double tiltSpeed = 15;
+        double armSpeed  = 5;
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Configuration Error Handing ---------------------">
