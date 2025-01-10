@@ -45,7 +45,7 @@ public class dRRagonsAuto extends LinearOpMode {
         int halfTicks = 1065;
         int mostTicks = 1597;
         int maxTicks = 2125;
-        double linearAverage = ((leftLinear.getCurrentPosition() + rightLinear.getCurrentPosition()) /2);
+        double linearAverage;
         //todo: this causes an NPE, bad!!!!!!!!!
         //actual max is 2130, so we don't overextend we subtract five
         public Linearz(HardwareMap hardwareMap){
@@ -62,6 +62,8 @@ public class dRRagonsAuto extends LinearOpMode {
             rightLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightLinear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             rightLinear.setTargetPositionTolerance(5);
+
+            linearAverage = ((double) (leftLinear.getCurrentPosition() + rightLinear.getCurrentPosition()) /2);
         }
 
         public class ElevatorUp implements Action {
@@ -125,6 +127,8 @@ public class dRRagonsAuto extends LinearOpMode {
     } //test?
     public class Armz {
         private DcMotorEx leftArm, rightArm;
+        double armzAvg;
+
         public Armz (HardwareMap hardwareMap){
             leftArm = hardwareMap.get(DcMotorEx.class, "leftLinear");
             leftArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -139,8 +143,8 @@ public class dRRagonsAuto extends LinearOpMode {
             rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             rightArm.setTargetPositionTolerance(5);
+            armzAvg = (double) (leftArm.getCurrentPosition() + rightArm.getCurrentPosition()) /2;
         }
-        double armzAvg = (leftArm.getCurrentPosition()+rightArm.getCurrentPosition())/2;
         int armUp = 0;
         double armMost = -83.5;
         double armLittle = -250.5;
