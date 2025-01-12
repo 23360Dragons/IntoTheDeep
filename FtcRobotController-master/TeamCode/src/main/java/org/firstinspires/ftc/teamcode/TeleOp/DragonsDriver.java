@@ -235,6 +235,7 @@ public class DragonsDriver extends LinearOpMode {
                 if(debugMode) {
                     telemetry.addData("Super Structure extension power", superStructure.extension.getPower());
                     telemetry.addData("Super Structure extension position", superStructure.extension.getPosition().right);
+                    telemetry.addData("Super Structure Extension Draw", superStructure.extension.getCurrent().avg);
                 }
             }
             //</editor-fold>

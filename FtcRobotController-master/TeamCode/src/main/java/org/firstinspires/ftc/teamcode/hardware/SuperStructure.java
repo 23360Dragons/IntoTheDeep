@@ -4,7 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.ConceptRampMotorSpeed;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.Global;
 import org.firstinspires.ftc.teamcode.utils.Positions;
 
@@ -162,6 +164,10 @@ public class SuperStructure {
 
         public Positions getPosition() {
             return new Positions(leftMotor.getCurrentPosition(), rightMotor.getCurrentPosition());
+        }
+
+        public Positions getCurrent () {
+            return new Positions(leftMotor.getCurrent(CurrentUnit.AMPS), rightMotor.getCurrent(CurrentUnit.AMPS));
         }
     }
 }
