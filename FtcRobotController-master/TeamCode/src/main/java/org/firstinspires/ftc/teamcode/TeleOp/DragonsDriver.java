@@ -11,6 +11,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
 import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
@@ -24,6 +25,7 @@ import org.firstinspires.ftc.teamcode.hardware.DragonsOTOS;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
 
 @Config
 @TeleOp(name = "DragonsDriver", group = "TeleOp")
@@ -59,6 +61,8 @@ public class DragonsDriver extends LinearOpMode {
         currentGamepad2  = new Gamepad();
         previousGamepad1 = new Gamepad();
         previousGamepad2 = new Gamepad();
+
+        ElapsedTime time = new ElapsedTime();
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
@@ -103,6 +107,9 @@ public class DragonsDriver extends LinearOpMode {
 
         if (isStopRequested()) return;
         telemetry.clearAll();
+
+        time.reset();
+        time.startTime();
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Set Twist Default Pos ---------------------">
@@ -387,6 +394,12 @@ public class DragonsDriver extends LinearOpMode {
                 }
             }
             //</editor-fold>
+
+            telemetry.addData("Time seconds", time.seconds());
+            telemetry.addData("Time toString", time.toString());
+            telemetry.addData("Time starttime", time.startTime());
+            telemetry.addData("Time seconds - starttime", time.seconds() - time.startTime());
+            telemetry.addData("Time time", time.time(TimeUnit.SECONDS));
 
             telemetry.update();
         }
