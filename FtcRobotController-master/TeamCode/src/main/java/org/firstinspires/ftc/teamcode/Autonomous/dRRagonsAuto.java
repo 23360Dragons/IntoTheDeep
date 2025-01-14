@@ -605,10 +605,15 @@ public class dRRagonsAuto extends LinearOpMode {
 
         TrajectoryActionBuilder stopping = drive.actionBuilder(startPose)
                 .waitSeconds(30);
+        TrajectoryActionBuilder test = drive.actionBuilder(startPose)
+                .turnTo(Math.toRadians(90))
+                .waitSeconds(30);
+
 
         waitForStart();
 
         Action autonomousAnonymous = null;
+        Action testy = test.build();
         switch (starty) {
             case 1:
                 autonomousAnonymous = blueberry.build();
@@ -667,8 +672,9 @@ public class dRRagonsAuto extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        autonomousAnonymous,
-                        grabby
+                        testy
+                        //autonomousAnonymous,
+                        //grabby
                 )
         );
     }
