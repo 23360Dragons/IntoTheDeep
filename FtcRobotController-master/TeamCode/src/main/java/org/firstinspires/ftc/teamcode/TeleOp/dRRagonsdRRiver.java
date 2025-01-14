@@ -43,7 +43,7 @@ public class dRRagonsdRRiver extends LinearOpMode {
         int halfTicks = 1065;
         int mostTicks = 1597;
         int maxTicks = 2125;
-        double linearAverage = ((leftLinear.getCurrentPosition()+rightLinear.getCurrentPosition())/2);
+        double linearAverage;
         //actual max is 2130, so we don't overextend we subtract five
         public Linearz(HardwareMap hardwareMap){
             leftLinear = hardwareMap.get(DcMotorEx.class, "leftLinear");
@@ -59,6 +59,8 @@ public class dRRagonsdRRiver extends LinearOpMode {
             rightLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightLinear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             rightLinear.setTargetPositionTolerance(5);
+
+            linearAverage = ((double) (leftLinear.getCurrentPosition() + rightLinear.getCurrentPosition()) / 2);
         }
 
         public class ElevatorUp implements Action {
@@ -147,8 +149,9 @@ public class dRRagonsdRRiver extends LinearOpMode {
             rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             rightArm.setTargetPositionTolerance(5);
+            armzAvg  = ((double) (leftArm.getCurrentPosition() + rightArm.getCurrentPosition())) / 2;
         }
-        double armzAvg = (leftArm.getCurrentPosition()+rightArm.getCurrentPosition())/2;
+        double armzAvg;
         int armUp = 0;
         double armMost = -83.5;
         double armLittle = -250.5;

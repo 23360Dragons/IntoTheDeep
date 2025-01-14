@@ -7,7 +7,7 @@ public class Global {
     public static boolean exceptionOccurred = false;
 
     public static final RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
-    public static final RevHubOrientationOnRobot.UsbFacingDirection  usbFacingDirection   = RevHubOrientationOnRobot.UsbFacingDirection.DOWN;
+    public static final RevHubOrientationOnRobot.UsbFacingDirection  usbFacingDirection   = RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
     public static final int BLUE   = 0;
     public static final int RED    = 1;

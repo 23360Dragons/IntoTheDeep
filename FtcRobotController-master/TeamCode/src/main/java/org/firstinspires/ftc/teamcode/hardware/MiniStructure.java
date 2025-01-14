@@ -114,7 +114,7 @@ public class MiniStructure {
         private Servo claw;
 
         private final double openRotation   = 1;
-        private final double closedRotation = 0.46;
+        private final double closedRotation = 0.47;
 
         Claw (HardwareMap hardwareMap) {
             try {

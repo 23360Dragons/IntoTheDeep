@@ -31,11 +31,6 @@ import java.util.concurrent.TimeUnit;
 @TeleOp(name = "DragonsDriver", group = "TeleOp")
 public class DragonsDriver extends LinearOpMode {
     //<editor-fold desc="--------------------- Local Constants ---------------------">
-    static Gamepad currentGamepad1;
-    static Gamepad currentGamepad2;
-    static Gamepad previousGamepad1;
-    static Gamepad previousGamepad2;
-
     public Drivetrain       drivetrain;
     public DragonsIMU       dragonsIMU;
     public DragonsLimelight dragonsLimelight;
@@ -45,6 +40,17 @@ public class DragonsDriver extends LinearOpMode {
     public MiniStructure    miniStructure;
 
     public static double LLAlignAngle = 0;
+
+    //<editor-fold desc="--------------------- Part Speeds ---------------------">
+    public static double SSSpeed      = 0.5;
+    public static double SSFullSpeed  = 0.8;
+    public static double extSpeed     = 0.7;
+    public static double extFullSpeed = 1;
+    public static double twistSpeed   = 40;
+    public static double tiltSpeed    = 15;
+    public static double armSpeed     = 5;
+    //</editor-fold>
+
     //</editor-fold>
 
     @Override
@@ -57,10 +63,10 @@ public class DragonsDriver extends LinearOpMode {
         Global.exceptions.delete(0, exceptions.capacity()).append("The following were not found:\n");
         Global.exceptionOccurred = false;
         telemetry        = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        currentGamepad1  = new Gamepad();
-        currentGamepad2  = new Gamepad();
-        previousGamepad1 = new Gamepad();
-        previousGamepad2 = new Gamepad();
+        Gamepad currentGamepad1  = new Gamepad();
+        Gamepad currentGamepad2  = new Gamepad();
+        Gamepad previousGamepad1 = new Gamepad();
+        Gamepad previousGamepad2 = new Gamepad();
 
         ElapsedTime time = new ElapsedTime();
         //</editor-fold>
@@ -73,18 +79,6 @@ public class DragonsDriver extends LinearOpMode {
         dragonsOTOS      = new DragonsOTOS(this);
         superStructure   = new SuperStructure(this);
         miniStructure    = new MiniStructure(this);
-        //</editor-fold>
-
-        //<editor-fold desc="--------------------- Part Speeds ---------------------">
-        double SSSpeed = 0.5;
-        double SSFullSpeed = 0.8;
-
-        double extSpeed = 0.7;
-        double extFullSpeed = 1;
-
-        double twistSpeed = 40;
-        double tiltSpeed = 15;
-        double armSpeed  = 5;
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Configuration Error Handing ---------------------">
@@ -175,19 +169,26 @@ public class DragonsDriver extends LinearOpMode {
             //</editor-fold>
 
             // <editor-fold desc="--------------------- SuperStructure ---------------------">
-            telemetry.addLine("-----Super Structure-----");
+            if (superStructure.articulation.isValid || superStructure.extension.isValid)
+                telemetry.addLine("-----Super Structure-----");
 
             if (superStructure.articulation.isValid) {
 
                 double velocity = superStructure.articulation.getVelocity().avg;
                 double speed;
 
-                if (SSFullPower) {
+                if (superStructure.articulation.getState() == SuperStructure.ARTICULATION_POS.UP) {
                     speed = SSFullSpeed;
-                    telemetry.addLine("SS Full Speed!");
                 } else {
                     speed = SSSpeed;
                 }
+
+//                if (SSFullPower) {
+//                    speed = SSFullSpeed;
+//                    telemetry.addLine("SS Full Speed!");
+//                } else {
+//                    speed = SSSpeed;
+//                }
 
                 // handles articulation state for limiting extension
                 if (superStructure.articulation.getPosition().avg <= -300) {
@@ -245,6 +246,8 @@ public class DragonsDriver extends LinearOpMode {
                     telemetry.addData("Super Structure Extension Draw", superStructure.extension.getCurrent().avg);
                 }
             }
+
+            telemetry.addLine();
             //</editor-fold>
 
             //<editor-fold desc="--------------------- Limelight ---------------------">
@@ -273,6 +276,8 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("LLAlignAngle", LLAlignAngle);
                 }
             }
+
+            telemetry.addLine();
             //</editor-fold>
 
             // <editor-fold desc=" --------------------- MiniStructure ---------------------">
@@ -346,6 +351,8 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("MiniStructure arm power", power);
                 telemetry.addData("MiniStructure arm position", miniStructure.arm.getPosition().avg);
             }
+
+            telemetry.addLine();
             //</editor-fold>
 
             //<editor-fold desc="--------------------- SparkFun OTOS ---------------------">
@@ -360,11 +367,14 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("sparkfun y position", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getPosition().y)));
                 telemetry.addData("sparkfun    heading", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getPosition().h)));
             }
+
+            telemetry.addLine();
             //</editor-fold>
 
             //<editor-fold desc="--------------------- Movement ---------------------">
-            telemetry.addLine("-----Drivetrain-----");
             if (dragonsIMU.isValid && drivetrain.isValid) {
+                telemetry.addLine("-----Drivetrain-----");
+
                 double driveSpeed = 1;
 
                 if (creepSpeed > 0.1) {
@@ -392,6 +402,8 @@ public class DragonsDriver extends LinearOpMode {
                     telemetry.addData("leftBack power", String.valueOf(Math.round(drivetrain.getPower()[2])));
                     telemetry.addData("rightBack power", String.valueOf(Math.round(drivetrain.getPower()[3])));
                 }
+
+                telemetry.addLine();
             }
             //</editor-fold>
 
