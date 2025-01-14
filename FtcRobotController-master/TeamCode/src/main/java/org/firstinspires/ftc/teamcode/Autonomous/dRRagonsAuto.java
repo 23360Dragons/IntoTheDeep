@@ -46,7 +46,6 @@ public class dRRagonsAuto extends LinearOpMode {
         int mostTicks = 1597;
         int maxTicks = 2125;
         double linearAverage;
-        //todo: this causes an NPE, bad!!!!!!!!!
         //actual max is 2130, so we don't overextend we subtract five
         public Linearz(HardwareMap hardwareMap){
             leftLinear = hardwareMap.get(DcMotorEx.class, "leftLinear");
@@ -143,6 +142,7 @@ public class dRRagonsAuto extends LinearOpMode {
             rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             rightArm.setTargetPositionTolerance(5);
+
             armzAvg = (double) (leftArm.getCurrentPosition() + rightArm.getCurrentPosition()) /2;
         }
         int armUp = 0;
