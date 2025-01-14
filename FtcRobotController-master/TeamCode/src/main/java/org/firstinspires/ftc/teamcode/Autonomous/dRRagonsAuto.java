@@ -512,8 +512,8 @@ public class dRRagonsAuto extends LinearOpMode {
         Clawz clawz = new Clawz(hardwareMap);
         Seesaw seesaw = new Seesaw(hardwareMap);
         TwistNTurn twistyturny = new TwistNTurn(hardwareMap);
-        LarryLime littleLarryLime = new LarryLime(hardwareMap);
-        ThisLittleLight littleLight = new ThisLittleLight(hardwareMap);
+        //LarryLime littleLarryLime = new LarryLime(hardwareMap);
+        //ThisLittleLight littleLight = new ThisLittleLight(hardwareMap);
 
 
         while (opModeInInit()){
@@ -523,25 +523,25 @@ public class dRRagonsAuto extends LinearOpMode {
             switch (StartingPosPicker.starty) {
                 case 1:
                     startPose = blueStartBasket;
-                    Actions.runBlocking(littleLarryLime.LarryLimeYellow());
+                    //Actions.runBlocking(littleLarryLime.LarryLimeYellow());
                     telemetry.addLine("Starting Position Set To Blue, Basket Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
                 case 2:
                     startPose = redStartBasket;
-                    Actions.runBlocking(littleLarryLime.LarryLimeYellow());
+                    //Actions.runBlocking(littleLarryLime.LarryLimeYellow());
                     telemetry.addLine("Starting Position Set To Red, Basket Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
                 case 3:
                     startPose = blueStartObserve;
-                    Actions.runBlocking(littleLarryLime.LarryLimeBlues());
+                    //Actions.runBlocking(littleLarryLime.LarryLimeBlues());
                     telemetry.addLine("Starting Position Set To Blue, Observation Zone Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
                 case 4:
                     startPose = redStartObserve;
-                    Actions.runBlocking(littleLarryLime.LarryLimeRedTV());
+                    //Actions.runBlocking(littleLarryLime.LarryLimeRedTV());
                     telemetry.addLine("Starting Position Set To Red, Observation Zone Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
@@ -605,7 +605,7 @@ public class dRRagonsAuto extends LinearOpMode {
 
         TrajectoryActionBuilder stopping = drive.actionBuilder(startPose)
                 .waitSeconds(30);
-        TrajectoryActionBuilder test = drive.actionBuilder(startPose)
+        TrajectoryActionBuilder test = drive.actionBuilder(notSelected)
                 .turnTo(Math.toRadians(90))
                 .waitSeconds(30);
 
@@ -638,7 +638,7 @@ public class dRRagonsAuto extends LinearOpMode {
 // artie up +6 in, artie out/down -6in
         Action toGrabby = new SequentialAction();
         Action grabby = new SequentialAction (
-                littleLarryLime.SetAngle(),
+                //littleLarryLime.SetAngle(),
                 twistyturny.TurnClaw(),
                 littleArtie.artieDown(),
                 clawz.CloseClaw(),
