@@ -493,8 +493,8 @@ public class dRRagonsdRRiver extends LinearOpMode {
         Clawz clawz = new Clawz(hardwareMap);
         Seesaw seesaw = new Seesaw(hardwareMap);
         TwistNTurn twistyturny = new TwistNTurn(hardwareMap);
-        LarryLime littleLarryLime = new LarryLime(hardwareMap);
-        ThisLittleLight littleLight = new ThisLittleLight(hardwareMap);
+       //LarryLime littleLarryLime = new LarryLime(hardwareMap);
+        //ThisLittleLight littleLight = new ThisLittleLight(hardwareMap);
 
 
         while (opModeInInit()){
@@ -504,13 +504,13 @@ public class dRRagonsdRRiver extends LinearOpMode {
             switch (starty2) {
                 case 1:
                 case 3:
-                    Actions.runBlocking(littleLarryLime.LarryLimeBlues());
+                    //Actions.runBlocking(littleLarryLime.LarryLimeBlues());
                     telemetry.addLine("Limelight Set To Blue");
                     telemetry.update();
                     break;
                 case 2:
                 case 4:
-                    Actions.runBlocking(littleLarryLime.LarryLimeRedTV());
+                    //Actions.runBlocking(littleLarryLime.LarryLimeRedTV());
                     telemetry.addLine("Limelight Set To Red");
                     telemetry.update();
                     break;
@@ -535,7 +535,7 @@ public class dRRagonsdRRiver extends LinearOpMode {
                 linearSlidez.GoHalf()
         );
         Action grabby = new SequentialAction (
-                littleLarryLime.SetAngle(),
+                //littleLarryLime.SetAngle(),
                 twistyturny.TurnClaw(),
                 littleArtie.artieDown(),
                 clawz.CloseClaw(),
