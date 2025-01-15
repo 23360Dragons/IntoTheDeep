@@ -62,14 +62,14 @@ public final class MecanumDrive {
                 Global.usbFacingDirection;
 
         // drive model parameters
-        public double inPerTick = 0.02262;
-        public double lateralInPerTick = 0.02431;
-        public double trackWidthTicks = 1343.1464;
+        public double inPerTick = 0.0226;
+        public double lateralInPerTick = 0.02352;
+        public double trackWidthTicks = 1347.9896909149804;
 
         // feedforward parameters (in tick units)
-        public double kS = 1.62763;
-        public double kV = 0.00383;
-        public double kA = 0;
+        public double kS = 1.3936742985813115;
+        public double kV = 0.004082168628210842;
+        public double kA = 0.0000001;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
