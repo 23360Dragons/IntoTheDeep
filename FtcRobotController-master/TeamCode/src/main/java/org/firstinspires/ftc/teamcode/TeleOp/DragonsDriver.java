@@ -175,6 +175,7 @@ public class DragonsDriver extends LinearOpMode {
             if (superStructure.articulation.isValid) {
 
                 double velocity = superStructure.articulation.getVelocity().avg;
+                double velLimitPwr = articulationPower;
                 double speed;
 
                 if (superStructure.articulation.getState() == SuperStructure.ARTICULATION_POS.UP) {
@@ -198,8 +199,8 @@ public class DragonsDriver extends LinearOpMode {
                 }
 
                 if (Math.abs(velocity) > 25) {
-                    articulationPower += velocity / -25;
-                }
+                    velLimitPwr += velocity / -25;
+                } // this is breaking things.
 
                 if (superStructure.extension.isValid
                         && superStructure.articulation.getState() == SuperStructure.ARTICULATION_POS.UP
@@ -212,11 +213,12 @@ public class DragonsDriver extends LinearOpMode {
                 }
 
                 if (debugMode) {
-                    telemetry.addData("Super Structure   articulation power", superStructure.articulation.getPower());
                     telemetry.addData("Super Structure right artie position", superStructure.articulation.getPosition().right);
                     telemetry.addData("Super Structure  left artie position", superStructure.articulation.getPosition().left);
                 }
 
+                telemetry.addData("Super structure      vel limit power", velLimitPwr);
+                telemetry.addData("Super Structure   articulation power", superStructure.articulation.getPower());
                 telemetry.addData("Super Structure        enum position", superStructure.articulation.getState());
             }
 
