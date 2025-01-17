@@ -208,6 +208,7 @@ public class DragonsDriver extends LinearOpMode {
                         && articulationPower < 0
                 ) {
                     telemetry.addLine("Articulation cannot go down, as extension is too extended!");
+                    //TODO flash the lights white or orange (orange might be too close to yellow, test it)
                 } else {
                     superStructure.articulation.setPower(articulationPower * speed);
                 }
@@ -238,6 +239,7 @@ public class DragonsDriver extends LinearOpMode {
                         && superStructure.extension.getPosition().avg > superStructure.extension.maxDownExtension
                 ) {
                     telemetry.addLine("Extension cannot extend more, as the arms are down!");
+                    //TODO flash the lights white or orange (orange might be too close to yellow, test it)
                 } else {
                     superStructure.extension.setPower(extensionPower * speed);
                 }
