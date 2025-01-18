@@ -8,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.utils.Global.exceptions;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -134,27 +135,31 @@ public class DragonsDriver extends LinearOpMode {
             double  y                 = -currentGamepad1.left_stick_y,
                     x                 = currentGamepad1.left_stick_x,
                     rightX            = currentGamepad1.right_stick_x,
-                    creepSpeed        = currentGamepad1.left_trigger;
+                    articulationDown  = -currentGamepad1.left_trigger;
 
             boolean recalibrateIMU    = currentGamepad1.a,
                     bluePipeline      = currentGamepad1.x,
                     yellowPipeline    = currentGamepad1.y,
                     redPipeline       = currentGamepad1.b,
+                    creepSpeed        = currentGamepad1.right_bumper,
+                    SSFullPower       = currentGamepad1.dpad_right,
+                    articulationUp    = currentGamepad1.left_bumper,
                     lDebugMode        = currentGamepad1.left_stick_button,
-                    rDebugMode        = currentGamepad1.right_stick_button;
+                    rDebugMode        = currentGamepad1.right_stick_button,
+                    slidesUp          = currentGamepad1.dpad_up,
+                    slidesDown        = currentGamepad1.dpad_down;
 
             // gamepad 2 (MANIPULATOR)
-            //TODO move artcilation to the Drivers gamepad
+            //TODO move articulation to the Drivers gamepad
             //TODO either LB and LT, or LT and RT
             //TODO what makes the most sense?
-            double  articulationPower = -currentGamepad2.left_stick_y,
-                    extensionPower    = -currentGamepad2.right_stick_y,
+            double  /*articulationPower = -currentGamepad2.left_stick_y,*/
+//                    extensionPower    = -currentGamepad2.right_stick_y,
                     armUp             = currentGamepad2.right_trigger,
                     armDown           = currentGamepad2.left_trigger;
 
             boolean openClaw          = currentGamepad2.right_bumper,
                     closeClaw         = currentGamepad2.left_bumper,
-                    SSFullPower       = currentGamepad2.x,
                     twistLeft         = currentGamepad2.dpad_left,
                     twistRight        = currentGamepad2.dpad_right,
                     tiltUp            = currentGamepad2.dpad_up,
@@ -175,6 +180,7 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addLine("-----Super Structure-----");
 
             if (superStructure.articulation.isValid) {
+                double articulationPower = ((articulationUp ? 1 : 0) - articulationDown);
 
                 double velocity = superStructure.articulation.getVelocity().avg;
                 double velLimitPwr = articulationPower;
@@ -210,7 +216,8 @@ public class DragonsDriver extends LinearOpMode {
                         && articulationPower < 0
                 ) {
                     telemetry.addLine("Articulation cannot go down, as extension is too extended!");
-                    //TODO flash the lights white or orange (orange might be too close to yellow, test it)
+                    //TO //DO flash the lights white or orange (orange might be too close to yellow, test it)
+                    dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
                 } else {
                     superStructure.articulation.setPower(articulationPower * speed);
                 }
@@ -226,6 +233,7 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             if (superStructure.extension.isValid) {
+                double extensionPower = ((slidesUp ? 1 : 0) - (slidesDown ? -1 : 0));
                 double speed;
 
                 if (SSFullPower) {
@@ -241,7 +249,8 @@ public class DragonsDriver extends LinearOpMode {
                         && superStructure.extension.getPosition().avg > superStructure.extension.maxDownExtension
                 ) {
                     telemetry.addLine("Extension cannot extend more, as the arms are down!");
-                    //TODO flash the lights white or orange (orange might be too close to yellow, test it)
+                    //TO //DO flash the lights white or orange (orange might be too close to yellow, test it)
+                    dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
                 } else {
                     superStructure.extension.setPower(extensionPower * speed);
                 }
@@ -383,8 +392,8 @@ public class DragonsDriver extends LinearOpMode {
 
                 double driveSpeed = 1;
 
-                if (creepSpeed > 0.1) {
-                    driveSpeed *= 0.5;
+                if (creepSpeed) {
+                    driveSpeed *= 0.7;
                 }
 
                 if (recalibrateIMU) {
