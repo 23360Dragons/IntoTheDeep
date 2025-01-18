@@ -144,7 +144,9 @@ public class DragonsDriver extends LinearOpMode {
                     rDebugMode        = currentGamepad1.right_stick_button;
 
             // gamepad 2 (MANIPULATOR)
-
+            //TODO move artcilation to the Drivers gamepad
+            //TODO either LB and LT, or LT and RT
+            //TODO what makes the most sense?
             double  articulationPower = -currentGamepad2.left_stick_y,
                     extensionPower    = -currentGamepad2.right_stick_y,
                     armUp             = currentGamepad2.right_trigger,
