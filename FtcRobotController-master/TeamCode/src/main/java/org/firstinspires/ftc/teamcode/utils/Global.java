@@ -6,7 +6,7 @@ public class Global {
     public static StringBuilder exceptions  = new StringBuilder("The following were not found:\n");
     public static boolean exceptionOccurred = false;
 
-    public static final RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+    public static final RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.FORWARD;
     public static final RevHubOrientationOnRobot.UsbFacingDirection  usbFacingDirection   = RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
     public static final int BLUE   = 0;
