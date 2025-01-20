@@ -107,7 +107,7 @@ public class DragonsDriver extends LinearOpMode {
         time.startTime();
         //</editor-fold>
 
-        //<editor-fold desc="--------------------- Set Twist Default Pos ---------------------">
+        //<editor-fold desc="--------------------- Set Ministructure Default Pos ---------------------">
         miniStructure.twist.setPosition(1);
         miniStructure.arm.setPosition(0.5);
         miniStructure.tilt.setPosition(0.2);
@@ -138,34 +138,35 @@ public class DragonsDriver extends LinearOpMode {
                     articulationDown  = -currentGamepad1.left_trigger;
 
             boolean recalibrateIMU    = currentGamepad1.a,
-                    bluePipeline      = currentGamepad1.x,
-                    yellowPipeline    = currentGamepad1.y,
-                    redPipeline       = currentGamepad1.b,
                     creepSpeed        = currentGamepad1.right_bumper,
                     SSFullPower       = currentGamepad1.dpad_right,
                     articulationUp    = currentGamepad1.left_bumper,
+
                     lDebugMode        = currentGamepad1.left_stick_button,
                     rDebugMode        = currentGamepad1.right_stick_button,
+
                     slidesUp          = currentGamepad1.dpad_up,
                     slidesDown        = currentGamepad1.dpad_down;
 
             // gamepad 2 (MANIPULATOR)
-            //TODO move articulation to the Drivers gamepad
-            //TODO either LB and LT, or LT and RT
-            //TODO what makes the most sense?
+
+            //TO DO move articulation to the Drivers gamepad
+            //TO DO either LB and LT, or LT and RT
+            //TO DO what makes the most sense?
+
             double  /*articulationPower = -currentGamepad2.left_stick_y,*/
 //                    extensionPower    = -currentGamepad2.right_stick_y,
-                    armUp             = currentGamepad2.right_trigger,
-                    armDown           = currentGamepad2.left_trigger;
+                    armPower          = currentGamepad2.left_stick_y,
+                    twistPower        = -currentGamepad2.right_stick_x,
+                    tiltPower         = currentGamepad2.right_stick_y;
 
             boolean openClaw          = currentGamepad2.right_bumper,
                     closeClaw         = currentGamepad2.left_bumper,
-                    twistLeft         = currentGamepad2.dpad_left,
-                    twistRight        = currentGamepad2.dpad_right,
-                    tiltUp            = currentGamepad2.dpad_up,
-                    tiltDown          = currentGamepad2.dpad_down;
+                    bluePipeline      = currentGamepad2.x,
+                    yellowPipeline    = currentGamepad2.y,
+                    redPipeline       = currentGamepad2.b;
 
-            //</editor-fold>\
+            //</editor-fold>
 
             //<editor-fold desc="--------------------- Debug Mode ---------------------">
             if (lDebugMode && rDebugMode) {
@@ -180,7 +181,7 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addLine("-----Super Structure-----");
 
             if (superStructure.articulation.isValid) {
-                double articulationPower = ((articulationUp ? 1 : 0) - articulationDown);
+                double articulationPower = ((articulationUp ? 1 : 0) - (articulationDown > 0.1 ? 1 : 0));
 
                 double velocity = superStructure.articulation.getVelocity().avg;
                 double velLimitPwr = articulationPower;
@@ -320,7 +321,7 @@ public class DragonsDriver extends LinearOpMode {
 //                arm.twist.setRotation(LLAlignAngle / 270);
 //                double power = twistLeft ? 1 : twistRight ? -1 : 0;
 
-                double power = twistLeft ? 0.001 * twistSpeed : twistRight ? -0.001 * twistSpeed : 0;
+                double power = (twistPower * 0.001) * twistSpeed;
                 double targetPosition = miniStructure.twist.getPosition() + power;
 
                 miniStructure.twist.setPosition(targetPosition);
@@ -338,7 +339,7 @@ public class DragonsDriver extends LinearOpMode {
 //                    telemetry.addLine("moving tilt down");
 //                }
 
-                double power = tiltUp ? 0.001 * tiltSpeed : tiltDown ? -0.001 * tiltSpeed : 0;
+                double power = (tiltPower * 0.001) * tiltSpeed;
                 double targetPosition = miniStructure.tilt.getPosition() + power;
 
                 miniStructure.tilt.setPosition(targetPosition);
@@ -359,8 +360,14 @@ public class DragonsDriver extends LinearOpMode {
 //                telemetry.addData("artie pos", arm.artie.getPosition().name());
 //                double power = armUp ? 1 : armDown ? -1 : 0;
 
-                double power = (armUp - armDown) * (0.001 * armSpeed);
-                double targetPosition = miniStructure.arm.getPosition().avg + power;
+                double targetPosition;
+
+                double power = armPower * (0.001 * armSpeed);
+                if (superStructure.articulation.isValid) {
+                    if (superStructure.articulation.getState() == SuperStructure.ARTICULATION_POS.DOWN && superStructure.articulation.getLastState() != SuperStructure.ARTICULATION_POS.DOWN)
+                        miniStructure.arm.setPosition(0.7);
+                }
+                targetPosition = miniStructure.arm.getPosition().avg + power;
 
                 miniStructure.arm.setPosition(targetPosition);
                 telemetry.addData("MiniStructure arm power", power);

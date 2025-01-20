@@ -21,6 +21,7 @@ public class SuperStructure {
     }
 
     private ARTICULATION_POS articulationPos;
+    private ARTICULATION_POS lastArticulationPos;
 
     public SuperStructure (LinearOpMode opmode) {
         opmode.telemetry.addLine("Configuring Superstructure Articulation!");
@@ -76,11 +77,20 @@ public class SuperStructure {
         }
 
         public void setState (ARTICULATION_POS pos) {
+            setLastState(articulationPos);
             articulationPos = pos;
+        }
+
+        private void setLastState (ARTICULATION_POS pos) {
+            lastArticulationPos = pos;
         }
 
         public ARTICULATION_POS getState () {
             return articulationPos;
+        }
+
+        public ARTICULATION_POS getLastState () {
+            return lastArticulationPos;
         }
 
         public void setPower (double power) {
