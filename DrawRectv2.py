@@ -10,4 +10,4 @@ def runPipeline(image, llrobot):
     # that do not fall within the following HSV Min/Max values
     img_threshold = cv2.inRange(img_hsv, lower_hsv, upper_hsv)
     
-    return _, image, llrobot
+    return img_threshold, llrobot

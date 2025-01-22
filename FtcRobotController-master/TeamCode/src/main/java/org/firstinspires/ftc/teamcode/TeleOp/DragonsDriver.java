@@ -219,6 +219,7 @@ public class DragonsDriver extends LinearOpMode {
                     telemetry.addLine("Articulation cannot go down, as extension is too extended!");
                     //TO //DO flash the lights white or orange (orange might be too close to yellow, test it)
                     dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    currentGamepad1.rumble(1);
                 } else {
                     superStructure.articulation.setPower(articulationPower * speed);
                 }
@@ -228,7 +229,7 @@ public class DragonsDriver extends LinearOpMode {
                     telemetry.addData("Super Structure  left artie position", superStructure.articulation.getPosition().left);
                 }
 
-                telemetry.addData("Super structure      vel limit power", velLimitPwr);
+                telemetry.addData("Super structure      vel limit power", velLimitPwr); //todo look at velocity stuff
                 telemetry.addData("Super Structure   articulation power", superStructure.articulation.getPower());
                 telemetry.addData("Super Structure        enum position", superStructure.articulation.getState());
             }
@@ -252,6 +253,8 @@ public class DragonsDriver extends LinearOpMode {
                     telemetry.addLine("Extension cannot extend more, as the arms are down!");
                     //TO //DO flash the lights white or orange (orange might be too close to yellow, test it)
                     dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    currentGamepad1.rumble(1);
+                    //todo study rumble
                 } else {
                     superStructure.extension.setPower(extensionPower * speed);
                 }
@@ -260,6 +263,7 @@ public class DragonsDriver extends LinearOpMode {
                     telemetry.addData("Super Structure extension power", superStructure.extension.getPower());
                     telemetry.addData("Super Structure extension position", superStructure.extension.getPosition().right);
                     telemetry.addData("Super Structure Extension Draw", superStructure.extension.getCurrent().avg);
+                    //todo look at draw
                 }
             }
 
