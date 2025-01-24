@@ -647,33 +647,33 @@ public class dRRagonsAuto extends LinearOpMode {
                     //Actions.runBlocking(littleLarryLime.LarryLimeYellow());
                     telemetry.addLine("Starting Position Set To Blue, Basket Side. If inncorrect, please reselect");
                     telemetry.update();
-                    new SequentialAction(
-                            seesaw.tiltToInit(),
-                            twistyturny.twistToInit(),
-                            littleArm.armToInit()
-                    );
+//                    new SequentialAction(
+//                            seesaw.tiltToInit(),
+//                            twistyturny.twistToInit(),
+//                            littleArm.armToInit()
+//                    );
                     break;
                 case 2:
                     startPose = redStartBasket;
                     //Actions.runBlocking(littleLarryLime.LarryLimeYellow());
                     telemetry.addLine("Starting Position Set To Red, Basket Side. If inncorrect, please reselect");
                     telemetry.update();
-                    new SequentialAction(
-                            seesaw.tiltToInit(),
-                            twistyturny.twistToInit(),
-                            littleArm.armToInit()
-                    );
+//                    new SequentialAction(
+//                            seesaw.tiltToInit(),
+//                            twistyturny.twistToInit(),
+//                            littleArm.armToInit()
+//                    );
                     break;
                 case 3:
                     startPose = blueStartObserve;
                     //Actions.runBlocking(littleLarryLime.LarryLimeBlues());
                     telemetry.addLine("Starting Position Set To Blue, Observation Zone Side. If inncorrect, please reselect");
                     telemetry.update();
-                    new SequentialAction(
-                            seesaw.tiltToInit(),
-                            twistyturny.twistToInit(),
-                            littleArm.armToInit()
-                    );
+//                    new SequentialAction(
+//                            seesaw.tiltToInit(),
+//                            twistyturny.twistToInit(),
+//                            littleArm.armToInit()
+//                    );
                     break;
                 case 4:
                     startPose = redStartObserve;
