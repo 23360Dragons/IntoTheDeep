@@ -596,12 +596,12 @@ public class dRRagonsAuto extends LinearOpMode {
         redFace = 90;
         Pose2d blueStartBasket, blueStartObserve, redStartBasket, redStartObserve;
         Vector2d blueSpecimen, redSpecimen, blueBasket, redBasket, redAscent, blueAscent, blueObserve, redObserve, redYellow1, redYellow2, redYellow3, blueYellow1, blueYellow2, blueYellow3;
-        blueStartBasket = new Pose2d(35, 62, Math.toRadians(blueFace));
-        blueStartObserve = new Pose2d(-12, 62, Math.toRadians(blueFace));
-        redStartBasket = new Pose2d(12, 60, Math.toRadians(redFace));
-        redStartObserve = new Pose2d(-35, 60, Math.toRadians(redFace));
+        blueStartBasket = new Pose2d(12, 60, Math.toRadians(blueFace));
+        blueStartObserve = new Pose2d(-35, 62, Math.toRadians(blueFace));
+        redStartBasket = new Pose2d(12, -60, Math.toRadians(redFace));
+        redStartObserve = new Pose2d(12, -62, Math.toRadians(redFace));
         blueSpecimen = new Vector2d(0, 34);
-        redSpecimen = new Vector2d(0, -33);
+        redSpecimen = new Vector2d(0, -38);
         blueBasket = new Vector2d(53, 53);
         redBasket = new Vector2d(-52, -52);
         redAscent = new Vector2d(-25, 0);
@@ -617,9 +617,11 @@ public class dRRagonsAuto extends LinearOpMode {
         Pose2d startPose = null;
         Pose2d notSelected = new Pose2d(0, 0, 0);
 
+        int starty = 0;
+
         Linearz linearSlidez = new Linearz(hardwareMap);
         Armz ourArtiez = new Armz(hardwareMap);
-        Artie littleArm = new Artie(hardwareMap);
+        //Artie littleArm = new Artie(hardwareMap);
         Clawz clawz = new Clawz(hardwareMap);
         Seesaw seesaw = new Seesaw(hardwareMap);
         TwistNTurn twistyturny = new TwistNTurn(hardwareMap);
@@ -627,8 +629,9 @@ public class dRRagonsAuto extends LinearOpMode {
         //ThisLittleLight littleLight = new ThisLittleLight(hardwareMap);
 
 
-        int starty = 0;
+
         while (opModeInInit()) {
+
 
 
             if (gamepad1.x) {
@@ -640,6 +643,7 @@ public class dRRagonsAuto extends LinearOpMode {
             } else if (gamepad1.y) {
                 starty = 4;
             }
+
 
             switch (starty) {
                 case 1:
@@ -689,6 +693,7 @@ public class dRRagonsAuto extends LinearOpMode {
                 default:
                     startPose = notSelected;
                     telemetry.addLine("Please select starting position! If not selected, the robot will not run during Auto.");
+                    telemetry.update();
                     break;
             }
         }
@@ -706,9 +711,11 @@ public class dRRagonsAuto extends LinearOpMode {
         TrajectoryActionBuilder firePit = drive.actionBuilder(startPose)
                 .strafeTo(redSpecimen)
                 .waitSeconds(3)
-                .strafeToSplineHeading(redObserve, Math.toRadians(90))
+                .strafeTo(new Vector2d(0,-42))
+                .turnTo(270)
+                .strafeTo(redObserve)
                 .waitSeconds(3)
-                .turnTo(Math.toRadians(redFace));
+                .turnTo(redFace);
 
         TrajectoryActionBuilder tomato = drive.actionBuilder(startPose)
                 .waitSeconds(3)
@@ -775,39 +782,39 @@ public class dRRagonsAuto extends LinearOpMode {
 //41 in to top at full ext artie out/down
 //13 in to top at no ext artie out/down
 // artie up +6 in, artie out/down -6in
-        Action toGrabby = new SequentialAction();
-        Action grabby = new SequentialAction(
-                //littleLarryLime.SetAngle(),
-                twistyturny.TurnClaw(),
-                littleArm.artieDown(),
-                clawz.CloseClaw(),
-                littleArm.artieUp(),
-                twistyturny.Resetting()
-        );
-        Action depositTop = new SequentialAction(
-                linearSlidez.GoUp(),
-                littleArm.artieBack(),
-                seesaw.tiltBack(),
-                clawz.OpenClaw()
-        );
-        Action depositBottom = new SequentialAction(
-                linearSlidez.GoHalf(),
-                littleArm.artieBack(),
-                seesaw.tiltBack(),
-                clawz.OpenClaw()
-        );
-        Action sampleBottom = new SequentialAction(
-                linearSlidez.GoDown(),
-                seesaw.tiltUp(),
-                littleArm.artieDownMore(),
-                clawz.OpenClaw()
-        );
-        Action sampleTop = new SequentialAction(
-                linearSlidez.GoHalf(),
-                seesaw.tiltUp(),
-                littleArm.artieDownMore(),
-                clawz.OpenClaw()
-        );
+//        Action toGrabby = new SequentialAction();
+//        Action grabby = new SequentialAction(
+//                //littleLarryLime.SetAngle(),
+//                twistyturny.TurnClaw(),
+//                littleArm.artieDown(),
+//                clawz.CloseClaw(),
+//                littleArm.artieUp(),
+//                twistyturny.Resetting()
+//        );
+//        Action depositTop = new SequentialAction(
+//                linearSlidez.GoUp(),
+//                littleArm.artieBack(),
+//                seesaw.tiltBack(),
+//                clawz.OpenClaw()
+//        );
+//        Action depositBottom = new SequentialAction(
+//                linearSlidez.GoHalf(),
+//                littleArm.artieBack(),
+//                seesaw.tiltBack(),
+//                clawz.OpenClaw()
+//        );
+//        Action sampleBottom = new SequentialAction(
+//                linearSlidez.GoDown(),
+//                seesaw.tiltUp(),
+//                littleArm.artieDownMore(),
+//                clawz.OpenClaw()
+//        );
+//        Action sampleTop = new SequentialAction(
+//                linearSlidez.GoHalf(),
+//                seesaw.tiltUp(),
+//                littleArm.artieDownMore(),
+//                clawz.OpenClaw()
+//        );
 
         Actions.runBlocking(
                 new SequentialAction(
