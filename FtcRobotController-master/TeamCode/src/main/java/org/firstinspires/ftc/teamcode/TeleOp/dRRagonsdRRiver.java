@@ -136,14 +136,14 @@ public class dRRagonsdRRiver extends LinearOpMode {
     public class Armz {
         private DcMotorEx leftArm, rightArm;
         public Armz (HardwareMap hardwareMap){
-            leftArm = hardwareMap.get(DcMotorEx.class, "leftLinear");
+            leftArm = hardwareMap.get(DcMotorEx.class, "leftArtie");
             leftArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             leftArm.setDirection(DcMotorSimple.Direction.FORWARD);
             leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             leftArm.setTargetPositionTolerance(5);
 
-            rightArm = hardwareMap.get(DcMotorEx.class, "rightLinear");
+            rightArm = hardwareMap.get(DcMotorEx.class, "rightArtie");
             rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightArm.setDirection(DcMotorSimple.Direction.REVERSE);
             rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -202,9 +202,9 @@ public class dRRagonsdRRiver extends LinearOpMode {
     public class Artie {
         private Servo leftArtie, rightArtie;
         public Artie(HardwareMap hardwareMap){
-            leftArtie = hardwareMap.get(Servo.class,"leftArtie");
+            leftArtie = hardwareMap.get(Servo.class,"leftArm");
             //leftArtie.scaleRange(0,1);
-            rightArtie = hardwareMap.get(Servo.class, "rightArtie");
+            rightArtie = hardwareMap.get(Servo.class, "rightArm");
             //rightArtie.scaleRange(0,1);
             rightArtie.setDirection(Servo.Direction.REVERSE);
         }
@@ -258,6 +258,18 @@ public class dRRagonsdRRiver extends LinearOpMode {
         }
         public Action artieDownMore (){
             return new ArtieDownMore();
+        }
+        public class ArmToInit implements Action {
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                leftArtie.setPosition(0.5);
+                rightArtie.setPosition(0.5);
+                return false;
+            }
+        }
+        public Action armToInit(){
+            return new ArmToInit();
         }
 
     } //test? 1+ position tho
@@ -332,6 +344,17 @@ public class dRRagonsdRRiver extends LinearOpMode {
         public Action tiltBack(){
             return new TiltBack();
         }
+        public class TiltToInit implements Action{
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                tilt.setPosition(0.2);
+                return false;
+            }
+        }
+        public Action tiltToInit (){
+            return new TiltToInit();
+        }
     } //finish once you find out positions
     public class TwistNTurn {
         private Servo twist;
@@ -358,6 +381,17 @@ public class dRRagonsdRRiver extends LinearOpMode {
         }
         public Action TurnClaw () {
             return new ThisWay();
+        }
+        public class TwistToInit implements Action {
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                twist.setPosition(1);
+                return false;
+            }
+        }
+        public Action twistToInit(){
+            return new TwistToInit();
         }
     } //test?
     public class LarryLime {

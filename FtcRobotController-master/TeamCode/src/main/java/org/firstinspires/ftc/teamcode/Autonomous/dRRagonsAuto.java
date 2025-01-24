@@ -22,6 +22,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.TeleOp.dRRagonsdRRiver;
 import org.firstinspires.ftc.teamcode.utils.Global;
 import org.firstinspires.ftc.teamcode.utils.StartingPosPicker;
 
@@ -195,9 +196,9 @@ public class dRRagonsAuto extends LinearOpMode {
     public class Artie {
         private Servo leftArtie, rightArtie;
         public Artie(HardwareMap hardwareMap){
-            leftArtie = hardwareMap.get(Servo.class,"leftArtie");
+            leftArtie = hardwareMap.get(Servo.class,"leftArm");
             leftArtie.scaleRange(0,1);
-            rightArtie = hardwareMap.get(Servo.class, "rightArtie");
+            rightArtie = hardwareMap.get(Servo.class, "rightArm");
             rightArtie.scaleRange(0,1);
             rightArtie.setDirection(Servo.Direction.REVERSE);
         }
@@ -251,6 +252,18 @@ public class dRRagonsAuto extends LinearOpMode {
         }
         public Action artieDownMore (){
             return new ArtieDownMore();
+        }
+        public class ArmToInit implements Action {
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                leftArtie.setPosition(0.5);
+                rightArtie.setPosition(0.5);
+                return false;
+            }
+        }
+        public Action armToInit(){
+            return new ArmToInit();
         }
 
     } //test? 1+ position tho
@@ -325,6 +338,17 @@ public class dRRagonsAuto extends LinearOpMode {
         public Action tiltBack(){
             return new TiltBack();
         }
+        public class TiltToInit implements Action{
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                tilt.setPosition(0.2);
+                return false;
+            }
+        }
+        public Action tiltToInit (){
+            return new TiltToInit();
+        }
     } //finish once you find out positions
     public class TwistNTurn {
         private Servo twist;
@@ -351,6 +375,17 @@ public class dRRagonsAuto extends LinearOpMode {
         }
         public Action TurnClaw () {
             return new ThisWay();
+        }
+        public class TwistToInit implements Action {
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                twist.setPosition(1);
+                return false;
+            }
+        }
+        public Action twistToInit(){
+            return new TwistToInit();
         }
     } //test?
     public class LarryLime {
@@ -507,8 +542,8 @@ public class dRRagonsAuto extends LinearOpMode {
         Pose2d notSelected = new Pose2d(0,0,0);
 
         Linearz linearSlidez = new Linearz(hardwareMap);
-        Armz ourArmz = new Armz(hardwareMap);
-        Artie littleArtie = new Artie(hardwareMap);
+        Armz ourArtiez = new Armz(hardwareMap);
+        Artie littleArm = new Artie(hardwareMap);
         Clawz clawz = new Clawz(hardwareMap);
         Seesaw seesaw = new Seesaw(hardwareMap);
         TwistNTurn twistyturny = new TwistNTurn(hardwareMap);
@@ -526,18 +561,33 @@ public class dRRagonsAuto extends LinearOpMode {
                     //Actions.runBlocking(littleLarryLime.LarryLimeYellow());
                     telemetry.addLine("Starting Position Set To Blue, Basket Side. If inncorrect, please reselect");
                     telemetry.update();
+                    new SequentialAction(
+                            seesaw.tiltToInit(),
+                            twistyturny.twistToInit(),
+                            littleArm.armToInit()
+                    );
                     break;
                 case 2:
                     startPose = redStartBasket;
                     //Actions.runBlocking(littleLarryLime.LarryLimeYellow());
                     telemetry.addLine("Starting Position Set To Red, Basket Side. If inncorrect, please reselect");
                     telemetry.update();
+                    new SequentialAction(
+                            seesaw.tiltToInit(),
+                            twistyturny.twistToInit(),
+                            littleArm.armToInit()
+                    );
                     break;
                 case 3:
                     startPose = blueStartObserve;
                     //Actions.runBlocking(littleLarryLime.LarryLimeBlues());
                     telemetry.addLine("Starting Position Set To Blue, Observation Zone Side. If inncorrect, please reselect");
                     telemetry.update();
+                    new SequentialAction(
+                            seesaw.tiltToInit(),
+                            twistyturny.twistToInit(),
+                            littleArm.armToInit()
+                    );
                     break;
                 case 4:
                     startPose = redStartObserve;
@@ -545,6 +595,11 @@ public class dRRagonsAuto extends LinearOpMode {
                     telemetry.addLine("Starting Position Set To Red, Observation Zone Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
+                new SequentialAction(
+                        seesaw.tiltToInit(),
+                        twistyturny.twistToInit(),
+                        littleArm.armToInit()
+                );
                 default:
                     startPose = notSelected;
                     telemetry.addLine("Please select starting position! If not selected, the robot will not run during Auto.");
@@ -640,33 +695,33 @@ public class dRRagonsAuto extends LinearOpMode {
         Action grabby = new SequentialAction (
                 //littleLarryLime.SetAngle(),
                 twistyturny.TurnClaw(),
-                littleArtie.artieDown(),
+                littleArm.artieDown(),
                 clawz.CloseClaw(),
-                littleArtie.artieUp(),
+                littleArm.artieUp(),
                 twistyturny.Resetting()
         );
         Action depositTop = new SequentialAction(
                 linearSlidez.GoUp(),
-                littleArtie.artieBack(),
+                littleArm.artieBack(),
                 seesaw.tiltBack(),
                 clawz.OpenClaw()
         );
         Action depositBottom = new SequentialAction(
                 linearSlidez.GoHalf(),
-                littleArtie.artieBack(),
+                littleArm.artieBack(),
                 seesaw.tiltBack(),
                 clawz.OpenClaw()
         );
         Action sampleBottom = new SequentialAction(
                 linearSlidez.GoDown(),
                 seesaw.tiltUp(),
-                littleArtie.artieDownMore(),
+                littleArm.artieDownMore(),
                 clawz.OpenClaw()
         );
         Action sampleTop = new SequentialAction(
                 linearSlidez.GoHalf(),
                 seesaw.tiltUp(),
-                littleArtie.artieDownMore(),
+                littleArm.artieDownMore(),
                 clawz.OpenClaw()
         );
 
