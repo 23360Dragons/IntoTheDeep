@@ -15,9 +15,9 @@ public class StartingPosPicker {
             starty = 1;
         } else if (gamepad1.b) {
             starty = 2;
-        } else if (gamepad2.x) {
+        } else if (gamepad1.a) {
             starty = 3;
-        } else if (gamepad2.b) {
+        } else if (gamepad1.y) {
             starty = 4;
         }
     }
