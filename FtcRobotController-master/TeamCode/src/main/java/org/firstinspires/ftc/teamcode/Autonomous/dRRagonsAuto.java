@@ -681,11 +681,11 @@ public class dRRagonsAuto extends LinearOpMode {
                     telemetry.addLine("Starting Position Set To Red, Observation Zone Side. If inncorrect, please reselect");
                     telemetry.update();
                     break;
-                new SequentialAction(
-                        seesaw.tiltToInit(),
-                        twistyturny.twistToInit(),
-                        littleArm.armToInit()
-                );
+//                new SequentialAction(
+//                        seesaw.tiltToInit(),
+//                        twistyturny.twistToInit(),
+//                        littleArm.armToInit()
+//                );
                 default:
                     startPose = notSelected;
                     telemetry.addLine("Please select starting position! If not selected, the robot will not run during Auto.");
