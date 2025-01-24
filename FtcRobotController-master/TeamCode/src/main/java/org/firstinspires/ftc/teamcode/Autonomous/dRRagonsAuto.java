@@ -672,8 +672,8 @@ public class dRRagonsAuto extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        testy
-                        //autonomousAnonymous,
+                        //testy
+                        autonomousAnonymous
                         //grabby
                 )
         );
