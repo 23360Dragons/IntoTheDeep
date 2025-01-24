@@ -48,14 +48,14 @@ public class MoveRobot
     }
 
     // input the angle at which you want to move and it will go that way, relative to the robot
-    public static double[] moveRobotAngle (double angle, double speed) {
-        double x = Math.abs(-Math.abs(((double) 1 /90) * angle) + 2)-1;
-        double y = Math.abs(-Math.abs(((double) 1 /90) * angle - 1) + 2)-1; // math works out.
-
-        double leftFrontPower  = (y + x) * speed;
-        double rightFrontPower = (y - x) * speed;
-        double leftBackPower   = (y - x) * speed;
-        double rightBackPower  = (y + x) * speed;
-        return new double[]{leftFrontPower, rightFrontPower, leftBackPower, rightBackPower};
-    }
+//    public static double[] moveRobotAngle (double angle, double speed) {
+//        double x = Math.abs(-Math.abs(((double) 1 /90) * angle) + 2)-1;
+//        double y = Math.abs(-Math.abs(((double) 1 /90) * angle - 1) + 2)-1; // math works out.
+//
+//        double leftFrontPower  = (y + x) * speed;
+//        double rightFrontPower = (y - x) * speed;
+//        double leftBackPower   = (y - x) * speed;
+//        double rightBackPower  = (y + x) * speed;
+//        return new double[]{leftFrontPower, rightFrontPower, leftBackPower, rightBackPower};
+//    }
 }

@@ -135,6 +135,7 @@ public class DragonsDriver extends LinearOpMode {
             double  y                 = -currentGamepad1.left_stick_y,
                     x                 = currentGamepad1.left_stick_x,
                     rightX            = currentGamepad1.right_stick_x,
+
                     articulationDown  = -currentGamepad1.left_trigger;
 
             boolean recalibrateIMU    = currentGamepad1.a,
@@ -314,7 +315,8 @@ public class DragonsDriver extends LinearOpMode {
                     telemetry.addLine("Close claw");
                 }
 
-                telemetry.addData("claw Position", miniStructure.claw.getPosition());
+                if (debugMode)
+                    telemetry.addData("claw Position", miniStructure.claw.getPosition());
 
 //                double power = openClaw ? 1 : closeClaw ? -1 : 0;
 //                arm.claw.setPower(power);
@@ -329,6 +331,8 @@ public class DragonsDriver extends LinearOpMode {
                 double targetPosition = miniStructure.twist.getPosition() + power;
 
                 miniStructure.twist.setPosition(targetPosition);
+
+
                 telemetry.addData("MiniStructure twist power", power);
                 telemetry.addData("MiniStructure twist position", miniStructure.twist.getPosition());
             }
@@ -347,6 +351,8 @@ public class DragonsDriver extends LinearOpMode {
                 double targetPosition = miniStructure.tilt.getPosition() + power;
 
                 miniStructure.tilt.setPosition(targetPosition);
+
+
                 telemetry.addData("MiniStructure tilt power", power);
                 telemetry.addData("MiniStructure tilt position", miniStructure.tilt.getPosition());
             }
@@ -374,6 +380,8 @@ public class DragonsDriver extends LinearOpMode {
                 targetPosition = miniStructure.arm.getPosition().avg + power;
 
                 miniStructure.arm.setPosition(targetPosition);
+
+
                 telemetry.addData("MiniStructure arm power", power);
                 telemetry.addData("MiniStructure arm position", miniStructure.arm.getPosition().avg);
             }
