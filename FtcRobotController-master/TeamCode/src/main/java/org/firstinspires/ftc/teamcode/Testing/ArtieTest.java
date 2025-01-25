@@ -4,12 +4,9 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-import org.firstinspires.ftc.teamcode.TeleOp.DragonsDriver;
 import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
 
 @Config
@@ -34,12 +31,12 @@ public class ArtieTest extends LinearOpMode {
         while (opModeIsActive()) {
             controller.setPID(p, i, d);
 
-            double armPos = superStructure.articulation.getPosition().avg,
+            double armPos = superStructure.arm.getPosition().avg,
                     pid = controller.calculate(armPos, target);
 
-            superStructure.articulation.setPower(pid);
+            superStructure.arm.setPower(pid);
 
-            telemetry.addData("Arm pos", armPos);
+            telemetry.addData("Artie pos", armPos);
             telemetry.addData("Power", pid);
             telemetry.addData("Target", target);
             telemetry.update();
