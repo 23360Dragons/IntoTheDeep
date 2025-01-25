@@ -46,12 +46,12 @@ public class ExtensionTest extends LinearOpMode {
 
             double extPos = superStructure.extension.getPosition().right,
                     pid = controller.calculate(extPos, target),
-                    armPos = superStructure.articulation.getPosition().right;
+                    armPos = superStructure.arm.getPosition().right;
 
             superStructure.extension.setPower(pid);
 
             telemetry.addData("extension power", pid);
-            telemetry.addData("Articulation pos", armPos);
+            telemetry.addData("Arm pos", armPos);
             telemetry.addData("extension pos", extPos);
             telemetry.update();
         }
