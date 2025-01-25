@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Testing;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.utils.Global;
 import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
 
+@Config
 @TeleOp(name="Extension PIDF Test")
 public class ExtensionTest extends LinearOpMode {
     public static double p = 0,
@@ -44,7 +46,7 @@ public class ExtensionTest extends LinearOpMode {
 
             double extPos = superStructure.extension.getPosition().right,
                     pid = controller.calculate(extPos, target),
-                    armPos = superStructure.articulation.getPosition().right / superStructure.articulation.getTPD();
+                    armPos = superStructure.articulation.getPosition().right;
 
             superStructure.extension.setPower(pid);
 

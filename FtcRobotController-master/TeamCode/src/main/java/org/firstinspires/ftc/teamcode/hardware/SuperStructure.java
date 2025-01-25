@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.apache.commons.math3.linear.RealVector;
 import org.firstinspires.ftc.robotcontroller.external.samples.ConceptRampMotorSpeed;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
@@ -18,6 +20,7 @@ public class SuperStructure {
     public enum ARTICULATION_POS {
         UP,
         DOWN,
+        HANG
     }
 
     private ARTICULATION_POS articulationPos;
@@ -131,6 +134,8 @@ public class SuperStructure {
                 leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+                leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
             } catch (Exception e) {
                 Global.exceptions.append("leftLinear\n");
                 Global.exceptionOccurred = true;

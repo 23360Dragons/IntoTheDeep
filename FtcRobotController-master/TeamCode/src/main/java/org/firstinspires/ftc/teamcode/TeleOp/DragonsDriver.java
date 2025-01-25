@@ -44,11 +44,11 @@ public class DragonsDriver extends LinearOpMode {
 
     //<editor-fold desc="--------------------- Part Speeds ---------------------">
     public static double SSSpeed      = 0.5;
-    public static double SSFullSpeed  = 0.8;
-    public static double extSpeed     = 0.7;
+    public static double SSFullSpeed  = 1;
+    public static double extSpeed     = 1;
     public static double extFullSpeed = 1;
     public static double twistSpeed   = 40;
-    public static double tiltSpeed    = 15;
+    public static double tiltSpeed    = 30;
     public static double armSpeed     = 5;
     //</editor-fold>
 
@@ -73,7 +73,7 @@ public class DragonsDriver extends LinearOpMode {
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
-        drivetrain = new Drivetrain(this);
+        drivetrain       = new Drivetrain(this);
         dragonsIMU       = new DragonsIMU(this);
         dragonsLimelight = new DragonsLimelight(this);
         dragonsLights    = new DragonsLights(this);
@@ -108,9 +108,9 @@ public class DragonsDriver extends LinearOpMode {
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Set Ministructure Default Pos ---------------------">
-        miniStructure.twist.setPosition(1);
-        miniStructure.arm.setPosition(0.5);
-        miniStructure.tilt.setPosition(0.2);
+//        miniStructure.twist.setPosition(1);
+//        miniStructure.arm.setPosition(0.5);
+//        miniStructure.tilt.setPosition(0.2);
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Main Loop ---------------------">
@@ -140,11 +140,9 @@ public class DragonsDriver extends LinearOpMode {
 
             boolean recalibrateIMU    = currentGamepad1.a,
                     creepSpeed        = currentGamepad1.right_bumper,
-                    SSFullPower       = currentGamepad1.dpad_right,
+                    SSFullPower       = currentGamepad1.x,
                     articulationUp    = currentGamepad1.left_bumper,
-
-                    lDebugMode        = currentGamepad1.left_stick_button,
-                    rDebugMode        = currentGamepad1.right_stick_button,
+//                    articulationDown  = currentGamepad1.y,
 
                     slidesUp          = currentGamepad1.dpad_up,
                     slidesDown        = currentGamepad1.dpad_down;
@@ -157,12 +155,16 @@ public class DragonsDriver extends LinearOpMode {
 
             double  /*articulationPower = -currentGamepad2.left_stick_y,*/
 //                    extensionPower    = -currentGamepad2.right_stick_y,
-                    armPower          = currentGamepad2.left_stick_y,
-                    twistPower        = -currentGamepad2.right_stick_x,
-                    tiltPower         = currentGamepad2.right_stick_y;
+                    armPower          = -currentGamepad2.left_stick_y,
+                    twistPower        = currentGamepad2.right_stick_x,
+                    tiltPower         = -currentGamepad2.right_stick_y;
 
             boolean openClaw          = currentGamepad2.right_bumper,
                     closeClaw         = currentGamepad2.left_bumper,
+
+                    lDebugMode        = currentGamepad2.left_stick_button,
+                    rDebugMode        = currentGamepad2.right_stick_button,
+
                     bluePipeline      = currentGamepad2.x,
                     yellowPipeline    = currentGamepad2.y,
                     redPipeline       = currentGamepad2.b;
@@ -182,13 +184,15 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addLine("-----Super Structure-----");
 
             if (superStructure.articulation.isValid) {
-                double articulationPower = ((articulationUp ? 1 : 0) - (articulationDown > 0.1 ? 1 : 0));
+                telemetry.addLine("articulation down power," + articulationDown);
+                double articulationPower = ((articulationUp ? 1 : 0) - ((articulationDown > 0.1) ? 1 : 0));
+                telemetry.addData("Plain articulation", ((articulationUp ? 1 : 0) - ((articulationDown > 0.1) ? 1 : 0)));
 
                 double velocity = superStructure.articulation.getVelocity().avg;
                 double velLimitPwr = articulationPower;
                 double speed;
 
-                if (superStructure.articulation.getState() == SuperStructure.ARTICULATION_POS.UP) {
+                if (SSFullPower) {
                     speed = SSFullSpeed;
                 } else {
                     speed = SSSpeed;
@@ -202,8 +206,10 @@ public class DragonsDriver extends LinearOpMode {
 //                }
 
                 // handles articulation state for limiting extension
-                if (superStructure.articulation.getPosition().avg <= -300) {
+                if (superStructure.articulation.getPosition().avg <= -400) {
                     superStructure.articulation.setState(SuperStructure.ARTICULATION_POS.DOWN);
+                } else if (superStructure.articulation.getPosition().avg <= -200) {
+                    superStructure.articulation.setState(SuperStructure.ARTICULATION_POS.HANG);
                 } else {
                     superStructure.articulation.setState(SuperStructure.ARTICULATION_POS.UP);
                 }
@@ -212,18 +218,17 @@ public class DragonsDriver extends LinearOpMode {
                     velLimitPwr += velocity / -25;
                 } // this is breaking things.
 
-                if (superStructure.extension.isValid
-                        && superStructure.articulation.getState() == SuperStructure.ARTICULATION_POS.UP
-                        && superStructure.extension.getPosition().avg > superStructure.extension.maxDownExtension
-                        && articulationPower < 0
-                ) {
-                    telemetry.addLine("Articulation cannot go down, as extension is too extended!");
+//                if (superStructure.extension.isValid
+//                        && superStructure.articulation.getState() == SuperStructure.ARTICULATION_POS.UP
+//                        && superStructure.extension.getPosition().avg > superStructure.extension.maxDownExtension
+//                        && articulationPower < 0
+//                ) {
+//                    telemetry.addLine("Articulation cannot go down, as extension is too extended!");
                     //TO //DO flash the lights white or orange (orange might be too close to yellow, test it)
-                    dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-                    currentGamepad1.rumble(1);
-                } else {
-                    superStructure.articulation.setPower(articulationPower * speed);
-                }
+//                    dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+//                    currentGamepad1.rumble(1);
+//                } else {
+                superStructure.articulation.setPower(articulationPower * speed);
 
                 if (debugMode) {
                     telemetry.addData("Super Structure right artie position", superStructure.articulation.getPosition().right);
@@ -236,7 +241,8 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             if (superStructure.extension.isValid) {
-                double extensionPower = ((slidesUp ? 1 : 0) - (slidesDown ? -1 : 0));
+                double extensionPower = ((slidesUp ? 1 : 0) - (slidesDown ? 1 : 0));
+                //todo figure out why this isn't working!!!!!
                 double speed;
 
                 if (SSFullPower) {
@@ -246,24 +252,25 @@ public class DragonsDriver extends LinearOpMode {
                     speed = extSpeed;
                 }
 
-                if (superStructure.articulation.isValid
-                        && superStructure.articulation.getState() == SuperStructure.ARTICULATION_POS.DOWN
-                        && extensionPower > 0
-                        && superStructure.extension.getPosition().avg > superStructure.extension.maxDownExtension
-                ) {
-                    telemetry.addLine("Extension cannot extend more, as the arms are down!");
-                    //TO //DO flash the lights white or orange (orange might be too close to yellow, test it)
-                    dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-                    currentGamepad1.rumble(1);
-                    //todo study rumble
-                } else {
+                //todo test this
+//                if (superStructure.articulation.isValid
+//                        && superStructure.articulation.getState() == SuperStructure.ARTICULATION_POS.DOWN
+//                        && extensionPower > 0
+//                        && superStructure.extension.getPosition().avg > superStructure.extension.maxDownExtension
+//                ) {
+//                    telemetry.addLine("Extension cannot extend more, as the arms are down!");
+//                    TO //DO flash the lights white or orange (orange might be too close to yellow, test it)
+//                    dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+//                    currentGamepad1.rumble(1);
+//                    todo study rumble
+//                } else {
                     superStructure.extension.setPower(extensionPower * speed);
-                }
+//                }
 
-                if(debugMode) {
-                    telemetry.addData("Super Structure extension power", superStructure.extension.getPower());
-                    telemetry.addData("Super Structure extension position", superStructure.extension.getPosition().right);
-                    telemetry.addData("Super Structure Extension Draw", superStructure.extension.getCurrent().avg);
+                if (true) { //todo change to debug mode
+                    telemetry.addData("   Super Structure extension power", superStructure.extension.getPower());
+                    telemetry.addData("Super Structure extension position", superStructure.extension.getPosition().avg);
+                    telemetry.addData("    Super Structure Extension Draw", superStructure.extension.getCurrent().avg);
                     //todo look at draw
                 }
             }
@@ -424,7 +431,7 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("IMU heading", Math.toDegrees(botHeading));
 
                 // calls for movement
-                double[] drivePowers = MoveRobot.FC(botHeading, x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
+                double[] drivePowers = MoveRobot.RC(x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
                 //sets the motors to their corresponding power
                 drivetrain.setPower(drivePowers);
 
