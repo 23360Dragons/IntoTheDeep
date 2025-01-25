@@ -108,7 +108,7 @@ public class DragonsDriver extends LinearOpMode {
 
         //<editor-fold desc="--------------------- Set Ministructure Default Pos ---------------------">
         miniStructure.twist.setPosition(1);
-        miniStructure.artie.setPosition(0.5);
+        miniStructure.artie.setPosition(0.7);
         miniStructure.tilt.setPosition(0.5);
         //</editor-fold>
 
@@ -382,7 +382,9 @@ public class DragonsDriver extends LinearOpMode {
 
                 telemetry.addData("MiniStructure artie power", power);
                 telemetry.addData("Ministructure Target Position", targetPosition);
-                telemetry.addData("MiniStructure artie position", miniStructure.artie.getPosition().avg);
+                telemetry.addData("MiniStructure artie L position", miniStructure.artie.getPosition().left);
+                telemetry.addData("MiniStructure artie R position", miniStructure.artie.getPosition().right);
+
             }
 
             telemetry.addLine();
