@@ -78,20 +78,20 @@ public class DragonsLimelight {
 
                 // getting rotation of the result. TODO: make this work
 
-                List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
-
-                if (!colorResults.isEmpty()) {
-                    opmode.telemetry.addLine("true");
-
-                    for (LLResultTypes.ColorResult cr : colorResults) {
-                        List<List<Double>> la = cr.getTargetCorners(); // should return {{0,0}, {1,0}, {1,1}, {0,1}} or something like that
-
-                        angle = rotateClaw(la);
-                        opmode.telemetry.addData("CR target corners", la.get(0).toString());
-                        opmode.telemetry.addData("CR target corners", la.get(1).toString());
-                        opmode.telemetry.addData("Rotate to angle", angle);
-                    }
-                }
+//                List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
+//
+//                if (!colorResults.isEmpty()) {
+//                    opmode.telemetry.addLine("true");
+//
+//                    for (LLResultTypes.ColorResult cr : colorResults) {
+//                        List<List<Double>> la = cr.getTargetCorners(); // should return {{0,0}, {1,0}, {1,1}, {0,1}} or something like that
+//
+//                        angle = rotateClaw(la);
+//                        opmode.telemetry.addData("CR target corners", la.get(0).toString());
+//                        opmode.telemetry.addData("CR target corners", la.get(1).toString());
+//                        opmode.telemetry.addData("Rotate to angle", angle);
+//                    }
+//                }
 
             } else {
                 if (result == null) {

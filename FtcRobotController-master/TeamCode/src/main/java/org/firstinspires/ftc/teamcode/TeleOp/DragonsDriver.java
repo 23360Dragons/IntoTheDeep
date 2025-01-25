@@ -39,14 +39,14 @@ public class DragonsDriver extends LinearOpMode {
     public SuperStructure   superStructure;
     public MiniStructure    miniStructure;
 
-    public static double LLAlignAngle = 0;
+//    public static double LLAlignAngle = 0;
 
     //<editor-fold desc="--------------------- Part Speeds ---------------------">
     public static double SSSpeed      = 1;
     public static double SSCreepSpeed = 0.5;
     public static double extSpeed     = 1;
     public static double extCreepSpeed = 0.7;
-    public static double twistSpeed   = 40;
+    public static double twistSpeed   = 50;
     public static double tiltSpeed    = 30;
     public static double armSpeed     = 5;
     //</editor-fold>
@@ -108,8 +108,8 @@ public class DragonsDriver extends LinearOpMode {
 
         //<editor-fold desc="--------------------- Set Ministructure Default Pos ---------------------">
         miniStructure.twist.setPosition(1);
-        miniStructure.artie.setPosition(0.7);
-        miniStructure.tilt.setPosition(0.5);
+        miniStructure.artie.setPosition(0.5);
+        miniStructure.tilt.setPosition(0.8);
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Main Loop ---------------------">
@@ -199,9 +199,9 @@ public class DragonsDriver extends LinearOpMode {
                 }
 
                 // handles arm state for limiting extension
-                if (superStructure.arm.getPosition().avg <= -400) {
+                if (superStructure.arm.getPosition().avg <= -300) {
                     superStructure.arm.setState(SuperStructure.ARTICULATION_POS.DOWN);
-                } else if (superStructure.arm.getPosition().avg <= -200) {
+                } else if (superStructure.arm.getPosition().avg <= -150) {
                     superStructure.arm.setState(SuperStructure.ARTICULATION_POS.HANG);
                 } else {
                     superStructure.arm.setState(SuperStructure.ARTICULATION_POS.UP);
@@ -223,7 +223,7 @@ public class DragonsDriver extends LinearOpMode {
 //                } else {
                 superStructure.arm.setPower(articulationPower * speed);
 
-                if (debugMode) {
+                if (true) {
                     telemetry.addData("Super Structure right artie position", superStructure.arm.getPosition().right);
                     telemetry.addData("Super Structure  left artie position", superStructure.arm.getPosition().left);
                 }
@@ -260,9 +260,11 @@ public class DragonsDriver extends LinearOpMode {
                     superStructure.extension.setPower(extensionPower * speed);
 //                }
 
-                if (debugMode) {
+                if (true) {
                     telemetry.addData("   Super Structure extension power", superStructure.extension.getPower());
-                    telemetry.addData("Super Structure extension position", superStructure.extension.getPosition().avg);
+                    telemetry.addData("Super Structure extension L position", superStructure.extension.getPosition().left);
+                    telemetry.addData("Super Structure extension R position", superStructure.extension.getPosition().right);
+
                     telemetry.addData("    Super Structure Extension Draw", superStructure.extension.getCurrent().avg);
                     //todo look at draw
                 }
@@ -274,32 +276,32 @@ public class DragonsDriver extends LinearOpMode {
             //<editor-fold desc="--------------------- Limelight ---------------------">
             telemetry.addLine("-----Limelight-----");
 
-//            if (dragonsLimelight.isValid) {
-//                // --------------------- Pipeline Switching ---------------------
-////                if (currentB2 && !previousB2) { //rising edge
-////                    dragonsLimelight.setPipeline(YELLOW);
-////                } else if (!currentB2 && previousB2) { //falling edge
-////                    dragonsLimelight.setPipeline();
-////                }
-//
-//                //       x
-//                     if (bluePipeline   && dragonsLimelight.getPipeline().num != BLUE)
-//                    dragonsLimelight.setPipeline(BLUE);//
-//                //       b
-//                else if (redPipeline    && dragonsLimelight.getPipeline().num != RED)
-//                    dragonsLimelight.setPipeline(RED);
-//                //       y
-//                else if (yellowPipeline && dragonsLimelight.getPipeline().num != YELLOW)
+            if (dragonsLimelight.isValid) {
+                // --------------------- Pipeline Switching ---------------------
+//                if (currentB2 && !previousB2) { //rising edge
 //                    dragonsLimelight.setPipeline(YELLOW);
+//                } else if (!currentB2 && previousB2) { //falling edge
+//                    dragonsLimelight.setPipeline();
+//                }
+
+                //       x
+                     if (bluePipeline   && dragonsLimelight.getPipeline().num != BLUE)
+                    dragonsLimelight.setPipeline(BLUE);//
+                //       b
+                else if (redPipeline    && dragonsLimelight.getPipeline().num != RED)
+                    dragonsLimelight.setPipeline(RED);
+                //       y
+                else if (yellowPipeline && dragonsLimelight.getPipeline().num != YELLOW)
+                    dragonsLimelight.setPipeline(YELLOW);
+
+                telemetry.addData("Limelight Pipeline", dragonsLimelight.getPipeline().getName());
+
+//                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this)), 180);
 //
-//                telemetry.addData("Limelight Pipeline", dragonsLimelight.getPipeline().getName());
-//
-////                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this)), 180);
-////
-////                if (debugMode) {
-////                    telemetry.addData("LLAlignAngle", LLAlignAngle);
-////                }
-//            }
+//                if (debugMode) {
+//                    telemetry.addData("LLAlignAngle", LLAlignAngle);
+//                }
+            }
 
             telemetry.addLine();
             //</editor-fold>
@@ -369,7 +371,7 @@ public class DragonsDriver extends LinearOpMode {
                 double targetPosition;
 
                 //             right stick y
-                double power = artiePower * (0.01 * armSpeed);
+                double power = artiePower * (0.005 * armSpeed);
 //                if (superStructure.arm.isValid) {
 //                    if (superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN && superStructure.arm.getLastState() != SuperStructure.ARTICULATION_POS.DOWN)
 //                        miniStructure.artie.setPosition(0.7);

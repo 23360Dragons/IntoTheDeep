@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.Testing;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 
+@Disabled
 @TeleOp
 public class testCRSERVO extends LinearOpMode {
     @Override

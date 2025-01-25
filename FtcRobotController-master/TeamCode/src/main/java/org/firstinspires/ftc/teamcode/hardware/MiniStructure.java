@@ -111,7 +111,7 @@ public class MiniStructure {
 //        private CRServo claw;
         private Servo claw;
 
-        private final double openRotation   = 1;
+        private final double openRotation   = 0.7;
         private final double closedRotation = 0.45;
 
         Claw (HardwareMap hardwareMap) {
@@ -154,6 +154,7 @@ public class MiniStructure {
                 Global.exceptionOccurred = true;
                 isValid = false;
             }
+
 
             // left motor - right goes back
             // right motor - left goes back ( so 0)
