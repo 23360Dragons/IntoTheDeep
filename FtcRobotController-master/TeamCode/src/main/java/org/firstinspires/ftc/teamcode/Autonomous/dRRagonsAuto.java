@@ -36,7 +36,7 @@ public class dRRagonsAuto extends LinearOpMode {
         UP,
         DOWN,
     }
-
+  
     ARTIE_POS artiePos;
 
     public class Linearz {
