@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.apache.commons.math3.linear.RealVector;
+import org.firstinspires.ftc.robotcontroller.external.samples.ConceptRampMotorSpeed;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.Global;
@@ -12,7 +14,7 @@ import org.firstinspires.ftc.teamcode.utils.Positions;
 
 public class SuperStructure {
     public boolean isValid;
-    public Arm arm;
+    public Articulation articulation;
     public Extension extension;
 
     public enum ARTICULATION_POS {
@@ -25,12 +27,12 @@ public class SuperStructure {
     private ARTICULATION_POS lastArticulationPos;
 
     public SuperStructure (LinearOpMode opmode) {
-        opmode.telemetry.addLine("Configuring Superstructure Arm!");
+        opmode.telemetry.addLine("Configuring Superstructure Articulation!");
         opmode.telemetry.update();
 
-        this.arm = new Arm(opmode);
+        this.articulation = new Articulation(opmode);
 
-        opmode.telemetry.addData("Superstructure Arm configured", arm.isValid);
+        opmode.telemetry.addData("Superstructure Articulation configured", articulation.isValid);
         opmode.telemetry.addLine("Configuring Superstructure Extension!");
         opmode.telemetry.update();
 
@@ -39,17 +41,17 @@ public class SuperStructure {
         opmode.telemetry.addData("Superstructure Extension configured", extension.isValid);
         opmode.telemetry.update();
 
-        this.isValid = arm.isValid && extension.isValid;
+        this.isValid = articulation.isValid && extension.isValid;
     }
 
-    public class Arm {
+    public class Articulation {
         private DcMotorEx leftMotor;
         private DcMotorEx rightMotor;
 
         public boolean isValid = true;
         private double power;
 
-        Arm(LinearOpMode opmode) {
+        Articulation (LinearOpMode opmode) {
             try {
                 leftMotor = opmode.hardwareMap.get(DcMotorEx.class, "leftArtie");
                 leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
