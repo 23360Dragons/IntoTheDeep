@@ -28,9 +28,9 @@ public class GoingBackToServoTesting extends LinearOpMode {
             double cL = claw.getPosition();
             double tI = tilt.getPosition();
             double tW = twist.getPosition();
-            telemetry.addData("left Artie Pos:", lA);
-            telemetry.addData("right Artie Pos:", rA);
-            telemetry.addData("average Artie Pos:", aA);
+            telemetry.addData("left Arm Pos:", lA);
+            telemetry.addData("right Arm Pos:", rA);
+            telemetry.addData("average Arm Pos:", aA);
             telemetry.addData("claw Pos:", cL);
             telemetry.addData("tilt Pos:", tI);
             telemetry.addData("twist Pos:", tW);

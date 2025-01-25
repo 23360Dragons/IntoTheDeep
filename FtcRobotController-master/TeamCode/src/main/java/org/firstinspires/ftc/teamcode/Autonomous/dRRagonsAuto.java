@@ -1,6 +1,4 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-import static org.firstinspires.ftc.teamcode.utils.StartingPosPicker.*;
 
 import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
@@ -23,9 +21,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.TeleOp.dRRagonsdRRiver;
 import org.firstinspires.ftc.teamcode.utils.Global;
-import org.firstinspires.ftc.teamcode.utils.StartingPosPicker;
 
 import java.util.List;
 @Config
