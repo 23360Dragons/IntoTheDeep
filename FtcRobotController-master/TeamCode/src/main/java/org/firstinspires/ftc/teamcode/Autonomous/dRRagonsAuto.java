@@ -1,4 +1,6 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
+import static org.firstinspires.ftc.teamcode.utils.StartingPosPicker.*;
 
 import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
@@ -21,7 +23,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.TeleOp.dRRagonsdRRiver;
 import org.firstinspires.ftc.teamcode.utils.Global;
+import org.firstinspires.ftc.teamcode.utils.StartingPosPicker;
 
 import java.util.List;
 @Config
@@ -32,12 +36,12 @@ public class dRRagonsAuto extends LinearOpMode {
     public double amnt;
     double myAngle;
 
-    public enum ARTIE_POS {
+    public enum ARM_POS {
         UP,
         DOWN,
     }
 
-    ARTIE_POS artiePos;
+    ARM_POS armPos;
 
     public class Linearz {
         private DcMotorEx rightLinear, leftLinear;
@@ -132,157 +136,157 @@ public class dRRagonsAuto extends LinearOpMode {
         }
     } //test?
 
-    public class Artie {
-        private DcMotorEx leftArtie, rightArtie;
-        double artiezAvg;
+    public class Armz {
+        private DcMotorEx leftArm, rightArm;
+        double armzAvg;
 
-        public Artie(HardwareMap hardwareMap) {
-            leftArtie = hardwareMap.get(DcMotorEx.class, "leftLinear");
-            leftArtie.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            leftArtie.setDirection(DcMotorSimple.Direction.FORWARD);
-            leftArtie.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            leftArtie.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            leftArtie.setTargetPositionTolerance(5);
+        public Armz(HardwareMap hardwareMap) {
+            leftArm = hardwareMap.get(DcMotorEx.class, "leftLinear");
+            leftArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            leftArm.setDirection(DcMotorSimple.Direction.FORWARD);
+            leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            leftArm.setTargetPositionTolerance(5);
 
-            rightArtie = hardwareMap.get(DcMotorEx.class, "rightLinear");
-            rightArtie.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            rightArtie.setDirection(DcMotorSimple.Direction.REVERSE);
-            rightArtie.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rightArtie.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            rightArtie.setTargetPositionTolerance(5);
+            rightArm = hardwareMap.get(DcMotorEx.class, "rightLinear");
+            rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightArm.setDirection(DcMotorSimple.Direction.REVERSE);
+            rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rightArm.setTargetPositionTolerance(5);
 
-            artiezAvg = (double) (leftArtie.getCurrentPosition() + rightArtie.getCurrentPosition()) / 2;
+            armzAvg = (double) (leftArm.getCurrentPosition() + rightArm.getCurrentPosition()) / 2;
         }
 
-        int artieUp = 0;
-        double artieMost = -83.5;
-        double artieLittle = -250.5;
-        int artieDown = -334;
+        int armUp = 0;
+        double armMost = -83.5;
+        double armLittle = -250.5;
+        int armDown = -334;
 
-        public class ArtieToBasket implements Action {
+        public class ArmToBasket implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                if (artiezAvg < artieMost) {
-                    leftArtie.setPower(0.75);
-                    rightArtie.setPower(0.75);
-                } else if (artiezAvg >= artieMost && artiezAvg < artieUp) {
-                    leftArtie.setPower(0.3);
-                    rightArtie.setPower(0.3);
+                if (armzAvg < armMost) {
+                    leftArm.setPower(0.75);
+                    rightArm.setPower(0.75);
+                } else if (armzAvg >= armMost && armzAvg < armUp) {
+                    leftArm.setPower(0.3);
+                    rightArm.setPower(0.3);
                 } else {
-                    leftArtie.setPower(0);
-                    rightArtie.setPower(0);
+                    leftArm.setPower(0);
+                    rightArm.setPower(0);
                 }
-                artiePos = ARTIE_POS.UP;
+                armPos = ARM_POS.UP;
 
                 return false;
             }
         }
 
         public Action ToBasket() {
-            return new ArtieToBasket();
+            return new ArmToBasket();
         }
 
-        public class ArtieToGrab implements Action {
+        public class ArmToGrab implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                if (artiezAvg < artieLittle) {
-                    leftArtie.setPower(0.75);
-                    rightArtie.setPower(0.75);
-                } else if (artiezAvg >= artieLittle && artiezAvg > artieDown) {
-                    leftArtie.setPower(0.3);
-                    rightArtie.setPower(0.3);
+                if (armzAvg < armLittle) {
+                    leftArm.setPower(0.75);
+                    rightArm.setPower(0.75);
+                } else if (armzAvg >= armLittle && armzAvg > armDown) {
+                    leftArm.setPower(0.3);
+                    rightArm.setPower(0.3);
                 } else {
-                    leftArtie.setPower(0);
-                    rightArtie.setPower(0);
+                    leftArm.setPower(0);
+                    rightArm.setPower(0);
                 }
-                artiePos = ARTIE_POS.DOWN;
+                armPos = ARM_POS.DOWN;
                 return false;
             }
         }
 
         public Action ToGrab() {
-            return new ArtieToGrab();
+            return new ArmToGrab();
         }
 
     } //test?
 
-    public class Armz {
-        private Servo leftArm, rightArm;
+    public class Artie {
+        private Servo leftArtie, rightArtie;
 
-        public Armz(HardwareMap hardwareMap) {
-            leftArm = hardwareMap.get(Servo.class, "leftArm");
-            leftArm.scaleRange(0, 1);
-            rightArm = hardwareMap.get(Servo.class, "rightArm");
-            rightArm.scaleRange(0, 1);
-            rightArm.setDirection(Servo.Direction.REVERSE);
+        public Artie(HardwareMap hardwareMap) {
+            leftArtie = hardwareMap.get(Servo.class, "leftArm");
+            leftArtie.scaleRange(0, 1);
+            rightArtie = hardwareMap.get(Servo.class, "rightArm");
+            rightArtie.scaleRange(0, 1);
+            rightArtie.setDirection(Servo.Direction.REVERSE);
         }
 
-        double armUP = 1;
-        double armDOWN = 0.5;
-        double armDOWNmore = 0.4;
-        double armBACK;
+        double artieUP = 1;
+        double artieDOWN = 0.5;
+        double artieDOWNmore = 0.4;
+        double artieBACK;
 
-        public class ArmUp implements Action {
+        public class ArtieUp implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                leftArm.setPosition(armUP);
-                rightArm.setPosition(armUP);
+                leftArtie.setPosition(artieUP);
+                rightArtie.setPosition(artieUP);
                 return false;
             }
         }
 
-        public Action armUp() {
-            return new ArmUp();
+        public Action artieUp() {
+            return new ArtieUp();
         }
 
-        public class ArmDown implements Action {
+        public class ArtieDown implements Action {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                leftArm.setPosition(armDOWN);
-                rightArm.setPosition(armDOWN);
+                leftArtie.setPosition(artieDOWN);
+                rightArtie.setPosition(artieDOWN);
                 return false;
             }
         }
 
-        public Action armDown() {
-            return new ArmDown();
+        public Action artieDown() {
+            return new ArtieDown();
         }
 
-        public class ArmBack implements Action {
+        public class ArtieBack implements Action {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                leftArm.setPosition(armBACK);
-                rightArm.setPosition(armBACK);
+                leftArtie.setPosition(artieBACK);
+                rightArtie.setPosition(artieBACK);
                 return false;
             }
         }
 
-        public Action armBack() {
-            return new ArmBack();
+        public Action artieBack() {
+            return new ArtieBack();
         }
 
-        public class ArmDownMore implements Action {
+        public class ArtieDownMore implements Action {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                leftArm.setPosition(armDOWNmore);
-                rightArm.setPosition(armDOWNmore);
+                leftArtie.setPosition(artieDOWNmore);
+                rightArtie.setPosition(artieDOWNmore);
                 return false;
             }
         }
 
-        public Action armDownMore() {
-            return new ArmDownMore();
+        public Action artieDownMore() {
+            return new ArtieDownMore();
         }
 
         public class ArmToInit implements Action {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                leftArm.setPosition(0.5);
-                rightArm.setPosition(0.5);
+                leftArtie.setPosition(0.5);
+                rightArtie.setPosition(0.5);
                 return false;
             }
         }
@@ -616,8 +620,8 @@ public class dRRagonsAuto extends LinearOpMode {
         int starty = 0;
 
         Linearz linearSlidez = new Linearz(hardwareMap);
-        Artie ourArtie = new Artie(hardwareMap);
-        //Armz littleArm = new Armz(hardwareMap);
+        Armz ourArtiez = new Armz(hardwareMap);
+        //Artie littleArm = new Artie(hardwareMap);
         Clawz clawz = new Clawz(hardwareMap);
         Seesaw seesaw = new Seesaw(hardwareMap);
         TwistNTurn twistyturny = new TwistNTurn(hardwareMap);
@@ -773,42 +777,42 @@ public class dRRagonsAuto extends LinearOpMode {
                 autonomousAnonymous = stopping.build();
                 break;
         }
-//47 in to top at full ext arm up
-//19 in to top at no ext arm up
-//41 in to top at full ext arm out/down
-//13 in to top at no ext arm out/down
-// arm up +6 in, arm out/down -6in
+//47 in to top at full ext artie up
+//19 in to top at no ext artie up
+//41 in to top at full ext artie out/down
+//13 in to top at no ext artie out/down
+// artie up +6 in, artie out/down -6in
 //        Action toGrabby = new SequentialAction();
 //        Action grabby = new SequentialAction(
 //                //littleLarryLime.SetAngle(),
 //                twistyturny.TurnClaw(),
-//                littleArm.armDown(),
+//                littleArm.artieDown(),
 //                clawz.CloseClaw(),
-//                littleArm.armUp(),
+//                littleArm.artieUp(),
 //                twistyturny.Resetting()
 //        );
 //        Action depositTop = new SequentialAction(
 //                linearSlidez.GoUp(),
-//                littleArm.armBack(),
+//                littleArm.artieBack(),
 //                seesaw.tiltBack(),
 //                clawz.OpenClaw()
 //        );
 //        Action depositBottom = new SequentialAction(
 //                linearSlidez.GoHalf(),
-//                littleArm.armBack(),
+//                littleArm.artieBack(),
 //                seesaw.tiltBack(),
 //                clawz.OpenClaw()
 //        );
 //        Action sampleBottom = new SequentialAction(
 //                linearSlidez.GoDown(),
 //                seesaw.tiltUp(),
-//                littleArm.armDownMore(),
+//                littleArm.artieDownMore(),
 //                clawz.OpenClaw()
 //        );
 //        Action sampleTop = new SequentialAction(
 //                linearSlidez.GoHalf(),
 //                seesaw.tiltUp(),
-//                littleArm.armDownMore(),
+//                littleArm.artieDownMore(),
 //                clawz.OpenClaw()
 //        );
 
@@ -820,4 +824,15 @@ public class dRRagonsAuto extends LinearOpMode {
                 )
         );
     }
-}
+    }
+
+/*
+Positions:
+Artie:
+    When SS is Up:
+        down-0
+        out-0.2742
+        up-0.7736
+        back-1
+    When SS is Down:
+ */
