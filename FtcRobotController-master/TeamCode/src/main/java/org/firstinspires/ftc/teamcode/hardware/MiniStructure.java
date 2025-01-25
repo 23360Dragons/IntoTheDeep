@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -12,7 +14,7 @@ public class MiniStructure {
     public Tilt  tilt;
     public Twist twist;
     public Claw  claw;
-    public Artie artie;
+    public Arm   arm;
 
     public MiniStructure(LinearOpMode opmode) {
         opmode.telemetry.addLine("Configuring MiniStructure Elbow!");
@@ -33,12 +35,12 @@ public class MiniStructure {
         this.claw  = new Claw (opmode.hardwareMap);
 
         opmode.telemetry.addData("MiniStructure Claw configured", claw.isValid);
-        opmode.telemetry.addLine("Configuring MiniStructure Artie!");
+        opmode.telemetry.addLine("Configuring MiniStructure Arm!");
         opmode.telemetry.update();
 
-        this.artie = new Artie(opmode.hardwareMap);
+        this.arm = new Arm(opmode.hardwareMap);
 
-        opmode.telemetry.addData("MiniStructure Artie configured", artie.isValid);
+        opmode.telemetry.addData("MiniStructure Arm configured", arm.isValid);
         opmode.telemetry.update();
     }
 
@@ -138,14 +140,14 @@ public class MiniStructure {
         }
     }
 
-    public static class Artie {
+    public static class Arm {
         public boolean isValid = true;
         private Servo left;
         private Servo right;
 //        private ArtiePos artiePos;
 //        private ArtiePos lastArtiePos;
 
-        Artie(HardwareMap hardwareMap) {
+        Arm (HardwareMap hardwareMap) {
             try {
                 left = hardwareMap.get(Servo.class, "leftArm");
                 left.scaleRange(0,1);
