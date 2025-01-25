@@ -150,7 +150,7 @@ public class MiniStructure {
                 left = hardwareMap.get(Servo.class, "leftArm");
                 left.scaleRange(0,1);
             } catch (Exception e) {
-                Global.exceptions.append("leftArtie\n");
+                Global.exceptions.append("leftArm\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
             }
@@ -163,7 +163,7 @@ public class MiniStructure {
                 right.setDirection(Servo.Direction.REVERSE);
                 right.scaleRange(0,1);
             } catch (Exception e) {
-                Global.exceptions.append("rightArtie\n");
+                Global.exceptions.append("rightArm\n");
                 Global.exceptionOccurred = true;
                 isValid = false;
             }

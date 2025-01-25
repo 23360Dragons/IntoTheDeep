@@ -107,9 +107,9 @@ public class DragonsDriver extends LinearOpMode {
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Set Ministructure Default Pos ---------------------">
-//        miniStructure.twist.setPosition(1);
-//        miniStructure.artie.setPosition(0.5);
-//        miniStructure.tilt.setPosition(0.2);
+        miniStructure.twist.setPosition(1);
+        miniStructure.artie.setPosition(0.5);
+        miniStructure.tilt.setPosition(0.5);
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Main Loop ---------------------">
@@ -274,32 +274,32 @@ public class DragonsDriver extends LinearOpMode {
             //<editor-fold desc="--------------------- Limelight ---------------------">
             telemetry.addLine("-----Limelight-----");
 
-            if (dragonsLimelight.isValid) {
-                // --------------------- Pipeline Switching ---------------------
-//                if (currentB2 && !previousB2) { //rising edge
+//            if (dragonsLimelight.isValid) {
+//                // --------------------- Pipeline Switching ---------------------
+////                if (currentB2 && !previousB2) { //rising edge
+////                    dragonsLimelight.setPipeline(YELLOW);
+////                } else if (!currentB2 && previousB2) { //falling edge
+////                    dragonsLimelight.setPipeline();
+////                }
+//
+//                //       x
+//                     if (bluePipeline   && dragonsLimelight.getPipeline().num != BLUE)
+//                    dragonsLimelight.setPipeline(BLUE);//
+//                //       b
+//                else if (redPipeline    && dragonsLimelight.getPipeline().num != RED)
+//                    dragonsLimelight.setPipeline(RED);
+//                //       y
+//                else if (yellowPipeline && dragonsLimelight.getPipeline().num != YELLOW)
 //                    dragonsLimelight.setPipeline(YELLOW);
-//                } else if (!currentB2 && previousB2) { //falling edge
-//                    dragonsLimelight.setPipeline();
-//                }
-
-                //       x
-                     if (bluePipeline   && dragonsLimelight.getPipeline().num != BLUE)
-                    dragonsLimelight.setPipeline(BLUE);//
-                //       b
-                else if (redPipeline    && dragonsLimelight.getPipeline().num != RED)
-                    dragonsLimelight.setPipeline(RED);
-                //       y
-                else if (yellowPipeline && dragonsLimelight.getPipeline().num != YELLOW)
-                    dragonsLimelight.setPipeline(YELLOW);
-
-                telemetry.addData("Limelight Pipeline", dragonsLimelight.getPipeline().getName());
-
-                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this)), 180);
-
-                if (debugMode) {
-                    telemetry.addData("LLAlignAngle", LLAlignAngle);
-                }
-            }
+//
+//                telemetry.addData("Limelight Pipeline", dragonsLimelight.getPipeline().getName());
+//
+////                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this)), 180);
+////
+////                if (debugMode) {
+////                    telemetry.addData("LLAlignAngle", LLAlignAngle);
+////                }
+//            }
 
             telemetry.addLine();
             //</editor-fold>
@@ -369,11 +369,11 @@ public class DragonsDriver extends LinearOpMode {
                 double targetPosition;
 
                 //             right stick y
-                double power = artiePower * (0.001 * armSpeed);
-                if (superStructure.arm.isValid) {
-                    if (superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN && superStructure.arm.getLastState() != SuperStructure.ARTICULATION_POS.DOWN)
-                        miniStructure.artie.setPosition(0.7);
-                }
+                double power = artiePower * (0.01 * armSpeed);
+//                if (superStructure.arm.isValid) {
+//                    if (superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN && superStructure.arm.getLastState() != SuperStructure.ARTICULATION_POS.DOWN)
+//                        miniStructure.artie.setPosition(0.7);
+//                }
 
                 targetPosition = miniStructure.artie.getPosition().avg + power;
 
@@ -381,6 +381,7 @@ public class DragonsDriver extends LinearOpMode {
 
 
                 telemetry.addData("MiniStructure artie power", power);
+                telemetry.addData("Ministructure Target Position", targetPosition);
                 telemetry.addData("MiniStructure artie position", miniStructure.artie.getPosition().avg);
             }
 
