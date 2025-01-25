@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class StartingPosPicker {
     public static Object pickStart;
-    public static int starty;
+    int starty;
 
     public void pickStart(){
         if (gamepad1.x) {
