@@ -20,15 +20,58 @@ public class DragonsAutoBruteForce extends LinearOpMode {
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftFront.setMode(Run);
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        double ticksPerInch = 32.37;
+        RobotMovement robotMovement = new RobotMovement(leftFront, rightFront, leftBack, rightBack);
+
+        double tiles = 24;
+        int starty = 0;
+        while (opModeInInit()) {
+            if (gamepad1.x) {
+                starty = 1;
+            } else if (gamepad1.b) {
+                starty = 2;
+            } else if (gamepad1.a) {
+                starty = 3;
+            } else if (gamepad1.y) {
+                starty = 4;
+            }
+            switch (starty) {
+                case 1:
+                    //Actions.runBlocking(littleLarryLime.LarryLimeYellow());
+                    telemetry.addLine("Starting Position Set To Blue, Basket Side. If inncorrect, please reselect");
+                    telemetry.update();
+                    break;
+                case 2:
+                    //Actions.runBlocking(littleLarryLime.LarryLimeYellow());
+                    telemetry.addLine("Starting Position Set To Red, Basket Side. If inncorrect, please reselect");
+                    telemetry.update();
+                    break;
+                case 3:
+                    //Actions.runBlocking(littleLarryLime.LarryLimeBlues());
+                    telemetry.addLine("Starting Position Set To Blue, Observation Zone Side. If inncorrect, please reselect");
+                    telemetry.update();
+                    break;
+                case 4:
+                    //Actions.runBlocking(littleLarryLime.LarryLimeRedTV());
+                    telemetry.addLine("Starting Position Set To Red, Observation Zone Side. If inncorrect, please reselect");
+                    telemetry.update();
+                    break;
+                default:
+                    telemetry.addLine("Please select starting position! If not selected, the robot will not run during Auto.");
+                    telemetry.update();
+                    break;
+            }
+        }
 
         waitForStart();
-
+        robotMovement.strafe((3.5*tiles),true);
     }
 
 }
