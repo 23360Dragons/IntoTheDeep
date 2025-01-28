@@ -45,13 +45,20 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(redTwo, Math.toRadians(redFace)))
+//                    .waitSeconds(3)
+                .strafeTo(toRedSide)
+                                .waitSeconds(1)
+                                .strafeTo(new Vector2d(redBasket.position.x - 5, redBasket.position.y - 5))
+
+//                    .splineTo(toRedSide, redFace)
+                .build());
+
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)
                 .start();
-
-        myBot.runAction(new Observe.moveToObserve());
     }
 }
 
@@ -60,8 +67,11 @@ class Observe {
         @Override
         public boolean run(@NotNull TelemetryPacket telemetryPacket) {
             myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(redTwo, Math.toRadians(redFace)))
-                    .waitSeconds(3)
-                    .splineTo(toRedSide, redFace)
+//                    .waitSeconds(3)
+                                    .lineToX(15)
+                                    .lineToY(15)
+                                    .turnTo(90)
+//                    .splineTo(toRedSide, redFace)
                     .build());
 
             return false;
