@@ -50,7 +50,7 @@ public class BlueBasketBFP1 extends LinearOpMode{
 
 
         // Call the RobotMovemenet class to move diagonally 33.94 in at a heading of 45 degress
-        robotMovement.moveDiagonally(12.0, 45.0);
+        robotMovement.moveDiagonallyRight(12.0, 45.0);
 
         //Step 2
         //Suggest path is B4 to B2
@@ -58,7 +58,7 @@ public class BlueBasketBFP1 extends LinearOpMode{
 
         //Step 3
         //Suggest path B2 to A1
-        robotMovement.moveDiagonally(33.94, 135); //Moves diagonally 33.94 in at a heading of 135 degress.
+        robotMovement.moveDiagonallyRight(33.94, 135); //Moves diagonally 33.94 in at a heading of 135 degress.
 
         // Set motors to run without encoder
         _leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

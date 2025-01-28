@@ -34,7 +34,7 @@ public class TestDiagonal extends LinearOpMode {
         RobotMovement robotMovement = new RobotMovement(_leftFront, _rightFront, _leftBack, _rightBack);
 
         // Move diagonally 12 inches at 45 degrees
-        robotMovement.moveDiagonally(12.0, 45.0);
+        robotMovement.moveDiagonallyRight(12.0, 45.0);
 
         // Stop motors (optional, as subroutine already stops them)
         _leftFront.setPower(0);

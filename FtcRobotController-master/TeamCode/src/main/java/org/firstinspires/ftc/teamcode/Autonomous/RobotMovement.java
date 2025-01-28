@@ -148,17 +148,17 @@ public class RobotMovement {
      * @param distance The distance to move in inches.
      * @param angle The angle of the diagonal movement in degrees (0-360).
      */
-    public void moveDiagonally(double distance, double angle) {
+    public void moveDiagonallyRight(double distance, double angle) {
         double angleRadians = Math.toRadians(angle);
 
         double frontLeftPower = Math.cos(angleRadians);
-        double frontRightPower = Math.sin(angleRadians);
-        double backLeftPower = Math.sin(angleRadians);
+        double frontRightPower = 0;
+        double backLeftPower = 0;
         double backRightPower = Math.cos(angleRadians);
 
         // Adjust power ratios for mecanum drive (simplified)
-        frontLeftPower *= -1;
-        backRightPower *= -1;
+//        frontLeftPower *= -1;
+//        backRightPower *= -1;
 
         double targetTicks = distance * Constants.TICKS_PER_INCH;
 
@@ -186,7 +186,44 @@ public class RobotMovement {
         backLeft.setPower(0);
         backRight.setPower(0);
     }
+    public void moveDiagonallyLeft(double distance, double angle) {
+        double angleRadians = Math.toRadians(angle);
 
+        double frontLeftPower = 0;
+        double frontRightPower = Math.cos(angleRadians);
+        double backLeftPower = Math.cos(angleRadians);
+        double backRightPower = 0;
+
+        // Adjust power ratios for mecanum drive (simplified)
+//        frontLeftPower *= -1;
+//        backRightPower *= -1;
+
+        double targetTicks = distance * Constants.TICKS_PER_INCH;
+
+        frontLeft.setTargetPosition((int) (targetTicks * frontLeftPower));
+        frontRight.setTargetPosition((int) (targetTicks * frontRightPower));
+        backLeft.setTargetPosition((int) (targetTicks * backLeftPower));
+        backRight.setTargetPosition((int) (targetTicks * backRightPower));
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        frontLeft.setPower(Math.abs(frontLeftPower));
+        frontRight.setPower(Math.abs(frontRightPower));
+        backLeft.setPower(Math.abs(backLeftPower));
+        backRight.setPower(Math.abs(backRightPower));
+
+        while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
+            // Do nothing, just wait
+        }
+
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
+    }
 
 
 
