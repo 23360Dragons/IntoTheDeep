@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 public class RobotMovementOTOS {
 
     private DcMotor frontLeft;
@@ -13,7 +16,7 @@ public class RobotMovementOTOS {
     // Declare OTOS sensor
     private SparkFunOTOS otos;
 
-    public RobotMovementOTOS(DcMotor fl, DcMotor fr, DcMotor bl, DcMotor br, Otos otos) {
+    public RobotMovementOTOS(DcMotor fl, DcMotor fr, DcMotor bl, DcMotor br, SparkFunOTOS otos) {
         frontLeft = fl;
         frontRight = fr;
         backLeft = bl;
@@ -30,7 +33,7 @@ public class RobotMovementOTOS {
      */
     public void moveForward(double distance, boolean forward) {
         // Get initial robot position
-        double initialX = otos.getX();
+        double initialX = otos.getPosition().x;
 
         // Set target position
         double targetX = initialX + (forward ? distance : -distance);
@@ -44,7 +47,7 @@ public class RobotMovementOTOS {
         backRight.setPower(power);
 
         // Move until target position is reached
-        while ((forward && otos.getX() < targetX) || (!forward && otos.getX() > targetX)) {
+        while ((forward && otos.getPosition().x < targetX) || (!forward && otos.getPosition().x > targetX)) {
             // Continue moving
         }
 
@@ -63,7 +66,7 @@ public class RobotMovementOTOS {
      */
     public void strafe(double distance, boolean right) {
         // Get initial robot position
-        double initialY = otos.getY(); 
+        double initialY = otos.getPosition().y; 
 
         // Set target position
         double targetY = initialY + (right ? distance : -distance);
@@ -77,7 +80,7 @@ public class RobotMovementOTOS {
         backRight.setPower(right ? -power : power);
 
         // Move until target position is reached
-        while ((right && otos.getY() < targetY) || (!right && otos.getY() > targetY)) {
+        while ((right && otos.getPosition().y < targetY) || (!right && otos.getPosition().y > targetY)) {
             // Continue moving
         }
 
@@ -96,8 +99,8 @@ public class RobotMovementOTOS {
      */
     public void moveDiagonally(double distance, double angle) {
         // Get initial robot position
-        double initialX = otos.getX();
-        double initialY = otos.getY();
+        double initialX = otos.getPosition().x;
+        double initialY = otos.getPosition().y;
 
         // Calculate target position based on distance and angle
         double targetX = initialX + (distance * Math.cos(Math.toRadians(angle)));
@@ -120,7 +123,7 @@ public class RobotMovementOTOS {
         backRight.setPower(backRightPower);
 
         // Move until target position is reached (simplified)
-        while (Math.sqrt(Math.pow(otos.getX() - targetX, 2) + Math.pow(otos.getY() - targetY, 2)) > 0.1) { 
+        while (Math.sqrt(Math.pow(otos.getPosition().x - targetX, 2) + Math.pow(otos.getPosition().y - targetY, 2)) > 0.1) { 
             // Continue moving
         }
 
@@ -183,7 +186,7 @@ public class RobotMovementOTOS {
     }
 
 		//TODO
-    /**
+    /*
      * Helper method to get the robot's current heading from OTOS data.
      * 
      * **This method needs to be implemented based on how your OTOS sensor provides heading information.** 
@@ -202,8 +205,8 @@ public class RobotMovementOTOS {
      * 
      *     ```java
      *     public double getRobotHeadingFromOTOS() {
-     *         double robotX = otos.getX();
-     *         double robotY = otos.getY();
+     *         double robotX = otos.getPosition().x;
+     *         double robotY = otos.getPosition().y;
      *         double heading = Math.atan2(robotY, robotX) * 180 / Math.PI; 
      *         return normalizeAngle(heading); 
      *     }

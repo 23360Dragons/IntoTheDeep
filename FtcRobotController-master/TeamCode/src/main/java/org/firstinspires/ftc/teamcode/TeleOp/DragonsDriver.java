@@ -8,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.utils.Global.exceptions;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -211,17 +212,20 @@ public class DragonsDriver extends LinearOpMode {
                     velLimitPwr += velocity / -25;
                 } // this is breaking things.
 
-//                if (superStructure.extension.isValid
-//                        && superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.UP
-//                        && superStructure.extension.getPosition().avg > superStructure.extension.maxDownExtension
-//                        && articulationPower < 0
-//                ) {
-//                    telemetry.addLine("Arm cannot go down, as extension is too extended!");
+                if (superStructure.extension.isValid
+                        && superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.UP
+                        && superStructure.extension.getPosition().avg > superStructure.extension.maxDownExtension
+                        && articulationPower < 0
+                ) {
+                    telemetry.addLine("Arm cannot go down, as extension is too extended!");
                     //TO //DO flash the lights white or orange (orange might be too close to yellow, test it)
-//                    dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-//                    currentGamepad1.rumble(1);
-//                } else {
-                superStructure.arm.setPower(articulationPower * speed);
+                    dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    currentGamepad1.rumble(1);
+                    telemetry.addLine("Can't articulate articulation because extension is too extended");
+                }
+//                else {
+                    superStructure.arm.setPower(articulationPower * speed);
+//                }
 
                 if (true) {
                     telemetry.addData("Super Structure right artie position", superStructure.arm.getPosition().right);
@@ -246,17 +250,20 @@ public class DragonsDriver extends LinearOpMode {
                 }
 
                 //todo test this
-//                if (superStructure.arm.isValid
-//                        && superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN
-//                        && extensionPower > 0
-//                        && superStructure.extension.getPosition().avg > superStructure.extension.maxDownExtension
-//                ) {
-//                    telemetry.addLine("Extension cannot extend more, as the arms are down!");
-//                    TO //DO flash the lights white or orange (orange might be too close to yellow, test it)
-//                    dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-//                    currentGamepad1.rumble(1);
-//                    todo study rumble
-//                } else {
+                if (superStructure.arm.isValid
+                        && superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN
+                        && extensionPower > 0
+                        && superStructure.extension.getPosition().avg > superStructure.extension.maxDownExtension
+                ) {
+                    telemetry.addLine("Extension cannot extend more, as the arms are down!");
+                    //TO //DO flash the lights white or orange (orange might be too close to yellow, test it)
+                    dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    currentGamepad1.rumble(1);
+                    //todo study rumble
+                    telemetry.addLine("Can't extend extension because extension is too extended + artie is down");
+
+                }
+//                else {
                     superStructure.extension.setPower(extensionPower * speed);
 //                }
 
