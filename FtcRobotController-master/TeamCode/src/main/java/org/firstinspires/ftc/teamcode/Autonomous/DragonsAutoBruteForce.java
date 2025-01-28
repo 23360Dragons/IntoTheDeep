@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-@Disabled
+@Autonomous
 public class DragonsAutoBruteForce extends LinearOpMode {
     public DcMotorEx leftFront, leftBack, rightBack, rightFront;
     @Override
@@ -71,7 +72,12 @@ public class DragonsAutoBruteForce extends LinearOpMode {
         }
 
         waitForStart();
-        robotMovement.strafe((3.5*tiles),true);
+        switch (starty) {
+            case 1:
+                robotMovement.strafe((3.5 * tiles), true);
+            case 2:
+                robotMovement.strafe((3.5 * tiles), true);
+        }
     }
 
 }
