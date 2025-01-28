@@ -34,7 +34,7 @@ public class TestForwardOTOS extends LinearOpMode {
         _leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         
         // Initialize OTOS sensor 
-        otos = opmode.hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+        otos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
 
         // Wait for start
         waitForStart();

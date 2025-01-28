@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
 @Autonomous(name="TestDiagonal12Inches45OTOS", group="Tests")
-public class TestDiagonal extends LinearOpMode {
+public class TestDiagonalOTOS extends LinearOpMode {
     // Declare motors
     //motor code from CombinedMaster
     // are those ports correct?
@@ -34,7 +34,7 @@ public class TestDiagonal extends LinearOpMode {
         _leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         
         // Initialize OTOS sensor 
-        otos = opmode.hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+        otos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
 
         // Wait for start
         waitForStart();
