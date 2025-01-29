@@ -78,10 +78,10 @@ public class RobotMovement {
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setPower(right ? -0.5 : 0.5);
-        frontRight.setPower(right ? 0.5 : -0.5);
-        backLeft.setPower(right ? 0.5 : -0.5);
-        backRight.setPower(right ? -0.5 : 0.5);
+        frontLeft.setPower(right ? 0.5 : -0.5);
+        frontRight.setPower(right ? -0.5 : 0.5);
+        backLeft.setPower(right ? -0.5 : 0.5);
+        backRight.setPower(right ? 0.5 : -0.5);
 
         while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
             // Do nothing, just wait

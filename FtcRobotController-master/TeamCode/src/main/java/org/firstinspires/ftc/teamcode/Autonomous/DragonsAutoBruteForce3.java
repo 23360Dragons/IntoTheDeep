@@ -6,15 +6,19 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.Servo;
+
 @Autonomous
-public class DragonsAutoBruteForce extends LinearOpMode {
+public class DragonsAutoBruteForce3 extends LinearOpMode {
     public DcMotorEx leftFront, leftBack, rightBack, rightFront;
+    public Servo claw;
     @Override
     public void runOpMode() throws InterruptedException {
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
         rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
         rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        claw = hardwareMap.get(Servo.class, "claw");
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -30,19 +34,19 @@ public class DragonsAutoBruteForce extends LinearOpMode {
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         RobotMovement robotMovement = new RobotMovement(leftFront, rightFront, leftBack, rightBack);
-
-
+        Claw clawy = new Claw(claw);
+        double tiles = 24;
         int starty = 0;
-//        while (opModeInInit()) {
-//            if (gamepad1.x) {
-//                starty = 1;
-//            } else if (gamepad1.b) {
-//                starty = 2;
-//            } else if (gamepad1.a) {
-//                starty = 3;
-//            } else if (gamepad1.y) {
-//                starty = 4;
-//            }
+        while (opModeInInit()) {
+            if (gamepad1.x) {
+                starty = 1;
+            } else if (gamepad1.b) {
+                starty = 2;
+            } else if (gamepad1.a) {
+                starty = 3;
+            } else if (gamepad1.y) {
+                starty = 4;
+            }
 //            switch (starty) {
 //                case 1:
 //                    //Actions.runBlocking(littleLarryLime.LarryLimeYellow());
@@ -71,18 +75,31 @@ public class DragonsAutoBruteForce extends LinearOpMode {
 //            }
 //        }
 
-        waitForStart();
+            waitForStart();
 //        switch (starty) {
 //            case 1:
-//                robotMovement.strafe(84, true);
+//                robotMovement.strafe((3.5 * tiles), true);
 //            case 2:
-//                robotMovement.strafe(84, true);
+//                robotMovement.strafe((3.5 * tiles), true);
 //            case 3:
-//                robotMovement.strafe(48, true);
+//                robotMovement.strafe((2 * tiles), true);
 //            case 4:
-//                robotMovement.strafe(48, true);
+//                robotMovement.strafe((2 * tiles), true);
 
 //        }
-        robotMovement.strafe(84.0, true);
+            robotMovement.rotate(90,false);
+            robotMovement.moveForward(10,true);
+            clawy.OpenClaw();
+            robotMovement.moveForward(10,false);
+            robotMovement.strafe(74, true);
+            robotMovement.moveForward(8,true);
+            robotMovement.strafe(74, false);
+            robotMovement.strafe(74, true);
+            robotMovement.moveForward(8,true);
+            robotMovement.strafe(74, false);
+            robotMovement.strafe(74, true);
+            robotMovement.moveForward(8,true);
+            robotMovement.strafe(74, false);
+        }
     }
 }
