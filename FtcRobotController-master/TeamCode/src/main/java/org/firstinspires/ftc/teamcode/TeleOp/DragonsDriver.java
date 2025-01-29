@@ -40,8 +40,6 @@ public class DragonsDriver extends LinearOpMode {
     public SuperStructure   superStructure;
     public MiniStructure    miniStructure;
 
-//    public static double LLAlignAngle = 0;
-
     //<editor-fold desc="--------------------- Part Speeds ---------------------">
     public static double SSSpeed      = 1;
     public static double SSCreepSpeed = 0.5;
@@ -176,14 +174,6 @@ public class DragonsDriver extends LinearOpMode {
 
             //</editor-fold>
 
-            //<editor-fold desc="--------------------- Debug Mode ---------------------">
-            if (leftStickButton && rightStickButton) {
-                debugMode = !debugMode;
-            }
-
-            telemetry.addData("Debug Mode", debugMode);
-            //</editor-fold>
-
             // <editor-fold desc="--------------------- SuperStructure ---------------------">
             if (superStructure.arm.isValid || superStructure.extension.isValid)
                 telemetry.addLine("-----Super Structure-----");
@@ -225,19 +215,15 @@ public class DragonsDriver extends LinearOpMode {
                     //TO //DO flash the lights white or orange (orange might be too close to yellow, test it)
                     dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
                     currentGamepad1.rumble(1);
-                    telemetry.addLine("Can't articulate articulation because extension is too extended");
                 }
                 else {
                     superStructure.arm.setPower(articulationPower * speed);
                 }
 
-                if (true) {
-                    telemetry.addData("Super Structure right artie position", superStructure.arm.getPosition().right);
-                    telemetry.addData("Super Structure  left artie position", superStructure.arm.getPosition().left);
-                }
-
+                telemetry.addData("Super Structure right artie position", superStructure.arm.getPosition().right);
+                telemetry.addData("Super Structure  left artie position", superStructure.arm.getPosition().left);
                 telemetry.addData("Super structure      vel limit power", velLimitPwr); //todo look at velocity stuff
-                telemetry.addData("Super Structure   arm power", superStructure.arm.getPower());
+                telemetry.addData("Super Structure            arm power", superStructure.arm.getPower());
                 telemetry.addData("Super Structure        enum position", superStructure.arm.getState());
             }
 
@@ -249,12 +235,10 @@ public class DragonsDriver extends LinearOpMode {
 
                 if (creepSpeed2 > 0.1) {
                     speed = extCreepSpeed;
-                    telemetry.addLine("Ext Full Speed!");
                 } else {
                     speed = extSpeed;
                 }
 
-                //todo test this
                 if (superStructure.arm.isValid
                         && superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN
                         && extensionPower > 0
@@ -264,22 +248,14 @@ public class DragonsDriver extends LinearOpMode {
                     //TO //DO flash the lights white or orange (orange might be too close to yellow, test it)
                     dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
                     currentGamepad1.rumble(1);
-                    //todo study rumble
-                    telemetry.addLine("Can't extend extension because extension is too extended + artie is down");
-
                 }
                 else {
                     superStructure.extension.setPower(extensionPower * speed);
                 }
 
-                if (true) {
-                    telemetry.addData("   Super Structure extension power", superStructure.extension.getPower());
-                    telemetry.addData("Super Structure extension L position", superStructure.extension.getPosition().left);
-                    telemetry.addData("Super Structure extension R position", superStructure.extension.getPosition().right);
-
-                    telemetry.addData("    Super Structure Extension Draw", superStructure.extension.getCurrent().avg);
-                    //todo look at draw
-                }
+                telemetry.addData("Super Structure extension power", superStructure.extension.getPower());
+                telemetry.addData("Super Structure extension L position", superStructure.extension.getPosition().left);
+                telemetry.addData("Super Structure extension R position", superStructure.extension.getPosition().right);
             }
 
             telemetry.addLine();
@@ -309,10 +285,7 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("Limelight Pipeline", dragonsLimelight.getPipeline().getName());
 
 //                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this)), 180);
-//
-//                if (debugMode) {
-//                    telemetry.addData("LLAlignAngle", LLAlignAngle);
-//                }
+                dragonsLimelight.update(this);
             }
 
             telemetry.addLine();
@@ -334,23 +307,15 @@ public class DragonsDriver extends LinearOpMode {
                     telemetry.addLine("Close claw");
                 }
 
-                //  left stick + right stick
-                if (debugMode)
-                    telemetry.addData("claw Position", miniStructure.claw.getPosition());
-
-//                double power = openClaw ? 1 : closeClaw ? -1 : 0;
-//                artie.claw.setPower(power);
-//                telemetry.addData("MiniStructure claw power", power);
+                telemetry.addData("claw Position", miniStructure.claw.getPosition());
             }
 
             if (miniStructure.twist.isValid) {
-//                artie.twist.setRotation(LLAlignAngle / 270);
                 //             dpad left                        dpad right
                 double power = twistLeft ? 0.001 * twistSpeed : twistRight ? -0.001 * twistSpeed : 0;
                 double targetPosition = miniStructure.twist.getPosition() + power;
 
                 miniStructure.twist.setPosition(targetPosition);
-
 
                 telemetry.addData("MiniStructure twist power", power);
                 telemetry.addData("MiniStructure twist position", miniStructure.twist.getPosition());
@@ -362,35 +327,18 @@ public class DragonsDriver extends LinearOpMode {
 
                 miniStructure.tilt.setPosition(targetPosition);
 
-
                 telemetry.addData("MiniStructure tilt power", power);
                 telemetry.addData("MiniStructure tilt position", miniStructure.tilt.getPosition());
             }
 
 
             if (miniStructure.artie.isValid) {
-//                if (armUp)
-//                    artie.artie.setPosition(MiniStructure.Artie.ArtiePos.UP);
-//                if (armDown)
-//                    artie.artie.setPosition(MiniStructure.Artie.ArtiePos.DOWN);
-//                if (armBack)
-//                    artie.artie.setPosition(MiniStructure.Artie.ArtiePos.BACK);
-//
-//                artie.artie.updatePosition();
-//                telemetry.addData("artie pos", artie.artie.getPosition().name());
-//                double power = armUp ? 1 : armDown ? -1 : 0;
-
 //                double targetPosition;
 
                 //             right stick y
 //                double power = artiePower * (0.005 * armSpeed);
 
                 double power = artiePower/* * (1 * armSpeed)*/;
-
-//                if (superStructure.arm.isValid) {
-//                    if (superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN && superStructure.arm.getLastState() != SuperStructure.ARTICULATION_POS.DOWN)
-//                        miniStructure.artie.setPosition(0.7);
-//                }
 
 //                targetPosition = miniStructure.artie.getPosition().avg + power;
 
@@ -402,7 +350,6 @@ public class DragonsDriver extends LinearOpMode {
 //                telemetry.addData("Ministructure Target Position", targetPosition);
 //                telemetry.addData("MiniStructure artie L position", miniStructure.artie.getPosition().left);
 //                telemetry.addData("MiniStructure artie R position", miniStructure.artie.getPosition().right);
-
             }
 
             telemetry.addLine();
@@ -411,7 +358,6 @@ public class DragonsDriver extends LinearOpMode {
             //<editor-fold desc="--------------------- SparkFun OTOS ---------------------">
             telemetry.addLine("-----Sparkfun OTOS-----");
             DecimalFormat sparkfunDF = new DecimalFormat("#.###");
-            //todo: make sure this works
 
             if (dragonsOTOS.isValid) {
                 telemetry.addData("sparkfun x velocity", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getVelocity().x)));
@@ -424,14 +370,14 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.addLine();
             //</editor-fold>
 
-            //<editor-fold desc="--------------------- Movement ---------------------">
+            // <editor-fold desc="--------------------- Movement ---------------------">
             if (dragonsIMU.isValid && drivetrain.isValid) {
                 telemetry.addLine("-----Drivetrain-----");
 
                 double driveSpeed = 1;
 
                 if (creepSpeed) {
-                    driveSpeed *= 0.7;
+                    driveSpeed *= 0.6;
                 }
 
                 if (recalibrateIMU) {
@@ -446,25 +392,14 @@ public class DragonsDriver extends LinearOpMode {
                 double[] drivePowers = MoveRobot.RC(x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
                 //sets the motors to their corresponding power
                 drivetrain.setPower(drivePowers);
-
-                //telemetry
-                if (debugMode) {
-                    telemetry.addLine();
-                    telemetry.addData("leftFront power", String.valueOf(Math.round(drivetrain.getPower()[0])));
-                    telemetry.addData("rightFront power", String.valueOf(Math.round(drivetrain.getPower()[1])));
-                    telemetry.addData("leftBack power", String.valueOf(Math.round(drivetrain.getPower()[2])));
-                    telemetry.addData("rightBack power", String.valueOf(Math.round(drivetrain.getPower()[3])));
-                }
-
+//                telemetry.addData("leftFront power", String.valueOf(Math.round(drivetrain.getPower()[0])));
+//                telemetry.addData("rightFront power", String.valueOf(Math.round(drivetrain.getPower()[1])));
+//                telemetry.addData("leftBack power", String.valueOf(Math.round(drivetrain.getPower()[2])));
+//                telemetry.addData("rightBack power", String.valueOf(Math.round(drivetrain.getPower()[3])));
                 telemetry.addLine();
             }
-            //</editor-fold>
 
-            telemetry.addData("Time seconds", time.seconds());
-            telemetry.addData("Time toString", time.toString());
-            telemetry.addData("Time starttime", time.startTime());
-            telemetry.addData("Time seconds - starttime", time.seconds() - time.startTime());
-            telemetry.addData("Time time", time.time(TimeUnit.SECONDS));
+            //</editor-fold>
 
             telemetry.update();
         }

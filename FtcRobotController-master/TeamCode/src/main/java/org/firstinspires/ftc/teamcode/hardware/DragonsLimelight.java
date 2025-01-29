@@ -39,42 +39,41 @@ public class DragonsLimelight {
 
     public double update (DragonsDriver opmode) {
         DragonsLights dragonsLights = opmode.dragonsLights;
-            result = limelight.getLatestResult();
-            double angle = 0;
+        result = limelight.getLatestResult();
+        double angle = 0;
 
-            if (result != null && result.isValid()) {
-                // Get the pose of the robot
-                Pose3D botpose = result.getBotpose(); // Extract orientation (yaw, pitch, roll
-                Position pos = botpose.getPosition();
-                double x = pos.x; // Display orientation on telemetry
-                double y = pos.y;
-                double z = pos.z;
-                opmode.telemetry.addData("Yaw (Z)",   z);
-                opmode.telemetry.addData("Pitch (Y)", y);
-                opmode.telemetry.addData("Roll (X)",  x);
-
-                if (dragonsLights.isValid) {
-                    switch (currentPipeline) {
-                        case 0:
-                            dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
-                            break;
-                        case 1:
-                            dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                            break;
-                        case 2:
-                            dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-                            break;
-                    }
+        if (result != null && result.isValid()) {
+            // Get the pose of the robot
+//               Pose3D botpose = result.getBotpose(); // Extract orientation (yaw, pitch, roll
+//               Position pos = botpose.getPosition();
+//               double x = pos.x; // Display orientation on telemetry
+//               double y = pos.y;
+//               double z = pos.z;
+//               opmode.telemetry.addData("Yaw (Z)",   z);
+//               opmode.telemetry.addData("Pitch (Y)", y);
+//               opmode.telemetry.addData("Roll (X)",  x);
+//
+            if (dragonsLights.isValid) {
+                switch (currentPipeline) {
+                    case 0:
+                        dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+                        break;
+                    case 1:
+                        dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                        break;
+                    case 2:
+                        dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                        break;
                 }
+            }
 
-                if (getPipeline().num == 3) {
-                    double[] pythonOutputs = result.getPythonOutput();
-
-                    if (pythonOutputs != null && pythonOutputs.length > 0) {
-                        double firstOutput = pythonOutputs[0];
-                        opmode.telemetry.addData("Python output:", firstOutput);
-                    }
-                }
+//            if (getPipeline().num == 3) {
+//                double[] pythonOutputs = result.getPythonOutput();
+//                if (pythonOutputs != null && pythonOutputs.length > 0) {
+//                    double firstOutput = pythonOutputs[0];
+//                    opmode.telemetry.addData("Python output:", firstOutput);
+//                }
+//            }
 
                 // getting rotation of the result. TODO: make this work
 
@@ -93,20 +92,23 @@ public class DragonsLimelight {
 //                    }
 //                }
 
-            } else {
-                if (result == null) {
-                    opmode.telemetry.addLine("Limelight result is null");
+        } else {
+            if (result == null) {
+                opmode.telemetry.addLine("Limelight result is null");
 
-                    if (dragonsLights.isValid)
-                        dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-                } else if (!result.isValid()) {
-                    opmode.telemetry.addLine("Limelight result is not valid");
+                if (dragonsLights.isValid)
+                    dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
-                    if (dragonsLights.isValid)
-                        dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-                }
+            } else if (!result.isValid()) {
+                opmode.telemetry.addLine("Limelight result is not valid");
+
+                if (dragonsLights.isValid)
+                    dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+
             }
-            return angle;
+        }
+
+        return angle;
     }
 
     public void setPipeline (int targetPipeline) {
