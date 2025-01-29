@@ -40,6 +40,9 @@ public class DragonsDriver extends LinearOpMode {
     public SuperStructure   superStructure;
     public MiniStructure    miniStructure;
 
+    public boolean isCanceled = false;
+    public boolean cancelHangPressed = false;
+
     //<editor-fold desc="--------------------- Part Speeds ---------------------">
     public static double SSSpeed      = 1;
     public static double SSCreepSpeed = 0.5;
@@ -55,19 +58,23 @@ public class DragonsDriver extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         //<editor-fold desc="--------------------- Housekeeping ---------------------">
-        boolean debugMode = false;
         telemetry.clearAll();
         telemetry.update();
         // clear exceptions, then re add stuff
         Global.exceptions.delete(0, exceptions.capacity()).append("The following were not found:\n");
         Global.exceptionOccurred = false;
-        telemetry        = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         Gamepad currentGamepad1  = new Gamepad();
         Gamepad currentGamepad2  = new Gamepad();
         Gamepad previousGamepad1 = new Gamepad();
         Gamepad previousGamepad2 = new Gamepad();
 
-        ElapsedTime time = new ElapsedTime();
+        boolean hanging = false;
+        boolean hangButtonPressed = false;
+        double hangButtonStartTime = 0;
+        double hangButtonHoldTime = 300; // milliseconds
+        double hangTime = 6; // the amount of time to hang for, in seconds
+        ElapsedTime hangTimer = new ElapsedTime();
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
@@ -101,8 +108,8 @@ public class DragonsDriver extends LinearOpMode {
         if (isStopRequested()) return;
         telemetry.clearAll();
 
-        time.reset();
-        time.startTime();
+        hangTimer.reset();
+        hangTimer.startTime();
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Set Ministructure Default Pos ---------------------">
@@ -133,12 +140,12 @@ public class DragonsDriver extends LinearOpMode {
             double  y                 = -currentGamepad1.left_stick_y,
                     x                 = currentGamepad1.left_stick_x,
                     rightX            = currentGamepad1.right_stick_x,
+
                     armUp             = currentGamepad1.left_trigger,
                     armDown           = currentGamepad1.right_trigger;
 
             boolean recalibrateIMU    = currentGamepad1.a,
-                    creepSpeed        = currentGamepad1.right_bumper,
-                    SSFullPower       = currentGamepad1.x;
+                    creepSpeed        = currentGamepad1.right_bumper;
 
 //                    slidesUp          = currentGamepad1.dpad_up,
 //                    slidesDown        = currentGamepad1.dpad_down;
@@ -160,6 +167,7 @@ public class DragonsDriver extends LinearOpMode {
             boolean openClaw       = currentGamepad2.right_bumper,
                     closeClaw      = currentGamepad2.left_bumper,
 
+                    //reset extension encoder positions
                     leftStickButton  = currentGamepad2.left_stick_button,
                     rightStickButton = currentGamepad2.right_stick_button,
 
@@ -170,7 +178,9 @@ public class DragonsDriver extends LinearOpMode {
 
                     bluePipeline   = currentGamepad2.x,
                     yellowPipeline = currentGamepad2.y,
-                    redPipeline    = currentGamepad2.b;
+                    redPipeline    = currentGamepad2.b,
+
+                    hangButton     = currentGamepad2.a;
 
             //</editor-fold>
 
@@ -239,6 +249,10 @@ public class DragonsDriver extends LinearOpMode {
                     speed = extSpeed;
                 }
 
+                if (leftStickButton && rightStickButton) {
+                    superStructure.extension.resetEncoders();
+                }
+
                 if (superStructure.arm.isValid
                         && superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN
                         && extensionPower > 0
@@ -250,7 +264,31 @@ public class DragonsDriver extends LinearOpMode {
                     currentGamepad1.rumble(1);
                 }
                 else {
-                    superStructure.extension.setPower(extensionPower * speed);
+                    if (!hanging)
+                        superStructure.extension.setPower(extensionPower * speed);
+                }
+
+                if (hangButton) {
+                    // runs the first time and only the first time every time this button is pressed
+                    if (!hangButtonPressed) {
+                        hangButtonPressed = true;
+                        hangButtonStartTime = hangTimer.milliseconds();
+                    }
+
+                    // if the time passed since the button was first pressed is greater than hangButtonHoldTime, do this
+                    if (hangTimer.milliseconds() >= (hangButtonStartTime + hangButtonHoldTime)) {
+                        // do hang
+                        telemetry.clearAll();
+                        telemetry.addLine("HANGING BEGUN!");
+                        telemetry.update();
+                        hanging = true;
+                    }
+                } else {
+                    hangButtonPressed = false;
+                }
+
+                if (hanging) {
+                    hanging = hangSequence(hangButton, superStructure.extension, hangTime);
                 }
 
                 telemetry.addData("Super Structure extension power", superStructure.extension.getPower());
@@ -404,5 +442,40 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.update();
         }
         //</editor-fold>
+    }
+
+    private boolean hangSequence (boolean cancelHang, SuperStructure.Extension superstructureExtension, double hangTime) {
+        ElapsedTime timer = new ElapsedTime();
+        ElapsedTime cancelTimer = new ElapsedTime();
+        double power = -1;
+
+
+        if (cancelHang) {
+            if (!cancelHangPressed) {
+                cancelHangPressed = true;
+                cancelTimer.reset();
+            }
+
+            if (cancelTimer.milliseconds() > 300) {
+                isCanceled = true;
+            }
+        } else {
+            cancelHangPressed = false;
+        }
+
+        // after time is up, fade out the power
+        if (timer.seconds() > hangTime || isCanceled) {
+            power = Math.min(0, (power + (timer.seconds() - (timer.startTime() + 6)) * 0.2));
+        }
+
+        superstructureExtension.setPower(power);
+
+        // if the power is faded out, stop hanging
+        if (power == 0) {
+            return false;
+        }
+
+        return true;
+
     }
 }

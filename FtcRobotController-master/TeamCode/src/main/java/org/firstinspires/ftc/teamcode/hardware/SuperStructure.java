@@ -158,6 +158,14 @@ public class SuperStructure {
 
             this.power = power;
         }
+
+        public void resetEncoders() {
+            leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        }
         
         public void setLeftPower (double power) {
             leftMotor.setPower(power);
