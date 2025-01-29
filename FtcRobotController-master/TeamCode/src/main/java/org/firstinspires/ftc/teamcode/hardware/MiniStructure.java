@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -140,15 +141,15 @@ public class MiniStructure {
 
     public static class Artie {
         public boolean isValid = true;
-        private Servo left;
-        private Servo right;
+        private CRServo left;
+        private CRServo right;
 //        private ArtiePos artiePos;
 //        private ArtiePos lastArtiePos;
 
         Artie(HardwareMap hardwareMap) {
             try {
-                left = hardwareMap.get(Servo.class, "leftArm");
-                left.scaleRange(0,1);
+                left = hardwareMap.get(CRServo.class, "leftArm");
+//                left.scaleRange(0,1);
             } catch (Exception e) {
                 Global.exceptions.append("leftArm\n");
                 Global.exceptionOccurred = true;
@@ -160,9 +161,9 @@ public class MiniStructure {
             // right motor - left goes back ( so 0)
 
             try {
-                right = hardwareMap.get(Servo.class, "rightArm");
-                right.setDirection(Servo.Direction.REVERSE);
-                right.scaleRange(0,1);
+                right = hardwareMap.get(CRServo.class, "rightArm");
+                right.setDirection(CRServo.Direction.REVERSE);
+//                right.scaleRange(0,1);
             } catch (Exception e) {
                 Global.exceptions.append("rightArm\n");
                 Global.exceptionOccurred = true;
@@ -182,41 +183,21 @@ public class MiniStructure {
 //            artiePos = pos;
 //        }
 
-        public void setPosition (double pos) {
-            left.setPosition(pos);
-            right.setPosition(pos);
-        }
-
-        public Positions getPosition(){
-            return new Positions(left.getPosition(), right.getPosition());
-        }
-
-//        public void updatePosition () {
-//            if (artiePos != lastArtiePos) {
-//                 todo : update these through testing
-//
-//                final double back = 1;
-//                final double down = 0.5;
-//                final double up   = 0.8;
-//
-//                if (artiePos == ArtiePos.UP)
-//                    moveServos(up);
-//                else if (artiePos == ArtiePos.DOWN)
-//                    moveServos(down);
-//                else if (artiePos == ArtiePos.BACK)
-//                    moveServos(back);
-//            }
-//
-//            lastArtiePos = artiePos;
+//        public void setPosition (double pos) {
+//            left.setPosition(pos);
+//            right.setPosition(pos);
 //        }
-//
+
+//        public Positions getPosition(){
+//            return new Positions(left.getPosition(), right.getPosition());
+//        }
 //        public ArtiePos getPosition () {
 //            return artiePos;
 //        }
 //
-//        public void setPower (double pow) {
-//            left.setPower(pow);
-//            right.setPower(pow);
-//        }
+        public void setPower (double pow) {
+            left.setPower(pow);
+            right.setPower(pow);
+        }
     }
 }

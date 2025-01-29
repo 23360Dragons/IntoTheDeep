@@ -109,7 +109,7 @@ public class DragonsDriver extends LinearOpMode {
 
         //<editor-fold desc="--------------------- Set Ministructure Default Pos ---------------------">
         miniStructure.twist.setPosition(1);
-        miniStructure.artie.setPosition(0.5);
+//        miniStructure.artie.setPosition(0.5);
         miniStructure.tilt.setPosition(0.8);
         //</editor-fold>
 
@@ -134,14 +134,16 @@ public class DragonsDriver extends LinearOpMode {
 
             double  y                 = -currentGamepad1.left_stick_y,
                     x                 = currentGamepad1.left_stick_x,
-                    rightX            = currentGamepad1.right_stick_x;
+                    rightX            = currentGamepad1.right_stick_x,
+                    armUp             = currentGamepad1.left_trigger,
+                    armDown           = currentGamepad1.right_trigger;
 
             boolean recalibrateIMU    = currentGamepad1.a,
                     creepSpeed        = currentGamepad1.right_bumper,
-                    SSFullPower       = currentGamepad1.x,
+                    SSFullPower       = currentGamepad1.x;
 
-                    slidesUp          = currentGamepad1.dpad_up,
-                    slidesDown        = currentGamepad1.dpad_down;
+//                    slidesUp          = currentGamepad1.dpad_up,
+//                    slidesDown        = currentGamepad1.dpad_down;
 
             // gamepad 2 (MANIPULATOR)
 
@@ -152,8 +154,10 @@ public class DragonsDriver extends LinearOpMode {
             double  /*articulationPower = -currentGamepad2.left_stick_y,*/
 //                    extensionPower    = -currentGamepad2.right_stick_y,
                     artiePower     = -currentGamepad2.right_stick_y,
-                    armUp          = currentGamepad2.left_trigger,
-                    armDown        = currentGamepad2.right_trigger;
+
+                    creepSpeed2    = currentGamepad2.right_trigger,
+
+                    slidesPower    = -currentGamepad2.left_stick_y;
 
             boolean openClaw       = currentGamepad2.right_bumper,
                     closeClaw      = currentGamepad2.left_bumper,
@@ -239,10 +243,11 @@ public class DragonsDriver extends LinearOpMode {
 
             if (superStructure.extension.isValid) {
                                         //dpad up              dpad down
-                double extensionPower = ((slidesUp ? 1 : 0) - (slidesDown ? 1 : 0));
+//                double extensionPower = ((slidesUp ? 1 : 0) - (slidesDown ? 1 : 0));
+                double extensionPower = slidesPower;
                 double speed;
 
-                if (creepSpeed) {
+                if (creepSpeed2 > 0.1) {
                     speed = extCreepSpeed;
                     telemetry.addLine("Ext Full Speed!");
                 } else {
@@ -375,24 +380,28 @@ public class DragonsDriver extends LinearOpMode {
 //                telemetry.addData("artie pos", artie.artie.getPosition().name());
 //                double power = armUp ? 1 : armDown ? -1 : 0;
 
-                double targetPosition;
+//                double targetPosition;
 
                 //             right stick y
-                double power = artiePower * (0.005 * armSpeed);
+//                double power = artiePower * (0.005 * armSpeed);
+
+                double power = artiePower/* * (1 * armSpeed)*/;
+
 //                if (superStructure.arm.isValid) {
 //                    if (superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN && superStructure.arm.getLastState() != SuperStructure.ARTICULATION_POS.DOWN)
 //                        miniStructure.artie.setPosition(0.7);
 //                }
 
-                targetPosition = miniStructure.artie.getPosition().avg + power;
+//                targetPosition = miniStructure.artie.getPosition().avg + power;
 
-                miniStructure.artie.setPosition(targetPosition);
+//                miniStructure.artie.setPosition(targetPosition);
 
+                miniStructure.artie.setPower(power);
 
                 telemetry.addData("MiniStructure artie power", power);
-                telemetry.addData("Ministructure Target Position", targetPosition);
-                telemetry.addData("MiniStructure artie L position", miniStructure.artie.getPosition().left);
-                telemetry.addData("MiniStructure artie R position", miniStructure.artie.getPosition().right);
+//                telemetry.addData("Ministructure Target Position", targetPosition);
+//                telemetry.addData("MiniStructure artie L position", miniStructure.artie.getPosition().left);
+//                telemetry.addData("MiniStructure artie R position", miniStructure.artie.getPosition().right);
 
             }
 

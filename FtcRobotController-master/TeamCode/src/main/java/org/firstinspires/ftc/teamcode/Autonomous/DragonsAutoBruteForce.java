@@ -83,6 +83,6 @@ public class DragonsAutoBruteForce extends LinearOpMode {
 //                robotMovement.strafe(48, true);
 
 //        }
-        robotMovement.strafe(84.0, true);
+        robotMovement.strafe(200, true);
     }
 }
