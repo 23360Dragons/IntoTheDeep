@@ -121,7 +121,7 @@ public class SuperStructure {
         private DcMotorEx leftMotor;
         private DcMotorEx rightMotor;
 
-        public double maxDownExtension = 1600;
+        public double maxDownExtension = 1350;
 
         public boolean isValid = true;
         private double power;
