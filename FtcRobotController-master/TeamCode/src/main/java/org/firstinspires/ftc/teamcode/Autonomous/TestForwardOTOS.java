@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
+import org.firstinspires.ftc.teamcode.hardware.DragonsOTOS;
+
 @Autonomous(name="TestForward12InchesOTOS", group="Tests")
 public class TestForwardOTOS extends LinearOpMode {
     // Declare motors
@@ -17,7 +19,7 @@ public class TestForwardOTOS extends LinearOpMode {
     DcMotor _rightBack;//Port3
     
     // Declare OTOS sensor
-    private SparkFunOTOS otos;
+    private DragonsOTOS otos;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -34,7 +36,7 @@ public class TestForwardOTOS extends LinearOpMode {
         _leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         
         // Initialize OTOS sensor 
-        otos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+        otos = new DragonsOTOS(this);
 
         // Wait for start
         waitForStart();
