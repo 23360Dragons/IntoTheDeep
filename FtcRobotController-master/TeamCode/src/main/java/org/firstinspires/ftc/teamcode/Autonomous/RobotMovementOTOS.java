@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.hardware.DragonsOTOS;
 
 public class RobotMovementOTOS {
 
@@ -14,15 +12,15 @@ public class RobotMovementOTOS {
     private DcMotor backRight;
 
     // Declare OTOS sensor
-    private SparkFunOTOS otos;
+    private DragonsOTOS otos;
 
-    public RobotMovementOTOS(DcMotor fl, DcMotor fr, DcMotor bl, DcMotor br, SparkFunOTOS otos) {
+    public RobotMovementOTOS(DcMotor fl, DcMotor fr, DcMotor bl, DcMotor br, DragonsOTOS otos) {
         frontLeft = fl;
         frontRight = fr;
         backLeft = bl;
         backRight = br;
         this.otos = otos;
-        configureOtos();
+//        configureOtos();
     }
 
     /**
@@ -33,7 +31,7 @@ public class RobotMovementOTOS {
      */
     public void moveForward(double distance, boolean forward) {
         // Get initial robot position
-        double initialX = otos.getPosition().x;
+        double initialX = otos.sparkFunOTOS.getPosition().x;
 
         // Set target position
         double targetX = initialX + (forward ? distance : -distance);
@@ -47,7 +45,7 @@ public class RobotMovementOTOS {
         backRight.setPower(power);
 
         // Move until target position is reached
-        while ((forward && otos.getPosition().x < targetX) || (!forward && otos.getPosition().x > targetX)) {
+        while ((forward && otos.sparkFunOTOS.getPosition().x < targetX) || (!forward && otos.sparkFunOTOS.getPosition().x > targetX)) {
             // Continue moving
         }
 
@@ -66,7 +64,7 @@ public class RobotMovementOTOS {
      */
     public void strafe(double distance, boolean right) {
         // Get initial robot position
-        double initialY = otos.getPosition().y; 
+        double initialY = otos.sparkFunOTOS.getPosition().y; 
 
         // Set target position
         double targetY = initialY + (right ? distance : -distance);
@@ -80,7 +78,7 @@ public class RobotMovementOTOS {
         backRight.setPower(right ? -power : power);
 
         // Move until target position is reached
-        while ((right && otos.getPosition().y < targetY) || (!right && otos.getPosition().y > targetY)) {
+        while ((right && otos.sparkFunOTOS.getPosition().y < targetY) || (!right && otos.sparkFunOTOS.getPosition().y > targetY)) {
             // Continue moving
         }
 
@@ -99,8 +97,8 @@ public class RobotMovementOTOS {
      */
     public void moveDiagonally(double distance, double angle) {
         // Get initial robot position
-        double initialX = otos.getPosition().x;
-        double initialY = otos.getPosition().y;
+        double initialX = otos.sparkFunOTOS.getPosition().x;
+        double initialY = otos.sparkFunOTOS.getPosition().y;
 
         // Calculate target position based on distance and angle
         double targetX = initialX + (distance * Math.cos(Math.toRadians(angle)));
@@ -123,7 +121,7 @@ public class RobotMovementOTOS {
         backRight.setPower(backRightPower);
 
         // Move until target position is reached (simplified)
-        while (Math.sqrt(Math.pow(otos.getPosition().x - targetX, 2) + Math.pow(otos.getPosition().y - targetY, 2)) > 0.1) { 
+        while (Math.sqrt(Math.pow(otos.sparkFunOTOS.getPosition().x - targetX, 2) + Math.pow(otos.sparkFunOTOS.getPosition().y - targetY, 2)) > 0.1) { 
             // Continue moving
         }
 
@@ -205,8 +203,8 @@ public class RobotMovementOTOS {
      * 
      *     ```java
      *     public double getRobotHeadingFromOTOS() {
-     *         double robotX = otos.getPosition().x;
-     *         double robotY = otos.getPosition().y;
+     *         double robotX = otos.sparkFunOTOS.getPosition().x;
+     *         double robotY = otos.sparkFunOTOS.getPosition().y;
      *         double heading = Math.atan2(robotY, robotX) * 180 / Math.PI; 
      *         return normalizeAngle(heading); 
      *     }
@@ -219,31 +217,31 @@ public class RobotMovementOTOS {
         return 0.0; // Placeholder
     }
     
-    
-    //using configuration from DragonsOTOS 
-    //how confident are we in those???
-    private void configureOtos() {
-    	// myOtos.setLinearUnit(DistanceUnit.METER);
-        otos.setLinearUnit(DistanceUnit.INCH);
-        // otos.setAngularUnit(AnguleUnit.RADIANS);
-        otos.setAngularUnit(AngleUnit.DEGREES);
-        
-        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, 0);
-        otos.setOffset(offset);
-        
-        otos.setLinearScalar(1.0);
-        otos.setAngularScalar(0.992);
-        
-        otos.calibrateImu();
-        otos.resetTracking();
-        
-        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
-        otos.setPosition(currentPosition);
-        
-        //why are these lines needed?
-        SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
-        SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
-        otos.getVersionInfo(hwVersion, fwVersion);
-        
-    }
+//    
+//    //using configuration from DragonsOTOS 
+//    //how confident are we in those???
+//    private void configureOtos() {
+//    	// myOtos.setLinearUnit(DistanceUnit.METER);
+//        otos.setLinearUnit(DistanceUnit.INCH);
+//        // otos.setAngularUnit(AnguleUnit.RADIANS);
+//        otos.setAngularUnit(AngleUnit.DEGREES);
+//        
+//        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, 0);
+//        otos.setOffset(offset);
+//        
+//        otos.setLinearScalar(1.0);
+//        otos.setAngularScalar(0.992);
+//        
+//        otos.calibrateImu();
+//        otos.resetTracking();
+//        
+//        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
+//        otos.setPosition(currentPosition);
+//        
+//        //why are these lines needed?
+//        SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
+//        SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
+//        otos.getVersionInfo(hwVersion, fwVersion);
+//        
+//    }
   }
