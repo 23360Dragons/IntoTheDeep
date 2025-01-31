@@ -12,6 +12,8 @@ public class TestClawMinistructure extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         m = new MiniStructure(this);
 
+        //todo test this
+
         waitForStart();
         if (!m.claw.isValid) return;
 

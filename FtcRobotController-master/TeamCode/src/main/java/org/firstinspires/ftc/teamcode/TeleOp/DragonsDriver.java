@@ -461,10 +461,6 @@ public class DragonsDriver extends LinearOpMode {
         opmode.telemetry.update();
 
         // if the power is faded out, stop hanging
-        if (power == 0) {
-            return false;
-        }
-        return true;
-
+        return power != 0;
     }
 }

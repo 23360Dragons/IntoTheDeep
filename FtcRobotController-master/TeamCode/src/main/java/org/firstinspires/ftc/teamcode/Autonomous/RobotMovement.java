@@ -231,6 +231,8 @@ public class RobotMovement {
 
         opmode.telemetry.addData("Target ticks", targetTicks);
         opmode.telemetry.update();
+
+        //todo look at this output
         opmode.sleep (1000);
 
         frontLeft.setTargetPosition((int) (targetTicks * frontLeftPower));
