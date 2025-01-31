@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
+import org.firstinspires.ftc.teamcode.hardware.DragonsOTOS;
+
 @Autonomous(name="TestStrafe12InchesRightOTOS", group="Tests")
 public class TestStrafeOTOS extends LinearOpMode {
     // Declare motors
@@ -16,7 +18,7 @@ public class TestStrafeOTOS extends LinearOpMode {
     DcMotor _rightBack;//Port3
     
     // Declare OTOS sensor
-    private SparkFunOTOS otos;
+    private DragonsOTOS otos;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -26,6 +28,12 @@ public class TestStrafeOTOS extends LinearOpMode {
         _leftBack = hardwareMap.get(DcMotor.class, "leftBack");
         _rightBack = hardwareMap.get(DcMotor.class, "rightBack");
 
+        _leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        _leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        _rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        _rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
         // Set motor directions
         //assumption - right side reversed - copied from CombinedMaster
         //that was the comment in CombinedMaster. Is this right?
@@ -33,7 +41,7 @@ public class TestStrafeOTOS extends LinearOpMode {
         _leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         
         // Initialize OTOS sensor 
-        otos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+        otos = new DragonsOTOS(this);
 
         // Wait for start
         waitForStart();

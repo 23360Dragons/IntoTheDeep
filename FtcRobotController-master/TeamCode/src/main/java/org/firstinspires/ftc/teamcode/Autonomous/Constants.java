@@ -7,9 +7,9 @@ public final class Constants {
     public static final double ROBOT_WIDTH = 18.0; // inches
     public static final double WHEEL_DIAMETER = 3.7795; // inches
     public static final String TEAM_NAME = "Dragons Anonymous";
-    public static final boolean Forward = true;
+    public static boolean Forward = true;
     public static final boolean Reverse = false;
-    public static final boolean Right = true;
+    public static boolean Right = true;
     public static final boolean Left = false;
 
 

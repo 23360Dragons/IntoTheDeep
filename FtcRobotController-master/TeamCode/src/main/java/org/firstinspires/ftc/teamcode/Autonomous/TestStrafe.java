@@ -36,17 +36,16 @@ public class TestStrafe extends LinearOpMode {
 
         // Strafe right 12 inches
         robotMovement.strafe(12.0, Constants.Right);
+        sleep(500);
+        robotMovement.rotate(180, true);
+        robotMovement.strafe(12.0, Constants.Left);
+        sleep(1000);
+        robotMovement.moveDiagonallyLeft(6.0, 45, this);
 
         // Stop motors (optional, as subroutine already stops them)
         _leftFront.setPower(0);
         _rightFront.setPower(0);
         _leftBack.setPower(0);
         _rightBack.setPower(0);
-
-        // Set motors to run without encoder
-        _leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        _rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        _leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        _rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 }

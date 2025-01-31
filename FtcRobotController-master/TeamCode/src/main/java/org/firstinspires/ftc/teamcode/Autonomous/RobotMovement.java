@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.teamcode.utils.MoveRobot;
+
+import java.util.Arrays;
 
 public class RobotMovement {
 
@@ -16,6 +21,13 @@ public class RobotMovement {
         backRight = br;
     }
 
+    private void resetEncoders() {
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
     /**
      * Moves the robot forward or backward for the specified distance.
      *
@@ -25,10 +37,11 @@ public class RobotMovement {
     public void moveForward(double distance, boolean forward) {
         // Calculate target encoder positions
         double targetTicks = distance * Constants.TICKS_PER_INCH;
+        targetTicks*=0.9;
 
-        if (!forward) {
-            targetTicks = -targetTicks;
-        }
+//        if (!forward) {
+//            targetTicks = -targetTicks;
+//        }
 
         frontLeft.setTargetPosition((int) targetTicks);
         frontRight.setTargetPosition((int) targetTicks);
@@ -63,15 +76,18 @@ public class RobotMovement {
      */
     public void strafe(double distance, boolean right) {
         double targetTicks = distance * Constants.TICKS_PER_INCH;
+        targetTicks*=1.75;
 
-        if (!right) {
-            targetTicks = -targetTicks;
-        }
+//        if (right) {
+//            targetTicks = -targetTicks;
+//        }
 
-        frontLeft.setTargetPosition((int) (right ? -targetTicks : targetTicks));
-        frontRight.setTargetPosition((int) (right ? targetTicks : -targetTicks));
-        backLeft.setTargetPosition((int) (right ? targetTicks : -targetTicks));
-        backRight.setTargetPosition((int) (right ? -targetTicks : targetTicks));
+        resetEncoders();
+
+        frontLeft.setTargetPosition((int) (right ? targetTicks : -targetTicks));
+        frontRight.setTargetPosition((int) (right ? -targetTicks : targetTicks));
+        backLeft.setTargetPosition((int) (right ? -targetTicks : targetTicks));
+        backRight.setTargetPosition((int) (right ? targetTicks : -targetTicks));
 
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -111,6 +127,8 @@ public class RobotMovement {
         if (!clockwise) {
             targetTicks = -targetTicks;
         }
+
+        resetEncoders();
 
         // Set motor target positions
         frontLeft.setTargetPosition((int) targetTicks);
@@ -160,6 +178,8 @@ public class RobotMovement {
 //        frontLeftPower *= -1;
 //        backRightPower *= -1;
 
+        resetEncoders();
+
         double targetTicks = distance * Constants.TICKS_PER_INCH;
 
         frontLeft.setTargetPosition((int) (targetTicks * frontLeftPower));
@@ -186,13 +206,21 @@ public class RobotMovement {
         backLeft.setPower(0);
         backRight.setPower(0);
     }
-    public void moveDiagonallyLeft(double distance, double angle) {
-        double angleRadians = Math.toRadians(angle);
+    public void moveDiagonallyLeft(double distance, double angle, LinearOpMode opmode) {
+//        double angleRadians = Math.toRadians(angle);
 
-        double frontLeftPower = 0;
-        double frontRightPower = Math.cos(angleRadians);
-        double backLeftPower = Math.cos(angleRadians);
-        double backRightPower = 0;
+        double[] drivePowers = MoveRobot.moveRobotAngle(angle, 0.5);
+
+        double frontLeftPower  = drivePowers[0];
+        double frontRightPower = drivePowers[1];
+        double backLeftPower   = drivePowers[2];
+        double backRightPower  = drivePowers[3];
+
+        resetEncoders();
+
+        opmode.telemetry.addLine(Arrays.toString(drivePowers));
+        opmode.telemetry.update();
+
 
         // Adjust power ratios for mecanum drive (simplified)
 //        frontLeftPower *= -1;
