@@ -47,10 +47,11 @@ public class DragonsDriver extends LinearOpMode {
     public static double SSSpeed      = 1;
     public static double SSCreepSpeed = 0.5;
     public static double extSpeed     = 1;
-    public static double extCreepSpeed = 0.7;
+    public static double extCreepSpeed = 0.75;
     public static double twistSpeed   = 50;
     public static double tiltSpeed    = 30;
     public static double armSpeed     = 5;
+    public static double armCreepSpeed = 3;
     //</editor-fold>
 
     //</editor-fold>
@@ -113,9 +114,6 @@ public class DragonsDriver extends LinearOpMode {
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Set Ministructure Default Pos ---------------------">
-        miniStructure.twist.setPosition(1);
-//        miniStructure.artie.setPosition(0.5);
-        miniStructure.tilt.setPosition(0.8);
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Main Loop ---------------------">
@@ -145,27 +143,16 @@ public class DragonsDriver extends LinearOpMode {
                     armDown           = currentGamepad1.right_trigger;
 
             boolean recalibrateIMU    = currentGamepad1.a,
-                    creepSpeed        = currentGamepad1.right_bumper;
-
-//                    slidesUp          = currentGamepad1.dpad_up,
-//                    slidesDown        = currentGamepad1.dpad_down;
+                    creepSpeed1       = currentGamepad1.right_bumper;
 
             // gamepad 2 (MANIPULATOR)
 
-            //TO DO move arm to the Drivers gamepad
-            //TO DO either LB and LT, or LT and RT
-            //TO DO what makes the most sense?
+            double  artiePower  = -currentGamepad2.right_stick_y,
 
-            double  /*articulationPower = -currentGamepad2.left_stick_y,*/
-//                    extensionPower    = -currentGamepad2.right_stick_y,
-                    artiePower     = -currentGamepad2.right_stick_y,
+                    slidesPower = -currentGamepad2.left_stick_y;
 
-                    creepSpeed2    = currentGamepad2.right_trigger,
-
-                    slidesPower    = -currentGamepad2.left_stick_y;
-
-            boolean openClaw       = currentGamepad2.right_bumper,
-                    closeClaw      = currentGamepad2.left_bumper,
+            boolean fullSpeed2     = currentGamepad2.right_bumper,
+                    toggleClaw     = currentGamepad2.left_bumper,
 
                     //reset extension encoder positions
                     leftStickButton  = currentGamepad2.left_stick_button,
@@ -197,7 +184,7 @@ public class DragonsDriver extends LinearOpMode {
                 double velLimitPwr = articulationPower;
                 double speed;
 
-                if (creepSpeed) {
+                if (creepSpeed1) {
                     speed = SSCreepSpeed;
                 } else {
                     speed = SSSpeed;
@@ -240,13 +227,12 @@ public class DragonsDriver extends LinearOpMode {
             if (superStructure.extension.isValid) {
                                         //dpad up              dpad down
 //                double extensionPower = ((slidesUp ? 1 : 0) - (slidesDown ? 1 : 0));
-                double extensionPower = slidesPower;
                 double speed;
 
-                if (creepSpeed2 > 0.1) {
-                    speed = extCreepSpeed;
-                } else {
+                if (fullSpeed2) {
                     speed = extSpeed;
+                } else {
+                    speed = extCreepSpeed;
                 }
 
                 if (leftStickButton && rightStickButton) {
@@ -255,7 +241,7 @@ public class DragonsDriver extends LinearOpMode {
 
                 if (superStructure.arm.isValid
                         && superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN
-                        && extensionPower > 0
+                        && slidesPower > 0
                         && superStructure.extension.getPosition().avg >= superStructure.extension.maxDownExtension
                 ) {
                     telemetry.addLine("Extension cannot extend more, as the arms are down!");
@@ -265,7 +251,7 @@ public class DragonsDriver extends LinearOpMode {
                 }
                 else {
                     if (!hanging)
-                        superStructure.extension.setPower(extensionPower * speed);
+                        superStructure.extension.setPower(slidesPower * speed);
                 }
 
                 if (hangButton) {
@@ -333,29 +319,23 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.addLine("-----Mini Structure-----");
 
             if (miniStructure.claw.isValid) {
-                //  right bumper
-                if (openClaw) {
-                    miniStructure.claw.open();
-                    telemetry.addLine("Open claw");
-                }
-
                 //  left bumper
-                if (closeClaw) {
-                    miniStructure.claw.close();
-                    telemetry.addLine("Close claw");
+                if (toggleClaw) {
+                    miniStructure.claw.toggle();
                 }
 
                 telemetry.addData("claw Position", miniStructure.claw.getPosition());
             }
 
             if (miniStructure.twist.isValid) {
-                //             dpad left                        dpad right
-                double power = twistLeft ? 0.001 * twistSpeed : twistRight ? -0.001 * twistSpeed : 0;
-                double targetPosition = miniStructure.twist.getPosition() + power;
+//                             dpad left                        dpad right
+//                double power = twistLeft ? 0.001 * twistSpeed : twistRight ? -0.001 * twistSpeed : 0;
+//                double targetPosition = miniStructure.twist.getPosition() + power;
 
-                miniStructure.twist.setPosition(targetPosition);
+                if (twistLeft || twistRight) {
+                    miniStructure.twist.togglePos();
+                }
 
-                telemetry.addData("MiniStructure twist power", power);
                 telemetry.addData("MiniStructure twist position", miniStructure.twist.getPosition());
             }
 
@@ -371,23 +351,26 @@ public class DragonsDriver extends LinearOpMode {
 
 
             if (miniStructure.artie.isValid) {
-//                double targetPosition;
+                double targetPosition;
+                double speed;
+
+                if (fullSpeed2) {
+                    speed = armSpeed;
+                } else {
+                    speed = armCreepSpeed;
+                }
 
                 //             right stick y
-//                double power = artiePower * (0.005 * armSpeed);
+                double power = artiePower * (0.005 * armSpeed);
 
-                double power = artiePower/* * (1 * armSpeed)*/;
+                targetPosition = miniStructure.artie.getPosition().avg + power;
 
-//                targetPosition = miniStructure.artie.getPosition().avg + power;
-
-//                miniStructure.artie.setPosition(targetPosition);
-
-                miniStructure.artie.setPower(power);
+                miniStructure.artie.setPosition(targetPosition);
 
                 telemetry.addData("MiniStructure artie power", power);
-//                telemetry.addData("Ministructure Target Position", targetPosition);
-//                telemetry.addData("MiniStructure artie L position", miniStructure.artie.getPosition().left);
-//                telemetry.addData("MiniStructure artie R position", miniStructure.artie.getPosition().right);
+                telemetry.addData("Ministructure Target Position", targetPosition);
+                telemetry.addData("MiniStructure artie L position", miniStructure.artie.getPosition().left);
+                telemetry.addData("MiniStructure artie R position", miniStructure.artie.getPosition().right);
             }
 
             telemetry.addLine();
@@ -414,7 +397,7 @@ public class DragonsDriver extends LinearOpMode {
 
                 double driveSpeed = 1;
 
-                if (creepSpeed) {
+                if (creepSpeed1) {
                     driveSpeed *= 0.6;
                 }
 
@@ -474,7 +457,7 @@ public class DragonsDriver extends LinearOpMode {
         if (power == 0) {
             return false;
         }
-
+ //todo make this whole thing into telemetry
         return true;
 
     }
