@@ -76,7 +76,7 @@ public class RobotMovement {
      */
     public void strafe(double distance, boolean right) {
         double targetTicks = distance * Constants.TICKS_PER_INCH;
-        targetTicks*=1.75;
+        targetTicks*=1.74;
 
 //        if (right) {
 //            targetTicks = -targetTicks;
@@ -84,10 +84,10 @@ public class RobotMovement {
 
         resetEncoders();
 
-        frontLeft.setTargetPosition((int) (right ? targetTicks : -targetTicks));
-        frontRight.setTargetPosition((int) (right ? -targetTicks : targetTicks));
-        backLeft.setTargetPosition((int) (right ? -targetTicks : targetTicks));
-        backRight.setTargetPosition((int) (right ? targetTicks : -targetTicks));
+        frontLeft.setTargetPosition((int)  (right ?  targetTicks  : -targetTicks));
+        frontRight.setTargetPosition((int) (right ? -targetTicks  :  targetTicks));
+        backLeft.setTargetPosition((int)   (right ? -targetTicks  :  targetTicks));
+        backRight.setTargetPosition((int)  (right ?  targetTicks  : -targetTicks));
 
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -192,10 +192,10 @@ public class RobotMovement {
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setPower(Math.abs(frontLeftPower));
-        frontRight.setPower(Math.abs(frontRightPower));
-        backLeft.setPower(Math.abs(backLeftPower));
-        backRight.setPower(Math.abs(backRightPower));
+        frontLeft.setPower((frontLeftPower));
+        frontRight.setPower((frontRightPower));
+        backLeft.setPower((backLeftPower));
+        backRight.setPower((backRightPower));
 
         while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
             // Do nothing, just wait
@@ -220,6 +220,7 @@ public class RobotMovement {
 
         opmode.telemetry.addLine(Arrays.toString(drivePowers));
         opmode.telemetry.update();
+        opmode.sleep(1000);
 
 
         // Adjust power ratios for mecanum drive (simplified)
@@ -227,6 +228,10 @@ public class RobotMovement {
 //        backRightPower *= -1;
 
         double targetTicks = distance * Constants.TICKS_PER_INCH;
+
+        opmode.telemetry.addData("Target ticks", targetTicks);
+        opmode.telemetry.update();
+        opmode.sleep (1000);
 
         frontLeft.setTargetPosition((int) (targetTicks * frontLeftPower));
         frontRight.setTargetPosition((int) (targetTicks * frontRightPower));
@@ -238,10 +243,10 @@ public class RobotMovement {
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setPower(Math.abs(frontLeftPower));
-        frontRight.setPower(Math.abs(frontRightPower));
-        backLeft.setPower(Math.abs(backLeftPower));
-        backRight.setPower(Math.abs(backRightPower));
+        frontLeft.setPower((frontLeftPower));
+        frontRight.setPower((frontRightPower));
+        backLeft.setPower((backLeftPower));
+        backRight.setPower((backRightPower));
 
         while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
             // Do nothing, just wait
@@ -252,7 +257,4 @@ public class RobotMovement {
         backLeft.setPower(0);
         backRight.setPower(0);
     }
-
-
-
 }

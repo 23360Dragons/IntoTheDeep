@@ -146,11 +146,11 @@ public class MiniStructure {
             }
         }
 
-        private void open  ()  {
+        public void open  ()  {
             claw.setPosition(openRotation);
         }
 
-        private void close () {
+        public void close () {
             claw.setPosition(closedRotation);
         }
 

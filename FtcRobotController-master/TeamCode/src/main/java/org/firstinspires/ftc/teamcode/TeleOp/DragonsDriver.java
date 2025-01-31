@@ -274,8 +274,10 @@ public class DragonsDriver extends LinearOpMode {
                 }
 
                 if (hanging) {
-                    hanging = hangSequence(hangButton, superStructure.extension, hangTime);
+                    hanging = hangSequence(hangButton, superStructure.extension, hangTime, this);
                 }
+
+                telemetry.addData("Hanging value", hanging);
 
                 telemetry.addData("Super Structure extension power", superStructure.extension.getPower());
                 telemetry.addData("Super Structure extension L position", superStructure.extension.getPosition().left);
@@ -427,7 +429,7 @@ public class DragonsDriver extends LinearOpMode {
         //</editor-fold>
     }
 
-    private boolean hangSequence (boolean cancelHang, SuperStructure.Extension superstructureExtension, double hangTime) {
+    private boolean hangSequence (boolean cancelHang, SuperStructure.Extension superstructureExtension, double hangTime, LinearOpMode opmode) {
         ElapsedTime timer = new ElapsedTime();
         ElapsedTime cancelTimer = new ElapsedTime();
         double power = -1;
@@ -451,13 +453,17 @@ public class DragonsDriver extends LinearOpMode {
             power = Math.min(0, (power + (timer.seconds() - (timer.startTime() + 6)) * 0.2));
         }
 
-        superstructureExtension.setPower(power);
+//        superstructureExtension.setPower(power);
+
+        //todo verify these values are expected, then implement it
+        opmode.telemetry.clearAll();
+        opmode.telemetry.addData("Superstructure Hang Power", power);
+        opmode.telemetry.update();
 
         // if the power is faded out, stop hanging
         if (power == 0) {
             return false;
         }
- //todo make this whole thing into telemetry
         return true;
 
     }
