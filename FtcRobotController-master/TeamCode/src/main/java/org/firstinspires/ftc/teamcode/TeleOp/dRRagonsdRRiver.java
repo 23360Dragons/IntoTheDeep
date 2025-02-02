@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.utils.Global;
 import org.firstinspires.ftc.teamcode.Autonomous.dRRagonsAuto;
 import java.util.List;
 @Config
-@TeleOp(name = "dRRagonsdRRiver", group = "TeleOp")
+//@TeleOp(name = "dRRagonsdRRiver", group = "TeleOp")
 public class dRRagonsdRRiver extends LinearOpMode {
     double y = -gamepad2.left_stick_y;
     public double amnt;

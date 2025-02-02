@@ -35,12 +35,7 @@ public class TestStrafe extends LinearOpMode {
         RobotMovement robotMovement = new RobotMovement(_leftFront, _rightFront, _leftBack, _rightBack);
 
         // Strafe right 12 inches
-        robotMovement.strafe(12.0, Constants.Right);
-        sleep(500);
-        robotMovement.rotate(180, true);
-        robotMovement.strafe(12.0, Constants.Left);
-        sleep(1000);
-        robotMovement.moveDiagonallyLeft(6.0, 45, this);
+        robotMovement.strafe(24, Constants.Right, telemetry);
 
         // Stop motors (optional, as subroutine already stops them)
         _leftFront.setPower(0);

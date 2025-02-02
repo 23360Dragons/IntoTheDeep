@@ -45,7 +45,7 @@ public class MiniStructure {
         public boolean isValid = true;
         private Servo servo;
 
-        double tiltStartPos  = 0.8;
+        double tiltStartPos  = 0.5;
 
         Tilt (HardwareMap hardwareMap) {
             try {
@@ -111,7 +111,7 @@ public class MiniStructure {
             return servo.getPosition();
         }
 
-        private void setPosition (double rotation) {
+        public void setPosition (double rotation) {
             servo.setPosition(rotation);
         }
     }
