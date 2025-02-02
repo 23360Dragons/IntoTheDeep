@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
+
 @Autonomous (preselectTeleOp = "DragonsDriver")
 public class DragonsAutoBruteObZone extends LinearOpMode {
     public DcMotorEx leftFront, leftBack, rightBack, rightFront;
@@ -30,13 +32,13 @@ public class DragonsAutoBruteObZone extends LinearOpMode {
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        RobotMovement robotMovement = new RobotMovement(leftFront, rightFront, leftBack, rightBack);
+        AutoRobotMovement autoRobotMovement = new AutoRobotMovement(leftFront, rightFront, leftBack, rightBack);
 
 
         waitForStart();
         sleep (20000);
-        robotMovement.strafe(44, true, telemetry);
+        autoRobotMovement.strafe(44, true);
 
-        //robotMovement.strafe(200, true);
+        //autoRobotMovement.strafe(200, true);
     }
 }

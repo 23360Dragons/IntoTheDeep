@@ -1,12 +1,14 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.Tests;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
 import org.firstinspires.ftc.teamcode.hardware.DragonsOTOS;
+import org.firstinspires.ftc.teamcode.utils.Global;
 
+@Disabled
 @Autonomous(name="TestStrafe12InchesRightOTOS", group="Tests")
 public class TestStrafeOTOS extends LinearOpMode {
     // Declare motors
@@ -46,11 +48,11 @@ public class TestStrafeOTOS extends LinearOpMode {
         // Wait for start
         waitForStart();
 
-         // Create an instance of RobotMovement
+         // Create an instance of AutoRobotMovement
         RobotMovementOTOS robotMovement = new RobotMovementOTOS(_leftFront, _rightFront, _leftBack, _rightBack, otos);
 
         // Strafe right 12 inches
-        robotMovement.strafe(12.0, Constants.Right);
+        robotMovement.strafe(12.0, Global.Right);
 
         // Stop motors (optional, as subroutine already stops them)
         _leftFront.setPower(0);

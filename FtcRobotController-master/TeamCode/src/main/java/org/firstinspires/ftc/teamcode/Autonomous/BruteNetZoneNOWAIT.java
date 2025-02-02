@@ -5,10 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Const;
+import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
+import org.firstinspires.ftc.teamcode.utils.Global;
 
 @Autonomous (preselectTeleOp = "DragonsDriver")
 public class BruteNetZoneNOWAIT extends LinearOpMode {
@@ -34,15 +33,15 @@ public class BruteNetZoneNOWAIT extends LinearOpMode {
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        RobotMovement robotMovement = new RobotMovement(leftFront, rightFront, leftBack, rightBack);
+        AutoRobotMovement autoRobotMovement = new AutoRobotMovement(leftFront, rightFront, leftBack, rightBack);
 
         waitForStart();
-//        robotMovement.moveForward(3,  Constants.Forward);
-        robotMovement.strafe(     14, Constants.Left, telemetry);
+//        autoRobotMovement.moveForward(3,  Global.Forward);
+        autoRobotMovement.strafe(     14, Global.Left);
 
         sleep (500);
 
-        robotMovement.strafe(     100, Constants.Right, telemetry);
+        autoRobotMovement.strafe(     100, Global.Right);
 
     }
 }

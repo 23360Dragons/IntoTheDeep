@@ -1,20 +1,18 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.utils;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.utils.MoveRobot;
-
 import java.util.Arrays;
 
-public class RobotMovement {
+public class AutoRobotMovement {
 
     private DcMotor frontLeft;
     private DcMotor frontRight;
     private DcMotor backLeft;
     private DcMotor backRight;
 
-    public RobotMovement(DcMotor fl, DcMotor fr, DcMotor bl, DcMotor br) {
+    public AutoRobotMovement(DcMotor fl, DcMotor fr, DcMotor bl, DcMotor br) {
         frontLeft = fl;
         frontRight = fr;
         backLeft = bl;
@@ -36,7 +34,7 @@ public class RobotMovement {
      */
     public void moveForward(double distance, boolean forward) {
         // Calculate target encoder positions
-        double targetTicks = distance * Constants.TICKS_PER_INCH;
+        double targetTicks = distance * Global.TICKS_PER_INCH;
         targetTicks*=0.9;
 
 //        if (!forward) {
@@ -75,7 +73,7 @@ public class RobotMovement {
      * @param right    True to move right, false to move left.
      */
     public void strafe(double distance, boolean right) {
-        double targetTicks = distance * Constants.TICKS_PER_INCH;
+        double targetTicks = distance * Global.TICKS_PER_INCH;
         targetTicks*=1.74;
 
 //        if (right) {
@@ -116,12 +114,12 @@ public class RobotMovement {
      */
     public void rotate(double degrees, boolean clockwise) {
         // Calculate the distance traveled by each wheel during rotation
-        double wheelCircumference = Math.PI * Constants.ROBOT_WIDTH;
+        double wheelCircumference = Math.PI * Global.ROBOT_WIDTH;
         double distancePerDegree = wheelCircumference / 360.0;
         double rotationDistance = degrees * distancePerDegree;
 
         // Calculate target encoder counts
-        double targetTicks = rotationDistance * Constants.TICKS_PER_INCH;
+        double targetTicks = rotationDistance * Global.TICKS_PER_INCH;
 
         // Adjust targetTicks based on rotation direction
         if (!clockwise) {
@@ -180,7 +178,7 @@ public class RobotMovement {
 
         resetEncoders();
 
-        double targetTicks = distance * Constants.TICKS_PER_INCH;
+        double targetTicks = distance * Global.TICKS_PER_INCH;
 
         frontLeft.setTargetPosition((int) (targetTicks * frontLeftPower));
         frontRight.setTargetPosition((int) (targetTicks * frontRightPower));
@@ -227,7 +225,7 @@ public class RobotMovement {
 //        frontLeftPower *= -1;
 //        backRightPower *= -1;
 
-        double targetTicks = distance * Constants.TICKS_PER_INCH;
+        double targetTicks = distance * Global.TICKS_PER_INCH;
 
         opmode.telemetry.addData("Target ticks", targetTicks);
         opmode.telemetry.update();
