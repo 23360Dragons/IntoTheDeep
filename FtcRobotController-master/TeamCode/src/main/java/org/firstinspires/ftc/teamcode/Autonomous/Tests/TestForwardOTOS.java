@@ -43,10 +43,10 @@ public class TestForwardOTOS extends LinearOpMode {
         waitForStart();
 
         // Create an instance of AutoRobotMovement
-        RobotMovementOTOS robotMovement = new RobotMovementOTOS(_leftFront, _rightFront, _leftBack, _rightBack, otos);
+        RobotMovementOTOS robotMovementOTOS = new RobotMovementOTOS(_leftFront, _rightFront, _leftBack, _rightBack, otos);
 
         // Move forward 12 inches
-        robotMovement.moveForward(12.0, Global.Forward);
+        robotMovementOTOS.moveForward(12.0, Global.Forward);
 
         // Stop motors (optional, as subroutine already stops them)
         _leftFront.setPower(0);

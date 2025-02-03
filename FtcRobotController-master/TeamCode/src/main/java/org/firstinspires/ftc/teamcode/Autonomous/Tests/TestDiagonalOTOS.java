@@ -42,10 +42,10 @@ public class TestDiagonalOTOS extends LinearOpMode {
         waitForStart();
 
         // Create an instance of AutoRobotMovement
-        RobotMovementOTOS robotMovement = new RobotMovementOTOS(_leftFront, _rightFront, _leftBack, _rightBack, otos);
+        RobotMovementOTOS robotMovementOTOS = new RobotMovementOTOS(_leftFront, _rightFront, _leftBack, _rightBack, otos);
 
         // Move diagonally 12 inches at 45 degrees
-        robotMovement.moveDiagonally(12.0, 45.0);
+        robotMovementOTOS.moveDiagonally(12.0, 45.0);
 
         // Stop motors (optional, as subroutine already stops them)
         _leftFront.setPower(0);

@@ -35,7 +35,6 @@ public class TestStrafeOTOS extends LinearOpMode {
         _rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
         // Set motor directions
         //assumption - right side reversed - copied from CombinedMaster
         //that was the comment in CombinedMaster. Is this right?
@@ -49,10 +48,10 @@ public class TestStrafeOTOS extends LinearOpMode {
         waitForStart();
 
          // Create an instance of AutoRobotMovement
-        RobotMovementOTOS robotMovement = new RobotMovementOTOS(_leftFront, _rightFront, _leftBack, _rightBack, otos);
+        RobotMovementOTOS robotMovementOTOS = new RobotMovementOTOS(_leftFront, _rightFront, _leftBack, _rightBack, otos);
 
         // Strafe right 12 inches
-        robotMovement.strafe(12.0, Global.Right);
+        robotMovementOTOS.strafe(12.0, Global.Right);
 
         // Stop motors (optional, as subroutine already stops them)
         _leftFront.setPower(0);

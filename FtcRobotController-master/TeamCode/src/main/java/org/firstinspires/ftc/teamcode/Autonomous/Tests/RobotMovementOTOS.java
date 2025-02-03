@@ -31,10 +31,10 @@ public class RobotMovementOTOS {
      */
     public void moveForward(double distance, boolean forward) {
         // Get initial robot position
-        double initialX = otos.sparkFunOTOS.getPosition().x;
+        double initialY = otos.sparkFunOTOS.getPosition().y;
 
         // Set target position
-        double targetX = initialX + (forward ? distance : -distance);
+        double targetY = initialY + (forward ? distance : -distance);
 
         // Set motor power
         double power = forward ? 0.5 : -0.5;
@@ -45,7 +45,7 @@ public class RobotMovementOTOS {
         backRight.setPower(power);
 
         // Move until target position is reached
-        while ((forward && otos.sparkFunOTOS.getPosition().x < targetX) || (!forward && otos.sparkFunOTOS.getPosition().x > targetX)) {
+        while ((Math.abs(targetY - otos.sparkFunOTOS.getPosition().y)) > 0.5) {
             // Continue moving
         }
 
@@ -64,21 +64,21 @@ public class RobotMovementOTOS {
      */
     public void strafe(double distance, boolean right) {
         // Get initial robot position
-        double initialY = otos.sparkFunOTOS.getPosition().y; 
+        double initialX = otos.sparkFunOTOS.getPosition().x;
 
         // Set target position
-        double targetY = initialY + (right ? distance : -distance);
+        double targetX = initialX + (right ? distance : -distance);
 
         // Set motor power (adjust as needed)
         double power = right ? 0.5 : -0.5;
 
-        frontLeft.setPower(right ? -power : power); 
-        frontRight.setPower(right ? power : -power);
-        backLeft.setPower(right ? power : -power);
-        backRight.setPower(right ? -power : power);
+        frontLeft.setPower(right ? power : -power);
+        frontRight.setPower(right ? -power : power);
+        backLeft.setPower(right ? -power : power);
+        backRight.setPower(right ? power : -power);
 
         // Move until target position is reached
-        while ((right && otos.sparkFunOTOS.getPosition().y < targetY) || (!right && otos.sparkFunOTOS.getPosition().y > targetY)) {
+        while ((Math.abs(targetX - otos.sparkFunOTOS.getPosition().x)) > 0.5) {
             // Continue moving
         }
 
@@ -214,7 +214,7 @@ public class RobotMovementOTOS {
      */
     private double getRobotHeadingFromOTOS() {
         // Implement this method based on your specific OTOS sensor and robot configuration
-        return 0.0; // Placeholder
+        return otos.sparkFunOTOS.getPosition().h;
     }
     
 //    

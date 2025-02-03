@@ -31,8 +31,8 @@ public class DragonsOTOS {
         // set, the default is inches and degrees. Note that this setting is not
         // persisted in the sensor, so you need to set at the start of all your
         // OpModes if using the non-default value.
-        sparkFunOTOS.setLinearUnit(DistanceUnit.METER);
-//        sparkFunOTOS.setLinearUnit(DistanceUnit.INCH);
+//        sparkFunOTOS.setLinearUnit(DistanceUnit.METER);
+        sparkFunOTOS.setLinearUnit(DistanceUnit.INCH);
 //        sparkFunOTOS.setAngularUnit(AngleUnit.RADIANS);
         sparkFunOTOS.setAngularUnit(AngleUnit.DEGREES);
 
