@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import static org.firstinspires.ftc.teamcode.utils.Global.BLUE;
-import static org.firstinspires.ftc.teamcode.utils.Global.RED;
-import static org.firstinspires.ftc.teamcode.utils.Global.YELLOW;
 import static org.firstinspires.ftc.teamcode.utils.Global.exceptions;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -25,8 +22,7 @@ import org.firstinspires.ftc.teamcode.hardware.DragonsLimelight;
 import org.firstinspires.ftc.teamcode.hardware.DragonsOTOS;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
-import java.text.DecimalFormat;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 @Config
 @TeleOp(name = "DragonsDriver", group = "TeleOp")
@@ -54,6 +50,14 @@ public class DragonsDriver extends LinearOpMode {
     public static double normalDriveSpeed = 1;
     public static double alternateDriveSpeed = 0.6;
     //</editor-fold>
+
+    public static double extensionKp = 0;
+
+    public static double artieKp = 0;
+    public static double artieKi = 0;
+    public static double artieKd = 0;
+    public static double artieKv = 0;
+    public static double artieKs = 0;
 
     //</editor-fold>
 
@@ -105,6 +109,9 @@ public class DragonsDriver extends LinearOpMode {
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Wait For Start ---------------------">
+        List<LynxModule> hubs = hardwareMap.getAll(LynxModule.class);
+        hubs.forEach(hub -> hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
+
         waitForStart();
 
         if (isStopRequested()) return;
@@ -121,6 +128,8 @@ public class DragonsDriver extends LinearOpMode {
         while (opModeIsActive()) {
 
             //<editor-fold desc=" --------------------- Input ---------------------">
+            hubs.forEach(LynxModule::clearBulkCache);
+
             // Store the gamepad values from the previous loop, which
             // does the same thing as copying them at the end. In the first loop
             // through, it will make it a new gamepad.
@@ -144,7 +153,11 @@ public class DragonsDriver extends LinearOpMode {
                     armDown           = currentGamepad1.right_trigger;
 
             boolean recalibrateIMU    = currentGamepad1.a,
-                    creepSpeed1       = currentGamepad1.right_bumper;
+                    creepSpeed1       = currentGamepad1.right_bumper,
+
+                    SSFull = currentGamepad1.y, prevSSFull = previousGamepad1.y,
+                    SSHang = currentGamepad1.x, prevSSHang = previousGamepad1.x,
+                    SSDown = currentGamepad1.b, prevSSDown = previousGamepad1.b;
 
             // gamepad 2 (MANIPULATOR)
 
@@ -168,12 +181,19 @@ public class DragonsDriver extends LinearOpMode {
                     tiltUp         = currentGamepad2.dpad_up,
                     tiltDown       = currentGamepad2.dpad_down,
 
-                    bluePipeline   = currentGamepad2.x,
-                    yellowPipeline = currentGamepad2.y,
-                    redPipeline    = currentGamepad2.b;
+                    // linear slide stuff
+                    controlToggle = currentGamepad2.options, prevControlToggle = previousGamepad2.options,
 
-//                    hangButton     = currentGamepad2.a;
+                    hang = currentGamepad2.x, prevHang = previousGamepad2.x,
+                    full = currentGamepad2.y, prevFull = previousGamepad2.y,
+                    down = currentGamepad2.a, prevDown = previousGamepad2.a;
 
+            Global.ControlState previousControlState = Global.controlState;
+            if (controlToggle && !prevControlToggle) {
+                Global.toggleControlState();
+            }
+
+            telemetry.addData("Control state", Global.controlState.name());
             //</editor-fold>
 
             // <editor-fold desc="--------------------- SuperStructure ---------------------">
@@ -183,106 +203,130 @@ public class DragonsDriver extends LinearOpMode {
             if (superStructure.arm.isValid){
                 //                         left trigger       right trigger
                 double articulationPower = (armUp - (armDown));
-                telemetry.addData("Plain arm", (armUp - armDown));
 
-                double velocity = superStructure.arm.getVelocity().avg;
-                double velLimitPwr = articulationPower;
-                double speed;
-
+                double speed = SSCreepSpeed;
                 if (creepSpeed1) {
                     speed = SSSpeed;
-                } else {
-                    speed = SSCreepSpeed;
                 }
 
                 // handles arm state for limiting extension
-                if (superStructure.arm.getPosition().avg <= -200) {
+                if (superStructure.arm.getPosition().avg <= -220) {
                     superStructure.arm.setState(SuperStructure.ARTICULATION_POS.DOWN);
-                } else if (superStructure.arm.getPosition().avg <= -100) {
+                } else if (superStructure.arm.getPosition().avg <= -50) {
                     superStructure.arm.setState(SuperStructure.ARTICULATION_POS.HANG);
                 } else {
                     superStructure.arm.setState(SuperStructure.ARTICULATION_POS.UP);
                 }
 
-                if (Math.abs(velocity) > 25) {
-                    velLimitPwr += velocity / -25;
-                } // this is breaking things.
+                // toggle control modes
+                if (Global.controlState == Global.ControlState.MANUAL
+                        && previousControlState != Global.ControlState.MANUAL)
+                {
+                    superStructure.arm.switchToManual();
+                    // changes run mode
 
-                if (superStructure.extension.isValid
-                        && superStructure.arm.getState() != SuperStructure.ARTICULATION_POS.DOWN
-                        && superStructure.extension.getPosition().right >= superStructure.extension.maxDownExtension
-//                        && articulationPower < 0
-                ) {
-                    telemetry.addLine("Arm cannot go down, as extension is too extended!");
-                    //TO //DO flash the lights white or orange (orange might be too close to yellow, test it)
-                    dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-                    currentGamepad1.rumble(1);
+                } else if (Global.controlState == Global.ControlState.AUTO
+                        && previousControlState != Global.ControlState.AUTO)
+                {
+                    superStructure.arm.switchToAuto();
+                    // changes run mode
                 }
-                else {
-                    superStructure.arm.setPower(articulationPower * speed);
+
+                // if the extension is past legal limit
+                if (superStructure.extension.isValid && superStructure.arm.getState() != SuperStructure.ARTICULATION_POS.DOWN && superStructure.extension.getPosition().right > superStructure.extension.maxDownExtension) {
+                    telemetry.addLine("Arm cannot go down, as extension is too extended!");
+                } else {
+                    // actually control the superstructure
+
+                    if (Global.controlState == Global.ControlState.MANUAL) {
+                        superStructure.arm.setPower(articulationPower * speed);
+
+                        telemetry.addData("superstructure is being set to", articulationPower * speed);
+                    } else if (Global.controlState == Global.ControlState.AUTO) {
+
+                        superStructure.arm.setFeedbackCoeffs(artieKp, artieKi, artieKd);
+                        superStructure.arm.setFeedforwardCoeffs(artieKv, artieKs);
+
+                        if (SSFull && !prevSSFull)
+                            superStructure.arm.setTarget(superStructure.arm.fullTicks);
+                        else if (SSHang && !prevSSHang)
+                            superStructure.arm.setTarget(superStructure.arm.hangTicks);
+                        else if (SSDown && !prevSSDown)
+                            superStructure.arm.setTarget(superStructure.arm.downTicks);
+
+                        superStructure.arm.updatePosition(speed);
+
+
+                    } else {
+                        telemetry.addLine("Articulation control state isn't working properly :(");
+                    }
                 }
 
                 telemetry.addData("Super Structure right artie position", superStructure.arm.getPosition().right);
                 telemetry.addData("Super Structure  left artie position", superStructure.arm.getPosition().left);
-                telemetry.addData("Super structure      vel limit power", velLimitPwr); //todo look at velocity stuff
-                telemetry.addData("Super Structure            arm power", superStructure.arm.getPower());
                 telemetry.addData("Super Structure        enum position", superStructure.arm.getState());
             }
 
             if (superStructure.extension.isValid) {
                 //                right trigger left trigger
                 double slidesPower = (slidesUp - slidesDown);
-                double speed;
+                double speed = extSpeed;
 
-//                if (fullSpeed2 > 0.1) {
-//                    speed = extSpeed;
-//                } else {
-                    speed = extSpeed;
-//                }
-
+                // reset encoders
                 if (leftStickButton && rightStickButton) {
                     superStructure.extension.resetEncoders();
                 }
 
-                if (superStructure.arm.isValid
-                        && superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN
-                        && slidesPower > 0
-                        && superStructure.extension.getPosition().right >= superStructure.extension.maxDownExtension
-                ) {
-                    telemetry.addLine("Extension cannot extend more, as the arms are down!");
+                // toggle control modes
+                if (Global.controlState == Global.ControlState.MANUAL
+                    && previousControlState != Global.ControlState.MANUAL)
+                {
+                    superStructure.extension.switchToManual();
+                    // changes run mode
 
-                    dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-                } else {
-                        superStructure.extension.setPower(slidesPower * speed);
-                        telemetry.addData("extension is being set to", slidesPower * speed);
+                } else if (Global.controlState == Global.ControlState.AUTO
+                        && previousControlState != Global.ControlState.AUTO)
+                {
+                    superStructure.extension.switchToAuto();
+                    // changes run mode
                 }
 
-//                if (hangButton) {
-//                    // runs the first time and only the first time every time this button is pressed
-//                    if (!hangButtonPressed) {
-//                        hangButtonPressed = true;
-//                        hangButtonStartTime = hangTimer.milliseconds();
-//                    }
-//
-//                    // if the time passed since the button was first pressed is greater than hangButtonHoldTime, do this
-//                    if (hangTimer.milliseconds() >= (hangButtonStartTime + hangButtonHoldTime)) {
-//                        // do hang
-//                        telemetry.clearAll();
-//                        telemetry.addLine("HANGING BEGUN!");
-//                        telemetry.update();
-//                        hanging = true;
-//                    }
-//                } else {
-//                    hangButtonPressed = false;
-//                }
-//
-//                if (hanging) {
-//                    hanging = hangSequence(hangButton, superStructure.extension, hangTime, this);
-//                }
+                // if the superstructure is down, prevent extending too much
+                if (superStructure.arm.isValid && superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN && slidesPower > 0 && superStructure.extension.getPosition().right > superStructure.extension.maxDownExtension) {
+                    telemetry.addLine("Extension cannot extend more, as the arms are down!");
+                } else {
 
-//                telemetry.addData("Hanging value", hanging);
+                    // actually control the superstructure
+                    if (Global.controlState == Global.ControlState.MANUAL) {
 
-                telemetry.addData("Super Structure extension power", superStructure.extension.getPower());
+                        //                       Manual Control
+
+                        superStructure.extension.setPower(slidesPower * speed);
+
+                        telemetry.addData("extension is being set to", slidesPower * speed);
+
+                    } else if (Global.controlState == Global.ControlState.AUTO) {
+
+                        //                       Auto Control
+
+                        superStructure.extension.setPositionCoefficient(extensionKp);
+
+                        if (hang && !prevHang)
+                            superStructure.extension.setTarget(superStructure.extension.hangTicks);
+                        else if (full && !prevFull)
+                            superStructure.extension.setTarget(superStructure.extension.fullTicks);
+                        else if (down && !prevDown)
+                            superStructure.extension.setTarget(superStructure.extension.downTicks);
+
+                        superStructure.extension.updatePosition(speed);
+
+                        telemetry.addData("Extension Target", superStructure.extension.currentTarget);
+
+                    } else {
+                        telemetry.addLine("Extension control state isn't working properly :(");
+                    }
+                }
+
                 telemetry.addData("Super Structure extension L position", superStructure.extension.getPosition().left);
                 telemetry.addData("Super Structure extension R position", superStructure.extension.getPosition().right);
             }
@@ -359,21 +403,30 @@ public class DragonsDriver extends LinearOpMode {
             if (miniStructure.artie.isValid) {
                 double targetPosition;
 
-//                if (fullSpeed2 > 0.1) {
-//                    speed = armSpeed;
-//                } else {
-//                    speed = armCreepSpeed;
-//                }
+                // Manual Control
+                if (Global.controlState == Global.ControlState.MANUAL) {
+                    //             right stick y
+                    double power = artiePower * (0.005 * armSpeed);
 
-                //             right stick y
-                double power = artiePower * (0.005 * armSpeed);
+                    targetPosition = (miniStructure.artie.getPosition().avg + power);
+                    miniStructure.artie.setPosition(targetPosition);
 
-                targetPosition = (miniStructure.artie.getPosition().avg + power);
+                    telemetry.addData("MiniStructure artie power", power);
+                    telemetry.addData("Ministructure Target Position", targetPosition);
+                } else if (Global.controlState == Global.ControlState.AUTO) {
+                    // Auto Control
 
-                miniStructure.artie.setPosition(targetPosition);
+                    if (artiePower < -0.3) {
+                        miniStructure.artie.down();
+                    } else if (artiePower > 0.3) {
+                        miniStructure.artie.up();
+                    } else {
+                        miniStructure.artie.holdPos();
+                    }
 
-                telemetry.addData("MiniStructure artie power", power);
-                telemetry.addData("Ministructure Target Position", targetPosition);
+                    telemetry.addData("Ministructure Position ", miniStructure.artie.getPosition().right);
+                }
+
                 telemetry.addData("MiniStructure artie L position", miniStructure.artie.getPosition().left);
                 telemetry.addData("MiniStructure artie R position", miniStructure.artie.getPosition().right);
             }

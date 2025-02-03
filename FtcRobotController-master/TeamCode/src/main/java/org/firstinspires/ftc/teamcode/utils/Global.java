@@ -22,6 +22,21 @@ public class Global {
     public static boolean Right = true;
     public static final boolean Left = false;
 
+    public enum ControlState {
+        MANUAL,
+        AUTO
+    }
+
+    public static Global.ControlState controlState = ControlState.AUTO;
+
+
+    public static void toggleControlState () {
+        if (controlState == ControlState.MANUAL)
+            controlState = ControlState.AUTO;
+        else
+            controlState = ControlState.MANUAL;
+    }
+
     private Global () {
 
     }

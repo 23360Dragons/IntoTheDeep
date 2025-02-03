@@ -165,6 +165,8 @@ public class MiniStructure {
         private Servo right;
 
         double artieStartPos = 0.5;
+        double downPos = 0.2;
+        double upPos   = 0.65;
 
         Artie(HardwareMap hardwareMap) {
             try {
@@ -190,13 +192,28 @@ public class MiniStructure {
             }
 
             if (isValid) {
-                setPosition(artieStartPos);
+//                setPosition(artieStartPos);
+                up();
             }
+
+            // todo replace this with "all the way down" value
         }
 
         public void setPosition (double pos) {
             left.setPosition(pos);
             right.setPosition(pos);
+        }
+
+        public void holdPos () {
+            setPosition(getPosition().right);
+        }
+
+        public void down () {
+            setPosition(downPos);
+        }
+
+        public void up () {
+            setPosition(upPos);
         }
 
         public Positions getPosition(){
