@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.utils.Global.exceptions;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -54,10 +55,9 @@ public class DragonsDriver extends LinearOpMode {
     public static double extensionKp = 0;
 
     public static double artieKp = 0;
-    public static double artieKi = 0;
     public static double artieKd = 0;
     public static double artieKv = 0;
-    public static double artieKs = 0;
+    public static double artieKa = 0;
 
     //</editor-fold>
 
@@ -75,12 +75,6 @@ public class DragonsDriver extends LinearOpMode {
         Gamepad previousGamepad1 = new Gamepad();
         Gamepad previousGamepad2 = new Gamepad();
 
-        boolean hanging = false;
-        boolean hangButtonPressed = false;
-        double hangButtonStartTime = 0;
-        double hangButtonHoldTime = 1000; // milliseconds
-        double hangTime = 6; // the amount of time to hang for, in seconds
-        ElapsedTime hangTimer = new ElapsedTime();
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
@@ -116,9 +110,6 @@ public class DragonsDriver extends LinearOpMode {
 
         if (isStopRequested()) return;
         telemetry.clearAll();
-
-        hangTimer.reset();
-        hangTimer.startTime();
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Set Ministructure Default Pos ---------------------">
@@ -244,8 +235,8 @@ public class DragonsDriver extends LinearOpMode {
                         telemetry.addData("superstructure is being set to", articulationPower * speed);
                     } else if (Global.controlState == Global.ControlState.AUTO) {
 
-                        superStructure.arm.setFeedbackCoeffs(artieKp, artieKi, artieKd);
-                        superStructure.arm.setFeedforwardCoeffs(artieKv, artieKs);
+                        superStructure.arm.setFeedbackCoeffs(artieKp, 0, artieKd);
+                        superStructure.arm.setFeedforwardCoeffs(artieKv, artieKa);
 
                         if (SSFull && !prevSSFull)
                             superStructure.arm.setTarget(superStructure.arm.fullTicks);
@@ -262,6 +253,7 @@ public class DragonsDriver extends LinearOpMode {
                     }
                 }
 
+                telemetry.addData("Super Structure current target position", superStructure.arm.currentTarget);
                 telemetry.addData("Super Structure right artie position", superStructure.arm.getPosition().right);
                 telemetry.addData("Super Structure  left artie position", superStructure.arm.getPosition().left);
                 telemetry.addData("Super Structure        enum position", superStructure.arm.getState());

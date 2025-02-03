@@ -88,8 +88,8 @@ public class SuperStructure {
             motors.setVeloCoefficients(kP, kI, kD);
         }
 
-        public void setFeedforwardCoeffs (double kV, double kS) {
-            motors.setFeedforwardCoefficients(kV, kS);
+        public void setFeedforwardCoeffs (double kV, double kA) {
+            motors.setFeedforwardCoefficients(kV, 0, kA);
         }
 
         public void switchToManual () {
