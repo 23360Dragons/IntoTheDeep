@@ -197,10 +197,10 @@ public class SuperStructure {
         public boolean isValid = true;
 
         public  int maxDownExtension = 1350;
-        private int tolerance        = 15;
+        private int tolerance        = 10;
         public  int hangTicks        = maxDownExtension - tolerance;
-        public  int downTicks        = 0;
-        public  int fullTicks        = 2110;
+        public  int downTicks        = -5;
+        public  int fullTicks        = 2125;
 
         public int currentTarget = downTicks;
 
