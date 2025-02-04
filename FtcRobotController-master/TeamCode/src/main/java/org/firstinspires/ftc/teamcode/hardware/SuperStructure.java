@@ -229,11 +229,8 @@ public class SuperStructure {
             motors.setRunMode(Motor.RunMode.PositionControl);
         }
 
-        public void toggleControlMode () {
-            if (Global.controlState == Global.ControlState.MANUAL)
-                switchToAuto(); // todo might need to re add coeffs and tolerance?
-            else
-                switchToManual();
+        public boolean atTargetPosition () {
+            return motors.atTargetPosition();
         }
 
         // --------------- Manual Methods ---------------
