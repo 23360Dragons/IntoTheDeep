@@ -49,12 +49,17 @@ public class SuperStructure {
 
         public boolean isValid = true;
 
+        private double Kcos;
+
         private int tolerance = 25;
         public  int hangTicks = -50;
         public  int downTicks = -330;
         public  int fullTicks = -0;
 
         public int currentTarget = fullTicks;
+
+        // ticks per revolution = 1680
+        // thus, about 70degrees is all the way down
 
         public Arm (LinearOpMode opmode) {
             rightMotor = new MotorEx(opmode.hardwareMap, "leftArtie");
@@ -72,8 +77,11 @@ public class SuperStructure {
         }
 
         public void updatePosition (double speed) {
+            double ff = Kcos * Math.sin(Math.toRadians(Math.abs(motors.getPositions().get(0)) / ((double) 1680 / 360)));
+            double power = Math.max(ff + speed, 1);
+
             if (!motors.atTargetPosition()) {
-                motors.set(speed);
+                motors.set(power);
             } else {
                 motors.stopMotor();
             }
@@ -88,8 +96,9 @@ public class SuperStructure {
             motors.setVeloCoefficients(kP, kI, kD);
         }
 
-        public void setFeedforwardCoeffs (double kV, double kA) {
-            motors.setFeedforwardCoefficients(kV, 0, kA);
+        public void setFeedforwardCoeffs (double kV, double kA, double kCos) {
+            motors.setFeedforwardCoefficients(0, kV, kA);
+            this.Kcos = kCos;
         }
 
         public void switchToManual () {

@@ -56,6 +56,21 @@ public class DragonsDriver extends LinearOpMode {
     public static double artieKd = 0;
     public static double artieKv = 0;
     public static double artieKa = 0;
+    public static double artieKcos = 0;
+
+    public enum ScoringState {
+        // slides down, artie down
+        INTAKE,
+        // artie up, slides move up
+        LIFTING,
+        // slides up, artie up, wait a sec then open claw
+        SCORING,
+        //artie up, tilt up (?), slides down
+        LOWERING
+    }
+
+    private ElapsedTime scoringTimer;
+    private ScoringState scoringState = ScoringState.INTAKE;
 
     //</editor-fold>
 
@@ -73,6 +88,7 @@ public class DragonsDriver extends LinearOpMode {
         Gamepad previousGamepad1 = new Gamepad();
         Gamepad previousGamepad2 = new Gamepad();
 
+        scoringTimer.startTime();
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
@@ -110,7 +126,8 @@ public class DragonsDriver extends LinearOpMode {
         telemetry.clearAll();
         //</editor-fold>
 
-        //<editor-fold desc="--------------------- Set Ministructure Default Pos ---------------------">
+        //<editor-fold desc="--------------------- Reset timers ---------------------">
+        scoringTimer.reset();
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Main Loop ---------------------">
@@ -238,7 +255,7 @@ public class DragonsDriver extends LinearOpMode {
                         case AUTO:
 
                             superStructure.arm.setFeedbackCoeffs(artieKp, 0, artieKd);
-                            superStructure.arm.setFeedforwardCoeffs(artieKv, artieKa);
+                            superStructure.arm.setFeedforwardCoeffs(artieKv, artieKa, artieKcos);
 
                             if (SSFull && !prevSSFull)
                                 superStructure.arm.setTarget(superStructure.arm.fullTicks);
@@ -480,6 +497,59 @@ public class DragonsDriver extends LinearOpMode {
 
             //</editor-fold>
 
+            //<editor-fold desc="--------------------- FSM Scoring Control ---------------------">
+            switch (scoringState) {
+                case INTAKE:
+                    // if a score button is pressed, set targets and switch to lifting
+                    if (currentGamepad2.start && !previousGamepad2.start) {
+                        basketScore(superStructure, miniStructure, telemetry);
+                        scoringState = ScoringState.LIFTING;
+                    }
+
+                    break;
+                case LIFTING:
+                    // tolerance and stuff is defined in subclass
+                    if (superStructure.extension.atTargetPosition()) {
+                        scoringTimer.reset();
+                        scoringState = ScoringState.SCORING;
+                    }
+
+                    break;
+                case SCORING:
+                    // open claw after 1 second, close 1 second later
+
+                    if (scoringTimer.milliseconds() > 2000) {
+                        miniStructure.claw.close();
+                        intake(superStructure, miniStructure, telemetry);
+                        scoringState = ScoringState.LOWERING;
+                    } else if (scoringTimer.milliseconds() > 1000) {
+                        miniStructure.claw.open();
+                    }
+
+                    break;
+                case LOWERING:
+
+                    if (superStructure.extension.atTargetPosition()) {
+                        miniStructure.claw.open();
+                        scoringState = ScoringState.INTAKE;
+                    }
+
+                    break;
+                default:
+                    scoringState = ScoringState.INTAKE;
+            }
+
+            if ((currentGamepad2.start && !previousGamepad2.start) && scoringState != ScoringState.INTAKE) {
+                telemetry.addLine ("Canceling score!!");
+                telemetry.addData("Score enum pos", scoringState.name());
+
+                intake(superStructure, miniStructure, telemetry);
+                scoringState = ScoringState.LOWERING;
+                // because lowering handles claw opening once slides are down
+            }
+
+            //</editor-fold>
+
             telemetry.update();
         }
         //</editor-fold>
@@ -494,10 +564,9 @@ public class DragonsDriver extends LinearOpMode {
 
     private void intake (SuperStructure superStructure, MiniStructure miniStructure, Telemetry telemetry) {
         superStructure.extension.setTarget(superStructure.extension.downTicks);
-        miniStructure.claw.open();
         miniStructure.artie.down();
 
-        telemetry.addLine("Lowering extension and artie! Opening claw...");
+        telemetry.addLine("Lowering extension and artie!");
 
     }
 }
