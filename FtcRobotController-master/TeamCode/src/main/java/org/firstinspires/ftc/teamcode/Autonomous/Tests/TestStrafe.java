@@ -1,12 +1,16 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.Tests;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous(name="TestForward12Inches", group="Tests")
-public class TestForward extends LinearOpMode {
+import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
+import org.firstinspires.ftc.teamcode.utils.Global;
+
+@Disabled
+@Autonomous(name="TestStrafe12InchesRight", group="Tests")
+public class TestStrafe extends LinearOpMode {
     // Declare motors
     //motor code from CombinedMaster
     // are those ports correct?
@@ -32,22 +36,16 @@ public class TestForward extends LinearOpMode {
         // Wait for start
         waitForStart();
 
-        // Create an instance of RobotMovement
-        RobotMovement robotMovement = new RobotMovement(_leftFront, _rightFront, _leftBack, _rightBack);
+        // Create an instance of AutoRobotMovement
+        AutoRobotMovement autoRobotMovement = new AutoRobotMovement(_leftFront, _rightFront, _leftBack, _rightBack);
 
-        // Move forward 12 inches
-        robotMovement.moveForward(12.0, Constants.Forward);
+        // Strafe right 12 inches
+        autoRobotMovement.strafe(24, Global.Right);
 
         // Stop motors (optional, as subroutine already stops them)
         _leftFront.setPower(0);
         _rightFront.setPower(0);
         _leftBack.setPower(0);
         _rightBack.setPower(0);
-
-        // Set motors to run without encoder
-        _leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        _rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        _leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        _rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 }

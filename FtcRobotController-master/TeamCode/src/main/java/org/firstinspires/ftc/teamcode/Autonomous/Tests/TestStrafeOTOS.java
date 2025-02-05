@@ -1,15 +1,16 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.Tests;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
 import org.firstinspires.ftc.teamcode.hardware.DragonsOTOS;
+import org.firstinspires.ftc.teamcode.utils.Global;
 
-@Autonomous(name="TestForward12InchesOTOS", group="Tests")
-public class TestForwardOTOS extends LinearOpMode {
+@Disabled
+@Autonomous(name="TestStrafe12InchesRightOTOS", group="Tests")
+public class TestStrafeOTOS extends LinearOpMode {
     // Declare motors
     //motor code from CombinedMaster
     // are those ports correct?
@@ -29,6 +30,11 @@ public class TestForwardOTOS extends LinearOpMode {
         _leftBack = hardwareMap.get(DcMotor.class, "leftBack");
         _rightBack = hardwareMap.get(DcMotor.class, "rightBack");
 
+        _leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        _leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        _rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        _rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         // Set motor directions
         //assumption - right side reversed - copied from CombinedMaster
         //that was the comment in CombinedMaster. Is this right?
@@ -41,11 +47,11 @@ public class TestForwardOTOS extends LinearOpMode {
         // Wait for start
         waitForStart();
 
-        // Create an instance of RobotMovement
-        RobotMovementOTOS robotMovement = new RobotMovementOTOS(_leftFront, _rightFront, _leftBack, _rightBack, otos);
+         // Create an instance of AutoRobotMovement
+        RobotMovementOTOS robotMovementOTOS = new RobotMovementOTOS(_leftFront, _rightFront, _leftBack, _rightBack, otos);
 
-        // Move forward 12 inches
-        robotMovement.moveForward(12.0, Constants.Forward);
+        // Strafe right 12 inches
+        robotMovementOTOS.strafe(12.0, Global.Right);
 
         // Stop motors (optional, as subroutine already stops them)
         _leftFront.setPower(0);

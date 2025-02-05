@@ -1,13 +1,16 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
+
+@Disabled
 @Autonomous
 public class DragonsAutoBruteForce3 extends LinearOpMode {
     public DcMotorEx leftFront, leftBack, rightBack, rightFront;
@@ -33,7 +36,7 @@ public class DragonsAutoBruteForce3 extends LinearOpMode {
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        RobotMovement robotMovement = new RobotMovement(leftFront, rightFront, leftBack, rightBack);
+        AutoRobotMovement autoRobotMovement = new AutoRobotMovement(leftFront, rightFront, leftBack, rightBack);
         Claw clawy = new Claw(claw);
         double tiles = 24;
         int starty = 0;
@@ -78,52 +81,28 @@ public class DragonsAutoBruteForce3 extends LinearOpMode {
             waitForStart();
 //        switch (starty) {
 //            case 1:
-//            robotMovement.rotate(90,false);
-//            robotMovement.moveForward(10,true);
-//            clawy.OpenClaw();
-//            robotMovement.moveForward(10,false);
-//            robotMovement.strafe(74, true);
-//            robotMovement.moveForward(8,true);
-//            robotMovement.strafe(74, false);
-//            robotMovement.strafe(74, true);
-//            robotMovement.moveForward(8,true);
-//            robotMovement.strafe(74, false);
-//            robotMovement.strafe(74, true);
-//            robotMovement.moveForward(8,true);
-//            robotMovement.strafe(74, false);
+//                autoRobotMovement.strafe((3.5 * tiles), true);
 //            case 2:
-//                robotMovement.rotate(90,false);
-//            robotMovement.moveForward(10,true);
-//            clawy.OpenClaw();
-//            robotMovement.moveForward(10,false);
-//            robotMovement.strafe(74, true);
-//            robotMovement.moveForward(8,true);
-//            robotMovement.strafe(74, false);
-//            robotMovement.strafe(74, true);
-//            robotMovement.moveForward(8,true);
-//            robotMovement.strafe(74, false);
-//            robotMovement.strafe(74, true);
-//            robotMovement.moveForward(8,true);
-//            robotMovement.strafe(74, false);
+//                autoRobotMovement.strafe((3.5 * tiles), true);
 //            case 3:
-//                robotMovement.strafe((2 * tiles), true);
+//                autoRobotMovement.strafe((2 * tiles), true);
 //            case 4:
-//                robotMovement.strafe((2 * tiles), true);
+//                autoRobotMovement.strafe((2 * tiles), true);
 
 //        }
-            robotMovement.rotate(90,false);
-            robotMovement.moveForward(10,true);
+            autoRobotMovement.rotate(90,false);
+            autoRobotMovement.moveForward(10,true);
             clawy.OpenClaw();
-            robotMovement.moveForward(10,false);
-            robotMovement.strafe(74, true);
-            robotMovement.moveForward(8,true);
-            robotMovement.strafe(74, false);
-            robotMovement.strafe(74, true);
-            robotMovement.moveForward(8,true);
-            robotMovement.strafe(74, false);
-            robotMovement.strafe(74, true);
-            robotMovement.moveForward(8,true);
-            robotMovement.strafe(74, false);
+            autoRobotMovement.moveForward(10,false);
+            autoRobotMovement.strafe(74, true);
+            autoRobotMovement.moveForward(8,true);
+            autoRobotMovement.strafe(74, false);
+            autoRobotMovement.strafe(74, true);
+            autoRobotMovement.moveForward(8,true);
+            autoRobotMovement.strafe(74, false);
+            autoRobotMovement.strafe(74, true);
+            autoRobotMovement.moveForward(8,true);
+            autoRobotMovement.strafe(74, false);
         }
     }
 }
