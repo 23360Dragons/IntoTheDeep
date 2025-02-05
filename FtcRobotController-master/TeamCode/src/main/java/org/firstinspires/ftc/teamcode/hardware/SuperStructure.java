@@ -22,7 +22,6 @@ public class SuperStructure {
     }
 
     private ARTICULATION_POS articulationPos;
-    private ARTICULATION_POS lastArticulationPos;
 
     public SuperStructure (LinearOpMode opmode) {
         opmode.telemetry.addLine("Configuring Superstructure Arm!");
@@ -205,11 +204,11 @@ public class SuperStructure {
 
         public boolean isValid = true;
 
-        public  int maxDownExtension = 1350;
-        private int tolerance        = 10;
-        public  int hangTicks        = maxDownExtension - tolerance;
-        public  int downTicks        = -5;
-        public  int fullTicks        = 2125;
+        public  static int maxDownExtension = 1350;
+        private static final int tolerance  = 10;
+        public  static int hangTicks        = maxDownExtension - tolerance;
+        public  static int downTicks        = -5;
+        public  static int fullTicks        = 2125;
 
         public int currentTarget = downTicks;
 
@@ -235,7 +234,7 @@ public class SuperStructure {
         }
 
         public void switchToAuto () {
-            motors.setRunMode(Motor.RunMode.PositionControl);
+            motors.setRunMode(Motor.RunMode.VelocityControl);
         }
 
         public boolean atTargetPosition () {
@@ -250,8 +249,8 @@ public class SuperStructure {
 
         // --------------- Auto Methods ---------------
 
-        public void setPositionCoefficient (double kP) {
-            motors.setPositionCoefficient(kP);
+        public void setVeloCoefficients (double kP, double kI, double kD) {
+            motors.setVeloCoefficients(kP, kI, kD);
         }
 
         public void setTarget (int target) {

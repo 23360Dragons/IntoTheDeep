@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.hardware.DragonsLimelight;
 import org.firstinspires.ftc.teamcode.hardware.DragonsOTOS;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Config
@@ -51,6 +52,8 @@ public class DragonsDriver extends LinearOpMode {
     //</editor-fold>
 
     public static double extensionKp = 0;
+    public static double extensionKi = 0;
+    public static double extensionKd = 0;
 
     public static double artieKp = 0;
     public static double artieKd = 0;
@@ -88,6 +91,7 @@ public class DragonsDriver extends LinearOpMode {
         Gamepad previousGamepad1 = new Gamepad();
         Gamepad previousGamepad2 = new Gamepad();
 
+        scoringTimer = new ElapsedTime();
         scoringTimer.startTime();
         //</editor-fold>
 
@@ -239,7 +243,7 @@ public class DragonsDriver extends LinearOpMode {
                 }
 
                 // if the extension is past legal limit
-                if (superStructure.extension.isValid && superStructure.arm.getState() != SuperStructure.ARTICULATION_POS.DOWN && superStructure.extension.getPosition().right > superStructure.extension.maxDownExtension) {
+                if (superStructure.extension.isValid && superStructure.arm.getState() != SuperStructure.ARTICULATION_POS.DOWN && superStructure.extension.getPosition().right > SuperStructure.Extension.maxDownExtension) {
                     telemetry.addLine("Arm cannot go down, as extension is too extended!");
                 } else {
 
@@ -306,7 +310,7 @@ public class DragonsDriver extends LinearOpMode {
                 }
 
                 // if the superstructure is down, prevent extending too much
-                if (superStructure.arm.isValid && superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN && slidesPower > 0 && superStructure.extension.getPosition().right > superStructure.extension.maxDownExtension) {
+                if (superStructure.arm.isValid && superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN && slidesPower > 0 && superStructure.extension.getPosition().right > SuperStructure.Extension.maxDownExtension) {
                     telemetry.addLine("Extension cannot extend more, as the arms are down!");
                 } else {
 
@@ -321,14 +325,14 @@ public class DragonsDriver extends LinearOpMode {
 
                         case AUTO:
 
-                            superStructure.extension.setPositionCoefficient(extensionKp);
+                            superStructure.extension.setVeloCoefficients(extensionKp, extensionKi, extensionKd);
 
                             if (hang && !prevHang)
-                                superStructure.extension.setTarget(superStructure.extension.hangTicks);
+                                superStructure.extension.setTarget(SuperStructure.Extension.hangTicks);
                             else if (full && !prevFull)
-                                superStructure.extension.setTarget(superStructure.extension.fullTicks);
+                                superStructure.extension.setTarget(SuperStructure.Extension.fullTicks);
                             else if (down && !prevDown)
-                                superStructure.extension.setTarget(superStructure.extension.downTicks);
+                                superStructure.extension.setTarget(SuperStructure.Extension.downTicks);
 
                             superStructure.extension.updatePosition(speed);
 
@@ -452,18 +456,18 @@ public class DragonsDriver extends LinearOpMode {
             //</editor-fold>
 
             //<editor-fold desc="--------------------- SparkFun OTOS ---------------------">
-//            telemetry.addLine("-----Sparkfun OTOS-----");
-//            DecimalFormat sparkfunDF = new DecimalFormat("#.###");
-//
-//            if (dragonsOTOS.isValid) {
-//                telemetry.addData("sparkfun x velocity", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getVelocity().x)));
-//                telemetry.addData("sparkfun y velocity", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getVelocity().y)));
-//                telemetry.addData("sparkfun x position", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getPosition().x)));
-//                telemetry.addData("sparkfun y position", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getPosition().y)));
-//                telemetry.addData("sparkfun    heading", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getPosition().h)));
-//            }
-//
-//            telemetry.addLine();
+            telemetry.addLine("-----Sparkfun OTOS-----");
+            DecimalFormat sparkfunDF = new DecimalFormat("#.###");
+
+            if (dragonsOTOS.isValid) {
+                telemetry.addData("sparkfun x velocity", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getVelocity().x)));
+                telemetry.addData("sparkfun y velocity", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getVelocity().y)));
+                telemetry.addData("sparkfun x position", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getPosition().x)));
+                telemetry.addData("sparkfun y position", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getPosition().y)));
+                telemetry.addData("sparkfun    heading", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getPosition().h)));
+            }
+
+            telemetry.addLine();
             //</editor-fold>
 
             // <editor-fold desc="--------------------- Movement ---------------------">
@@ -556,14 +560,14 @@ public class DragonsDriver extends LinearOpMode {
     }
 
     private void basketScore (SuperStructure superStructure, MiniStructure miniStructure, Telemetry telemetry) {
-        superStructure.extension.setTarget(superStructure.extension.fullTicks);
+        superStructure.extension.setTarget(SuperStructure.Extension.fullTicks);
         miniStructure.artie.up();
 
         telemetry.addLine("Raising extension and artie!");
     }
 
     private void intake (SuperStructure superStructure, MiniStructure miniStructure, Telemetry telemetry) {
-        superStructure.extension.setTarget(superStructure.extension.downTicks);
+        superStructure.extension.setTarget(SuperStructure.Extension.downTicks);
         miniStructure.artie.down();
 
         telemetry.addLine("Lowering extension and artie!");

@@ -39,25 +39,25 @@ public class MeepMeepTesting {
         MeepMeep meepMeep   = new MeepMeep(760);
 
 
-        myBot = new DefaultBotBuilder(meepMeep)
+//        myBot = new DefaultBotBuilder(meepMeep)
 //                 Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setColorScheme(new ColorSchemeBlueDark())
-                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
-                .build();
-
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(redTwo, Math.toRadians(redFace)))
+//                .setColorScheme(new ColorSchemeBlueDark())
+//                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+//                .build();
+//
+//        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(redTwo, Math.toRadians(redFace)))
 //                    .waitSeconds(3)
-                .strafeTo(toRedSide)
-                                .waitSeconds(1)
-                                .strafeTo(new Vector2d(redBasket.position.x - 5, redBasket.position.y - 5))
-
+//                .strafeTo(toRedSide)
+//                                .waitSeconds(1)
+//                                .strafeTo(new Vector2d(redBasket.position.x - 5, redBasket.position.y - 5))
+//
 //                    .splineTo(toRedSide, redFace)
-                .build());
+//                .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-                .addEntity(myBot)
+//                .addEntity(myBot)
                 .start();
     }
 }
