@@ -173,9 +173,6 @@ public class DragonsDriver extends LinearOpMode {
 
             double  artiePower  = -currentGamepad2.right_stick_y,
 
-//                    slidesPower = -currentGamepad2.left_stick_y,
-//                    fullSpeed2  = currentGamepad2.right_trigger,
-
                     slidesDown  = currentGamepad2.left_trigger,
                     slidesUp    = currentGamepad2.right_trigger;
 
@@ -183,8 +180,8 @@ public class DragonsDriver extends LinearOpMode {
                     openClaw     = currentGamepad2.right_bumper,
 
                     //reset extension encoder positions
-                    leftStickButton  = currentGamepad2.left_stick_button,
-                    rightStickButton = currentGamepad2.right_stick_button,
+//                    leftStickButton  = currentGamepad2.left_stick_button,
+//                    rightStickButton = currentGamepad2.right_stick_button,
 
                     twistLeft      = currentGamepad2.dpad_left,
                     twistRight     = currentGamepad2.dpad_right,
@@ -192,7 +189,7 @@ public class DragonsDriver extends LinearOpMode {
                     tiltDown       = currentGamepad2.dpad_down,
 
                     // linear slide stuff
-                    controlToggle = currentGamepad2.options, prevControlToggle = previousGamepad2.options,
+                    controlToggle = currentGamepad2.start, prevControlToggle = previousGamepad2.start,
 
                     hang = currentGamepad2.x, prevHang = previousGamepad2.x,
                     full = currentGamepad2.y, prevFull = previousGamepad2.y,
