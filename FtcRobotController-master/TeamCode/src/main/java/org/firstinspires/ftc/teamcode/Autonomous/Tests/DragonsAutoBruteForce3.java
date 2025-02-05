@@ -37,7 +37,6 @@ public class DragonsAutoBruteForce3 extends LinearOpMode {
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         AutoRobotMovement autoRobotMovement = new AutoRobotMovement(leftFront, rightFront, leftBack, rightBack);
-        Claw clawy = new Claw(claw);
         double tiles = 24;
         int starty = 0;
         while (opModeInInit()) {
@@ -92,7 +91,6 @@ public class DragonsAutoBruteForce3 extends LinearOpMode {
 //        }
             autoRobotMovement.rotate(90,false);
             autoRobotMovement.moveForward(10,true);
-            clawy.OpenClaw();
             autoRobotMovement.moveForward(10,false);
             autoRobotMovement.strafe(74, true);
             autoRobotMovement.moveForward(8,true);
