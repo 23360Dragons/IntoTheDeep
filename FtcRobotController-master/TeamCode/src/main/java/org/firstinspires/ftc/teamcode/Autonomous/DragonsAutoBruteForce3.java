@@ -78,9 +78,33 @@ public class DragonsAutoBruteForce3 extends LinearOpMode {
             waitForStart();
 //        switch (starty) {
 //            case 1:
-//                robotMovement.strafe((3.5 * tiles), true);
+//            robotMovement.rotate(90,false);
+//            robotMovement.moveForward(10,true);
+//            clawy.OpenClaw();
+//            robotMovement.moveForward(10,false);
+//            robotMovement.strafe(74, true);
+//            robotMovement.moveForward(8,true);
+//            robotMovement.strafe(74, false);
+//            robotMovement.strafe(74, true);
+//            robotMovement.moveForward(8,true);
+//            robotMovement.strafe(74, false);
+//            robotMovement.strafe(74, true);
+//            robotMovement.moveForward(8,true);
+//            robotMovement.strafe(74, false);
 //            case 2:
-//                robotMovement.strafe((3.5 * tiles), true);
+//                robotMovement.rotate(90,false);
+//            robotMovement.moveForward(10,true);
+//            clawy.OpenClaw();
+//            robotMovement.moveForward(10,false);
+//            robotMovement.strafe(74, true);
+//            robotMovement.moveForward(8,true);
+//            robotMovement.strafe(74, false);
+//            robotMovement.strafe(74, true);
+//            robotMovement.moveForward(8,true);
+//            robotMovement.strafe(74, false);
+//            robotMovement.strafe(74, true);
+//            robotMovement.moveForward(8,true);
+//            robotMovement.strafe(74, false);
 //            case 3:
 //                robotMovement.strafe((2 * tiles), true);
 //            case 4:
