@@ -39,6 +39,8 @@ public class WallToChamber extends LinearOpMode {
         pushSampleToObs(autoRobotMovement);
         autoRobotMovement.moveForward(48, Forward);
         pushSampleToObs(autoRobotMovement);
+        autoRobotMovement.moveForward(20, Forward);
+        autoRobotMovement.rotate(180, );
 
         // Stop motors (optional, as subroutine already stops them)
         drivetrain.setPower(new double[]{0, 0, 0, 0});
