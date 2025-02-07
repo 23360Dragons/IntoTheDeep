@@ -12,6 +12,8 @@ import static org.firstinspires.ftc.teamcode.utils.Global.Right;
 import static org.firstinspires.ftc.teamcode.utils.Global.Left;
 import static org.firstinspires.ftc.teamcode.utils.Global.Forward;
 import static org.firstinspires.ftc.teamcode.utils.Global.Backward;
+import static org.firstinspires.ftc.teamcode.utils.Global.Clockwise;
+import static org.firstinspires.ftc.teamcode.utils.Global.CounterClockwise;
 
 
 @Disabled
@@ -39,8 +41,50 @@ public class WallToChamber extends LinearOpMode {
         pushSampleToObs(autoRobotMovement);
         autoRobotMovement.moveForward(48, Forward);
         pushSampleToObs(autoRobotMovement);
-        autoRobotMovement.moveForward(20, Forward);
-        autoRobotMovement.rotate(180, );
+        autoRobotMovement.moveForward(18, Forward);
+        autoRobotMovement.rotate(180, Clockwise);
+        //arm/ministructure up here
+        autoRobotMovement.moveForward(6, Forward);
+        Thread.sleep(3000);
+        autoRobotMovement.moveForward(6, Forward);
+        //close claw
+        // arm up all the way
+        autoRobotMovement.strafe(48, Right);
+        autoRobotMovement.rotate(180, Clockwise);
+        autoRobotMovement.moveForward(12, Forward);
+        // hang specimen
+        autoRobotMovement.rotate(180, Clockwise);
+        autoRobotMovement.strafe(48, Left);
+        autoRobotMovement.moveForward(6, Forward);
+        Thread.sleep(3000);
+        autoRobotMovement.moveForward(6, Forward);
+        //close claw
+        // arm up all the way
+        autoRobotMovement.strafe(48, Right);
+        autoRobotMovement.rotate(180, Clockwise);
+        autoRobotMovement.moveForward(12, Forward);
+        // hang specimen
+        autoRobotMovement.rotate(180, Clockwise);
+        autoRobotMovement.strafe(48, Left);
+        autoRobotMovement.moveForward(6, Forward);
+        Thread.sleep(3000);
+        autoRobotMovement.moveForward(6, Forward);
+        //close claw
+        // arm up all the way
+        autoRobotMovement.strafe(48, Right);
+        autoRobotMovement.rotate(180, Clockwise);
+        autoRobotMovement.moveForward(12, Forward);
+        // hang specimen
+        autoRobotMovement.rotate(180, Clockwise);
+        autoRobotMovement.strafe(48, Left);autoRobotMovement.moveForward(6, Forward);
+        Thread.sleep(3000);
+        autoRobotMovement.moveForward(6, Forward);
+        //close claw
+        // arm up all the way
+        autoRobotMovement.strafe(48, Right);
+        autoRobotMovement.rotate(180, Clockwise);
+        autoRobotMovement.moveForward(12, Forward);
+        // hang specimen
 
         // Stop motors (optional, as subroutine already stops them)
         drivetrain.setPower(new double[]{0, 0, 0, 0});
