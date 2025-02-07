@@ -72,7 +72,7 @@ public class SuperStructure {
             motors.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
             motors.setPositionTolerance(tolerance);
 
-            switchToAuto();
+            updateControlState();
         }
 
         public void updatePosition (double speed) {
@@ -100,11 +100,21 @@ public class SuperStructure {
             this.Kcos = kCos;
         }
 
-        public void switchToManual () {
+        public void updateControlState () {
+            switch (Global.controlState) {
+                case AUTO:
+                    switchToAuto();
+                    break;
+                case MANUAL:
+                    switchToManual();
+                    break;
+            }
+        }
+        private void switchToManual () {
             motors.setRunMode(Motor.RunMode.RawPower);
         }
 
-        public void switchToAuto () {
+        private void switchToAuto () {
             motors.setRunMode(Motor.RunMode.VelocityControl);
         }
 
@@ -226,14 +236,25 @@ public class SuperStructure {
             motors.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
             motors.setPositionTolerance(tolerance);
 
-            switchToAuto();
+            updateControlState();
         }
 
-        public void switchToManual () {
+        public void updateControlState () {
+            switch (Global.controlState) {
+                case AUTO:
+                    switchToAuto();
+                    break;
+                case MANUAL:
+                    switchToManual();
+                    break;
+            }
+        }
+
+        private void switchToManual () {
             motors.setRunMode(Motor.RunMode.RawPower);
         }
 
-        public void switchToAuto () {
+        private void switchToAuto () {
             motors.setRunMode(Motor.RunMode.VelocityControl);
         }
 

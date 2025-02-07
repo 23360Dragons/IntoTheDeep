@@ -177,7 +177,7 @@ public class DragonsDriver extends LinearOpMode {
                     slidesUp    = currentGamepad2.right_trigger;
 
             boolean closeClaw     = currentGamepad2.left_bumper,
-                    openClaw     = currentGamepad2.right_bumper,
+                    openClaw      = currentGamepad2.right_bumper,
 
                     //reset extension encoder positions
 //                    leftStickButton  = currentGamepad2.left_stick_button,
@@ -189,7 +189,7 @@ public class DragonsDriver extends LinearOpMode {
                     tiltDown       = currentGamepad2.dpad_down,
 
                     // linear slide stuff
-                    controlToggle = currentGamepad2.start, prevControlToggle = previousGamepad2.start,
+                    controlToggle = currentGamepad2.back, prevControlToggle = previousGamepad2.back,
 
                     hang = currentGamepad2.x, prevHang = previousGamepad2.x,
                     full = currentGamepad2.y, prevFull = previousGamepad2.y,
@@ -226,18 +226,7 @@ public class DragonsDriver extends LinearOpMode {
                 }
 
                 // toggle control modes
-                if (Global.controlState == Global.ControlState.MANUAL
-                        && previousControlState != Global.ControlState.MANUAL)
-                {
-                    superStructure.arm.switchToManual();
-                    // changes run mode
-
-                } else if (Global.controlState == Global.ControlState.AUTO
-                        && previousControlState != Global.ControlState.AUTO)
-                {
-                    superStructure.arm.switchToAuto();
-                    // changes run mode
-                }
+                superStructure.arm.updateControlState();
 
                 // if the extension is past legal limit
                 if (superStructure.extension.isValid && superStructure.arm.getState() != SuperStructure.ARTICULATION_POS.DOWN && superStructure.extension.getPosition().right > SuperStructure.Extension.maxDownExtension) {
@@ -293,18 +282,7 @@ public class DragonsDriver extends LinearOpMode {
                 }*/
 
                 // toggle control modes
-                if (Global.controlState == Global.ControlState.MANUAL
-                    && previousControlState != Global.ControlState.MANUAL)
-                {
-                    superStructure.extension.switchToManual();
-                    // changes run mode
-
-                } else if (Global.controlState == Global.ControlState.AUTO
-                        && previousControlState != Global.ControlState.AUTO)
-                {
-                    superStructure.extension.switchToAuto();
-                    // changes run mode
-                }
+                superStructure.extension.updateControlState();
 
                 // if the superstructure is down, prevent extending too much
                 if (superStructure.arm.isValid && superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN && slidesPower > 0 && superStructure.extension.getPosition().right > SuperStructure.Extension.maxDownExtension) {

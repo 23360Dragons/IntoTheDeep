@@ -27,7 +27,7 @@ public class Global {
         AUTO
     }
 
-    public static Global.ControlState controlState = ControlState.AUTO;
+    public static Global.ControlState controlState = ControlState.MANUAL;
 
 
     public static void toggleControlState () {
