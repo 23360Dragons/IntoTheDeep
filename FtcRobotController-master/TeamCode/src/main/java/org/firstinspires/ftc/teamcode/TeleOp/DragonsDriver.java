@@ -35,9 +35,7 @@ public class DragonsDriver extends LinearOpMode {
     public DragonsOTOS      dragonsOTOS;
     public SuperStructure   superStructure;
     public MiniStructure    miniStructure;
-
-    public boolean isCanceled = false;
-    public boolean cancelHangPressed = false;
+    public DragonsColor     dragonsColor;
 
     //<editor-fold desc="--------------------- Part Speeds ---------------------">
     public static double SSSpeed      = 0.8;
@@ -72,7 +70,6 @@ public class DragonsDriver extends LinearOpMode {
         LOWERING
     }
 
-    private ElapsedTime scoringTimer;
     private ScoringState scoringState = ScoringState.INTAKE;
 
     //</editor-fold>
@@ -91,7 +88,7 @@ public class DragonsDriver extends LinearOpMode {
         Gamepad previousGamepad1 = new Gamepad();
         Gamepad previousGamepad2 = new Gamepad();
 
-        scoringTimer = new ElapsedTime();
+        ElapsedTime scoringTimer = new ElapsedTime();
         scoringTimer.startTime();
         //</editor-fold>
 
@@ -189,15 +186,13 @@ public class DragonsDriver extends LinearOpMode {
                     tiltDown       = currentGamepad2.dpad_down,
 
                     // linear slide stuff
-                    controlToggle = currentGamepad2.back, prevControlToggle = previousGamepad2.back,
+                    controlToggle       = currentGamepad2.back,  prevControlToggle       = previousGamepad2.back,
+                    scoringStateControl = currentGamepad2.start, prevScoringStateControl = previousGamepad2.start,
 
                     hang = currentGamepad2.x, prevHang = previousGamepad2.x,
                     full = currentGamepad2.y, prevFull = previousGamepad2.y,
-                    down = currentGamepad2.a, prevDown = previousGamepad2.a,
+                    down = currentGamepad2.a, prevDown = previousGamepad2.a;
 
-                    scoringStateControl = currentGamepad2.start, prevScoringStateControl = previousGamepad2.start;
-
-            Global.ControlState previousControlState = Global.controlState;
             if (controlToggle && !prevControlToggle) {
                 Global.toggleControlState();
             }
@@ -277,6 +272,7 @@ public class DragonsDriver extends LinearOpMode {
                 double speed = extSpeed;
 
                 //todo decide whether to enable or disable this
+
                 /*
                 // reset encoders
                 if (leftStickButton && rightStickButton) {
@@ -437,11 +433,10 @@ public class DragonsDriver extends LinearOpMode {
             DecimalFormat sparkfunDF = new DecimalFormat("#.###");
 
             if (dragonsOTOS.isValid) {
-                telemetry.addData("sparkfun x velocity", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getVelocity().x)));
-                telemetry.addData("sparkfun y velocity", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getVelocity().y)));
                 telemetry.addData("sparkfun x position", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getPosition().x)));
                 telemetry.addData("sparkfun y position", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getPosition().y)));
                 telemetry.addData("sparkfun    heading", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getPosition().h)));
+                telemetry.addData("IMU Heading", dragonsIMU.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
             }
 
             telemetry.addLine();
@@ -467,12 +462,13 @@ public class DragonsDriver extends LinearOpMode {
 
                 // calls for movement
                 double[] drivePowers = MoveRobot.RC(x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
+
                 //sets the motors to their corresponding power
                 drivetrain.setPower(drivePowers);
-//                telemetry.addData("leftFront power", String.valueOf(Math.round(drivetrain.getPower()[0])));
+//                telemetry.addData("leftFront power",  String.valueOf(Math.round(drivetrain.getPower()[0])));
 //                telemetry.addData("rightFront power", String.valueOf(Math.round(drivetrain.getPower()[1])));
-//                telemetry.addData("leftBack power", String.valueOf(Math.round(drivetrain.getPower()[2])));
-//                telemetry.addData("rightBack power", String.valueOf(Math.round(drivetrain.getPower()[3])));
+//                telemetry.addData("leftBack power",   String.valueOf(Math.round(drivetrain.getPower()[2])));
+//                telemetry.addData("rightBack power",  String.valueOf(Math.round(drivetrain.getPower()[3])));
                 telemetry.addLine();
             }
 
@@ -555,6 +551,5 @@ public class DragonsDriver extends LinearOpMode {
         miniStructure.artie.down();
 
         telemetry.addLine("Lowering extension and artie!");
-
     }
 }

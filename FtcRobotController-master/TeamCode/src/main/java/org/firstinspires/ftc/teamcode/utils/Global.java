@@ -29,7 +29,6 @@ public class Global {
 
     public static Global.ControlState controlState = ControlState.MANUAL;
 
-
     public static void toggleControlState () {
         if (controlState == ControlState.MANUAL)
             controlState = ControlState.AUTO;
