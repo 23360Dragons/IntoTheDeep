@@ -40,10 +40,9 @@ public class DragonsDriver extends LinearOpMode {
     public boolean cancelHangPressed = false;
 
     //<editor-fold desc="--------------------- Part Speeds ---------------------">
-    public static double SSSpeed      = 1;
+    public static double SSSpeed      = 0.8;
     public static double SSCreepSpeed = 0.5;
     public static double extSpeed     = 1;
-//    public static double extCreepSpeed = 0.75;
     public static double twistSpeed   = 50;
     public static double tiltSpeed    = 30;
     public static double armSpeed     = 5;
@@ -51,6 +50,7 @@ public class DragonsDriver extends LinearOpMode {
     public static double alternateDriveSpeed = 0.6;
     //</editor-fold>
 
+    // superstructure PIDF coefficients
     public static double extensionKp = 0;
     public static double extensionKi = 0;
     public static double extensionKd = 0;
@@ -193,7 +193,9 @@ public class DragonsDriver extends LinearOpMode {
 
                     hang = currentGamepad2.x, prevHang = previousGamepad2.x,
                     full = currentGamepad2.y, prevFull = previousGamepad2.y,
-                    down = currentGamepad2.a, prevDown = previousGamepad2.a;
+                    down = currentGamepad2.a, prevDown = previousGamepad2.a,
+
+                    scoringStateControl = currentGamepad2.start, prevScoringStateControl = previousGamepad2.start;
 
             Global.ControlState previousControlState = Global.controlState;
             if (controlToggle && !prevControlToggle) {
@@ -479,14 +481,17 @@ public class DragonsDriver extends LinearOpMode {
             //<editor-fold desc="--------------------- FSM Scoring Control ---------------------">
             switch (scoringState) {
                 case INTAKE:
+
                     // if a score button is pressed, set targets and switch to lifting
-                    if (currentGamepad2.start && !previousGamepad2.start) {
+                    if (scoringStateControl && !prevScoringStateControl) {
                         basketScore(superStructure, miniStructure, telemetry);
                         scoringState = ScoringState.LIFTING;
                     }
 
                     break;
+
                 case LIFTING:
+
                     // tolerance and stuff is defined in subclass
                     if (superStructure.extension.atTargetPosition()) {
                         scoringTimer.reset();
@@ -494,9 +499,10 @@ public class DragonsDriver extends LinearOpMode {
                     }
 
                     break;
-                case SCORING:
-                    // open claw after 1 second, close 1 second later
 
+                case SCORING:
+
+                    // open claw after 1 second, close 1 second later
                     if (scoringTimer.milliseconds() > 2000) {
                         miniStructure.claw.close();
                         intake(superStructure, miniStructure, telemetry);
@@ -506,19 +512,22 @@ public class DragonsDriver extends LinearOpMode {
                     }
 
                     break;
+
                 case LOWERING:
 
+                    // if the extension is down, open the claw
                     if (superStructure.extension.atTargetPosition()) {
                         miniStructure.claw.open();
                         scoringState = ScoringState.INTAKE;
                     }
 
                     break;
+
                 default:
                     scoringState = ScoringState.INTAKE;
             }
 
-            if ((currentGamepad2.start && !previousGamepad2.start) && scoringState != ScoringState.INTAKE) {
+            if ((scoringStateControl && !prevScoringStateControl) && scoringState != ScoringState.INTAKE) {
                 telemetry.addLine ("Canceling score!!");
                 telemetry.addData("Score enum pos", scoringState.name());
 
