@@ -21,6 +21,8 @@ public class Global {
     public static final boolean Backward = false;
     public static boolean Right = true;
     public static final boolean Left = false;
+    public static final boolean Clockwise = true;
+    public static final boolean CounterClockwise = false;
 
     public enum ControlState {
         MANUAL,

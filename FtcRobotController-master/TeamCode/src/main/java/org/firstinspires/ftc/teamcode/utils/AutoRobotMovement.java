@@ -121,11 +121,6 @@ public class AutoRobotMovement {
         // Calculate target encoder counts
         double targetTicks = rotationDistance * Global.TICKS_PER_INCH;
 
-        // Adjust targetTicks based on rotation direction
-        if (!clockwise) {
-            targetTicks = -targetTicks;
-        }
-
         resetEncoders();
 
         // Set motor target positions
