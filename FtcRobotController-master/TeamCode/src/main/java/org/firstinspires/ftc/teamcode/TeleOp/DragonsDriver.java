@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.hardware.DragonsColor;
 import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
 import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.MoveRobot;
@@ -100,6 +102,8 @@ public class DragonsDriver extends LinearOpMode {
         dragonsOTOS      = new DragonsOTOS(this);
         superStructure   = new SuperStructure(this);
         miniStructure    = new MiniStructure(this);
+        dragonsColor     = new DragonsColor(this);
+
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Configuration Error Handing ---------------------">
@@ -324,36 +328,6 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.addLine();
             //</editor-fold>
 
-            //<editor-fold desc="--------------------- Limelight ---------------------">
-//            telemetry.addLine("-----Limelight-----");
-//
-//            if (dragonsLimelight.isValid) {
-//                // --------------------- Pipeline Switching ---------------------
-////                if (currentB2 && !previousB2) { //rising edge
-////                    dragonsLimelight.setPipeline(YELLOW);
-////                } else if (!currentB2 && previousB2) { //falling edge
-////                    dragonsLimelight.setPipeline();
-////                }
-//
-//                //       x
-//                     if (bluePipeline   && dragonsLimelight.getPipeline().num != BLUE)
-//                    dragonsLimelight.setPipeline(BLUE);//
-//                //       b
-//                else if (redPipeline    && dragonsLimelight.getPipeline().num != RED)
-//                    dragonsLimelight.setPipeline(RED);
-//                //       y
-//                else if (yellowPipeline && dragonsLimelight.getPipeline().num != YELLOW)
-//                    dragonsLimelight.setPipeline(YELLOW);
-//
-//                telemetry.addData("Limelight Pipeline", dragonsLimelight.getPipeline().getName());
-//
-////                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this)), 180);
-//                dragonsLimelight.update(this);
-//            }
-//
-//            telemetry.addLine();
-           //</editor-fold>
-
             // <editor-fold desc=" --------------------- MiniStructure ---------------------">
             telemetry.addLine("-----Mini Structure-----");
 
@@ -428,6 +402,48 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.addLine();
             //</editor-fold>
 
+            //<editor-fold desc="--------------------- Color Sensor ---------------------">
+            if (dragonsColor.isValid) {
+                telemetry.addData("Light Detected", (dragonsColor.colorSensor).getLightDetected());
+                telemetry.addData("Red", dragonsColor.colorSensor.red());
+                telemetry.addData("Green", dragonsColor.colorSensor.green());
+                telemetry.addData("Blue", dragonsColor.colorSensor.blue());
+                telemetry.addData("Alpha", dragonsColor.colorSensor.alpha());
+                telemetry.addData("Distance", dragonsColor.colorSensor.getDistance(DistanceUnit.INCH));
+                telemetry.update();
+            }
+            //</editor-fold>
+
+            //<editor-fold desc="--------------------- Limelight ---------------------">
+//            telemetry.addLine("-----Limelight-----");
+//
+//            if (dragonsLimelight.isValid) {
+//                // --------------------- Pipeline Switching ---------------------
+////                if (currentB2 && !previousB2) { //rising edge
+////                    dragonsLimelight.setPipeline(YELLOW);
+////                } else if (!currentB2 && previousB2) { //falling edge
+////                    dragonsLimelight.setPipeline();
+////                }
+//
+//                //       x
+//                     if (bluePipeline   && dragonsLimelight.getPipeline().num != BLUE)
+//                    dragonsLimelight.setPipeline(BLUE);//
+//                //       b
+//                else if (redPipeline    && dragonsLimelight.getPipeline().num != RED)
+//                    dragonsLimelight.setPipeline(RED);
+//                //       y
+//                else if (yellowPipeline && dragonsLimelight.getPipeline().num != YELLOW)
+//                    dragonsLimelight.setPipeline(YELLOW);
+//
+//                telemetry.addData("Limelight Pipeline", dragonsLimelight.getPipeline().getName());
+//
+////                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this)), 180);
+//                dragonsLimelight.update(this);
+//            }
+//
+//            telemetry.addLine();
+           //</editor-fold>
+
             //<editor-fold desc="--------------------- SparkFun OTOS ---------------------">
             telemetry.addLine("-----Sparkfun OTOS-----");
             DecimalFormat sparkfunDF = new DecimalFormat("#.###");
@@ -465,10 +481,12 @@ public class DragonsDriver extends LinearOpMode {
 
                 //sets the motors to their corresponding power
                 drivetrain.setPower(drivePowers);
+
 //                telemetry.addData("leftFront power",  String.valueOf(Math.round(drivetrain.getPower()[0])));
 //                telemetry.addData("rightFront power", String.valueOf(Math.round(drivetrain.getPower()[1])));
 //                telemetry.addData("leftBack power",   String.valueOf(Math.round(drivetrain.getPower()[2])));
 //                telemetry.addData("rightBack power",  String.valueOf(Math.round(drivetrain.getPower()[3])));
+
                 telemetry.addLine();
             }
 
@@ -524,8 +542,8 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             if ((scoringStateControl && !prevScoringStateControl) && scoringState != ScoringState.INTAKE) {
-                telemetry.addLine ("Canceling score!!");
-                telemetry.addData("Score enum pos", scoringState.name());
+                telemetry.addLine("Canceling score!!");
+                telemetry.addData   ("Score enum pos", scoringState.name());
 
                 intake(superStructure, miniStructure, telemetry);
                 scoringState = ScoringState.LOWERING;
