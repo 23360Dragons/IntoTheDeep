@@ -46,8 +46,8 @@ public class DragonsDriver extends LinearOpMode {
     public static double twistSpeed   = 50;
     public static double tiltSpeed    = 30;
     public static double armSpeed     = 5;
-    public static double normalDriveSpeed = 1;
-    public static double alternateDriveSpeed = 0.6;
+    public static double normalDriveSpeed = 0.7;
+    public static double alternateDriveSpeed = 1;
     //</editor-fold>
 
     // superstructure PIDF coefficients
@@ -410,7 +410,6 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("Blue", dragonsColor.colorSensor.blue());
                 telemetry.addData("Alpha", dragonsColor.colorSensor.alpha());
                 telemetry.addData("Distance", dragonsColor.colorSensor.getDistance(DistanceUnit.INCH));
-                telemetry.update();
             }
             //</editor-fold>
 
@@ -477,7 +476,7 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("IMU heading", Math.toDegrees(botHeading));
 
                 // calls for movement
-                double[] drivePowers = MoveRobot.RC(x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
+                double[] drivePowers = MoveRobot.FC(botHeading, x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
 
                 //sets the motors to their corresponding power
                 drivetrain.setPower(drivePowers);

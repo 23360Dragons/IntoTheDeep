@@ -35,16 +35,12 @@ public class AutoRobotMovement {
     public void moveForward(double distance, boolean forward) {
         // Calculate target encoder positions
         double targetTicks = distance * Global.TICKS_PER_INCH;
-        targetTicks*=0.9;
+        targetTicks *= 1;
 
-//        if (!forward) {
-//            targetTicks = -targetTicks;
-//        }
-
-        frontLeft.setTargetPosition((int) targetTicks);
-        frontRight.setTargetPosition((int) targetTicks);
-        backLeft.setTargetPosition((int) targetTicks);
-        backRight.setTargetPosition((int) targetTicks);
+        frontLeft.setTargetPosition ((int) (forward ? targetTicks : -targetTicks));
+        frontRight.setTargetPosition((int) (forward ? targetTicks : -targetTicks));
+        backLeft.setTargetPosition  ((int) (forward ? targetTicks : -targetTicks));
+        backRight.setTargetPosition ((int) (forward ? targetTicks : -targetTicks));
 
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);

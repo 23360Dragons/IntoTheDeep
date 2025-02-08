@@ -20,6 +20,7 @@ public class DragonsIMU {
 
             imu = opmode.hardwareMap.get(IMU.class, "imu");
 
+            imu.resetDeviceConfigurationForOpMode();
             isValid = true;
 
             IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(

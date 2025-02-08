@@ -45,7 +45,7 @@ public class MiniStructure {
         public boolean isValid = true;
         private Servo servo;
 
-        double tiltStartPos  = 0.5;
+        double tiltStartPos  = 0.3;
 
         Tilt (HardwareMap hardwareMap) {
             try {
@@ -81,12 +81,12 @@ public class MiniStructure {
         private Servo servo;
 
         private double twistedPos = 0;
-        private double defaultPos = 1;
+        private double defaultPos = 0.7;
 
         Twist (HardwareMap hardwareMap) {
             try {
                 servo = hardwareMap.get(Servo.class, "twist");
-                servo.scaleRange(0.5, 0.875);
+                servo.scaleRange(0, 1);
                 setPosition(defaultPos);
             } catch (Exception e) {
                 Global.exceptions.append("Twist\n");
