@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
-@Disabled
 @Autonomous(name="TestStrafe12InchesRight", group="Tests")
 public class TestStrafe extends LinearOpMode {
     // Declare motors
