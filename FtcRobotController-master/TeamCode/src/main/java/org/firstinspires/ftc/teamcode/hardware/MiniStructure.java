@@ -45,7 +45,7 @@ public class MiniStructure {
         public boolean isValid = true;
         private Servo servo;
 
-        double tiltStartPos  = 0.3;
+        double tiltStartPos  = 0.45;
 
         Tilt (HardwareMap hardwareMap) {
             try {

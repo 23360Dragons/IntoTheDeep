@@ -40,9 +40,9 @@ public class DragonsDriver extends LinearOpMode {
     public DragonsColor     dragonsColor;
 
     //<editor-fold desc="--------------------- Part Speeds ---------------------">
-    public static double SSSpeed      = 0.8;
+    public static double SSSpeed      = 0.8; // todo finetune this. Maybe different values for auto and manual?
     public static double SSCreepSpeed = 0.5;
-    public static double extSpeed     = 1;
+    public static double extSpeed     = 0.7; // todo finetune this. Maybe different values for auto and manual?
     public static double twistSpeed   = 50;
     public static double tiltSpeed    = 30;
     public static double armSpeed     = 5;
@@ -265,7 +265,7 @@ public class DragonsDriver extends LinearOpMode {
                     }
                 }
 
-                telemetry.addData("Super Structure right artie position", superStructure.arm.getPosition().right);
+                telemetry.addData("Super Structure right artie position (used for control)", superStructure.arm.getPosition().right);
                 telemetry.addData("Super Structure  left artie position", superStructure.arm.getPosition().left);
                 telemetry.addData("Super Structure        enum position", superStructure.arm.getState());
             }
@@ -297,7 +297,7 @@ public class DragonsDriver extends LinearOpMode {
                         case MANUAL:
 
                             superStructure.extension.setPower(slidesPower * speed);
-                            telemetry.addData("extension is being set to", slidesPower * speed);
+                            telemetry.addData("Extension  is being set to", slidesPower * speed);
                             break;
 
                         case AUTO:
@@ -318,11 +318,12 @@ public class DragonsDriver extends LinearOpMode {
 
                         default:
                             telemetry.addLine("Extension control state isn't working properly :(");
+                            break;
                     }
                 }
 
-                telemetry.addData("Super Structure extension L position", superStructure.extension.getPosition().left);
-                telemetry.addData("Super Structure extension R position", superStructure.extension.getPosition().right);
+                telemetry.addData("Extension L position", superStructure.extension.getPosition().left);
+                telemetry.addData("Extension R position (used for control)", superStructure.extension.getPosition().right);
             }
 
             telemetry.addLine();
@@ -332,16 +333,15 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.addLine("-----Mini Structure-----");
 
             if (miniStructure.claw.isValid) {
-                //  left bumper
+                //  right bumper
                 if (openClaw) {
                     miniStructure.claw.open();
                 }
 
+                //  left bumper
                 if (closeClaw) {
                     miniStructure.claw.close();
                 }
-
-                telemetry.addData("claw Position", miniStructure.claw.getPosition());
             }
 
             if (miniStructure.twist.isValid) {
@@ -470,6 +470,10 @@ public class DragonsDriver extends LinearOpMode {
                 if (recalibrateIMU) {
                     telemetry.addLine("reset imu yaw");
                     dragonsIMU.imu.resetYaw();
+
+                    if (dragonsOTOS.isValid) {
+                        dragonsOTOS.sparkFunOTOS.calibrateImu();
+                    }
                 }
 
                 double botHeading = dragonsIMU.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //updates the imu
