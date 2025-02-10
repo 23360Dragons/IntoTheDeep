@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -124,6 +125,8 @@ public class DragonsDriver extends LinearOpMode {
         //<editor-fold desc="--------------------- Wait For Start ---------------------">
         List<LynxModule> hubs = hardwareMap.getAll(LynxModule.class);
         hubs.forEach(hub -> hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
+
+        telemetry.addLine("> Robot ready. Press play.");
 
         waitForStart();
 
@@ -410,6 +413,18 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("Blue", dragonsColor.colorSensor.blue());
                 telemetry.addData("Alpha", dragonsColor.colorSensor.alpha());
                 telemetry.addData("Distance", dragonsColor.colorSensor.getDistance(DistanceUnit.INCH));
+
+                if (dragonsLights.isValid) {
+                    if (dragonsColor.colorSensor.red() > 100) {
+                        telemetry.addData("Current Detected Color", "Red");
+                        dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                    } else if (dragonsColor.colorSensor.blue() > 100) {
+                        telemetry.addData("Current Detected Color", "Blue");
+                        dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+//                    } else if (dragonsColor.colorSensor.green() > 100) {
+//                        telemetry.addData("Current Detected Color", "Green");
+                    }
+                }
             }
             //</editor-fold>
 
