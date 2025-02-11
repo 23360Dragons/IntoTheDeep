@@ -120,7 +120,7 @@ public class MiniStructure {
         public boolean isValid = true;
         private Servo claw;
 
-        private final double openRotation   = 0.7;
+        private final double openRotation   = 0.65;
         private final double closedRotation = 0.45;
 
         Claw (HardwareMap hardwareMap) {
@@ -165,7 +165,7 @@ public class MiniStructure {
         private Servo right;
 
         double artieStartPos = 0.5;
-        double downPos = 0.2;
+        double downPos = 0.3;
         double upPos   = 0.65;
 
         Artie(HardwareMap hardwareMap) {
@@ -193,7 +193,7 @@ public class MiniStructure {
 
             if (isValid) {
 //                setPosition(artieStartPos);
-                up();
+                down();
             }
 
             // todo replace this with "all the way down" value

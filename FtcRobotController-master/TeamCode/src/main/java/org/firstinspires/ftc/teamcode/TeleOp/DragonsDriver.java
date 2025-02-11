@@ -40,28 +40,6 @@ public class DragonsDriver extends LinearOpMode {
     public MiniStructure    miniStructure;
     public DragonsColor     dragonsColor;
 
-    //<editor-fold desc="--------------------- Part Speeds ---------------------">
-    public static double SSSpeed      = 0.8; // todo finetune this. Maybe different values for auto and manual?
-    public static double SSCreepSpeed = 0.5;
-    public static double extSpeed     = 0.7; // todo finetune this. Maybe different values for auto and manual?
-    public static double twistSpeed   = 50;
-    public static double tiltSpeed    = 30;
-    public static double armSpeed     = 5;
-    public static double normalDriveSpeed = 0.7;
-    public static double alternateDriveSpeed = 1;
-    //</editor-fold>
-
-    // superstructure PIDF coefficients
-    public static double extensionKp = 0;
-    public static double extensionKi = 0;
-    public static double extensionKd = 0;
-
-    public static double artieKp = 0;
-    public static double artieKd = 0;
-    public static double artieKv = 0;
-    public static double artieKa = 0;
-    public static double artieKcos = 0;
-
     public enum ScoringState {
         // slides down, artie down
         INTAKE,
