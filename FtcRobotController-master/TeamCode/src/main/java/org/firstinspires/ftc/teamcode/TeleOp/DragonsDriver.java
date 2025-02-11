@@ -57,6 +57,9 @@ public class DragonsDriver extends LinearOpMode {
     public MiniStructure    miniStructure;
     public DragonsColor     dragonsColor;
 
+    public static double extensionTar = 0,
+    artieTar = 0;
+
     public enum ScoringState {
         // slides down, artie down
         INTAKE,
@@ -246,13 +249,14 @@ public class DragonsDriver extends LinearOpMode {
                             superStructure.arm.setFeedbackCoeffs(artieKp, 0, artieKd);
                             superStructure.arm.setFeedforwardCoeffs(artieKv, artieKa, artieKcos);
 
-                            if (SSFull && !prevSSFull)
-                                superStructure.arm.setTarget(superStructure.arm.fullTicks);
-                            else if (SSHang && !prevSSHang)
-                                superStructure.arm.setTarget(superStructure.arm.hangTicks);
-                            else if (SSDown && !prevSSDown)
-                                superStructure.arm.setTarget(superStructure.arm.downTicks);
+//                            if (SSFull && !prevSSFull)
+//                                superStructure.arm.setTarget(superStructure.arm.fullTicks);
+//                            else if (SSHang && !prevSSHang)
+//                                superStructure.arm.setTarget(superStructure.arm.hangTicks);
+//                            else if (SSDown && !prevSSDown)
+//                                superStructure.arm.setTarget(superStructure.arm.downTicks);
 
+                            superStructure.extension.setTarget(artieTar);
                             superStructure.arm.updatePosition(speed);
 
                             telemetry.addData("Super Structure current target position", superStructure.arm.currentTarget);
@@ -302,13 +306,14 @@ public class DragonsDriver extends LinearOpMode {
 
                             superStructure.extension.setVeloCoefficients(extKp, extKi, extKd);
 
-                            if (hang && !prevHang)
-                                superStructure.extension.setTarget(SuperStructure.Extension.hangTicks);
-                            else if (full && !prevFull)
-                                superStructure.extension.setTarget(SuperStructure.Extension.fullTicks);
-                            else if (down && !prevDown)
-                                superStructure.extension.setTarget(SuperStructure.Extension.downTicks);
+//                            if (hang && !prevHang)
+//                                superStructure.extension.setTarget(SuperStructure.Extension.hangTicks);
+//                            else if (full && !prevFull)
+//                                superStructure.extension.setTarget(SuperStructure.Extension.fullTicks);
+//                            else if (down && !prevDown)
+//                                superStructure.extension.setTarget(SuperStructure.Extension.downTicks);
 
+                            superStructure.extension.setTarget(extensionTar);
                             superStructure.extension.updatePosition(speed);
 
                             telemetry.addData("Extension Target", superStructure.extension.currentTarget);
