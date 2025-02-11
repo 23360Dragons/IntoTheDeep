@@ -20,6 +20,17 @@ public class Global {
     public static double normalDriveSpeed    = 0.8;
     public static double alternateDriveSpeed = 1;
 
+    // PIDF stuff
+    public static double extKp = 0;
+    public static double extKi = 0;
+    public static double extKd = 0;
+
+    public static double artieKp  = 0;
+    public static double artieKd  = 0;
+    public static double artieKcos = 0;
+    public static double artieKa = 0;
+    public static double artieKv = 0;
+
     //<editor-fold desc="Consts (Will literally never need to be edited)">
     public static StringBuilder exceptions  = new StringBuilder("The following were not found:\n");
     public static boolean exceptionOccurred = false;

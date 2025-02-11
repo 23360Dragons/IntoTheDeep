@@ -1,5 +1,22 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import static org.firstinspires.ftc.teamcode.utils.Global.SSCreepSpeed;
+import static org.firstinspires.ftc.teamcode.utils.Global.SSSpeed;
+import static org.firstinspires.ftc.teamcode.utils.Global.artieKa;
+import static org.firstinspires.ftc.teamcode.utils.Global.artieKcos;
+import static org.firstinspires.ftc.teamcode.utils.Global.artieKd;
+import static org.firstinspires.ftc.teamcode.utils.Global.artieKp;
+import static org.firstinspires.ftc.teamcode.utils.Global.artieKv;
+import static org.firstinspires.ftc.teamcode.utils.Global.extKd;
+import static org.firstinspires.ftc.teamcode.utils.Global.extKi;
+import static org.firstinspires.ftc.teamcode.utils.Global.extKp;
+import static org.firstinspires.ftc.teamcode.utils.Global.extSpeed           ;
+import static org.firstinspires.ftc.teamcode.utils.Global.twistSpeed         ;
+import static org.firstinspires.ftc.teamcode.utils.Global.tiltSpeed          ;
+import static org.firstinspires.ftc.teamcode.utils.Global.armSpeed           ;
+import static org.firstinspires.ftc.teamcode.utils.Global.normalDriveSpeed   ;
+import static org.firstinspires.ftc.teamcode.utils.Global.alternateDriveSpeed;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -283,7 +300,7 @@ public class DragonsDriver extends LinearOpMode {
 
                         case AUTO:
 
-                            superStructure.extension.setVeloCoefficients(extensionKp, extensionKi, extensionKd);
+                            superStructure.extension.setVeloCoefficients(extKp, extKi, extKd);
 
                             if (hang && !prevHang)
                                 superStructure.extension.setTarget(SuperStructure.Extension.hangTicks);
