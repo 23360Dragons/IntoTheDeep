@@ -45,7 +45,8 @@ public class MiniStructure {
         public boolean isValid = true;
         private Servo servo;
 
-        double tiltStartPos  = 0.45;
+        double tiltStartPos  = 0.3;
+        double tiltDownPos = 0.15;
 
         Tilt (HardwareMap hardwareMap) {
             try {
@@ -70,6 +71,14 @@ public class MiniStructure {
 //        public void setPower (double power){
 //            servo.setPower(power);
 //        }
+
+        public void up(){
+            setPosition(tiltStartPos);
+        }
+
+        public void down () {
+            setPosition(tiltDownPos);
+        }
 
         public double getPosition () {
             return servo.getPosition();
@@ -121,7 +130,7 @@ public class MiniStructure {
         private Servo claw;
 
         private final double openRotation   = 0.65;
-        private final double closedRotation = 0.45;
+        private final double closedRotation = 0.39;
 
         Claw (HardwareMap hardwareMap) {
             try {
@@ -164,9 +173,8 @@ public class MiniStructure {
         private Servo left;
         private Servo right;
 
-        double artieStartPos = 0.5;
-        double downPos = 0.3;
-        double upPos   = 0.65;
+        double downPos = 0.1;
+        double upPos   = 0.61;
 
         Artie(HardwareMap hardwareMap) {
             try {

@@ -5,12 +5,12 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.ejml.equation.IntegerSequence;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
+import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
-import org.firstinspires.ftc.teamcode.utils.Global;
 
 import static org.firstinspires.ftc.teamcode.utils.Global.Right;
 import static org.firstinspires.ftc.teamcode.utils.Global.Left;
@@ -24,25 +24,46 @@ import static org.firstinspires.ftc.teamcode.utils.Global.CounterClockwise;
 public class WallToChamber extends LinearOpMode {
     Drivetrain drivetrain;
     MiniStructure miniStructure;
+    SuperStructure superStructure;
 
-    public static double dist = 0,
-    strafeDist = 0,
-    dist2 = 0;
+    public static double dist = 20,
+    strafeDist = 12,
+    dist2 = 20;
+
+    ElapsedTime timer;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
+        timer = new ElapsedTime();
+        timer.startTime();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         miniStructure = new MiniStructure(this);
-        // Initialize motors - copied from CombinedMaster
+        miniStructure.artie.up();
         drivetrain = new Drivetrain(this);
+        superStructure = new SuperStructure(this);
         AutoRobotMovement autoRobotMovement = new AutoRobotMovement(drivetrain.leftFront, drivetrain.rightFront, drivetrain.leftBack, drivetrain.rightBack);
 
         waitForStart();
 
         // drive to submersible
-        autoRobotMovement.moveForward(dist, Forward);
+        miniStructure.artie.up();
+        miniStructure.tilt.down();
+        superStructure.extension.setTarget(1000);
+        superStructure.extension.switchToAuto();
+        autoRobotMovement.moveForward( dist, Forward);
         autoRobotMovement.strafe(strafeDist, Left);
         autoRobotMovement.moveForward(dist2, Forward);
+        superStructure.extension.setTarget(300);
+        superStructure.extension.setPower(1);
+        sleep(1000);
+
+        miniStructure.claw.open();
+        sleep(10000);
+
+
+
+
 
         // hangSpecimen();
         //go to push samples into obs zone
@@ -103,8 +124,4 @@ public class WallToChamber extends LinearOpMode {
 //        drivetrain.setPower(new double[]{0, 0, 0, 0});
     }
 
-    private void pushSampleToObs (AutoRobotMovement autoRobotMovement) {
-        autoRobotMovement.strafe(8, Right);
-        autoRobotMovement.moveForward(48, Backward);
-    }
 }

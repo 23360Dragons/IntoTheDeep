@@ -2,14 +2,6 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import static org.firstinspires.ftc.teamcode.utils.Global.SSCreepSpeed;
 import static org.firstinspires.ftc.teamcode.utils.Global.SSSpeed;
-import static org.firstinspires.ftc.teamcode.utils.Global.artieKa;
-import static org.firstinspires.ftc.teamcode.utils.Global.artieKcos;
-import static org.firstinspires.ftc.teamcode.utils.Global.artieKd;
-import static org.firstinspires.ftc.teamcode.utils.Global.artieKp;
-import static org.firstinspires.ftc.teamcode.utils.Global.artieKv;
-import static org.firstinspires.ftc.teamcode.utils.Global.extKd;
-import static org.firstinspires.ftc.teamcode.utils.Global.extKi;
-import static org.firstinspires.ftc.teamcode.utils.Global.extKp;
 import static org.firstinspires.ftc.teamcode.utils.Global.extSpeed           ;
 import static org.firstinspires.ftc.teamcode.utils.Global.twistSpeed         ;
 import static org.firstinspires.ftc.teamcode.utils.Global.tiltSpeed          ;
@@ -57,8 +49,8 @@ public class DragonsDriver extends LinearOpMode {
     public MiniStructure    miniStructure;
     public DragonsColor     dragonsColor;
 
-    public static double extensionTar = 0,
-    artieTar = 0;
+    public static int extensionTar = 0,
+                      artieTar = 0;
 
     public enum ScoringState {
         // slides down, artie down
@@ -103,6 +95,8 @@ public class DragonsDriver extends LinearOpMode {
         miniStructure    = new MiniStructure(this);
         dragonsColor     = new DragonsColor(this);
 
+        superStructure.extension.setTarget(0);
+        superStructure.arm.setTarget(0);
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Configuration Error Handing ---------------------">
@@ -181,10 +175,6 @@ public class DragonsDriver extends LinearOpMode {
             boolean closeClaw     = currentGamepad2.left_bumper,
                     openClaw      = currentGamepad2.right_bumper,
 
-                    //reset extension encoder positions
-//                    leftStickButton  = currentGamepad2.left_stick_button,
-//                    rightStickButton = currentGamepad2.right_stick_button,
-
                     twistLeft      = currentGamepad2.dpad_left,
                     twistRight     = currentGamepad2.dpad_right,
                     tiltUp         = currentGamepad2.dpad_up,
@@ -227,9 +217,6 @@ public class DragonsDriver extends LinearOpMode {
                     superStructure.arm.setState(SuperStructure.ARTICULATION_POS.UP);
                 }
 
-                // toggle control modes
-                superStructure.arm.updateControlState();
-
                 // if the extension is past legal limit
                 if (superStructure.extension.isValid && superStructure.arm.getState() != SuperStructure.ARTICULATION_POS.DOWN && superStructure.extension.getPosition().right > SuperStructure.Extension.maxDownExtension) {
                     telemetry.addLine("Arm cannot go down, as extension is too extended!");
@@ -240,34 +227,28 @@ public class DragonsDriver extends LinearOpMode {
 
                         case MANUAL:
 
+                            superStructure.arm.switchToManual();
                             superStructure.arm.setPower(articulationPower * speed);
                             telemetry.addData("superstructure is being set to", articulationPower * speed);
                             break;
 
                         case AUTO:
 
-                            superStructure.arm.setFeedbackCoeffs(artieKp, 0, artieKd);
-                            superStructure.arm.setFeedforwardCoeffs(artieKv, artieKa, artieKcos);
+                            if (SSFull && !prevSSFull) {
+                                superStructure.extension.full();
+                            } else if (SSHang && !prevSSHang) {
+                                superStructure.extension.hang();
+                            } else if (SSDown && !prevSSDown) {
+                                superStructure.extension.down();
+                            }
 
-//                            if (SSFull && !prevSSFull)
-//                                superStructure.arm.setTarget(superStructure.arm.fullTicks);
-//                            else if (SSHang && !prevSSHang)
-//                                superStructure.arm.setTarget(superStructure.arm.hangTicks);
-//                            else if (SSDown && !prevSSDown)
-//                                superStructure.arm.setTarget(superStructure.arm.downTicks);
-
-                            superStructure.extension.setTarget(artieTar);
-                            superStructure.arm.updatePosition(speed);
-
-                            telemetry.addData("Super Structure current target position", superStructure.arm.currentTarget);
+                            superStructure.arm.switchToAuto();
+                            superStructure.arm.setPower(SSSpeed);
                             break;
-
-                        default:
-                            telemetry.addLine("Articulation control state isn't working properly :(");
                     }
                 }
 
-                telemetry.addData("Super Structure right artie position (used for control)", superStructure.arm.getPosition().right);
+                telemetry.addData("Super Structure right artie position", superStructure.arm.getPosition().right);
                 telemetry.addData("Super Structure  left artie position", superStructure.arm.getPosition().left);
                 telemetry.addData("Super Structure        enum position", superStructure.arm.getState());
             }
@@ -277,17 +258,6 @@ public class DragonsDriver extends LinearOpMode {
                 double slidesPower = (slidesUp - slidesDown);
                 double speed = extSpeed;
 
-                //todo decide whether to enable or disable this
-
-                /*
-                // reset encoders
-                if (leftStickButton && rightStickButton) {
-                    superStructure.extension.resetEncoders();
-                }*/
-
-                // toggle control modes
-                superStructure.extension.updateControlState();
-
                 // if the superstructure is down, prevent extending too much
                 if (superStructure.arm.isValid && superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN && slidesPower > 0 && superStructure.extension.getPosition().right > SuperStructure.Extension.maxDownExtension) {
                     telemetry.addLine("Extension cannot extend more, as the arms are down!");
@@ -295,36 +265,27 @@ public class DragonsDriver extends LinearOpMode {
 
                     // actually control the superstructure
                     switch (Global.controlState) {
-
                         case MANUAL:
-
+                            superStructure.extension.switchToManual();
                             superStructure.extension.setPower(slidesPower * speed);
                             telemetry.addData("Extension  is being set to", slidesPower * speed);
                             break;
 
                         case AUTO:
+                            if (full && !prevFull) {
+                                superStructure.extension.full();
+                            } else if (hang && !prevHang) {
+                                superStructure.extension.hang();
+                            } else if (down && !prevDown) {
+                                superStructure.extension.down();
+                            }
 
-                            superStructure.extension.setVeloCoefficients(extKp, extKi, extKd);
-
-//                            if (hang && !prevHang)
-//                                superStructure.extension.setTarget(SuperStructure.Extension.hangTicks);
-//                            else if (full && !prevFull)
-//                                superStructure.extension.setTarget(SuperStructure.Extension.fullTicks);
-//                            else if (down && !prevDown)
-//                                superStructure.extension.setTarget(SuperStructure.Extension.downTicks);
-
-                            superStructure.extension.setTarget(extensionTar);
-                            superStructure.extension.updatePosition(speed);
-
-                            telemetry.addData("Extension Target", superStructure.extension.currentTarget);
-                            break;
-
-                        default:
-                            telemetry.addLine("Extension control state isn't working properly :(");
+                            superStructure.extension.switchToAuto();
                             break;
                     }
                 }
 
+                telemetry.addData("Extension tar", extensionTar);
                 telemetry.addData("Extension L position", superStructure.extension.getPosition().left);
                 telemetry.addData("Extension R position (used for control)", superStructure.extension.getPosition().right);
             }

@@ -48,10 +48,10 @@ public class AutoRobotMovement {
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setPower(forward ? 0.5 : -0.5);
+        frontLeft.setPower(forward ?  0.5 : -0.5);
         frontRight.setPower(forward ? 0.5 : -0.5);
-        backLeft.setPower(forward ? 0.5 : -0.5);
-        backRight.setPower(forward ? 0.5 : -0.5);
+        backLeft.setPower(forward ?   0.5 : -0.5);
+        backRight.setPower(forward ?  0.5 : -0.5);
 
         while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
             // Do nothing, just wait
@@ -85,10 +85,10 @@ public class AutoRobotMovement {
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setPower(right ? 0.5 : -0.5);
-        frontRight.setPower(right ? -0.5 : 0.5);
-        backLeft.setPower(right ? -0.5 : 0.5);
-        backRight.setPower(right ? 0.5 : -0.5);
+        frontLeft.setPower(right ?   0.5 : -0.5);
+        frontRight.setPower(right ? -0.5 :  0.5);
+        backLeft.setPower(right ?   -0.5 :  0.5);
+        backRight.setPower(right ?   0.5 : -0.5);
 
         while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
             // Do nothing, just wait
@@ -129,10 +129,10 @@ public class AutoRobotMovement {
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Set motor power
-        frontLeft.setPower(clockwise ? 0.5 : -0.5);
-        frontRight.setPower(clockwise ? -0.5 : 0.5);
-        backLeft.setPower(clockwise ? 0.5 : -0.5);
-        backRight.setPower(clockwise ? -0.5 : 0.5);
+        frontLeft.setPower(clockwise ?   0.5 : -0.5);
+        frontRight.setPower(clockwise ? -0.5 :  0.5);
+        backLeft.setPower(clockwise ?    0.5 : -0.5);
+        backRight.setPower(clockwise ?  -0.5 :  0.5);
 
         // Wait for motors to reach target position
         while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
