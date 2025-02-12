@@ -55,6 +55,14 @@ public class Global {
         else
             controlState = ControlState.MANUAL;
     }
+
+    public static void switchToManual () {
+        controlState = ControlState.MANUAL;
+    }
+
+    public static void switchToAuto () {
+        controlState = ControlState.AUTO;
+    }
     //</editor-fold>
 
     private Global () {}

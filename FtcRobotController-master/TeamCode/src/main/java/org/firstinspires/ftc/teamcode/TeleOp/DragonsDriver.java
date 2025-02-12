@@ -75,6 +75,8 @@ public class DragonsDriver extends LinearOpMode {
         // clear exceptions, then re add stuff
         Global.exceptions.delete(0, Global.exceptions.capacity()).append("The following were not found:\n");
         Global.exceptionOccurred = false;
+
+        Global.switchToManual();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         Gamepad currentGamepad1  = new Gamepad();
         Gamepad currentGamepad2  = new Gamepad();
@@ -119,6 +121,7 @@ public class DragonsDriver extends LinearOpMode {
         hubs.forEach(hub -> hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
 
         telemetry.addLine("> Robot ready. Press play.");
+        telemetry.update();
 
         waitForStart();
 
@@ -186,7 +189,8 @@ public class DragonsDriver extends LinearOpMode {
 
                     hang = currentGamepad2.x, prevHang = previousGamepad2.x,
                     full = currentGamepad2.y, prevFull = previousGamepad2.y,
-                    down = currentGamepad2.a, prevDown = previousGamepad2.a;
+                    down = currentGamepad2.a, prevDown = previousGamepad2.a,
+                    cham = currentGamepad2.b, prevCham = previousGamepad2.b;
 
             if (controlToggle && !prevControlToggle) {
                 Global.toggleControlState();
@@ -278,6 +282,8 @@ public class DragonsDriver extends LinearOpMode {
                                 superStructure.extension.hang();
                             } else if (down && !prevDown) {
                                 superStructure.extension.down();
+                            } else if (cham && !prevCham) {
+                                superStructure.extension.chamber();
                             }
 
                             superStructure.extension.switchToAuto();
@@ -319,12 +325,24 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             if (miniStructure.tilt.isValid) {
-                double power = tiltUp ? 0.001 * tiltSpeed : tiltDown ? -0.001 * tiltSpeed : 0;
-                double targetPosition = miniStructure.tilt.getPosition() + power;
+                switch (Global.controlState) {
+                    case MANUAL:
+                        double power = tiltUp ? 0.001 * tiltSpeed : tiltDown ? -0.001 * tiltSpeed : 0;
+                        double targetPosition = miniStructure.tilt.getPosition() + power;
 
-                miniStructure.tilt.setPosition(targetPosition);
+                        miniStructure.tilt.setPosition(targetPosition);
+                        telemetry.addData("MiniStructure tilt power", power);
+                        break;
 
-                telemetry.addData("MiniStructure tilt power", power);
+                    case AUTO:
+                        if (tiltUp) {
+                            miniStructure.tilt.up();
+                        } else if (tiltDown) {
+                            miniStructure.tilt.down();
+                        }
+                }
+
+
                 telemetry.addData("MiniStructure tilt position", miniStructure.tilt.getPosition());
             }
 
@@ -520,7 +538,7 @@ public class DragonsDriver extends LinearOpMode {
                     scoringState = ScoringState.INTAKE;
             }
 
-            if ((scoringStateControl && !prevScoringStateControl) && scoringState != ScoringState.INTAKE) {
+            if (((scoringStateControl && !prevScoringStateControl) && scoringState != ScoringState.INTAKE || Global.controlState == Global.ControlState.MANUAL)) {
                 telemetry.addLine("Canceling score!!");
                 telemetry.addData   ("Score enum pos", scoringState.name());
 
@@ -537,15 +555,22 @@ public class DragonsDriver extends LinearOpMode {
     }
 
     private void basketScore (SuperStructure superStructure, MiniStructure miniStructure, Telemetry telemetry) {
-        superStructure.extension.setTarget(SuperStructure.Extension.fullTicks);
-        miniStructure.artie.up();
+        superStructure.extension.full();
+        miniStructure.basket();
 
         telemetry.addLine("Raising extension and artie!");
     }
 
+    private void chamberScore (SuperStructure superStructure, MiniStructure miniStructure, Telemetry telemetry) {
+        superStructure.extension.chamber();
+        miniStructure.chamber();
+
+        telemetry.addLine("Chamber extension and artie!");
+    }
+
     private void intake (SuperStructure superStructure, MiniStructure miniStructure, Telemetry telemetry) {
-        superStructure.extension.setTarget(SuperStructure.Extension.downTicks);
-        miniStructure.artie.down();
+        superStructure.extension.down();
+        miniStructure.intake();
 
         telemetry.addLine("Lowering extension and artie!");
     }

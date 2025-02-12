@@ -49,21 +49,18 @@ public class WallToChamber extends LinearOpMode {
         // drive to submersible
         miniStructure.artie.up();
         miniStructure.tilt.down();
-        superStructure.extension.setTarget(1000);
+        superStructure.extension.chamber();
         superStructure.extension.switchToAuto();
         autoRobotMovement.moveForward( dist, Forward);
         autoRobotMovement.strafe(strafeDist, Left);
         autoRobotMovement.moveForward(dist2, Forward);
-        superStructure.extension.setTarget(300);
+        superStructure.extension.down();
         superStructure.extension.setPower(1);
-        sleep(1000);
-
+        timer.reset();
+        while(timer.milliseconds() < 1500) {}
         miniStructure.claw.open();
-        sleep(10000);
-
-
-
-
+        timer.reset();
+        while(timer.milliseconds() < 3000) {}
 
         // hangSpecimen();
         //go to push samples into obs zone

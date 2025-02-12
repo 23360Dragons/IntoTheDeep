@@ -41,6 +41,22 @@ public class MiniStructure {
         opmode.telemetry.update();
     }
 
+    public void basket () {
+        tilt.up();
+        artie.up();
+    }
+
+    public void chamber () {
+        tilt.down();
+        artie.up();
+    }
+
+    public void intake () {
+        tilt.up();
+        artie.down();
+        claw.open();
+    }
+
     public static class Tilt {
         public boolean isValid = true;
         private Servo servo;
@@ -59,7 +75,7 @@ public class MiniStructure {
             }
 
             if (isValid) {
-                setPosition(tiltStartPos);
+                up();
             }
         }
 

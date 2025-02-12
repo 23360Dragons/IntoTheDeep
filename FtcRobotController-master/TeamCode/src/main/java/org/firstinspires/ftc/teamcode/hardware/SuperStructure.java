@@ -49,9 +49,10 @@ public class SuperStructure {
 
         public boolean isValid = true;
 
-        public  int hangTicks = -50;
-        public  int downTicks = -300;
-        public  int fullTicks = -0;
+        public static final int hangTicks = -50;
+        public static final int downTicks = -300;
+        public static final int fullTicks = -0;
+        private static final int tolerance = 10;
 
         Arm (LinearOpMode opmode) {
             try {
@@ -76,6 +77,8 @@ public class SuperStructure {
                 this.isValid = false;
             }
 
+            leftMotor.setTargetPositionTolerance(tolerance);
+            rightMotor.setTargetPositionTolerance(tolerance);
             articulationPos = ARTICULATION_POS.UP;
         }
 
@@ -129,11 +132,12 @@ public class SuperStructure {
     public static class Extension {
         public boolean isValid = true;
 //
-        public  static int maxDownExtension = 1350;
-        private static final int tolerance  = 100;
-        public  static int hangTicks        = maxDownExtension - tolerance;
-        public  static int downTicks        = -5;
-        public  static int fullTicks        = 3000;
+        private static final int tolerance  = 10;
+        public static final int maxDownExtension = 1350;
+        public static final int hangTicks        = maxDownExtension - tolerance;
+        public static final int downTicks        = -5;
+        public static final int fullTicks        = 3000;
+        public static final int chamberTicks = 900;
 
         private DcMotorEx leftMotor, rightMotor;
         Extension (LinearOpMode opmode) {
@@ -160,6 +164,9 @@ public class SuperStructure {
                 Global.exceptionOccurred = true;
                 this.isValid = false;
             }
+
+            leftMotor.setTargetPositionTolerance(tolerance);
+            rightMotor.setTargetPositionTolerance(tolerance);
         }
 
         public void setPower(double power) {
@@ -187,6 +194,10 @@ public class SuperStructure {
         public void switchToAuto () {
             leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+
+        public void chamber () {
+            setTarget(chamberTicks);
         }
 
         public void hang () {
