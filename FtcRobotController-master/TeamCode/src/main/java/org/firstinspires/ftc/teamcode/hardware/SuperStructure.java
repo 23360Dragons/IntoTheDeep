@@ -80,6 +80,7 @@ public class SuperStructure {
             leftMotor.setTargetPositionTolerance(tolerance);
             rightMotor.setTargetPositionTolerance(tolerance);
             articulationPos = ARTICULATION_POS.UP;
+            setTarget(0);
         }
 
         public void setState (ARTICULATION_POS pos) {
@@ -167,6 +168,7 @@ public class SuperStructure {
 
             leftMotor.setTargetPositionTolerance(tolerance);
             rightMotor.setTargetPositionTolerance(tolerance);
+            setTarget(0);
         }
 
         public void setPower(double power) {

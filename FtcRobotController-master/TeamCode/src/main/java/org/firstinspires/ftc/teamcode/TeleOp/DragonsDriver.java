@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import static org.firstinspires.ftc.teamcode.utils.Global.SSCreepSpeed;
 import static org.firstinspires.ftc.teamcode.utils.Global.SSSpeed;
-import static org.firstinspires.ftc.teamcode.utils.Global.extSpeed           ;
-import static org.firstinspires.ftc.teamcode.utils.Global.twistSpeed         ;
-import static org.firstinspires.ftc.teamcode.utils.Global.tiltSpeed          ;
-import static org.firstinspires.ftc.teamcode.utils.Global.armSpeed           ;
-import static org.firstinspires.ftc.teamcode.utils.Global.normalDriveSpeed   ;
+import static org.firstinspires.ftc.teamcode.utils.Global.extSpeed;
+import static org.firstinspires.ftc.teamcode.utils.Global.twistSpeed;
+import static org.firstinspires.ftc.teamcode.utils.Global.tiltSpeed;
+import static org.firstinspires.ftc.teamcode.utils.Global.armSpeed;
+import static org.firstinspires.ftc.teamcode.utils.Global.normalDriveSpeed;
 import static org.firstinspires.ftc.teamcode.utils.Global.alternateDriveSpeed;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -49,9 +49,8 @@ public class DragonsDriver extends LinearOpMode {
     public MiniStructure    miniStructure;
     public DragonsColor     dragonsColor;
 
-//    public static int extensionTar = 0,
-//                      artieTar = 0;
-//
+
+    // These enums are for Finite State Machines (see gm0)
     public enum ScoringState {
         // slides down, artie down
         INTAKE,
@@ -74,6 +73,7 @@ public class DragonsDriver extends LinearOpMode {
         HANGING
     }
 
+    // set the current state of both to default
     private HangState    hangState = HangState.DEFAULT;
     private ScoringState scoringState = ScoringState.INTAKE;
 
@@ -88,13 +88,17 @@ public class DragonsDriver extends LinearOpMode {
         Global.exceptions.delete(0, Global.exceptions.capacity()).append("The following were not found:\n");
         Global.exceptionOccurred = false;
 
+        // Puts the control state in manual. This means that slides, ministructure, superstructure are all manually controlled
         Global.switchToManual();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        // creates previous gamepads for making holding buttons down only send one input (on down)
         Gamepad currentGamepad1  = new Gamepad();
         Gamepad currentGamepad2  = new Gamepad();
         Gamepad previousGamepad1 = new Gamepad();
         Gamepad previousGamepad2 = new Gamepad();
 
+        // create timers for the FSMs
         ElapsedTime scoringTimer = new ElapsedTime();
         scoringTimer.startTime();
         ElapsedTime hangingTimer = new ElapsedTime();
@@ -111,8 +115,7 @@ public class DragonsDriver extends LinearOpMode {
         miniStructure    = new MiniStructure(this);
         dragonsColor     = new DragonsColor(this);
 
-        superStructure.extension.setTarget(0);
-        superStructure.arm.setTarget(0);
+        // ministructure and superstructure targets are set in init (make sure to reset them at end of auto)
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Configuration Error Handing ---------------------">
@@ -131,6 +134,7 @@ public class DragonsDriver extends LinearOpMode {
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Wait For Start ---------------------">
+        // for bulk reads (reduces loop time)
         List<LynxModule> hubs = hardwareMap.getAll(LynxModule.class);
         hubs.forEach(hub -> hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
 
@@ -145,12 +149,14 @@ public class DragonsDriver extends LinearOpMode {
 
         //<editor-fold desc="--------------------- Reset timers ---------------------">
         scoringTimer.reset();
+        hangingTimer.reset();
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Main Loop ---------------------">
         while (opModeIsActive()) {
 
             //<editor-fold desc=" --------------------- Input ---------------------">
+            // bulk reads reset
             hubs.forEach(LynxModule::clearBulkCache);
 
             // Store the gamepad values from the previous loop, which
@@ -218,9 +224,9 @@ public class DragonsDriver extends LinearOpMode {
             // <editor-fold desc="--------------------- SuperStructure ---------------------">
             if (superStructure.arm.isValid || superStructure.extension.isValid)
                 telemetry.addLine("-----Super Structure-----");
-
+            // SUperstructure arm
             if (superStructure.arm.isValid){
-                //                         left trigger       right trigger
+                //                         left trigger  right trigger
                 double articulationPower = (armUp - (armDown));
 
                 double speed = SSCreepSpeed;
@@ -273,6 +279,7 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("Super Structure        enum position", superStructure.arm.getState());
             }
 
+            // SUperstructure extension
             if (superStructure.extension.isValid) {
                 //                right trigger left trigger
                 double slidesPower = (slidesUp - slidesDown);
@@ -286,14 +293,15 @@ public class DragonsDriver extends LinearOpMode {
                     // actually control the superstructure
                     switch (Global.controlState) {
                         case MANUAL:
+
                             superStructure.extension.switchToManual();
                             superStructure.extension.setPower(slidesPower * speed);
                             telemetry.addData("Extension  is being set to", slidesPower * speed);
                             break;
 
                         case AUTO:
-                            superStructure.extension.setPower(extSpeed);
 
+                            // when you press a button, set it to a height
                             if (full && !prevFull) {
                                 superStructure.extension.full();
                             } else if (hang && !prevHang) {
@@ -305,6 +313,9 @@ public class DragonsDriver extends LinearOpMode {
                             }
 
                             superStructure.extension.switchToAuto();
+
+                            // this might make it move when it shouldn't?
+                            superStructure.extension.setPower(extSpeed);
                             break;
                     }
                 }
@@ -352,6 +363,7 @@ public class DragonsDriver extends LinearOpMode {
                         break;
 
                     case AUTO:
+                        // todo maybe a presseddown functionality?
                         if (tiltUp) {
                             miniStructure.tilt.up();
                         } else if (tiltDown) {
@@ -368,6 +380,7 @@ public class DragonsDriver extends LinearOpMode {
 
                 // Manual Control
 
+                // todo probably make this fully manual except for FSMs
                 switch (Global.controlState) {
                     case MANUAL:
 
@@ -382,6 +395,7 @@ public class DragonsDriver extends LinearOpMode {
 
                     case AUTO:
 
+                        // if the right stick is down, lower
                         if (artiePower < -0.3) {
                             miniStructure.artie.down();
                         } else if (artiePower > 0.3) {
@@ -554,11 +568,14 @@ public class DragonsDriver extends LinearOpMode {
                 default:
                     scoringState = ScoringState.INTAKE;
             }
-
+            //   if the button is pressed down, run ONCE                  if it's not supposed to START score          if it's in manual
             if (((scoringStateControl && !prevScoringStateControl) && scoringState != ScoringState.INTAKE || Global.controlState == Global.ControlState.MANUAL)) {
+
+                // Cancel the scoring fsm
                 telemetry.addLine("Canceling score!!");
                 telemetry.addData   ("Score enum pos", scoringState.name());
 
+                // lower slides and ministructure
                 intake(superStructure, miniStructure, telemetry);
                 scoringState = ScoringState.LOWERING;
                 // because lowering handles claw opening once slides are down
@@ -609,11 +626,14 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             if (((startHang && !prevStartHang) && hangState != HangState.DEFAULT || Global.controlState == Global.ControlState.MANUAL)) {
-                telemetry.addLine("Canceling score!!");
-                telemetry.addData   ("Score enum pos", scoringState.name());
 
+                //Cancel the hanging fsm
+                telemetry.addLine("Canceling hang!!");
+                telemetry.addData   ("Hang enum pos", hangState.name());
+
+                // lower slides and ministructure
                 intake(superStructure, miniStructure, telemetry);
-                scoringState = ScoringState.LOWERING;
+                hangState = HangState.DEFAULT;
                 // because lowering handles claw opening once slides are down
             }
             //</editor-fold>
