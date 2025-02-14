@@ -57,6 +57,11 @@ public class MiniStructure {
         claw.open();
     }
 
+    public void down () {
+        tilt.up();
+        artie.down();
+    }
+
     public static class Tilt {
         public boolean isValid = true;
         private Servo servo;

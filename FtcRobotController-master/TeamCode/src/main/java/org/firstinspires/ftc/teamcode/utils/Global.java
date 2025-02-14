@@ -13,7 +13,7 @@ public class Global {
     // SPEEDS
     public static double SSSpeed             = 0.8; // todo finetune this. Maybe different values for auto and manual?
     public static double SSCreepSpeed        = 0.5;
-    public static double extSpeed            = 0.7; // todo finetune this. Maybe different values for auto and manual?
+    public static double extSpeed            = 0.8; // todo finetune this. Maybe different values for auto and manual?
     public static double twistSpeed          = 50;
     public static double tiltSpeed           = 30;
     public static double armSpeed            = 5;
@@ -47,7 +47,7 @@ public class Global {
         AUTO
     }
 
-    public static Global.ControlState controlState = ControlState.MANUAL;
+    public static ControlState controlState = ControlState.MANUAL;
 
     public static void toggleControlState () {
         if (controlState == ControlState.MANUAL)

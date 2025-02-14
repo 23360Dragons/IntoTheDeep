@@ -49,9 +49,9 @@ public class DragonsDriver extends LinearOpMode {
     public MiniStructure    miniStructure;
     public DragonsColor     dragonsColor;
 
-    public static int extensionTar = 0,
-                      artieTar = 0;
-
+//    public static int extensionTar = 0,
+//                      artieTar = 0;
+//
     public enum ScoringState {
         // slides down, artie down
         INTAKE,
@@ -63,6 +63,18 @@ public class DragonsDriver extends LinearOpMode {
         LOWERING
     }
 
+    public enum HangState {
+        // anything when you're not hanging
+        DEFAULT,
+        // ministructure down, extension up
+        EXTENDING,
+        // superstructure down
+        TILTING,
+        // extension down
+        HANGING
+    }
+
+    private HangState    hangState = HangState.DEFAULT;
     private ScoringState scoringState = ScoringState.INTAKE;
 
     //</editor-fold>
@@ -85,6 +97,8 @@ public class DragonsDriver extends LinearOpMode {
 
         ElapsedTime scoringTimer = new ElapsedTime();
         scoringTimer.startTime();
+        ElapsedTime hangingTimer = new ElapsedTime();
+        hangingTimer.startTime();
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
@@ -166,7 +180,9 @@ public class DragonsDriver extends LinearOpMode {
 
                     SSFull = currentGamepad1.y, prevSSFull = previousGamepad1.y,
                     SSHang = currentGamepad1.x, prevSSHang = previousGamepad1.x,
-                    SSDown = currentGamepad1.b, prevSSDown = previousGamepad1.b;
+                    SSDown = currentGamepad1.b, prevSSDown = previousGamepad1.b,
+
+                    startHang = currentGamepad1.start, prevStartHang = previousGamepad1.start;
 
             // gamepad 2 (MANIPULATOR)
 
@@ -276,6 +292,8 @@ public class DragonsDriver extends LinearOpMode {
                             break;
 
                         case AUTO:
+                            superStructure.extension.setPower(extSpeed);
+
                             if (full && !prevFull) {
                                 superStructure.extension.full();
                             } else if (hang && !prevHang) {
@@ -291,7 +309,6 @@ public class DragonsDriver extends LinearOpMode {
                     }
                 }
 
-                telemetry.addData("Extension tar", extensionTar);
                 telemetry.addData("Extension L position", superStructure.extension.getPosition().left);
                 telemetry.addData("Extension R position (used for control)", superStructure.extension.getPosition().right);
             }
@@ -549,6 +566,57 @@ public class DragonsDriver extends LinearOpMode {
 
             //</editor-fold>
 
+            //<editor-fold desc="--------------------- FSM Hang Control ---------------------">
+            switch (hangState) {
+                case DEFAULT:
+
+                    if (startHang && !prevStartHang) {
+                        superStructure.extension.hang();
+                        miniStructure.down();
+                        hangState = HangState.EXTENDING;
+                    }
+
+                    break;
+
+                case EXTENDING:
+
+                    if (superStructure.extension.atTargetPosition()) {
+                        superStructure.arm.hang();
+                        hangState = HangState.TILTING;
+                    }
+
+                    break;
+                case TILTING:
+
+                    if (superStructure.arm.atTargetPosition()) {
+                        superStructure.extension.down();
+                        hangState = HangState.HANGING;
+                        hangingTimer.reset();
+                    }
+
+                    break;
+                case HANGING:
+
+                    if (hangingTimer.seconds() > 5) {
+                        superStructure.extension.setPower(0.3);
+                        superStructure.extension.hang();
+                        hangState = HangState.DEFAULT;
+                    }
+
+                    break;
+                default:
+                    hangState = HangState.DEFAULT;
+            }
+
+            if (((startHang && !prevStartHang) && hangState != HangState.DEFAULT || Global.controlState == Global.ControlState.MANUAL)) {
+                telemetry.addLine("Canceling score!!");
+                telemetry.addData   ("Score enum pos", scoringState.name());
+
+                intake(superStructure, miniStructure, telemetry);
+                scoringState = ScoringState.LOWERING;
+                // because lowering handles claw opening once slides are down
+            }
+            //</editor-fold>
             telemetry.update();
         }
         //</editor-fold>

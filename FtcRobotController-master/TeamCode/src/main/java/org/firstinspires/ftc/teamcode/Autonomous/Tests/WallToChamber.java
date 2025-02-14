@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
 import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
+import org.firstinspires.ftc.teamcode.utils.Global;
 
 import static org.firstinspires.ftc.teamcode.utils.Global.Right;
 import static org.firstinspires.ftc.teamcode.utils.Global.Left;
@@ -44,6 +45,9 @@ public class WallToChamber extends LinearOpMode {
         superStructure = new SuperStructure(this);
         AutoRobotMovement autoRobotMovement = new AutoRobotMovement(drivetrain.leftFront, drivetrain.rightFront, drivetrain.leftBack, drivetrain.rightBack);
 
+        Global.switchToAuto();
+        superStructure.arm.switchToAuto();
+        superStructure.extension.switchToAuto();
         waitForStart();
 
         // drive to submersible
