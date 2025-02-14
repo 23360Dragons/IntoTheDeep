@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
-@Disabled
 @Autonomous(name="TestForward12Inches", group="Tests")
 public class TestForward extends LinearOpMode {
     // Declare motors

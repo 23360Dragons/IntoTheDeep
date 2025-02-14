@@ -33,28 +33,25 @@ public class AutoRobotMovement {
      * @param forward   True to move forward, false to move backward.
      */
     public void moveForward(double distance, boolean forward) {
-        // Calculate target encoder positions
         double targetTicks = distance * Global.TICKS_PER_INCH;
-        targetTicks*=0.9;
+        targetTicks *= 1;
 
-//        if (!forward) {
-//            targetTicks = -targetTicks;
-//        }
+        resetEncoders();
 
-        frontLeft.setTargetPosition((int) targetTicks);
-        frontRight.setTargetPosition((int) targetTicks);
-        backLeft.setTargetPosition((int) targetTicks);
-        backRight.setTargetPosition((int) targetTicks);
+        frontLeft.setTargetPosition ((int) (forward ? targetTicks : -targetTicks));
+        frontRight.setTargetPosition((int) (forward ? targetTicks : -targetTicks));
+        backLeft.setTargetPosition  ((int) (forward ? targetTicks : -targetTicks));
+        backRight.setTargetPosition ((int) (forward ? targetTicks : -targetTicks));
 
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setPower(forward ? 0.5 : -0.5);
+        frontLeft.setPower(forward ?  0.5 : -0.5);
         frontRight.setPower(forward ? 0.5 : -0.5);
-        backLeft.setPower(forward ? 0.5 : -0.5);
-        backRight.setPower(forward ? 0.5 : -0.5);
+        backLeft.setPower(forward ?   0.5 : -0.5);
+        backRight.setPower(forward ?  0.5 : -0.5);
 
         while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
             // Do nothing, just wait
@@ -76,26 +73,22 @@ public class AutoRobotMovement {
         double targetTicks = distance * Global.TICKS_PER_INCH;
         targetTicks*=1.74;
 
-//        if (right) {
-//            targetTicks = -targetTicks;
-//        }
-
         resetEncoders();
 
-        frontLeft.setTargetPosition((int)  (right ?  targetTicks  : -targetTicks));
+        frontLeft.setTargetPosition( (int) (right ?  targetTicks  : -targetTicks));
         frontRight.setTargetPosition((int) (right ? -targetTicks  :  targetTicks));
-        backLeft.setTargetPosition((int)   (right ? -targetTicks  :  targetTicks));
-        backRight.setTargetPosition((int)  (right ?  targetTicks  : -targetTicks));
+        backLeft.setTargetPosition(  (int) (right ? -targetTicks  :  targetTicks));
+        backRight.setTargetPosition( (int) (right ?  targetTicks  : -targetTicks));
 
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setPower(right ? 0.5 : -0.5);
-        frontRight.setPower(right ? -0.5 : 0.5);
-        backLeft.setPower(right ? -0.5 : 0.5);
-        backRight.setPower(right ? 0.5 : -0.5);
+        frontLeft.setPower(right ?   0.5 : -0.5);
+        frontRight.setPower(right ? -0.5 :  0.5);
+        backLeft.setPower(right ?   -0.5 :  0.5);
+        backRight.setPower(right ?   0.5 : -0.5);
 
         while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
             // Do nothing, just wait
@@ -124,10 +117,10 @@ public class AutoRobotMovement {
         resetEncoders();
 
         // Set motor target positions
-        frontLeft.setTargetPosition((int) targetTicks);
-        frontRight.setTargetPosition((int) -targetTicks);
-        backLeft.setTargetPosition((int) targetTicks);
-        backRight.setTargetPosition((int) -targetTicks);
+        frontLeft.setTargetPosition( (int) (clockwise ? targetTicks  : -targetTicks));
+        frontRight.setTargetPosition((int) (clockwise ? -targetTicks : targetTicks));
+        backLeft.setTargetPosition(  (int) (clockwise ? targetTicks  : -targetTicks));
+        backRight.setTargetPosition( (int) (clockwise ? -targetTicks : targetTicks));
 
         // Set motor modes
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -136,10 +129,10 @@ public class AutoRobotMovement {
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Set motor power
-        frontLeft.setPower(clockwise ? 0.5 : -0.5);
-        frontRight.setPower(clockwise ? -0.5 : 0.5);
-        backLeft.setPower(clockwise ? 0.5 : -0.5);
-        backRight.setPower(clockwise ? -0.5 : 0.5);
+        frontLeft.setPower(clockwise ?   0.5 : -0.5);
+        frontRight.setPower(clockwise ? -0.5 :  0.5);
+        backLeft.setPower(clockwise ?    0.5 : -0.5);
+        backRight.setPower(clockwise ?  -0.5 :  0.5);
 
         // Wait for motors to reach target position
         while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {

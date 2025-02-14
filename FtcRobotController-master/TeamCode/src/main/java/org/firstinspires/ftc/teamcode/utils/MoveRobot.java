@@ -22,7 +22,7 @@ public class MoveRobot
     public static double[] FC (double botHeading, double x, double y, double rightX, double speed)
     {
 
-        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading); // * 1.1 to counteract imperfect strafing - removed for testing TODO
+        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading)  * 1.1; // to counteract imperfect strafing
         double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
         /*
         these are the rotated x and y (i.e. the vector relative to the field rather than to the robot)

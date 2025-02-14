@@ -41,11 +41,33 @@ public class MiniStructure {
         opmode.telemetry.update();
     }
 
+    public void basket () {
+        tilt.up();
+        artie.up();
+    }
+
+    public void chamber () {
+        tilt.down();
+        artie.up();
+    }
+
+    public void intake () {
+        tilt.up();
+        artie.down();
+        claw.open();
+    }
+
+    public void down () {
+        tilt.up();
+        artie.down();
+    }
+
     public static class Tilt {
         public boolean isValid = true;
         private Servo servo;
 
-        double tiltStartPos  = 0.5;
+        double tiltStartPos  = 0.3;
+        double tiltDownPos = 0.15;
 
         Tilt (HardwareMap hardwareMap) {
             try {
@@ -58,7 +80,7 @@ public class MiniStructure {
             }
 
             if (isValid) {
-                setPosition(tiltStartPos);
+                up();
             }
         }
 
@@ -71,6 +93,14 @@ public class MiniStructure {
 //            servo.setPower(power);
 //        }
 
+        public void up(){
+            setPosition(tiltStartPos);
+        }
+
+        public void down () {
+            setPosition(tiltDownPos);
+        }
+
         public double getPosition () {
             return servo.getPosition();
         }
@@ -81,12 +111,12 @@ public class MiniStructure {
         private Servo servo;
 
         private double twistedPos = 0;
-        private double defaultPos = 1;
+        private double defaultPos = 0.7;
 
         Twist (HardwareMap hardwareMap) {
             try {
                 servo = hardwareMap.get(Servo.class, "twist");
-                servo.scaleRange(0.5, 0.875);
+                servo.scaleRange(0, 1);
                 setPosition(defaultPos);
             } catch (Exception e) {
                 Global.exceptions.append("Twist\n");
@@ -120,8 +150,8 @@ public class MiniStructure {
         public boolean isValid = true;
         private Servo claw;
 
-        private final double openRotation   = 0.7;
-        private final double closedRotation = 0.45;
+        private final double openRotation   = 0.65;
+        private final double closedRotation = 0.39;
 
         Claw (HardwareMap hardwareMap) {
             try {
@@ -164,9 +194,8 @@ public class MiniStructure {
         private Servo left;
         private Servo right;
 
-        double artieStartPos = 0.5;
-        double downPos = 0.2;
-        double upPos   = 0.65;
+        double downPos = 0.1;
+        double upPos   = 0.61;
 
         Artie(HardwareMap hardwareMap) {
             try {
@@ -193,7 +222,7 @@ public class MiniStructure {
 
             if (isValid) {
 //                setPosition(artieStartPos);
-                up();
+                down();
             }
 
             // todo replace this with "all the way down" value
