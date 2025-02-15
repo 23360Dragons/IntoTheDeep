@@ -438,36 +438,6 @@ public class DragonsDriver extends LinearOpMode {
             }
             //</editor-fold>
 
-            //<editor-fold desc="--------------------- Limelight ---------------------">
-//            telemetry.addLine("-----Limelight-----");
-//
-//            if (dragonsLimelight.isValid) {
-//                // --------------------- Pipeline Switching ---------------------
-////                if (currentB2 && !previousB2) { //rising edge
-////                    dragonsLimelight.setPipeline(YELLOW);
-////                } else if (!currentB2 && previousB2) { //falling edge
-////                    dragonsLimelight.setPipeline();
-////                }
-//
-//                //       x
-//                     if (bluePipeline   && dragonsLimelight.getPipeline().num != BLUE)
-//                    dragonsLimelight.setPipeline(BLUE);//
-//                //       b
-//                else if (redPipeline    && dragonsLimelight.getPipeline().num != RED)
-//                    dragonsLimelight.setPipeline(RED);
-//                //       y
-//                else if (yellowPipeline && dragonsLimelight.getPipeline().num != YELLOW)
-//                    dragonsLimelight.setPipeline(YELLOW);
-//
-//                telemetry.addData("Limelight Pipeline", dragonsLimelight.getPipeline().getName());
-//
-////                LLAlignAngle = Math.min(Math.abs(dragonsLimelight.update(this)), 180);
-//                dragonsLimelight.update(this);
-//            }
-//
-//            telemetry.addLine();
-           //</editor-fold>
-
             //<editor-fold desc="--------------------- SparkFun OTOS ---------------------">
             telemetry.addLine("-----Sparkfun OTOS-----");
             DecimalFormat sparkfunDF = new DecimalFormat("#.###");
@@ -650,7 +620,7 @@ public class DragonsDriver extends LinearOpMode {
     }
 
     private void chamberScore (SuperStructure superStructure, MiniStructure miniStructure, Telemetry telemetry) {
-        superStructure.extension.chamber();
+        superStructure.extension.hang();
         miniStructure.chamber();
 
         telemetry.addLine("Chamber extension and artie!");
@@ -658,7 +628,7 @@ public class DragonsDriver extends LinearOpMode {
 
     private void intake (SuperStructure superStructure, MiniStructure miniStructure, Telemetry telemetry) {
         superStructure.extension.down();
-        miniStructure.intake();
+        miniStructure.down();
 
         telemetry.addLine("Lowering extension and artie!");
     }
