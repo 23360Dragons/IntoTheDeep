@@ -6,12 +6,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
 import org.firstinspires.ftc.teamcode.utils.Global;
 
 @Autonomous (preselectTeleOp = "DragonsDriver")
 public class DragonsAutoBruteNetZone extends LinearOpMode {
     public DcMotorEx leftFront, leftBack, rightBack, rightFront;
+    public DragonsIMU imu;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -35,14 +38,15 @@ public class DragonsAutoBruteNetZone extends LinearOpMode {
 
         AutoRobotMovement autoRobotMovement = new AutoRobotMovement(leftFront, rightFront, leftBack, rightBack);
 
-            waitForStart();
-            sleep (18000);
-            autoRobotMovement.moveForward(3,  Global.Forward);
-            autoRobotMovement.strafe(     14, Global.Left);
+        imu = new DragonsIMU(this);
 
-            sleep (500);
+        waitForStart();
 
-            autoRobotMovement.strafe(     100, Global.Right);
+        autoRobotMovement.strafe(     14, Global.Left, 0.5);
+
+        sleep (500);
+
+        autoRobotMovement.strafe(     100, Global.Right, 0.5);
 
     }
 }

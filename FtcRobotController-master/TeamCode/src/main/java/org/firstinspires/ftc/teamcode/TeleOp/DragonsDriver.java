@@ -353,23 +353,23 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             if (miniStructure.tilt.isValid) {
-                switch (Global.controlState) {
-                    case MANUAL:
+//                switch (Global.controlState) {
+//                    case MANUAL:
                         double power = tiltUp ? 0.001 * tiltSpeed : tiltDown ? -0.001 * tiltSpeed : 0;
                         double targetPosition = miniStructure.tilt.getPosition() + power;
 
                         miniStructure.tilt.setPosition(targetPosition);
                         telemetry.addData("MiniStructure tilt power", power);
-                        break;
-
-                    case AUTO:
-                        // todo maybe a presseddown functionality?
-                        if (tiltUp) {
-                            miniStructure.tilt.up();
-                        } else if (tiltDown) {
-                            miniStructure.tilt.down();
-                        }
-                }
+//                        break;
+//
+//                    case AUTO:
+//                         todo maybe a presseddown functionality?
+//                        if (tiltUp) {
+//                            miniStructure.tilt.up();
+//                        } else if (tiltDown) {
+//                            miniStructure.tilt.down();
+//                        }
+//                }
 
 
                 telemetry.addData("MiniStructure tilt position", miniStructure.tilt.getPosition());
@@ -519,7 +519,7 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             //</editor-fold>
-
+/*
             //<editor-fold desc="--------------------- FSM Scoring Control ---------------------">
             switch (scoringState) {
                 case INTAKE:
@@ -636,7 +636,7 @@ public class DragonsDriver extends LinearOpMode {
                 hangState = HangState.DEFAULT;
                 // because lowering handles claw opening once slides are down
             }
-            //</editor-fold>
+            //</editor-fold>*/
             telemetry.update();
         }
         //</editor-fold>

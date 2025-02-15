@@ -49,9 +49,9 @@ public class SuperStructure {
 
         public boolean isValid = true;
 
-        public static final int hangTicks = -50;
-        public static final int downTicks = -300;
-        public static final int fullTicks = -0;
+        public static final int SShangTicks = -50;
+        public static final int SSdownTicks = -300;
+        public static final int SSfullTicks = -0;
         private static final int tolerance = 10;
 
         Arm (LinearOpMode opmode) {
@@ -88,13 +88,13 @@ public class SuperStructure {
         }
 
         public void hang () {
-            setTarget(hangTicks);
+            setTarget(SShangTicks);
         }
         public void full () {
-            setTarget(fullTicks);
+            setTarget(SSfullTicks);
         }
         public void down () {
-            setTarget(downTicks);
+            setTarget(SSdownTicks);
         }
 
         public ARTICULATION_POS getState () {
@@ -133,12 +133,12 @@ public class SuperStructure {
     public static class Extension {
         public boolean isValid = true;
 //
-        private static final int tolerance  = 10;
+        private static final int tolerance  = 50;
         public static final int maxDownExtension = 1350;
         public static final int hangTicks        = maxDownExtension - tolerance;
         public static final int downTicks        = -5;
         public static final int fullTicks        = 3000;
-        public static final int chamberTicks = 900;
+        public static final int chamberTicks = 350;
 
         private DcMotorEx leftMotor, rightMotor;
         Extension (LinearOpMode opmode) {

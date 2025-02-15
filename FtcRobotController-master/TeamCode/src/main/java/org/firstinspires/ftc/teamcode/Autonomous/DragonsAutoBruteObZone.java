@@ -6,11 +6,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
 
 @Autonomous (preselectTeleOp = "DragonsDriver")
 public class DragonsAutoBruteObZone extends LinearOpMode {
     public DcMotorEx leftFront, leftBack, rightBack, rightFront;
+    DragonsIMU imu;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -32,12 +34,13 @@ public class DragonsAutoBruteObZone extends LinearOpMode {
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        imu = new DragonsIMU(this);
+
         AutoRobotMovement autoRobotMovement = new AutoRobotMovement(leftFront, rightFront, leftBack, rightBack);
 
 
         waitForStart();
-        sleep (20000);
-        autoRobotMovement.strafe(44, true);
+        autoRobotMovement.strafe(44, true, 0.5);
 
         //autoRobotMovement.strafe(200, true);
     }

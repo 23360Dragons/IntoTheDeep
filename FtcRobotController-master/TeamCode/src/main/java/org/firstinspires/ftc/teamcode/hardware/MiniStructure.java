@@ -14,6 +14,12 @@ public class MiniStructure {
     public Artie artie;
 
     public MiniStructure(LinearOpMode opmode) {
+        opmode.telemetry.addLine("Configuring MiniStructure Artie!");
+        opmode.telemetry.update();
+
+        this.artie = new Artie(opmode.hardwareMap);
+
+        opmode.telemetry.addData("MiniStructure Artie configured", artie.isValid);
         opmode.telemetry.addLine("Configuring MiniStructure Elbow!");
         opmode.telemetry.update();
 
@@ -32,13 +38,8 @@ public class MiniStructure {
         this.claw  = new Claw (opmode.hardwareMap);
 
         opmode.telemetry.addData("MiniStructure Claw configured", claw.isValid);
-        opmode.telemetry.addLine("Configuring MiniStructure Artie!");
         opmode.telemetry.update();
 
-        this.artie = new Artie(opmode.hardwareMap);
-
-        opmode.telemetry.addData("MiniStructure Artie configured", artie.isValid);
-        opmode.telemetry.update();
     }
 
     public void basket () {
@@ -66,8 +67,9 @@ public class MiniStructure {
         public boolean isValid = true;
         private Servo servo;
 
-        double tiltStartPos  = 0.3;
-        double tiltDownPos = 0.15;
+        double tiltStartPos  = 0.58;
+        double tiltDownPos = 0.34;
+        double tiltasc1Pos = 0.67;
 
         Tilt (HardwareMap hardwareMap) {
             try {
@@ -99,6 +101,10 @@ public class MiniStructure {
 
         public void down () {
             setPosition(tiltDownPos);
+        }
+
+        public void hang () {
+            setPosition(tiltasc1Pos);
         }
 
         public double getPosition () {
@@ -194,8 +200,10 @@ public class MiniStructure {
         private Servo left;
         private Servo right;
 
-        double downPos = 0.1;
-        double upPos   = 0.61;
+        double downPos = 0.12;
+        double upPos   = 0.67;
+        double chamberRelPos = 0.58;
+//        double chamPos = 0.58;
 
         Artie(HardwareMap hardwareMap) {
             try {
@@ -244,6 +252,14 @@ public class MiniStructure {
         public void up () {
             setPosition(upPos);
         }
+
+        public void chamberRelPos () {
+            setPosition(chamberRelPos);
+        }
+
+//        public void chamber () {
+//            setPosition(chamPos);
+//        }
 
         public Positions getPosition(){
             return new Positions(left.getPosition(), right.getPosition());

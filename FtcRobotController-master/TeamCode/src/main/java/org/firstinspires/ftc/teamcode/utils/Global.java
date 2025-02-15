@@ -13,12 +13,12 @@ public class Global {
     // SPEEDS
     public static double SSSpeed             = 0.8; // todo finetune this. Maybe different values for auto and manual?
     public static double SSCreepSpeed        = 0.5;
-    public static double extSpeed            = 0.8; // todo finetune this. Maybe different values for auto and manual?
+    public static double extSpeed            = 0.7; // todo finetune this. Maybe different values for auto and manual?
     public static double twistSpeed          = 50;
     public static double tiltSpeed           = 30;
     public static double armSpeed            = 5;
     public static double normalDriveSpeed    = 0.8;
-    public static double alternateDriveSpeed = 1;
+    public static double alternateDriveSpeed = 0.4;
 
     //<editor-fold desc="Consts (Will literally never need to be edited)">
     public static StringBuilder exceptions  = new StringBuilder("The following were not found:\n");

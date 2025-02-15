@@ -32,7 +32,7 @@ public class AutoRobotMovement {
      * @param distance The distance to move in inches.
      * @param forward   True to move forward, false to move backward.
      */
-    public void moveForward(double distance, boolean forward) {
+    public void moveForward(double distance, boolean forward, double speed) {
         double targetTicks = distance * Global.TICKS_PER_INCH;
         targetTicks *= 1;
 
@@ -48,10 +48,10 @@ public class AutoRobotMovement {
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setPower(forward ?  0.5 : -0.5);
-        frontRight.setPower(forward ? 0.5 : -0.5);
-        backLeft.setPower(forward ?   0.5 : -0.5);
-        backRight.setPower(forward ?  0.5 : -0.5);
+        frontLeft.setPower(forward ?  speed : -speed);
+        frontRight.setPower(forward ? speed : -speed);
+        backLeft.setPower(forward ?   speed : -speed);
+        backRight.setPower(forward ?  speed : -speed);
 
         while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
             // Do nothing, just wait
@@ -69,7 +69,7 @@ public class AutoRobotMovement {
      * @param distance The distance to move in inches.
      * @param right    True to move right, false to move left.
      */
-    public void strafe(double distance, boolean right) {
+    public void strafe(double distance, boolean right, double speed) {
         double targetTicks = distance * Global.TICKS_PER_INCH;
         targetTicks*=1.74;
 
@@ -85,10 +85,10 @@ public class AutoRobotMovement {
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setPower(right ?   0.5 : -0.5);
-        frontRight.setPower(right ? -0.5 :  0.5);
-        backLeft.setPower(right ?   -0.5 :  0.5);
-        backRight.setPower(right ?   0.5 : -0.5);
+        frontLeft.setPower(right ?   speed : -speed);
+        frontRight.setPower(right ? -speed :  speed);
+        backLeft.setPower(right ?   -speed :  speed);
+        backRight.setPower(right ?   speed : -speed);
 
         while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
             // Do nothing, just wait
