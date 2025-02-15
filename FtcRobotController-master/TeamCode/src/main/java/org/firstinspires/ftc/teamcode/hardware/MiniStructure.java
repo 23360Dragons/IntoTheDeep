@@ -52,12 +52,6 @@ public class MiniStructure {
         artie.up();
     }
 
-    public void intake () {
-        tilt.up();
-        artie.down();
-        claw.open();
-    }
-
     public void down () {
         tilt.up();
         artie.down();
