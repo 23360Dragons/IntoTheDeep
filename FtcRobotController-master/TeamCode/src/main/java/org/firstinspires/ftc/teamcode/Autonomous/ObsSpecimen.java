@@ -20,7 +20,7 @@ import static org.firstinspires.ftc.teamcode.utils.Global.Right;
 
 @Config
 @Autonomous(name="ObsSpecimen", group="Auto", preselectTeleOp = "DragonsDriver")
-public class ObsSpecimen extends LinearOpMode {
+public class ObsSpecimen extends AutonomousOpMode {
     Drivetrain drivetrain;
     MiniStructure miniStructure;
     SuperStructure superStructure;
@@ -67,17 +67,13 @@ public class ObsSpecimen extends LinearOpMode {
         autoRobotMovement.moveForward(dist, Forward, 0.5);
         autoRobotMovement.strafe(strafeDist, Left, 0.5);
         autoRobotMovement.moveForward(dist2, Forward, 0.2);
-        sleep(200);
+        timerSleep(200);
         superStructure.extension.chamber();
-        timer.reset();
-        while (timer.milliseconds() < 300) {
-        }
+        timerSleep(300);
         miniStructure.artie.chamberRelPos();
-        while (timer.milliseconds() < 800) ;
+        timerSleep(500);
         miniStructure.claw.open();
-        timer.reset();
-        while (timer.milliseconds() < 500) {
-        }
+        timerSleep(500);
         miniStructure.tilt.up();
         miniStructure.artie.up();
         superStructure.extension.down();

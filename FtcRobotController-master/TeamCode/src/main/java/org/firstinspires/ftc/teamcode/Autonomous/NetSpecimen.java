@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
 import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
@@ -23,17 +24,10 @@ import java.time.Clock;
 
 @Config
 @Autonomous(name="NetSpecimen", group="Auto", preselectTeleOp = "DragonsDriver")
-public class NetSpecimen extends LinearOpMode {
-    Drivetrain drivetrain;
-    DragonsIMU imu;
-    MiniStructure miniStructure;
-    SuperStructure superStructure;
-
+public class NetSpecimen extends AutonomousOpMode {
     public static double dist = 20,
             strafeDist = 12,
             dist2 = 24;
-
-    ElapsedTime timer;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -69,23 +63,32 @@ public class NetSpecimen extends LinearOpMode {
         autoRobotMovement.moveForward(dist, Forward, 0.5);
         autoRobotMovement.strafe(strafeDist, Right, 0.5);
         autoRobotMovement.moveForward(dist2, Forward, 0.2);
-        sleep(200);
+
+        timerSleep(200);
+
+        // lower linear slides
         superStructure.extension.chamber();
-        timer.reset();
-        while (timer.milliseconds() < 300) {
-        }
+
+        timerSleep(300);
+
+        // push arm forward to clip it
         miniStructure.artie.chamberRelPos();
-        while (timer.milliseconds() < 800) ;
+
+        timerSleep(500);
+
+        // release claw
         miniStructure.claw.open();
-        timer.reset();
-        while (timer.milliseconds() < 500) {
-        }
+
+        timerSleep(500);
+
+        // move stuff back for driving
         miniStructure.tilt.up();
         miniStructure.artie.up();
         superStructure.extension.down();
         miniStructure.claw.close();
 
-}
+        // park at ascent
+        autoRobotMovement.moveForward(24, Backward, 0.5);
         autoRobotMovement.strafe(48, Left, 0.5);
         autoRobotMovement.moveForward(56, Forward, 0.6);
         autoRobotMovement.rotate(195, Clockwise);
