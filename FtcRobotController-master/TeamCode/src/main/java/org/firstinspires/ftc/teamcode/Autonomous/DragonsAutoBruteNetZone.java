@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
 import org.firstinspires.ftc.teamcode.utils.Global;
+import org.firstinspires.ftc.teamcode.utils.StoreAutoRobotPos;
 
 @Autonomous (preselectTeleOp = "DragonsDriver")
 public class DragonsAutoBruteNetZone extends LinearOpMode {
@@ -47,6 +48,8 @@ public class DragonsAutoBruteNetZone extends LinearOpMode {
         sleep (500);
 
         autoRobotMovement.strafe(     100, Global.Right, 0.5);
+
+        StoreAutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw());
 
     }
 }

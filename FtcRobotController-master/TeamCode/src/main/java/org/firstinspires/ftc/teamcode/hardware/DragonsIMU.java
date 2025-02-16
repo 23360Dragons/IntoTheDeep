@@ -4,7 +4,12 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.utils.Global;
+import org.firstinspires.ftc.teamcode.utils.StoreAutoRobotPos;
 
 import static org.firstinspires.ftc.teamcode.utils.Global.logoFacingDirection;
 import static org.firstinspires.ftc.teamcode.utils.Global.usbFacingDirection;
@@ -23,9 +28,21 @@ public class DragonsIMU {
             imu.resetDeviceConfigurationForOpMode();
             isValid = true;
 
-            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                    logoFacingDirection,
-                    usbFacingDirection));
+//            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+//                    logoFacingDirection, // forward, up
+//                    usbFacingDirection));
+
+            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(new Orientation(
+                    AxesReference.INTRINSIC,
+                    AxesOrder.XZY,
+                    AngleUnit.DEGREES,
+                    -90,
+                    0,
+                    // this allows field centric to be correct after auto, i think
+                    StoreAutoRobotPos.getRotation(),
+                    0
+
+            )));
 
             imu.initialize(parameters);
 

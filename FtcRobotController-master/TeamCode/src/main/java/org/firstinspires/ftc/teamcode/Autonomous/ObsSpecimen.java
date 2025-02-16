@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
 import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
 import org.firstinspires.ftc.teamcode.utils.Global;
+import org.firstinspires.ftc.teamcode.utils.StoreAutoRobotPos;
 
 import static org.firstinspires.ftc.teamcode.utils.Global.Backward;
 import static org.firstinspires.ftc.teamcode.utils.Global.Left;
@@ -41,7 +42,7 @@ public class ObsSpecimen extends AutonomousOpMode {
 
         imu = new DragonsIMU(this);
         drivetrain = new Drivetrain(this);
-        superStructure = new SuperStructure(this);
+        superStructure = new SuperStructure(this, true);
         AutoRobotMovement autoRobotMovement = new AutoRobotMovement(drivetrain.leftFront, drivetrain.rightFront, drivetrain.leftBack, drivetrain.rightBack);
 
         Global.switchToAuto();
@@ -84,5 +85,6 @@ public class ObsSpecimen extends AutonomousOpMode {
         autoRobotMovement.moveForward(36, Backward, 0.4);
         autoRobotMovement.strafe(40, Right, 0.5);
 
+        StoreAutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw());
     }
 }

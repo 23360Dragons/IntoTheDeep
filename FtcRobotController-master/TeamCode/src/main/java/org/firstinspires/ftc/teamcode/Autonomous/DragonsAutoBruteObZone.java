@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
+import org.firstinspires.ftc.teamcode.utils.StoreAutoRobotPos;
 
 @Autonomous (preselectTeleOp = "DragonsDriver")
 public class DragonsAutoBruteObZone extends LinearOpMode {
@@ -43,5 +44,6 @@ public class DragonsAutoBruteObZone extends LinearOpMode {
         autoRobotMovement.strafe(44, true, 0.5);
 
         //autoRobotMovement.strafe(200, true);
+        StoreAutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw());
     }
 }

@@ -32,6 +32,7 @@ import org.firstinspires.ftc.teamcode.hardware.DragonsLights;
 import org.firstinspires.ftc.teamcode.hardware.DragonsLimelight;
 import org.firstinspires.ftc.teamcode.hardware.DragonsOTOS;
 import org.firstinspires.ftc.teamcode.utils.Global;
+import org.firstinspires.ftc.teamcode.utils.StoreAutoRobotPos;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -111,7 +112,9 @@ public class DragonsDriver extends LinearOpMode {
         dragonsLimelight = new DragonsLimelight(this);
         dragonsLights    = new DragonsLights(this);
         dragonsOTOS      = new DragonsOTOS(this);
-        superStructure   = new SuperStructure(this);
+
+        //                                               if an auto was run, don't reset the encoders
+        superStructure   = new SuperStructure(this, !StoreAutoRobotPos.autoRun);
         miniStructure    = new MiniStructure(this);
         dragonsColor     = new DragonsColor(this);
 
@@ -610,6 +613,8 @@ public class DragonsDriver extends LinearOpMode {
             telemetry.update();
         }
         //</editor-fold>
+
+        StoreAutoRobotPos.reset();
     }
 
     private void basketScore (SuperStructure superStructure, MiniStructure miniStructure, Telemetry telemetry) {

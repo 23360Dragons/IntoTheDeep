@@ -25,17 +25,17 @@ public class SuperStructure {
 
     private ARTICULATION_POS articulationPos;
 
-    public SuperStructure (LinearOpMode opmode) {
+    public SuperStructure (LinearOpMode opmode, boolean resetEncoders) {
         opmode.telemetry.addLine("Configuring Superstructure Arm!");
         opmode.telemetry.update();
 
-        this.arm = new Arm(opmode);
+        this.arm = new Arm(opmode, resetEncoders);
 
         opmode.telemetry.addData("Superstructure Arm configured", arm.isValid);
         opmode.telemetry.addLine("Configuring Superstructure Extension!");
         opmode.telemetry.update();
 
-        this.extension    = new Extension(opmode);
+        this.extension = new Extension(opmode, resetEncoders);
 
         opmode.telemetry.addData("Superstructure Extension configured", extension.isValid);
         opmode.telemetry.update();
@@ -54,10 +54,13 @@ public class SuperStructure {
         public static final int SSfullTicks = -0;
         private static final int tolerance = 10;
 
-        Arm (LinearOpMode opmode) {
+        Arm (LinearOpMode opmode, boolean resetEncoders) {
             try {
                 leftMotor = opmode.hardwareMap.get(DcMotorEx.class, "leftArtie");
-                leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                if (resetEncoders)
+                    leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
                 leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             } catch (Exception e) {
@@ -68,7 +71,10 @@ public class SuperStructure {
 
             try {
                 rightMotor = opmode.hardwareMap.get(DcMotorEx.class, "rightArtie");
-                rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                if (resetEncoders)
+                    rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
                 rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             } catch (Exception e) {
@@ -141,10 +147,13 @@ public class SuperStructure {
         public static final int chamberTicks = 350;
 
         private DcMotorEx leftMotor, rightMotor;
-        Extension (LinearOpMode opmode) {
+        Extension (LinearOpMode opmode, boolean resetEncoders) {
             try {
                 leftMotor = opmode.hardwareMap.get(DcMotorEx.class, "leftLinear");
-                leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                if (resetEncoders)
+                    leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
                 leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -157,7 +166,10 @@ public class SuperStructure {
 
             try {
                 rightMotor = opmode.hardwareMap.get(DcMotorEx.class, "rightLinear");
-                rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                if (resetEncoders)
+                    rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
                 rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             } catch (Exception e) {

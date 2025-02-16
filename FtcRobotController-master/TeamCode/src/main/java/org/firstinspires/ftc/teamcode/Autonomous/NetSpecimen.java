@@ -38,7 +38,7 @@ public class NetSpecimen extends AutonomousOpMode {
         imu = new DragonsIMU(this);
 
         drivetrain = new Drivetrain(this);
-        superStructure = new SuperStructure(this);
+        superStructure = new SuperStructure(this, true);
         AutoRobotMovement autoRobotMovement = new AutoRobotMovement(drivetrain.leftFront, drivetrain.rightFront, drivetrain.leftBack, drivetrain.rightBack);
 
         Global.switchToAuto();
@@ -97,6 +97,6 @@ public class NetSpecimen extends AutonomousOpMode {
         superStructure.extension.chamber();
         autoRobotMovement.moveForward(35, Forward, 0.2);
 
-        StoreAutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw(), superStructure.extension.getPosition().avg);
+        StoreAutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw());
     }
 }
