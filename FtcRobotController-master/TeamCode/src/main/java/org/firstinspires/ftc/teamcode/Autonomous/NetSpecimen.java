@@ -35,6 +35,8 @@ public class NetSpecimen extends AutonomousOpMode {
         timer.startTime();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         miniStructure = new MiniStructure(this);
+
+        resetIMUOrientation(); // this removes the imu orientation offset from any previous autos
         imu = new DragonsIMU(this);
 
         drivetrain = new Drivetrain(this);

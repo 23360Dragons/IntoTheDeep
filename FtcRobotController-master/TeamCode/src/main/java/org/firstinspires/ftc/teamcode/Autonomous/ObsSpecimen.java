@@ -40,6 +40,7 @@ public class ObsSpecimen extends AutonomousOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         miniStructure = new MiniStructure(this);
 
+        resetIMUOrientation(); // this removes the imu orientation offset from any previous autos
         imu = new DragonsIMU(this);
         drivetrain = new Drivetrain(this);
         superStructure = new SuperStructure(this, true);

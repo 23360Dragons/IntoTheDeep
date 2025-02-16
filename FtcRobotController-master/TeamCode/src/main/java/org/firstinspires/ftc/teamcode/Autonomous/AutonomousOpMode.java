@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
 import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
+import org.firstinspires.ftc.teamcode.utils.StoreAutoRobotPos;
 
 public abstract class AutonomousOpMode extends LinearOpMode {
     public SuperStructure superStructure;
@@ -14,6 +15,10 @@ public abstract class AutonomousOpMode extends LinearOpMode {
     public MiniStructure miniStructure;
     public Drivetrain drivetrain;
     public ElapsedTime timer;
+
+    public void resetIMUOrientation () {
+        StoreAutoRobotPos.reset();
+    }
 
     public void timerSleep (int milliseconds) {
         timer.reset();

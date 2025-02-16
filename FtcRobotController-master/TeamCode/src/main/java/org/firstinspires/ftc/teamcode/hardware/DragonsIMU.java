@@ -32,17 +32,20 @@ public class DragonsIMU {
 //                    logoFacingDirection, // forward, up
 //                    usbFacingDirection));
 
-            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(new Orientation(
-                    AxesReference.INTRINSIC,
-                    AxesOrder.XZY,
-                    AngleUnit.DEGREES,
-                    -90,
-                    0,
-                    // this allows field centric to be correct after auto, i think
-                    StoreAutoRobotPos.getRotation(),
-                    0
-
-            )));
+            IMU.Parameters parameters = new IMU.Parameters(
+                    new RevHubOrientationOnRobot(
+                                new Orientation(
+                                AxesReference.INTRINSIC,
+                                AxesOrder.XZY,
+                                AngleUnit.DEGREES,
+                                -90,
+                                0,
+                                // this allows field centric to be correct after auto, i think
+                                StoreAutoRobotPos.getRotation(),
+                                0
+                            )
+                    )
+            );
 
             imu.initialize(parameters);
 

@@ -17,6 +17,7 @@ public class DragonsAutoBruteObZone extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        StoreAutoRobotPos.reset();
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
         rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
