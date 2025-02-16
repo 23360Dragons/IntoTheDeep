@@ -192,57 +192,57 @@ public class AutoRobotMovement {
         backLeft.setPower(0);
         backRight.setPower(0);
     }
-    public void moveDiagonallyLeft(double distance, double angle, LinearOpMode opmode) {
-//        double angleRadians = Math.toRadians(angle);
-
-        double[] drivePowers = MoveRobot.moveRobotAngle(angle, 0.5);
-
-        double frontLeftPower  = drivePowers[0];
-        double frontRightPower = drivePowers[1];
-        double backLeftPower   = drivePowers[2];
-        double backRightPower  = drivePowers[3];
-
-        resetEncoders();
-
-        opmode.telemetry.addLine(Arrays.toString(drivePowers));
-        opmode.telemetry.update();
-        opmode.sleep(1000);
-
-
-        // Adjust power ratios for mecanum drive (simplified)
-//        frontLeftPower *= -1;
-//        backRightPower *= -1;
-
-        double targetTicks = distance * Global.TICKS_PER_INCH;
-
-        opmode.telemetry.addData("Target ticks", targetTicks);
-        opmode.telemetry.update();
-
-        //todo look at this output
-        opmode.sleep (1000);
-
-        frontLeft.setTargetPosition((int) (targetTicks * frontLeftPower));
-        frontRight.setTargetPosition((int) (targetTicks * frontRightPower));
-        backLeft.setTargetPosition((int) (targetTicks * backLeftPower));
-        backRight.setTargetPosition((int) (targetTicks * backRightPower));
-
-        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        frontLeft.setPower((frontLeftPower));
-        frontRight.setPower((frontRightPower));
-        backLeft.setPower((backLeftPower));
-        backRight.setPower((backRightPower));
-
-        while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
-            // Do nothing, just wait
-        }
-
-        frontLeft.setPower(0);
-        frontRight.setPower(0);
-        backLeft.setPower(0);
-        backRight.setPower(0);
-    }
+//    public void moveDiagonallyLeft(double distance, double angle, LinearOpMode opmode) {
+////        double angleRadians = Math.toRadians(angle);
+//
+//        double[] drivePowers = MoveRobot.moveRobotAngle(angle, 0.5);
+//
+//        double frontLeftPower  = drivePowers[0];
+//        double frontRightPower = drivePowers[1];
+//        double backLeftPower   = drivePowers[2];
+//        double backRightPower  = drivePowers[3];
+//
+//        resetEncoders();
+//
+//        opmode.telemetry.addLine(Arrays.toString(drivePowers));
+//        opmode.telemetry.update();
+//        opmode.sleep(1000);
+//
+//
+//        // Adjust power ratios for mecanum drive (simplified)
+////        frontLeftPower *= -1;
+////        backRightPower *= -1;
+//
+//        double targetTicks = distance * Global.TICKS_PER_INCH;
+//
+//        opmode.telemetry.addData("Target ticks", targetTicks);
+//        opmode.telemetry.update();
+//
+//        //todo look at this output
+//        opmode.sleep (1000);
+//
+//        frontLeft.setTargetPosition((int) (targetTicks * frontLeftPower));
+//        frontRight.setTargetPosition((int) (targetTicks * frontRightPower));
+//        backLeft.setTargetPosition((int) (targetTicks * backLeftPower));
+//        backRight.setTargetPosition((int) (targetTicks * backRightPower));
+//
+//        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//        frontLeft.setPower((frontLeftPower));
+//        frontRight.setPower((frontRightPower));
+//        backLeft.setPower((backLeftPower));
+//        backRight.setPower((backRightPower));
+//
+//        while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
+//            // Do nothing, just wait
+//        }
+//
+//        frontLeft.setPower(0);
+//        frontRight.setPower(0);
+//        backLeft.setPower(0);
+//        backRight.setPower(0);
+//    }
 }

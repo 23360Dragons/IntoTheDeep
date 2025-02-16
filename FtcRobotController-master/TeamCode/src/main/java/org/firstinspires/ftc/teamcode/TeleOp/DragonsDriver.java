@@ -24,7 +24,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.hardware.DragonsColor;
 import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
 import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
-import org.firstinspires.ftc.teamcode.utils.MoveRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
@@ -478,11 +477,9 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("IMU heading", Math.toDegrees(botHeading));
 
                 // calls for movement
-                double[] drivePowers = MoveRobot.FC(botHeading, x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
+                drivetrain.FC(botHeading, x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
 
                 //sets the motors to their corresponding power
-                drivetrain.setPower(drivePowers);
-
 //                telemetry.addData("leftFront power",  String.valueOf(Math.round(drivetrain.getPower()[0])));
 //                telemetry.addData("rightFront power", String.valueOf(Math.round(drivetrain.getPower()[1])));
 //                telemetry.addData("leftBack power",   String.valueOf(Math.round(drivetrain.getPower()[2])));
