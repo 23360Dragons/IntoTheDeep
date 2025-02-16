@@ -20,7 +20,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.hardware.DragonsColor;
 import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
 import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
@@ -50,32 +49,32 @@ public class DragonsDriver extends LinearOpMode {
     public DragonsColor     dragonsColor;
 
 
-    // These enums are for Finite State Machines (see gm0)
-    public enum ScoringState {
-        // slides down, artie down
-        INTAKE,
-        // artie up, slides move up
-        LIFTING,
-        // slides up, artie up, wait a sec then open claw
-        SCORING,
-        //artie up, tilt up (?), slides down
-        LOWERING
-    }
-
-    public enum HangState {
-        // anything when you're not hanging
-        DEFAULT,
-        // ministructure down, extension up
-        EXTENDING,
-        // superstructure down
-        TILTING,
-        // extension down
-        HANGING
-    }
-
-    // set the current state of both to default
-    private HangState    hangState = HangState.DEFAULT;
-    private ScoringState scoringState = ScoringState.INTAKE;
+//    // These enums are for Finite State Machines (see gm0)
+//    public enum ScoringState {
+//        // slides down, artie down
+//        INTAKE,
+//        // artie up, slides move up
+//        LIFTING,
+//        // slides up, artie up, wait a sec then open claw
+//        SCORING,
+//        //artie up, tilt up (?), slides down
+//        LOWERING
+//    }
+//
+//    public enum HangState {
+//        // anything when you're not hanging
+//        DEFAULT,
+//        // ministructure down, extension up
+//        EXTENDING,
+//        // superstructure down
+//        TILTING,
+//        // extension down
+//        HANGING
+//    }
+//
+//    // set the current state of both to default
+//    private HangState    hangState = HangState.DEFAULT;
+//    private ScoringState scoringState = ScoringState.INTAKE;
 
     //</editor-fold>
 
@@ -103,19 +102,20 @@ public class DragonsDriver extends LinearOpMode {
         scoringTimer.startTime();
         ElapsedTime hangingTimer = new ElapsedTime();
         hangingTimer.startTime();
+        ElapsedTime colorTimer = new ElapsedTime();
+        colorTimer.startTime();
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Initialize Robot Hardware ---------------------">
         drivetrain       = new Drivetrain(this);
         dragonsIMU       = new DragonsIMU(this);
         dragonsLimelight = new DragonsLimelight(this);
-        dragonsLights    = new DragonsLights(this);
+        dragonsLights    = new DragonsLights(this, RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
         dragonsOTOS      = new DragonsOTOS(this);
 
         //                                               if an auto was run, don't reset the encoders
         superStructure   = new SuperStructure(this, !AutoRobotPos.autoRun);
         miniStructure    = new MiniStructure(this);
-        dragonsColor     = new DragonsColor(this);
 
         // ministructure and superstructure targets are set in init (make sure to reset them at end of auto)
         //</editor-fold>
@@ -152,6 +152,7 @@ public class DragonsDriver extends LinearOpMode {
         //<editor-fold desc="--------------------- Reset timers ---------------------">
         scoringTimer.reset();
         hangingTimer.reset();
+        colorTimer.reset();
         //</editor-fold>
 
         //<editor-fold desc="--------------------- Main Loop ---------------------">
@@ -222,6 +223,10 @@ public class DragonsDriver extends LinearOpMode {
 
             telemetry.addData("Control state", Global.controlState.name());
             //</editor-fold>
+
+            if (colorTimer.seconds() > 90) {
+                dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            }
 
             // <editor-fold desc="--------------------- SuperStructure ---------------------">
             if (superStructure.arm.isValid || superStructure.extension.isValid)
@@ -412,43 +417,6 @@ public class DragonsDriver extends LinearOpMode {
 
                 telemetry.addData("MiniStructure artie L position", miniStructure.artie.getPosition().left);
                 telemetry.addData("MiniStructure artie R position", miniStructure.artie.getPosition().right);
-            }
-
-            telemetry.addLine();
-            //</editor-fold>
-
-            //<editor-fold desc="--------------------- Color Sensor ---------------------">
-            if (dragonsColor.isValid) {
-                telemetry.addData("Light Detected", (dragonsColor.colorSensor).getLightDetected());
-                telemetry.addData("Red", dragonsColor.colorSensor.red());
-                telemetry.addData("Green", dragonsColor.colorSensor.green());
-                telemetry.addData("Blue", dragonsColor.colorSensor.blue());
-                telemetry.addData("Alpha", dragonsColor.colorSensor.alpha());
-                telemetry.addData("Distance", dragonsColor.colorSensor.getDistance(DistanceUnit.INCH));
-
-                if (dragonsLights.isValid) {
-                    if (dragonsColor.colorSensor.red() > 100) {
-                        telemetry.addData("Current Detected Color", "Red");
-                        dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                    } else if (dragonsColor.colorSensor.blue() > 100) {
-                        telemetry.addData("Current Detected Color", "Blue");
-                        dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
-//                    } else if (dragonsColor.colorSensor.green() > 100) {
-//                        telemetry.addData("Current Detected Color", "Green");
-                    }
-                }
-            }
-            //</editor-fold>
-
-            //<editor-fold desc="--------------------- SparkFun OTOS ---------------------">
-            telemetry.addLine("-----Sparkfun OTOS-----");
-            DecimalFormat sparkfunDF = new DecimalFormat("#.###");
-
-            if (dragonsOTOS.isValid) {
-                telemetry.addData("sparkfun x position", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getPosition().x)));
-                telemetry.addData("sparkfun y position", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getPosition().y)));
-                telemetry.addData("sparkfun    heading", (sparkfunDF.format(dragonsOTOS.sparkFunOTOS.getPosition().h)));
-                telemetry.addData("IMU Heading", dragonsIMU.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
             }
 
             telemetry.addLine();

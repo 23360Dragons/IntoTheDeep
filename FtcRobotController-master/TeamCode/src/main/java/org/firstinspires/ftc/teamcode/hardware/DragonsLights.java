@@ -9,13 +9,13 @@ public class DragonsLights {
     public boolean isValid = true;
     public RevBlinkinLedDriver lights;
 
-    public DragonsLights (LinearOpMode opmode) {
+    public DragonsLights (LinearOpMode opmode, RevBlinkinLedDriver.BlinkinPattern pattern) {
         try {
             opmode.telemetry.addLine("Configuring lights...");
             opmode.telemetry.update();
 
             lights = opmode.hardwareMap.get(RevBlinkinLedDriver.class, "lights");
-            setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+            setPattern(pattern);
 
             opmode.telemetry.addLine("Lights configured!");
             opmode.telemetry.update();
