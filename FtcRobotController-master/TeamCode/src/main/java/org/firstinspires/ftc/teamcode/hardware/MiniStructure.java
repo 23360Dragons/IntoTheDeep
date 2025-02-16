@@ -61,7 +61,7 @@ public class MiniStructure {
         public boolean isValid = true;
         private Servo servo;
 
-        double tiltStartPos  = 0.58;
+        double tiltUpPos  = 0.58;
         double tiltDownPos = 0.34;
         double tiltasc1Pos = 0.67;
 
@@ -90,7 +90,7 @@ public class MiniStructure {
 //        }
 
         public void up(){
-            setPosition(tiltStartPos);
+            setPosition(tiltUpPos);
         }
 
         public void down () {

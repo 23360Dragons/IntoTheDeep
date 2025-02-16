@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.ejml.equation.IntegerSequence;
 import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
@@ -15,13 +16,16 @@ import org.firstinspires.ftc.teamcode.utils.AutoRobotPos;
 
 import static org.firstinspires.ftc.teamcode.utils.Global.Backward;
 import static org.firstinspires.ftc.teamcode.utils.Global.Clockwise;
+import static org.firstinspires.ftc.teamcode.utils.Global.CounterClockwise;
 import static org.firstinspires.ftc.teamcode.utils.Global.Left;
 import static org.firstinspires.ftc.teamcode.utils.Global.Forward;
 import static org.firstinspires.ftc.teamcode.utils.Global.Right;
 
+import java.time.Clock;
+
 @Config
 @Autonomous(name="NetSpecimen", group="Auto", preselectTeleOp = "DragonsDriver")
-public class NetSpecimen extends AutonomousOpMode {
+public class NetBasket extends AutonomousOpMode {
     public static double dist = 20,
             strafeDist = 12,
             dist2 = 24;
@@ -47,54 +51,34 @@ public class NetSpecimen extends AutonomousOpMode {
 
         if (isStopRequested()) return;
 
-        miniStructure.artie.up();
-        miniStructure.tilt.down();
-
-        // start
-        superStructure.extension.hang();
-        superStructure.extension.switchToAuto();
+        autoRobotMovement.moveForward(2, Forward, 0.3);
+        autoRobotMovement.strafe(24, Left, 0.5);
+        superStructure.extension.full();
         superStructure.extension.setPower(0.8);
-//        sleep(500);
-
-        // drive to submersible
-        miniStructure.artie.up();
-        miniStructure.tilt.down();
-        autoRobotMovement.moveForward(dist, Forward, 0.5);
-        autoRobotMovement.strafe(strafeDist, Right, 0.5);
-        autoRobotMovement.moveForward(dist2, Forward, 0.2);
-
-        timerSleep(200);
-
-        // lower linear slides
-        superStructure.extension.chamber();
-
-        timerSleep(300);
-
-        // push arm forward to clip it
-        miniStructure.artie.chamberRelPos();
-
-        timerSleep(500);
-
-        // release claw
+        miniStructure.basket();
+        autoRobotMovement.rotate(135, CounterClockwise, 0.5);
+        autoRobotMovement.moveForward(6 , Forward, 0.2);
+        while (!superStructure.extension.atTargetPosition()) {}
         miniStructure.claw.open();
-
-        timerSleep(500);
-
-        // move stuff back for driving
-        miniStructure.tilt.up();
-        miniStructure.artie.up();
-        superStructure.extension.down();
+        timerSleep(1000);
         miniStructure.claw.close();
-
-        // park at ascent
-        autoRobotMovement.moveForward(24, Backward, 0.5);
-        autoRobotMovement.strafe(48, Left, 0.5);
+        timerSleep(500);
+        autoRobotMovement.moveForward(6, Backward, 0.3);
+        superStructure.extension.down();
+        superStructure.extension.setPower(0.6);
+        miniStructure.down();
+        timerSleep(500);
+        autoRobotMovement.rotate(135, Clockwise, 0.5);
+        autoRobotMovement.strafe(12, Right, 0.5);
         autoRobotMovement.moveForward(56, Forward, 0.6);
+
         autoRobotMovement.rotate(90, Clockwise, 0.5);
         miniStructure.artie.chamberRelPos();
         miniStructure.tilt.hang();
         superStructure.extension.chamber();
-        autoRobotMovement.moveForward(35, Forward, 0.2);
+        superStructure.extension.setPower(0.8);
+        timerSleep(300);
+        autoRobotMovement.moveForward(48, Forward, 0.2);
 
         AutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw());
     }

@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
-import java.util.Arrays;
 
 public class AutoRobotMovement {
 
@@ -105,14 +102,15 @@ public class AutoRobotMovement {
      * @param degrees The number of degrees to rotate.
      * @param clockwise True to rotate clockwise, false to rotate counterclockwise.
      */
-    public void rotate(double degrees, boolean clockwise) {
+    public void rotate(double degrees, boolean clockwise, double speed) {
         // Calculate the distance traveled by each wheel during rotation
-        double wheelCircumference = Math.PI * Global.ROBOT_WIDTH;
+        double wheelCircumference = 2 * Math.PI * Global.ROBOT_WIDTH;
         double distancePerDegree = wheelCircumference / 360.0;
         double rotationDistance = degrees * distancePerDegree;
 
         // Calculate target encoder counts
         double targetTicks = rotationDistance * Global.TICKS_PER_INCH;
+        targetTicks *= (195.0 /180.0);
 
         resetEncoders();
 
@@ -129,10 +127,10 @@ public class AutoRobotMovement {
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Set motor power
-        frontLeft.setPower(clockwise ?   0.5 : -0.5);
-        frontRight.setPower(clockwise ? -0.5 :  0.5);
-        backLeft.setPower(clockwise ?    0.5 : -0.5);
-        backRight.setPower(clockwise ?  -0.5 :  0.5);
+        frontLeft.setPower(clockwise ?   speed : -speed);
+        frontRight.setPower(clockwise ? -speed :  speed);
+        backLeft.setPower(clockwise ?    speed : -speed);
+        backRight.setPower(clockwise ?  -speed :  speed);
 
         // Wait for motors to reach target position
         while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {

@@ -21,16 +21,9 @@ import static org.firstinspires.ftc.teamcode.utils.Global.Right;
 @Config
 @Autonomous(name="ObsSpecimen", group="Auto", preselectTeleOp = "DragonsDriver")
 public class ObsSpecimen extends AutonomousOpMode {
-    Drivetrain drivetrain;
-    MiniStructure miniStructure;
-    SuperStructure superStructure;
-    DragonsIMU imu;
-
     public static double dist = 20,
             strafeDist = 12,
             dist2 = 24;
-
-    ElapsedTime timer;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -82,8 +75,8 @@ public class ObsSpecimen extends AutonomousOpMode {
 
         // park in observation zone
 
-        autoRobotMovement.moveForward(36, Backward, 0.4);
-        autoRobotMovement.strafe(40, Right, 0.5);
+        autoRobotMovement.moveForward(40, Backward, 0.4);
+        autoRobotMovement.strafe(44, Right, 0.5);
 
         AutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw());
     }
