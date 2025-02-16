@@ -36,9 +36,11 @@ public class DragonsIMU {
                                 AxesOrder.XZY,
                                 AngleUnit.DEGREES,
                                 -90,
-                                0,
+                                180,
+                                
                                 // this allows field centric to be correct after auto, i think
-                                AutoRobotPos.getRotation(),
+                                        // negative because z axis is flipped
+                                -AutoRobotPos.getRotation(),
                                 0
                             )
                     )
