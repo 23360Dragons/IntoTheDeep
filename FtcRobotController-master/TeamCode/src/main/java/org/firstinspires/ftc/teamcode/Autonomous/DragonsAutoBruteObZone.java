@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
-import org.firstinspires.ftc.teamcode.utils.StoreAutoRobotPos;
+import org.firstinspires.ftc.teamcode.utils.AutoRobotPos;
 
 @Autonomous (preselectTeleOp = "DragonsDriver")
 public class DragonsAutoBruteObZone extends LinearOpMode {
@@ -17,7 +17,7 @@ public class DragonsAutoBruteObZone extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        StoreAutoRobotPos.reset();
+        AutoRobotPos.reset();
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
         rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
@@ -45,6 +45,6 @@ public class DragonsAutoBruteObZone extends LinearOpMode {
         autoRobotMovement.strafe(44, true, 0.5);
 
         //autoRobotMovement.strafe(200, true);
-        StoreAutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw());
+        AutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw());
     }
 }

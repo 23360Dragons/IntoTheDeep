@@ -9,10 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.utils.Global;
-import org.firstinspires.ftc.teamcode.utils.StoreAutoRobotPos;
-
-import static org.firstinspires.ftc.teamcode.utils.Global.logoFacingDirection;
-import static org.firstinspires.ftc.teamcode.utils.Global.usbFacingDirection;
+import org.firstinspires.ftc.teamcode.utils.AutoRobotPos;
 
 public class DragonsIMU {
     public boolean isValid = true;
@@ -41,7 +38,7 @@ public class DragonsIMU {
                                 -90,
                                 0,
                                 // this allows field centric to be correct after auto, i think
-                                StoreAutoRobotPos.getRotation(),
+                                AutoRobotPos.getRotation(),
                                 0
                             )
                     )

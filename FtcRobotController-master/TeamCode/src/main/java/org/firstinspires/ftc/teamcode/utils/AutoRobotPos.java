@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-public class StoreAutoRobotPos {
+public class AutoRobotPos {
     public static float rotation = 0;
     public static boolean autoRun = false;
 

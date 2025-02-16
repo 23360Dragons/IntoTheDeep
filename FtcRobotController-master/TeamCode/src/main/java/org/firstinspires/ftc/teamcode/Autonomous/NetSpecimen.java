@@ -3,7 +3,6 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
@@ -12,15 +11,13 @@ import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
 import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
 import org.firstinspires.ftc.teamcode.utils.Global;
-import org.firstinspires.ftc.teamcode.utils.StoreAutoRobotPos;
+import org.firstinspires.ftc.teamcode.utils.AutoRobotPos;
 
 import static org.firstinspires.ftc.teamcode.utils.Global.Backward;
 import static org.firstinspires.ftc.teamcode.utils.Global.Clockwise;
 import static org.firstinspires.ftc.teamcode.utils.Global.Left;
 import static org.firstinspires.ftc.teamcode.utils.Global.Forward;
 import static org.firstinspires.ftc.teamcode.utils.Global.Right;
-
-import java.time.Clock;
 
 @Config
 @Autonomous(name="NetSpecimen", group="Auto", preselectTeleOp = "DragonsDriver")
@@ -36,7 +33,7 @@ public class NetSpecimen extends AutonomousOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         miniStructure = new MiniStructure(this);
 
-        resetIMUOrientation(); // this removes the imu orientation offset from any previous autos
+        AutoRobotPos.reset(); // this removes the imu orientation offset from any previous autos
         imu = new DragonsIMU(this);
 
         drivetrain = new Drivetrain(this);
@@ -99,6 +96,6 @@ public class NetSpecimen extends AutonomousOpMode {
         superStructure.extension.chamber();
         autoRobotMovement.moveForward(35, Forward, 0.2);
 
-        StoreAutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw());
+        AutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw());
     }
 }
