@@ -52,7 +52,7 @@ public class NetSpecimen extends AutonomousOpMode {
         autoRobotMovement.strafe(12, Right, 0.5);
         autoRobotMovement.moveForward(24, Forward, 0.2);
 
-        timerSleep(200);
+        timerSleep(100);
 
         // lower linear slides
         superStructure.extension.chamber();
@@ -67,7 +67,7 @@ public class NetSpecimen extends AutonomousOpMode {
         // release claw
         miniStructure.claw.open();
 
-        timerSleep(500);
+        timerSleep(200);
 
         // move stuff back for driving
         miniStructure.tilt.up();

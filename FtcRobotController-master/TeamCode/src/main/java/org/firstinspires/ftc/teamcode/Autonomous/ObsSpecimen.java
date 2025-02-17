@@ -41,13 +41,13 @@ public class ObsSpecimen extends AutonomousOpMode {
         autoRobotMovement.moveForward(dist, Forward, 0.5);
         autoRobotMovement.strafe(strafeDist, Left, 0.5);
         autoRobotMovement.moveForward(dist2, Forward, 0.2);
-        timerSleep(200);
+        timerSleep(100);
         superStructure.extension.chamber();
         timerSleep(300);
         miniStructure.artie.chamberRelPos();
         timerSleep(500);
         miniStructure.claw.open();
-        timerSleep(500);
+        timerSleep(200);
         miniStructure.tilt.up();
         miniStructure.artie.up();
         superStructure.extension.down();
