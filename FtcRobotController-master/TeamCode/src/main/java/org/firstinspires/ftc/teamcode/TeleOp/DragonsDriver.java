@@ -229,15 +229,11 @@ public class DragonsDriver extends LinearOpMode {
             // <editor-fold desc="--------------------- SuperStructure ---------------------">
             if (superStructure.arm.isValid || superStructure.extension.isValid)
                 telemetry.addLine("-----Super Structure-----");
-            // SUperstructure arm
+            
+            // Superstructure arm
             if (superStructure.arm.isValid){
                 //                         left trigger  right trigger
                 double articulationPower = (armUp - (armDown));
-
-                double speed = SSCreepSpeed;
-                if (creepSpeed1) {
-                    speed = SSSpeed;
-                }
 
                 // handles arm state for limiting extension
                 if (superStructure.arm.getPosition().avg <= -220) {
@@ -257,31 +253,29 @@ public class DragonsDriver extends LinearOpMode {
                     switch (Global.controlState) {
 
                         case MANUAL:
-
+                            
+                            // get extension on a scale of 0 to 1
+                            // meaning 0 = 0 ticks, 1 = hang extension or more
+                            double extensionPos = Math.min(superStructure.extension.getPosition().right, SuperStructure.Extension.maxDownExtension)
+                                    / SuperStructure.Extension.maxDownExtension;
+                            
+                            double speed = (extensionPos * (SSCreepSpeed - SSSpeed)) + SSSpeed;
+                            
                             superStructure.arm.switchToManual();
-                            superStructure.arm.setPower(articulationPower * speed);
+                            superStructure.arm.setPower(articulationPower * speed);  // 0.8 if down, 0.5 if up
                             telemetry.addData("superstructure is being set to", articulationPower * speed);
                             break;
 
                         case AUTO:
-
+                            
                             if (SSFull && !prevSSFull) {
                                 superStructure.arm.full();
                             } else if (SSHang && !prevSSHang) {
                                 superStructure.arm.hang();
                             } else if (SSDown && !prevSSDown) {
                                 superStructure.arm.down();
+                                miniStructure.basket();
                             }
-
-                            // if (basketScore && !prevBasketScore) {
-                            //                                basketScore(superStructure, miniStructure, telemetry);
-                            //                            } else if (SSHang && !prevSSHang) {
-                            //                                superStructure.extension.hang();
-                            //                            } else if (intake && !prevIntake) {
-                            //                                intake(superStructure, miniStructure, telemetry);
-                            //                            } else if (hangDown && !prevHangDown) {
-                            //                                superStructure.extension.down();
-                            //                            }
 
                             superStructure.arm.switchToAuto();
                             superStructure.arm.setPower(SSSpeed);
@@ -339,7 +333,6 @@ public class DragonsDriver extends LinearOpMode {
 
                             superStructure.extension.switchToAuto();
 
-                            // this might make it move when it shouldn't?
                             superStructure.extension.setPower(extSpeed);
                             break;
                     }
@@ -378,23 +371,26 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             if (miniStructure.tilt.isValid) {
-//                switch (Global.controlState) {
-//                    case MANUAL:
+                switch (Global.controlState) {
+                    case MANUAL:
+                        
                         double power = tiltUp ? 0.001 * tiltSpeed : tiltDown ? -0.001 * tiltSpeed : 0;
                         double targetPosition = miniStructure.tilt.getPosition() + power;
 
                         miniStructure.tilt.setPosition(targetPosition);
                         telemetry.addData("MiniStructure tilt power", power);
-//                        break;
-//
-//                    case AUTO:
-//                         todo maybe a presseddown functionality?
-//                        if (tiltUp) {
-//                            miniStructure.tilt.up();
-//                        } else if (tiltDown) {
-//                            miniStructure.tilt.down();
-//                        }
-//                }
+                        break;
+
+                    case AUTO:
+                        
+                        if (tiltUp) {
+                            miniStructure.tilt.up();
+                        } else if (tiltDown) {
+                            miniStructure.tilt.down();
+                        }
+                        
+                        break;
+                }
 
 
                 telemetry.addData("MiniStructure tilt position", miniStructure.tilt.getPosition());
