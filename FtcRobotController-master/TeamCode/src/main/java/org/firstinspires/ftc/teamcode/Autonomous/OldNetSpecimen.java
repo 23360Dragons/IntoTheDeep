@@ -21,7 +21,7 @@ import static org.firstinspires.ftc.teamcode.utils.Global.Forward;
 import static org.firstinspires.ftc.teamcode.utils.Global.Right;
 
 @Config
-@Autonomous(name="OldNetSpecimen", group="Auto", preselectTeleOp = "DragonsDriver")
+@Autonomous(name="OldNetSpecimen", group="OldAuto", preselectTeleOp = "DragonsDriver")
 public class OldNetSpecimen extends LinearOpMode {
     Drivetrain drivetrain;
     DragonsIMU imu;

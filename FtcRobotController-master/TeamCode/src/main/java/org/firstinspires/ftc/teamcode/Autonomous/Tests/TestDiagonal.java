@@ -5,11 +5,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.Autonomous.AutonomousOpMode;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
+import org.firstinspires.ftc.teamcode.utils.AutoRobotPos;
 
 @Disabled
 @Autonomous(name="TestDiagonal12Inches45", group="Tests")
-public class TestDiagonal extends LinearOpMode {
+public class TestDiagonal extends AutonomousOpMode {
     // Declare motors
     //motor code from CombinedMaster
     // are those ports correct?
@@ -19,26 +21,13 @@ public class TestDiagonal extends LinearOpMode {
     DcMotor _rightBack;//Port3
     @Override
     public void runOpMode() throws InterruptedException {
-        // Initialize motors - copied from CombinedMaster
-        _leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-        _rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-        _leftBack = hardwareMap.get(DcMotor.class, "leftBack");
-        _rightBack = hardwareMap.get(DcMotor.class, "rightBack");
-
-        // Set motor directions
-        //assumption - right side reversed - copied from CombinedMaster
-        //that was the comment in CombinedMaster. Is this right?
-        _leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        _leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        initRobot();
 
         // Wait for start
         waitForStart();
 
-        // Create an instance of AutoRobotMovement
-        AutoRobotMovement autoRobotMovement = new AutoRobotMovement(_leftFront, _rightFront, _leftBack, _rightBack);
-
         // Move diagonally 12 inches at 45 degrees
-        autoRobotMovement.moveDiagonallyRight(12.0, 45.0);
+//        autoRobotMovement.moveDiagonallyRight(12.0, 45.0);
 
         // Stop motors (optional, as subroutine already stops them)
         _leftFront.setPower(0);
@@ -51,7 +40,5 @@ public class TestDiagonal extends LinearOpMode {
         _rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         _leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         _rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-
     }
 }

@@ -21,7 +21,7 @@ import static org.firstinspires.ftc.teamcode.utils.Global.Forward;
 import static org.firstinspires.ftc.teamcode.utils.Global.Right;
 
 @Config
-@Autonomous(name="OldObsSpecimen", group="Auto", preselectTeleOp = "DragonsDriver")
+@Autonomous(name="OldObsSpecimen", group="OldAuto", preselectTeleOp = "DragonsDriver")
 public class OldObsSpecimen extends LinearOpMode {
     Drivetrain drivetrain;
     MiniStructure miniStructure;
