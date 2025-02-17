@@ -26,7 +26,7 @@ public class MeepMeepTesting {
     );
     public static Vector2d toBlueSide = new Vector2d(0, 34);
     public static double redFace = Math.toRadians(90);
-    public static Vector2d redOne     = new Vector2d(-35, -60);
+    public static Vector2d redOne     = new Vector2d(-35, -63);
     public static Vector2d redTwo     = new Vector2d(12, -60);
     public static Vector2d toRedSide  = new Vector2d(0, -33);
     public static Pose2d blueBasket   = new Pose2d(53, 53, Math.toRadians(45));
@@ -49,6 +49,7 @@ public class MeepMeepTesting {
                 .build();
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(redOne, redFace))
+                        .waitSeconds(10)
                 .strafeTo(toRedSide)
                 .waitSeconds(4)
                         .strafeTo(new Vector2d(-48, -40))

@@ -6,6 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.ejml.equation.IntegerSequence;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
@@ -24,7 +27,7 @@ import static org.firstinspires.ftc.teamcode.utils.Global.Right;
 import java.time.Clock;
 
 @Config
-@Autonomous(name="NetSpecimen", group="Auto", preselectTeleOp = "DragonsDriver")
+@Autonomous(name="NetBasket", group="Auto", preselectTeleOp = "DragonsDriver")
 public class NetBasket extends AutonomousOpMode {
     public static double dist = 20,
             strafeDist = 12,
@@ -32,20 +35,9 @@ public class NetBasket extends AutonomousOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        timer = new ElapsedTime();
-        timer.startTime();
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        miniStructure = new MiniStructure(this);
+        initRobot();
 
-        AutoRobotPos.reset(); // this removes the imu orientation offset from any previous autos
-        imu = new DragonsIMU(this);
-
-        drivetrain = new Drivetrain(this);
-        superStructure = new SuperStructure(this, true);
-        AutoRobotMovement autoRobotMovement = new AutoRobotMovement(drivetrain.leftFront, drivetrain.rightFront, drivetrain.leftBack, drivetrain.rightBack);
-
-        Global.switchToAuto();
-        superStructure.arm.switchToAuto();
+        robotPose = new Pose2D(DistanceUnit.INCH, redOne.x, redOne.y, AngleUnit.DEGREES, redFace);
 
         waitForStart();
 

@@ -27,20 +27,8 @@ public class ObsSpecimen extends AutonomousOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        timer = new ElapsedTime();
-        timer.startTime();
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        miniStructure = new MiniStructure(this);
+        initRobot();
 
-        AutoRobotPos.reset(); // this removes the imu orientation offset from any previous autos
-        imu = new DragonsIMU(this);
-        drivetrain = new Drivetrain(this);
-        superStructure = new SuperStructure(this, true);
-        AutoRobotMovement autoRobotMovement = new AutoRobotMovement(drivetrain.leftFront, drivetrain.rightFront, drivetrain.leftBack, drivetrain.rightBack);
-
-        Global.switchToAuto();
-        superStructure.arm.switchToAuto();
-//        superStructure.extension.switchToAuto();
         waitForStart();
 
         if (isStopRequested()) return;
