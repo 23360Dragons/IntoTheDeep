@@ -37,8 +37,6 @@ public class NetBasket extends AutonomousOpMode {
     public void runOpMode() throws InterruptedException {
         initRobot();
 
-        robotPose = new Pose2D(DistanceUnit.INCH, redOne.x, redOne.y, AngleUnit.DEGREES, redFace);
-
         waitForStart();
 
         if (isStopRequested()) return;

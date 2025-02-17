@@ -44,9 +44,6 @@ public class NetSpecimen extends AutonomousOpMode {
     public void runOpMode() throws InterruptedException {
         initRobot();
 
-        // the exact center of the robot (9 inch extension on each side)
-        robotPose = new Pose2D(DistanceUnit.INCH, redOne.x, redOne.y, AngleUnit.DEGREES, redFace);
-
         waitForStart();
 
         if (isStopRequested()) return;
