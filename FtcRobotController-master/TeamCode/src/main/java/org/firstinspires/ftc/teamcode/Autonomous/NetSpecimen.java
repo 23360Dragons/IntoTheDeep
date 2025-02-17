@@ -5,6 +5,10 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.ejml.equation.IntegerSequence;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
@@ -15,6 +19,7 @@ import org.firstinspires.ftc.teamcode.utils.AutoRobotPos;
 
 import static org.firstinspires.ftc.teamcode.utils.Global.Backward;
 import static org.firstinspires.ftc.teamcode.utils.Global.Clockwise;
+import static org.firstinspires.ftc.teamcode.utils.Global.CounterClockwise;
 import static org.firstinspires.ftc.teamcode.utils.Global.Left;
 import static org.firstinspires.ftc.teamcode.utils.Global.Forward;
 import static org.firstinspires.ftc.teamcode.utils.Global.Right;
@@ -22,26 +27,25 @@ import static org.firstinspires.ftc.teamcode.utils.Global.Right;
 @Config
 @Autonomous(name="NetSpecimen", group="Auto", preselectTeleOp = "DragonsDriver")
 public class NetSpecimen extends AutonomousOpMode {
-    public static double dist = 20,
-            strafeDist = 12,
-            dist2 = 24;
+    public static double moveAwayFromChamberdist = 12,
+    moveLeftToSampledist         = 50,
+    moveTowardsSampledist        = 12,
+    moveBackwardToBasketdist     = 15,
+    rotateToFaceBasketdist       = 135,
+    moveTowardsBasketdist        = 14,
+    moveAwayFromBasketdist       = 18,
+    rotateAwayFromBasketdist     = 135,
+    moveForwardTowardsAscentdist = 52,
+    moveTowardsRungForAscentdist = 35;
+    
+    public static boolean doBasket = true;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        timer = new ElapsedTime();
-        timer.startTime();
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        miniStructure = new MiniStructure(this);
+        initRobot();
 
-        AutoRobotPos.reset(); // this removes the imu orientation offset from any previous autos
-        imu = new DragonsIMU(this);
-
-        drivetrain = new Drivetrain(this);
-        superStructure = new SuperStructure(this, true);
-        AutoRobotMovement autoRobotMovement = new AutoRobotMovement(drivetrain.leftFront, drivetrain.rightFront, drivetrain.leftBack, drivetrain.rightBack);
-
-        Global.switchToAuto();
-        superStructure.arm.switchToAuto();
+        // the exact center of the robot (9 inch extension on each side)
+        robotPose = new Pose2D(DistanceUnit.INCH, redOne.x, redOne.y, AngleUnit.DEGREES, redFace);
 
         waitForStart();
 
@@ -59,9 +63,9 @@ public class NetSpecimen extends AutonomousOpMode {
         // drive to submersible
         miniStructure.artie.up();
         miniStructure.tilt.down();
-        autoRobotMovement.moveForward(dist, Forward, 0.5);
-        autoRobotMovement.strafe(strafeDist, Right, 0.5);
-        autoRobotMovement.moveForward(dist2, Forward, 0.2);
+        autoRobotMovement.moveForward(20, Forward, 0.5);
+        autoRobotMovement.strafe(12, Right, 0.5);
+        autoRobotMovement.moveForward(24, Forward, 0.2);
 
         timerSleep(200);
 
@@ -87,14 +91,48 @@ public class NetSpecimen extends AutonomousOpMode {
         miniStructure.claw.close();
 
         // park at ascent
-        autoRobotMovement.moveForward(24, Backward, 0.5);
-        autoRobotMovement.strafe(48, Left, 0.5);
-        autoRobotMovement.moveForward(56, Forward, 0.6);
+        autoRobotMovement.moveForward(moveAwayFromChamberdist, Backward, 0.5);
+        
+        // NEW FOR BASKET STUFF
+        if (doBasket) {
+            miniStructure.down();
+            miniStructure.claw.open();
+            
+            autoRobotMovement.strafe(moveLeftToSampledist, Left, 0.5);
+            autoRobotMovement.moveForward(moveTowardsSampledist, Forward, 0.3);
+            
+            miniStructure.claw.close();
+            timerSleep(300);
+            miniStructure.basket();
+            superStructure.extension.full();
+            superStructure.extension.setPower(0.8);
+            
+            autoRobotMovement.moveForward(moveBackwardToBasketdist, Backward, 0.3);
+            autoRobotMovement.rotate(rotateToFaceBasketdist, CounterClockwise, 0.3);
+            autoRobotMovement.moveForward(moveTowardsBasketdist, Forward, 0.3);
+            
+            miniStructure.tilt.down();
+            timerSleep(100);
+            miniStructure.claw.open();
+            timerSleep(500);
+            miniStructure.tilt.up();
+            autoRobotMovement.moveForward(moveAwayFromBasketdist, Backward, 0.3);
+            superStructure.extension.down();
+            superStructure.extension.setPower(0.6);
+            autoRobotMovement.rotate(rotateAwayFromBasketdist, Clockwise, 0.3);
+            autoRobotMovement.moveForward(moveForwardTowardsAscentdist, Forward, 0.6);
+            
+            // END NEW BASKET STUFF
+        } else {
+            autoRobotMovement.strafe(48, Left, 0.5);
+            autoRobotMovement.moveForward(44, Forward, 0.6);
+        }
+        
         autoRobotMovement.rotate(90, Clockwise, 0.5);
         miniStructure.artie.chamberRelPos();
         miniStructure.tilt.hang();
         superStructure.extension.chamber();
-        autoRobotMovement.moveForward(35, Forward, 0.2);
+        autoRobotMovement.moveForward(moveTowardsRungForAscentdist, Forward, 0.2);
 
         AutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw());
     }
