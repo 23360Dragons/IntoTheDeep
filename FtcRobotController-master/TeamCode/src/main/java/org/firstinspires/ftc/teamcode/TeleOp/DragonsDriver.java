@@ -189,9 +189,7 @@ public class DragonsDriver extends LinearOpMode {
 
                     SSFull = currentGamepad1.y, prevSSFull = previousGamepad1.y,
                     SSHang = currentGamepad1.x, prevSSHang = previousGamepad1.x,
-                    SSDown = currentGamepad1.b, prevSSDown = previousGamepad1.b,
-
-                    startHang = currentGamepad1.start, prevStartHang = previousGamepad1.start;
+                    SSDown = currentGamepad1.b, prevSSDown = previousGamepad1.b;
 
             // gamepad 2 (MANIPULATOR)
 
@@ -210,12 +208,12 @@ public class DragonsDriver extends LinearOpMode {
 
                     // linear slide stuff
                     controlToggle       = currentGamepad2.back,  prevControlToggle       = previousGamepad2.back,
-                    scoringStateControl = currentGamepad2.start, prevScoringStateControl = previousGamepad2.start,
+//                    scoringStateControl = currentGamepad2.start, prevScoringStateControl = previousGamepad2.start,
 
                     hang = currentGamepad2.x, prevHang = previousGamepad2.x,
-                    full = currentGamepad2.y, prevFull = previousGamepad2.y,
-                    down = currentGamepad2.a, prevDown = previousGamepad2.a,
-                    cham = currentGamepad2.b, prevCham = previousGamepad2.b;
+                    basketScore = currentGamepad2.y, prevBasketScore = previousGamepad2.y,
+                    intake = currentGamepad2.a, prevIntake = previousGamepad2.a,
+                    hangDown = currentGamepad2.b, prevHangDown = previousGamepad2.b;
 
             if (controlToggle && !prevControlToggle) {
                 Global.toggleControlState();
@@ -268,12 +266,22 @@ public class DragonsDriver extends LinearOpMode {
                         case AUTO:
 
                             if (SSFull && !prevSSFull) {
-                                superStructure.extension.full();
+                                superStructure.arm.full();
                             } else if (SSHang && !prevSSHang) {
-                                superStructure.extension.hang();
+                                superStructure.arm.hang();
                             } else if (SSDown && !prevSSDown) {
-                                superStructure.extension.down();
+                                superStructure.arm.down();
                             }
+
+                            // if (basketScore && !prevBasketScore) {
+                            //                                basketScore(superStructure, miniStructure, telemetry);
+                            //                            } else if (SSHang && !prevSSHang) {
+                            //                                superStructure.extension.hang();
+                            //                            } else if (intake && !prevIntake) {
+                            //                                intake(superStructure, miniStructure, telemetry);
+                            //                            } else if (hangDown && !prevHangDown) {
+                            //                                superStructure.extension.down();
+                            //                            }
 
                             superStructure.arm.switchToAuto();
                             superStructure.arm.setPower(SSSpeed);
@@ -308,7 +316,7 @@ public class DragonsDriver extends LinearOpMode {
 
                         case AUTO:
 
-                            // when you press a button, set it to a height
+                           /* // when you press a button, set it to a height
                             if (full && !prevFull) {
                                 superStructure.extension.full();
                             } else if (hang && !prevHang) {
@@ -317,6 +325,16 @@ public class DragonsDriver extends LinearOpMode {
                                 superStructure.extension.down();
                             } else if (cham && !prevCham) {
                                 superStructure.extension.chamber();
+                            }*/
+
+                            if (basketScore && !prevBasketScore) {
+                                basketScore(superStructure, miniStructure, telemetry);
+                            } else if (SSHang && !prevSSHang) {
+                                superStructure.extension.hang();
+                            } else if (intake && !prevIntake) {
+                                intake(superStructure, miniStructure, telemetry);
+                            } else if (hangDown && !prevHangDown) {
+                                superStructure.extension.down();
                             }
 
                             superStructure.extension.switchToAuto();
