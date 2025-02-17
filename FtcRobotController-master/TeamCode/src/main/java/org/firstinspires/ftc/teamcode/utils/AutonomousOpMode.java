@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.utils;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -12,9 +12,6 @@ import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
 import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
-import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
-import org.firstinspires.ftc.teamcode.utils.AutoRobotPos;
-import org.firstinspires.ftc.teamcode.utils.Global;
 
 public abstract class AutonomousOpMode extends LinearOpMode {
     public SuperStructure superStructure;
@@ -61,7 +58,7 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         drivetrain = new Drivetrain(this);
         superStructure = new SuperStructure(this, true);
         miniStructure = new MiniStructure(this);
-        autoRobotMovement = new AutoRobotMovement(drivetrain);
+        autoRobotMovement = new AutoRobotMovement(this); //must be initialized after drivetrain
 
         Global.switchToAuto();
         superStructure.extension.switchToAuto();

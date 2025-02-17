@@ -1,21 +1,9 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
-import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
-import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
-import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
-import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotPos;
-import org.firstinspires.ftc.teamcode.utils.Global;
+import org.firstinspires.ftc.teamcode.utils.AutonomousOpMode;
 
 @Autonomous (preselectTeleOp = "DragonsDriver")
 public class DragonsAutoBruteObZone extends AutonomousOpMode {

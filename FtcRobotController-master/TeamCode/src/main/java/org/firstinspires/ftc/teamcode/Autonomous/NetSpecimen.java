@@ -1,20 +1,8 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.ejml.equation.IntegerSequence;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
-import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
-import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
-import org.firstinspires.ftc.teamcode.hardware.SuperStructure;
-import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
-import org.firstinspires.ftc.teamcode.utils.Global;
+import org.firstinspires.ftc.teamcode.utils.AutonomousOpMode;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotPos;
 
 import static org.firstinspires.ftc.teamcode.utils.Global.Backward;

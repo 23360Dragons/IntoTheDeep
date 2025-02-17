@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.utils;
 
+import com.acmerobotics.roadrunner.Line;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
@@ -10,12 +12,18 @@ public class AutoRobotMovement {
     private DcMotor frontRight;
     private DcMotor backLeft;
     private DcMotor backRight;
+    private LinearOpMode opmode;
 
-    public AutoRobotMovement(Drivetrain drivetrain) {
-        frontLeft = drivetrain.leftFront;
+    public AutoRobotMovement(AutonomousOpMode opmode) {
+        new AutoRobotMovement(opmode.drivetrain, opmode);
+    }
+    
+    public AutoRobotMovement(Drivetrain drivetrain, LinearOpMode opMode) {
+        frontLeft  = drivetrain.leftFront;
         frontRight = drivetrain.rightFront;
-        backLeft = drivetrain.leftBack;
-        backRight = drivetrain.rightBack;
+        backLeft   = drivetrain.leftBack;
+        backRight  = drivetrain.rightBack;
+        opmode     = opMode;
     }
 
     private void resetEncoders() {
@@ -56,7 +64,7 @@ public class AutoRobotMovement {
         backLeft.setPower(speed);
         backRight.setPower(speed);
 
-        while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
+        while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy() && opmode.opModeIsActive()) {
             // Do nothing, just wait
         }
 
@@ -97,7 +105,7 @@ public class AutoRobotMovement {
         backLeft.setPower(speed);
         backRight.setPower(speed);
 
-        while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
+        while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy() && opmode.opModeIsActive()) {
             // Do nothing, just wait
         }
 
@@ -147,7 +155,7 @@ public class AutoRobotMovement {
         backRight.setPower(speed);
 
         // Wait for motors to reach target position
-        while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
+        while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy() && opmode.opModeIsActive()) {
             // Do nothing, just wait
         }
 

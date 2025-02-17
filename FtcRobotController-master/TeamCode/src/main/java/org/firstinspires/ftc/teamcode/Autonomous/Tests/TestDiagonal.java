@@ -1,13 +1,9 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Tests;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.Autonomous.AutonomousOpMode;
-import org.firstinspires.ftc.teamcode.utils.AutoRobotMovement;
-import org.firstinspires.ftc.teamcode.utils.AutoRobotPos;
+import org.firstinspires.ftc.teamcode.utils.AutonomousOpMode;
 
 @Disabled
 @Autonomous(name="TestDiagonal12Inches45", group="Tests")

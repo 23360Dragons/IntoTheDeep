@@ -45,7 +45,7 @@ public class OldNetSpecimen extends LinearOpMode {
 
         drivetrain = new Drivetrain(this);
         superStructure = new SuperStructure(this, true);
-        AutoRobotMovement autoRobotMovement = new AutoRobotMovement(drivetrain);
+        AutoRobotMovement autoRobotMovement = new AutoRobotMovement(drivetrain, this);
 
         Global.switchToAuto();
         superStructure.arm.switchToAuto();
