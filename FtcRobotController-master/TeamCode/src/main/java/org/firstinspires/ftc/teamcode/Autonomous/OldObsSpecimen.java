@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.hardware.DragonsIMU;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.MiniStructure;
@@ -91,7 +92,7 @@ public class OldObsSpecimen extends LinearOpMode {
         autoRobotMovement.moveForward(36, Backward, 0.4);
         autoRobotMovement.strafe(40, Right, 0.5);
 
-        AutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw());
+        AutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
 
     }
 }

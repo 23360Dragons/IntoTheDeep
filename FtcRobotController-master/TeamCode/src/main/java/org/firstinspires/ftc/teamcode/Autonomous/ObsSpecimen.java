@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.utils.AutonomousOpMode;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotPos;
 
@@ -58,6 +59,6 @@ public class ObsSpecimen extends AutonomousOpMode {
         autoRobotMovement.moveForward(40, Backward, 0.4);
         autoRobotMovement.strafe(44, Right, 0.5);
 
-        AutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw());
+        AutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
     }
 }

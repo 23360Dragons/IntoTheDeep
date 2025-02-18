@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.utils.AutonomousOpMode;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotPos;
 
@@ -56,6 +57,6 @@ public class NetBasket extends AutonomousOpMode {
         timerSleep(300);
         autoRobotMovement.moveForward(48, Forward, 0.2);
 
-        AutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw());
+        AutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
     }
 }
