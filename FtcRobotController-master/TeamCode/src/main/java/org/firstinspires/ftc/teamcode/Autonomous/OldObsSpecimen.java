@@ -55,8 +55,7 @@ public class OldObsSpecimen extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        miniStructure.artie.up();
-        miniStructure.tilt.down();
+        miniStructure.chamber();
 
         // start
 
@@ -66,8 +65,7 @@ public class OldObsSpecimen extends LinearOpMode {
 //        sleep(500);
 
         // drive to submersible
-        miniStructure.artie.up();
-        miniStructure.tilt.down();
+        miniStructure.chamber();
         autoRobotMovement.moveForward(dist, Forward, 0.5);
         autoRobotMovement.strafe(strafeDist, Left, 0.5);
         autoRobotMovement.moveForward(dist2, Forward, 0.2);

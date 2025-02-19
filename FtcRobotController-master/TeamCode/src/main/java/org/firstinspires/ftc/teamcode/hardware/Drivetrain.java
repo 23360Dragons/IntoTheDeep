@@ -106,8 +106,7 @@ public class Drivetrain {
     }
 
     //robot-centric move function
-    public void RC (double x, double y, double rightX, double speed)
-    {
+    public void RC (double x, double y, double rightX, double speed) {
         //rightX is yaw
 
         x*=1.1; //counteract imperfect strafing

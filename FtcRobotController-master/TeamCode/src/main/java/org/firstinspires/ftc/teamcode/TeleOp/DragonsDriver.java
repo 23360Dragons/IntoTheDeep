@@ -208,12 +208,11 @@ public class DragonsDriver extends LinearOpMode {
 
                     // linear slide stuff
                     controlToggle       = currentGamepad2.back,  prevControlToggle       = previousGamepad2.back,
-//                    scoringStateControl = currentGamepad2.start, prevScoringStateControl = previousGamepad2.start,
 
                     hang = currentGamepad2.x, prevHang = previousGamepad2.x,
                     basketScore = currentGamepad2.y, prevBasketScore = previousGamepad2.y,
                     intake = currentGamepad2.a, prevIntake = previousGamepad2.a,
-                    hangDown = currentGamepad2.b, prevHangDown = previousGamepad2.b;
+                    scoreSpecimen = currentGamepad2.b, prevScoreSpecimen = previousGamepad2.b;
 
             if (controlToggle && !prevControlToggle) {
                 Global.toggleControlState();
@@ -307,6 +306,7 @@ public class DragonsDriver extends LinearOpMode {
                             superStructure.extension.setPower(slidesPower * speed);
                             telemetry.addData("Extension  is being set to", slidesPower * speed);
                             break;
+                //sets the motors to their corresponding power
 
                         case AUTO:
 
@@ -316,6 +316,8 @@ public class DragonsDriver extends LinearOpMode {
                                 superStructure.extension.actuallyHangOnRung();
                             } else if (intake && !prevIntake) {
                                 intake(superStructure, miniStructure, telemetry);
+                            } else if (scoreSpecimen && !prevScoreSpecimen) {
+                                chamberScore(superStructure, miniStructure, telemetry);
                             }
 
                             superStructure.extension.switchToAuto();
@@ -358,64 +360,21 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             if (miniStructure.tilt.isValid) {
-                switch (Global.controlState) {
-                    case MANUAL:
-                        
-                        double power = tiltUp ? 0.001 * tiltSpeed : tiltDown ? -0.001 * tiltSpeed : 0;
-                        double targetPosition = miniStructure.tilt.getPosition() + power;
-
-                        miniStructure.tilt.setPosition(targetPosition);
-                        telemetry.addData("MiniStructure tilt power", power);
-                        break;
-
-                    case AUTO:
-                        
-                        if (tiltUp) {
-                            miniStructure.tilt.up();
-                        } else if (tiltDown) {
-                            miniStructure.tilt.down();
-                        }
-                        
-                        break;
-                }
-
-
+                double power = tiltUp ? 0.001 * tiltSpeed : tiltDown ? -0.001 * tiltSpeed : 0;
+                double targetPosition = miniStructure.tilt.getPosition() + power;
+                
+                miniStructure.tilt.setPosition(targetPosition);
+                telemetry.addData("MiniStructure tilt power", power);
                 telemetry.addData("MiniStructure tilt position", miniStructure.tilt.getPosition());
             }
 
             if (miniStructure.artie.isValid) {
-                double targetPosition;
-
-                // Manual Control
-
-                // todo probably make this fully manual except for FSMs
-                switch (Global.controlState) {
-                    case MANUAL:
-
-                        double power = artiePower * (0.005 * armSpeed);
-
-                        targetPosition = (miniStructure.artie.getPosition().avg + power);
-                        miniStructure.artie.setPosition(targetPosition);
-
-                        telemetry.addData("MiniStructure artie power", power);
-                        telemetry.addData("Ministructure Target Position", targetPosition);
-                        break;
-
-                    case AUTO:
-
-                        // if the right stick is down, lower
-                        if (artiePower < -0.3) {
-                            miniStructure.artie.down();
-                        } else if (artiePower > 0.3) {
-                            miniStructure.artie.up();
-                        } else {
-                            miniStructure.artie.holdPos();
-                        }
-
-                        telemetry.addData("Ministructure Position ", miniStructure.artie.getPosition().right);
-                        break;
-                }
-
+                double power = artiePower * (0.005 * armSpeed);
+                double targetPosition = (miniStructure.artie.getPosition().avg + power);
+                
+                miniStructure.artie.setPosition(targetPosition);
+                telemetry.addData("MiniStructure artie power", power);
+                telemetry.addData("Ministructure Target Position", targetPosition);
                 telemetry.addData("MiniStructure artie L position", miniStructure.artie.getPosition().left);
                 telemetry.addData("MiniStructure artie R position", miniStructure.artie.getPosition().right);
             }
@@ -448,7 +407,6 @@ public class DragonsDriver extends LinearOpMode {
                 // calls for movement
                 drivetrain.RC(x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
 
-                //sets the motors to their corresponding power
 //                telemetry.addData("leftFront power",  String.valueOf(Math.round(drivetrain.getPower()[0])));
 //                telemetry.addData("rightFront power", String.valueOf(Math.round(drivetrain.getPower()[1])));
 //                telemetry.addData("leftBack power",   String.valueOf(Math.round(drivetrain.getPower()[2])));
@@ -458,124 +416,7 @@ public class DragonsDriver extends LinearOpMode {
             }
 
             //</editor-fold>
-/*
-            //<editor-fold desc="--------------------- FSM Scoring Control ---------------------">
-            switch (scoringState) {
-                case INTAKE:
 
-                    // if a score button is pressed, set targets and switch to lifting
-                    if (scoringStateControl && !prevScoringStateControl) {
-                        basketScore(superStructure, miniStructure, telemetry);
-                        scoringState = ScoringState.LIFTING;
-                    }
-
-                    break;
-
-                case LIFTING:
-
-                    // tolerance and stuff is defined in subclass
-                    if (superStructure.extension.atTargetPosition()) {
-                        scoringTimer.reset();
-                        scoringState = ScoringState.SCORING;
-                    }
-
-                    break;
-
-                case SCORING:
-
-                    // open claw after 1 second, close 1 second later
-                    if (scoringTimer.milliseconds() > 2000) {
-                        miniStructure.claw.close();
-                        intake(superStructure, miniStructure, telemetry);
-                        scoringState = ScoringState.LOWERING;
-                    } else if (scoringTimer.milliseconds() > 1000) {
-                        miniStructure.claw.open();
-                    }
-
-                    break;
-
-                case LOWERING:
-
-                    // if the extension is down, open the claw
-                    if (superStructure.extension.atTargetPosition()) {
-                        miniStructure.claw.open();
-                        scoringState = ScoringState.INTAKE;
-                    }
-
-                    break;
-
-                default:
-                    scoringState = ScoringState.INTAKE;
-            }
-            //   if the button is pressed down, run ONCE                  if it's not supposed to START score          if it's in manual
-            if (((scoringStateControl && !prevScoringStateControl) && scoringState != ScoringState.INTAKE || Global.controlState == Global.ControlState.MANUAL)) {
-
-                // Cancel the scoring fsm
-                telemetry.addLine("Canceling score!!");
-                telemetry.addData   ("Score enum pos", scoringState.name());
-
-                // lower slides and ministructure
-                intake(superStructure, miniStructure, telemetry);
-                scoringState = ScoringState.LOWERING;
-                // because lowering handles claw opening once slides are down
-            }
-
-            //</editor-fold>
-
-            //<editor-fold desc="--------------------- FSM Hang Control ---------------------">
-            switch (hangState) {
-                case DEFAULT:
-
-                    if (startHang && !prevStartHang) {
-                        superStructure.extension.hang();
-                        miniStructure.down();
-                        hangState = HangState.EXTENDING;
-                    }
-
-                    break;
-
-                case EXTENDING:
-
-                    if (superStructure.extension.atTargetPosition()) {
-                        superStructure.arm.hang();
-                        hangState = HangState.TILTING;
-                    }
-
-                    break;
-                case TILTING:
-
-                    if (superStructure.arm.atTargetPosition()) {
-                        superStructure.extension.down();
-                        hangState = HangState.HANGING;
-                        hangingTimer.reset();
-                    }
-
-                    break;
-                case HANGING:
-
-                    if (hangingTimer.seconds() > 5) {
-                        superStructure.extension.setPower(0.3);
-                        superStructure.extension.hang();
-                        hangState = HangState.DEFAULT;
-                    }
-
-                    break;
-                default:
-                    hangState = HangState.DEFAULT;
-            }
-
-            if (((startHang && !prevStartHang) && hangState != HangState.DEFAULT || Global.controlState == Global.ControlState.MANUAL)) {
-
-                //Cancel the hanging fsm
-                telemetry.addLine("Canceling hang!!");
-                telemetry.addData   ("Hang enum pos", hangState.name());
-
-                // lower slides and ministructure
-                intake(superStructure, miniStructure, telemetry);
-                hangState = HangState.DEFAULT;
-                // because lowering handles claw opening once slides are down
-            }
-            //</editor-fold>*/
             telemetry.update();
         }
         //</editor-fold>
