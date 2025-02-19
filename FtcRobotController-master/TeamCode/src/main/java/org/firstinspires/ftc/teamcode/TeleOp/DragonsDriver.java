@@ -310,25 +310,12 @@ public class DragonsDriver extends LinearOpMode {
 
                         case AUTO:
 
-                           /* // when you press a button, set it to a height
-                            if (full && !prevFull) {
-                                superStructure.extension.full();
-                            } else if (hang && !prevHang) {
-                                superStructure.extension.hang();
-                            } else if (down && !prevDown) {
-                                superStructure.extension.down();
-                            } else if (cham && !prevCham) {
-                                superStructure.extension.chamber();
-                            }*/
-
                             if (basketScore && !prevBasketScore) {
                                 basketScore(superStructure, miniStructure, telemetry);
-                            } else if (SSHang && !prevSSHang) {
-                                superStructure.extension.hang();
+                            } else if (hang && !prevHang) {
+                                superStructure.extension.actuallyHangOnRung();
                             } else if (intake && !prevIntake) {
                                 intake(superStructure, miniStructure, telemetry);
-                            } else if (hangDown && !prevHangDown) {
-                                superStructure.extension.down();
                             }
 
                             superStructure.extension.switchToAuto();
@@ -459,7 +446,7 @@ public class DragonsDriver extends LinearOpMode {
                 telemetry.addData("IMU heading", Math.toDegrees(botHeading));
 
                 // calls for movement
-                drivetrain.FC(botHeading, x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
+                drivetrain.RC(x, y, rightX, driveSpeed); // x, y, and rightX are the gamepad inputs
 
                 //sets the motors to their corresponding power
 //                telemetry.addData("leftFront power",  String.valueOf(Math.round(drivetrain.getPower()[0])));

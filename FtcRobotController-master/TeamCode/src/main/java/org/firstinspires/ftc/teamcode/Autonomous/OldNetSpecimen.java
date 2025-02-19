@@ -31,7 +31,7 @@ public class OldNetSpecimen extends LinearOpMode {
 
     public static double dist = 20,
             strafeDist = 12,
-            dist2 = 24;
+            dist2 = 20;
 
     ElapsedTime timer;
 

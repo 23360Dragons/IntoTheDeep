@@ -195,7 +195,7 @@ public class MiniStructure {
         private Servo right;
 
         double downPos = 0.12;
-        double upPos   = 0.67;
+        double upPos   = 0.6;
         double chamberRelPos = 0.58;
 //        double chamPos = 0.58;
 
