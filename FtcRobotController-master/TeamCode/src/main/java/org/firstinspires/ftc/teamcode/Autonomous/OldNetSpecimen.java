@@ -29,9 +29,9 @@ public class OldNetSpecimen extends LinearOpMode {
     MiniStructure miniStructure;
     SuperStructure superStructure;
 
-    public static double dist = 20,
+    public static double dist = 28,
             strafeDist = 12,
-            dist2 = 20;
+            dist2 = 12;
 
     ElapsedTime timer;
 
@@ -73,13 +73,13 @@ public class OldNetSpecimen extends LinearOpMode {
         sleep(200);
         superStructure.extension.chamber();
         timer.reset();
-        while (timer.milliseconds() < 300) {
+        while (timer.milliseconds() < 300 && opModeIsActive()) {
         }
         miniStructure.artie.chamberRelPos();
-        while (timer.milliseconds() < 800) ;
+        while (timer.milliseconds() < 800 && opModeIsActive()) ;
         miniStructure.claw.open();
         timer.reset();
-        while (timer.milliseconds() < 500) {
+        while (timer.milliseconds() < 500 && opModeIsActive()) {
         }
         miniStructure.tilt.up();
         miniStructure.artie.up();
@@ -87,6 +87,7 @@ public class OldNetSpecimen extends LinearOpMode {
         miniStructure.claw.close();
 
 
+        autoRobotMovement.moveForward(6, Backward, 0.5);
         autoRobotMovement.strafe(48, Left, 0.5);
         autoRobotMovement.moveForward(56, Forward, 0.6);
         autoRobotMovement.rotate(90, Clockwise, 0.5);

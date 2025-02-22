@@ -49,8 +49,8 @@ public class SuperStructure {
 
         public boolean isValid = true;
 
-        public static final int SShangTicks = -132;
-        public static final int SSdownTicks = -275;
+        public static final int SShangTicks = -100;
+        public static final int SSdownTicks = -230;
         public static final int SSfullTicks = -0;
         private static final int tolerance  = 10;
 
@@ -110,6 +110,10 @@ public class SuperStructure {
         public void setTarget (int target) {
             leftMotor.setTargetPosition(target);
             rightMotor.setTargetPosition(target);
+        }
+        
+        public double getTarget () {
+            return leftMotor.getTargetPosition();
         }
 
         public void setPower (double power) {
@@ -234,7 +238,7 @@ public class SuperStructure {
         }
 
         public boolean atTargetPosition () {
-            return !rightMotor.isBusy();
+            return !leftMotor.isBusy();
         }
 
         public double getTPD () {

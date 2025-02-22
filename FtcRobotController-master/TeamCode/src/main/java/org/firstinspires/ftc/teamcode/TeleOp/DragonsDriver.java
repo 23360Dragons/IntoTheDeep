@@ -32,6 +32,7 @@ import org.firstinspires.ftc.teamcode.hardware.DragonsOTOS;
 import org.firstinspires.ftc.teamcode.utils.Global;
 import org.firstinspires.ftc.teamcode.utils.AutoRobotPos;
 
+import java.io.PipedInputStream;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -223,6 +224,9 @@ public class DragonsDriver extends LinearOpMode {
 
             if (colorTimer.seconds() > 90) {
                 dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                if (colorTimer.seconds() > 110) {
+                    dragonsLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                }
             }
 
             // <editor-fold desc="--------------------- SuperStructure ---------------------">
@@ -235,31 +239,33 @@ public class DragonsDriver extends LinearOpMode {
                 double articulationPower = (armUp - (armDown));
 
                 // handles arm state for limiting extension
-                if (superStructure.arm.getPosition().avg <= -220) {
+                if (superStructure.arm.getPosition().avg <= -190) {
                     superStructure.arm.setState(SuperStructure.ARTICULATION_POS.DOWN);
                 } else if (superStructure.arm.getPosition().avg <= -50) {
                     superStructure.arm.setState(SuperStructure.ARTICULATION_POS.HANG);
                 } else {
                     superStructure.arm.setState(SuperStructure.ARTICULATION_POS.UP);
                 }
+                
+                double extensionPos = Math.min(superStructure.extension.getPosition().right, SuperStructure.Extension.maxDownExtension)
+                        / SuperStructure.Extension.maxDownExtension;
+                double speed = (extensionPos * (SSCreepSpeed - SSSpeed)) + SSSpeed;
 
                 // if the extension is past legal limit
-                if (superStructure.extension.isValid && superStructure.arm.getState() != SuperStructure.ARTICULATION_POS.DOWN && superStructure.extension.getPosition().right > SuperStructure.Extension.maxDownExtension) {
+                if (superStructure.arm.getState() != SuperStructure.ARTICULATION_POS.DOWN
+                        && superStructure.extension.getPosition().left >= SuperStructure.Extension.maxDownExtension)
+                {
                     telemetry.addLine("Arm cannot go down, as extension is too extended!");
                 } else {
 
-                    // actually control the superstructure
+//                     actually control the superstructure
                     switch (Global.controlState) {
 
                         case MANUAL:
-                            
+
                             // get extension on a scale of 0 to 1
                             // meaning 0 = 0 ticks, 1 = hang extension or more
-                            double extensionPos = Math.min(superStructure.extension.getPosition().right, SuperStructure.Extension.maxDownExtension)
-                                    / SuperStructure.Extension.maxDownExtension;
-                            
-                            double speed = (extensionPos * (SSCreepSpeed - SSSpeed)) + SSSpeed;
-                            
+
                             superStructure.arm.switchToManual();
                             superStructure.arm.setPower(articulationPower * speed);  // 0.8 if down, 0.5 if up
                             telemetry.addData("superstructure is being set to", articulationPower * speed);
@@ -271,13 +277,21 @@ public class DragonsDriver extends LinearOpMode {
                                 superStructure.arm.full();
                             } else if (SSHang && !prevSSHang) {
                                 superStructure.arm.hang();
+                                miniStructure.down();
                             } else if (SSDown && !prevSSDown) {
                                 superStructure.arm.down();
                                 miniStructure.basket();
                             }
 
                             superStructure.arm.switchToAuto();
-                            superStructure.arm.setPower(SSSpeed);
+                            
+                            if (superStructure.arm.getTarget() == SuperStructure.Arm.SSdownTicks) {
+                                superStructure.arm.setPower(speed);
+                            } else if (superStructure.arm.getTarget() == SuperStructure.Arm.SShangTicks) {
+                                superStructure.arm.setPower(speed);
+                            } else if (superStructure.arm.getTarget() == SuperStructure.Arm.SSfullTicks) {
+                                superStructure.arm.setPower(0.35);
+                            }
                             break;
                     }
                 }
@@ -294,7 +308,10 @@ public class DragonsDriver extends LinearOpMode {
                 double speed = extSpeed;
 
                 // if the superstructure is down, prevent extending too much
-                if (superStructure.arm.isValid && superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN && slidesPower > 0 && superStructure.extension.getPosition().right > SuperStructure.Extension.maxDownExtension) {
+                if ((superStructure.arm.getState() == SuperStructure.ARTICULATION_POS.DOWN)
+                        && superStructure.extension.getPosition().left > SuperStructure.Extension.maxDownExtension
+                        && slidesPower > 0)
+                {
                     telemetry.addLine("Extension cannot extend more, as the arms are down!");
                 } else {
 
@@ -306,7 +323,6 @@ public class DragonsDriver extends LinearOpMode {
                             superStructure.extension.setPower(slidesPower * speed);
                             telemetry.addData("Extension  is being set to", slidesPower * speed);
                             break;
-                //sets the motors to their corresponding power
 
                         case AUTO:
 
@@ -322,7 +338,7 @@ public class DragonsDriver extends LinearOpMode {
 
                             superStructure.extension.switchToAuto();
 
-                            superStructure.extension.setPower(extSpeed);
+                            superStructure.extension.setPower(speed);
                             break;
                     }
                 }

@@ -72,13 +72,13 @@ public class OldObsSpecimen extends LinearOpMode {
         sleep(200);
         superStructure.extension.chamber();
         timer.reset();
-        while (timer.milliseconds() < 300) {
+        while (timer.milliseconds() < 300 && opModeIsActive()) {
         }
         miniStructure.artie.chamberRelPos();
-        while (timer.milliseconds() < 800) ;
+        while (timer.milliseconds() < 800 && opModeIsActive()) ;
         miniStructure.claw.open();
         timer.reset();
-        while (timer.milliseconds() < 500) {
+        while (timer.milliseconds() < 500 && opModeIsActive()) {
         }
         miniStructure.tilt.up();
         miniStructure.artie.up();
