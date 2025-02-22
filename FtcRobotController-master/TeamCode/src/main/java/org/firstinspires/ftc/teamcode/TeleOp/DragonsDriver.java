@@ -259,41 +259,56 @@ public class DragonsDriver extends LinearOpMode {
                 } else {
 
 //                     actually control the superstructure
-                    switch (Global.controlState) {
-
-                        case MANUAL:
-
-                            // get extension on a scale of 0 to 1
-                            // meaning 0 = 0 ticks, 1 = hang extension or more
-
-                            superStructure.arm.switchToManual();
+                
+                }
+                
+                switch (Global.controlState) {
+                    
+                    case MANUAL:
+                        
+                        // get extension on a scale of 0 to 1
+                        // meaning 0 = 0 ticks, 1 = hang extension or more
+                        
+                        superStructure.arm.switchToManual();
+                        
+                        if (superStructure.arm.getState() != SuperStructure.ARTICULATION_POS.DOWN
+                                && superStructure.extension.getPosition().left >= SuperStructure.Extension.maxDownExtension
+                                && articulationPower < 0) {
+                            telemetry.addLine("Arm cannot go down, as extension is too extended!");
+                        } else {
                             superStructure.arm.setPower(articulationPower * speed);  // 0.8 if down, 0.5 if up
-                            telemetry.addData("superstructure is being set to", articulationPower * speed);
-                            break;
-
-                        case AUTO:
-                            
-                            if (SSFull && !prevSSFull) {
-                                superStructure.arm.full();
-                            } else if (SSHang && !prevSSHang) {
-                                superStructure.arm.hang();
-                                miniStructure.down();
-                            } else if (SSDown && !prevSSDown) {
-                                superStructure.arm.down();
-                                miniStructure.basket();
-                            }
-
-                            superStructure.arm.switchToAuto();
-                            
-                            if (superStructure.arm.getTarget() == SuperStructure.Arm.SSdownTicks) {
-                                superStructure.arm.setPower(speed);
-                            } else if (superStructure.arm.getTarget() == SuperStructure.Arm.SShangTicks) {
-                                superStructure.arm.setPower(speed);
-                            } else if (superStructure.arm.getTarget() == SuperStructure.Arm.SSfullTicks) {
-                                superStructure.arm.setPower(0.35);
-                            }
-                            break;
-                    }
+                        }
+                        
+                        telemetry.addData("superstructure is being set to", articulationPower * speed);
+                        break;
+                    
+                    case AUTO:
+                        
+                        if (SSFull && !prevSSFull) {
+                            superStructure.arm.full();
+                        } else if (SSHang && !prevSSHang) {
+                            superStructure.arm.hang();
+                            miniStructure.down();
+                        } else if (SSDown && !prevSSDown) {
+                            superStructure.arm.down();
+                            miniStructure.basket();
+                        }
+                        
+                        if (superStructure.arm.getState() != SuperStructure.ARTICULATION_POS.DOWN
+                                && superStructure.extension.getPosition().left >= SuperStructure.Extension.maxDownExtension) {
+                            superStructure.arm.full();
+                        }
+                        
+                        superStructure.arm.switchToAuto();
+                        
+                        if (superStructure.arm.getTarget() == SuperStructure.Arm.SSdownTicks) {
+                            superStructure.arm.setPower(speed);
+                        } else if (superStructure.arm.getTarget() == SuperStructure.Arm.SShangTicks) {
+                            superStructure.arm.setPower(speed);
+                        } else if (superStructure.arm.getTarget() == SuperStructure.Arm.SSfullTicks) {
+                            superStructure.arm.setPower(0.35);
+                        }
+                        break;
                 }
 
                 telemetry.addData("Super Structure right artie position", superStructure.arm.getPosition().right);
@@ -316,31 +331,48 @@ public class DragonsDriver extends LinearOpMode {
                 } else {
 
                     // actually control the superstructure
-                    switch (Global.controlState) {
-                        case MANUAL:
-
-                            superStructure.extension.switchToManual();
+                    
+                }
+                
+                switch (Global.controlState) {
+                    case MANUAL:
+                        
+                        superStructure.extension.switchToManual();
+                        
+                        if ((superStructure.arm.getState() != SuperStructure.ARTICULATION_POS.UP)
+                                && superStructure.extension.getPosition().left > SuperStructure.Extension.maxDownExtension
+                                && slidesPower > 0) {
+                            telemetry.addLine("Extension cannot extend more, as the arms are down!");
+                        } else {
                             superStructure.extension.setPower(slidesPower * speed);
-                            telemetry.addData("Extension  is being set to", slidesPower * speed);
-                            break;
-
-                        case AUTO:
-
-                            if (basketScore && !prevBasketScore) {
-                                basketScore(superStructure, miniStructure, telemetry);
-                            } else if (hang && !prevHang) {
-                                superStructure.extension.actuallyHangOnRung();
-                            } else if (intake && !prevIntake) {
-                                intake(superStructure, miniStructure, telemetry);
-                            } else if (scoreSpecimen && !prevScoreSpecimen) {
-                                chamberScore(superStructure, miniStructure, telemetry);
+                        }
+                        
+                        telemetry.addData("Extension  is being set to", slidesPower * speed);
+                        break;
+                    
+                    case AUTO:
+                        
+                        if (basketScore && !prevBasketScore) {
+                            basketScore(superStructure, miniStructure, telemetry);
+                        } else if (hang && !prevHang) {
+                            superStructure.extension.actuallyHangOnRung();
+                        } else if (intake && !prevIntake) {
+                            intake(superStructure, miniStructure, telemetry);
+                        } else if (scoreSpecimen && !prevScoreSpecimen) {
+                            chamberScore(superStructure, miniStructure, telemetry);
+                        }
+                        
+                        if ((superStructure.arm.getState() != SuperStructure.ARTICULATION_POS.UP)
+                                && superStructure.extension.getPosition().left > SuperStructure.Extension.maxDownExtension) {
+                            if (superStructure.extension.getTarget() > SuperStructure.Extension.maxDownExtension) {
+                                superStructure.extension.setTarget(SuperStructure.Extension.maxDownExtension);
                             }
-
-                            superStructure.extension.switchToAuto();
-
-                            superStructure.extension.setPower(speed);
-                            break;
-                    }
+                        }
+                        
+                        superStructure.extension.switchToAuto();
+                        
+                        superStructure.extension.setPower(speed);
+                        break;
                 }
 
                 telemetry.addData("Extension L position", superStructure.extension.getPosition().left);
