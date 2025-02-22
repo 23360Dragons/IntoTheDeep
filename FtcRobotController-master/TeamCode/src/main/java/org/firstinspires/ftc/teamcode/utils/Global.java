@@ -13,7 +13,7 @@ public class Global {
     // SPEEDS
     public static double SSSpeed             = 0.8; // todo finetune this. Maybe different values for auto and manual?
     public static double SSCreepSpeed        = 0.5;
-    public static double extSpeed            = 0.7; // todo finetune this. Maybe different values for auto and manual?
+    public static double extSpeed            = 0.9; // todo finetune this. Maybe different values for auto and manual?
     public static double twistSpeed          = 30;
     public static double tiltSpeed           = 20;
     public static double armSpeed            = 4;

@@ -49,7 +49,7 @@ public class MiniStructure {
 
     public void chamber () {
         tilt.down();
-        artie.up();
+        artie.chamberRelPos();
     }
 
     public void down () {
@@ -62,8 +62,8 @@ public class MiniStructure {
         private Servo servo;
 
         double tiltUpPos  = 0.58;
-        double tiltDownPos = 0.34;
-        double tiltasc1Pos = 0.67;
+        double tiltDownPos = 0.32;
+        double tiltasc1Pos = 0.5;
 
         Tilt (HardwareMap hardwareMap) {
             try {
@@ -194,9 +194,10 @@ public class MiniStructure {
         private Servo left;
         private Servo right;
 
-        double downPos = 0.12;
-        double upPos   = 0.6;
-        double chamberRelPos = 0.58;
+        double downPos = 0.12 - 0.084;
+        double upPos   = 0.52;
+        double chamberRelPos = 0.45;
+        public double intakeSpec = 0.2262;
 //        double chamPos = 0.58;
 
         Artie(HardwareMap hardwareMap) {

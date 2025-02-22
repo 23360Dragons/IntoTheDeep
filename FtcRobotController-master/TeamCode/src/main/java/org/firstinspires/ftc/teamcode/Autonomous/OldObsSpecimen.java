@@ -29,9 +29,9 @@ public class OldObsSpecimen extends LinearOpMode {
     SuperStructure superStructure;
     DragonsIMU imu;
 
-    public static double dist = 20,
+    public static double dist = 28,
             strafeDist = 12,
-            dist2 = 20;
+            dist2 = 16;
 
     ElapsedTime timer;
 
@@ -54,6 +54,9 @@ public class OldObsSpecimen extends LinearOpMode {
         waitForStart();
 
         if (isStopRequested()) return;
+        
+        timer.reset();
+//        while (timer.seconds() < 13);
 
         miniStructure.chamber();
 
@@ -87,8 +90,9 @@ public class OldObsSpecimen extends LinearOpMode {
 
         // park in observation zone
 
-        autoRobotMovement.moveForward(36, Backward, 0.4);
+        autoRobotMovement.moveForward(39, Backward, 0.4);
         autoRobotMovement.strafe(40, Right, 0.5);
+        autoRobotMovement.moveForward(12, Backward, 0.2);
 
         AutoRobotPos.store(imu.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
 
