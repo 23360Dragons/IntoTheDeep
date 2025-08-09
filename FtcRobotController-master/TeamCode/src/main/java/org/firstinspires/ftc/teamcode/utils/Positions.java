@@ -15,6 +15,6 @@ public class Positions {
 
     @NonNull
     public String toString () {
-        return (String.valueOf(left) + "," + String.valueOf(right));
+        return (left + "," + right);
     }
 }
